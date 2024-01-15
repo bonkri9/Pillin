@@ -25,11 +25,17 @@
 3. 자동 영양재 재고 관리
 
 ## 역할별 담당자
+FE : 구본민, 김성현, 양희태
+BE : 강성범, 김희주, 이주혁
 
 ## FE 프레임워크
+Flutter
+Android Studio
 
 ## BE 프레임워크
+Spring Boot
 
 ## DB
+Mysql
 
 ## 주요 기술 스택
