@@ -39,3 +39,8 @@ Spring Boot
 Mysql
 
 ## 주요 기술 스택
+BE : Android Studio, Spring Boot, Flask
+FE : Flutter, Android Studio
+DB : Mysql
+Infra : Docker
+AI : Item 기반 추천 알고리즘
