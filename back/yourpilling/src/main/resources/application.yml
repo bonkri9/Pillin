@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/yourpilling?serverTimezone=Asia/Seoul
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1234
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MariaDBDialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
