@@ -1,8 +1,11 @@
 package com.ssafy.yourpilling.common;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+@Getter
 public enum Role {
     MEMBER("member"), ADMIN("admin");
 
@@ -10,10 +13,6 @@ public enum Role {
 
     Role(String value) {
         this.role = value;
-    }
-
-    public String getRole() {
-        return role;
     }
 
     public static Role findByRoleValue(String value) {

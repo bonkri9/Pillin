@@ -13,8 +13,8 @@ public enum ErrorCode {
     E4091("E4091", "중복된 아이디 입니다."),
     E5001("5001", "서버에러");
 
-    private String errorCode;
-    private String message;
+    private final String errorCode;
+    private final String message;
 
     ErrorCode(String errorCode, String message) {
         this.errorCode = errorCode;
