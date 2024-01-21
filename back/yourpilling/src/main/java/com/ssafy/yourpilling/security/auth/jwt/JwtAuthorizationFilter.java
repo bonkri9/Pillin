@@ -3,9 +3,9 @@ package com.ssafy.yourpilling.security.auth.jwt;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.ssafy.yourpilling.security.auth.error.AccessTokenExpiredException;
-import com.ssafy.yourpilling.security.auth.error.ErrorCode;
-import com.ssafy.yourpilling.security.auth.error.ErrorResponse;
-import com.ssafy.yourpilling.security.auth.error.ErrorStatues;
+import com.ssafy.yourpilling.common.exception.ErrorCode;
+import com.ssafy.yourpilling.common.exception.ErrorResponse;
+import com.ssafy.yourpilling.common.exception.ErrorStatues;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +29,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
-        if (request.getRequestURI().equals("/api/v1/login")) {
+        if (request.getRequestURI().equals("/api/v1/member/login") || request.getRequestURI().equals("/api/v1/register")) {
             chain.doFilter(request, response);
             return;
         }
@@ -66,7 +66,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
-
     }
 }
 
