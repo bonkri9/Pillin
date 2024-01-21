@@ -14,16 +14,15 @@ import lombok.*;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
 
-    @Column(nullable = false, length = 30)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false, length = 100)
+    @Column
     private String password;
 
-    @Column(nullable = false, length = 100)
+    @Column
     private String nickname;
 
     @Enumerated(EnumType.STRING)

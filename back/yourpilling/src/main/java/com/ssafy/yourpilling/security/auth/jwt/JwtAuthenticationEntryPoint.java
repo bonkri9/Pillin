@@ -2,7 +2,7 @@ package com.ssafy.yourpilling.security.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.ssafy.yourpilling.security.auth.error.ErrorResponse;
+import com.ssafy.yourpilling.common.exception.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -28,5 +28,4 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(errorResponse.getStateCode());
         response.getWriter().println(responseString);
     }
-
 }

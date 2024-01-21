@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.security.auth.error;
+package com.ssafy.yourpilling.common.exception;
 
 import lombok.Getter;
 

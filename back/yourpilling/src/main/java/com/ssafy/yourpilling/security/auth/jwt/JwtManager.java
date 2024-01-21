@@ -26,7 +26,7 @@ public class JwtManager {
         return JWT.create()
                 .withSubject("token")
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getAccessTokenExpirationTime()))
-                .withClaim("id", principalDetails.getMember().getId()) // 발행 유저정보 저장
+                .withClaim("memberId", principalDetails.getMember().getMemberId()) // 발행 유저정보 저장
                 .withClaim("username", principalDetails.getMember().getUsername())
                 .withClaim("role", principalDetails.getMember().getRole().toString())
                 .sign(Algorithm.HMAC512(jwtProperties.getAccessTokenSecret())); //고윳값

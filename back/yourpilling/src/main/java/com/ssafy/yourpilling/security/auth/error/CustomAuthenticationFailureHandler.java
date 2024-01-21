@@ -1,6 +1,9 @@
 package com.ssafy.yourpilling.security.auth.error;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.yourpilling.common.exception.ErrorCode;
+import com.ssafy.yourpilling.common.exception.ErrorResponse;
+import com.ssafy.yourpilling.common.exception.ErrorStatues;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -29,5 +32,4 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             response.getWriter().flush();
         }
     }
-
 }
