@@ -4,6 +4,8 @@ import com.ssafy.yourpilling.common.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "members")
@@ -14,9 +16,11 @@ import lombok.*;
 public class Member {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "member_id")
     private Long memberId;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private String username;
 
     @Column
@@ -24,6 +28,9 @@ public class Member {
 
     @Column
     private String nickname;
+
+    @Column
+    private LocalDate birth;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)

@@ -16,10 +16,11 @@ import java.time.LocalDateTime;
 public class MemberProfile {
 
     @Id
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long memberId;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private String username;
 
     @Column
@@ -37,10 +38,10 @@ public class MemberProfile {
     @Column
     private Gender gender;
 
-    @Column
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
 }

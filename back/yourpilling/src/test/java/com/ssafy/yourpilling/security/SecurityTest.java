@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static java.time.LocalDate.now;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,6 +47,7 @@ public class SecurityTest {
                 .password(encoder.encode(password))
                 .role(Role.MEMBER)
                 .nickname("nick")
+                .birth(now())
                 .build();
 
         JSONObject body = new JSONObject();
@@ -59,7 +61,7 @@ public class SecurityTest {
 
         String accessTokenHeader = new JwtProperties().getAccessTokenHeader();
 
-        registMember(member);
+        registerMember(member);
 
         // when, then
         mockMvc.perform(request)
@@ -79,6 +81,7 @@ public class SecurityTest {
                 .password(encoder.encode(password))
                 .role(Role.MEMBER)
                 .nickname("nick")
+                .birth(now())
                 .build();
 
         JSONObject body = new JSONObject();
@@ -92,7 +95,7 @@ public class SecurityTest {
 
         String accessTokenHeader = new JwtProperties().getAccessTokenHeader();
 
-        registMember(member);
+        registerMember(member);
 
         // when, then
         mockMvc.perform(request)
@@ -111,6 +114,7 @@ public class SecurityTest {
                 .password(encoder.encode("1234"))
                 .role(Role.MEMBER)
                 .nickname("nick")
+                .birth(now())
                 .build();
 
         JSONObject body = new JSONObject();
@@ -124,7 +128,7 @@ public class SecurityTest {
 
         String accessTokenHeader = new JwtProperties().getAccessTokenHeader();
 
-        registMember(member);
+        registerMember(member);
 
         // when, then
         mockMvc.perform(request)
@@ -132,8 +136,8 @@ public class SecurityTest {
                 .andExpect(header().doesNotExist(accessTokenHeader));
     }
 
-    private void registMember(Member member){
-        if(memberRepository.findByUsername(member.getUsername()).isEmpty()) {
+    private void registerMember(Member member) {
+        if (memberRepository.findByUsername(member.getUsername()).isEmpty()) {
             memberRepository.save(member);
         }
     }
