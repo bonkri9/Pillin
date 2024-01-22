@@ -15,7 +15,7 @@ class MainChildScreen extends StatelessWidget {
       case '/MainPage/a':
         return Column(
           children: [
-            Text('주간달력 ')
+            Text('주간달력')
           ],
         );
       case '/MainPage/b':
@@ -33,6 +33,12 @@ class MainChildScreen extends StatelessWidget {
                 context.go('/callender');
               },
               child: Text('Callender Screen'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.go('/pillDetail');
+              },
+              child: Text('Pill Detail Screen'),
             ),
           ],
         );

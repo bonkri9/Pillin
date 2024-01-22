@@ -6,6 +6,7 @@ import '../screens/alarmScreen.dart';
 import '../screens/loginScreen.dart';
 import '../screens/mainChildScreen.dart';
 import '../screens/callenderScreen.dart';
+import '../screens/pillDetailScreen.dart';
 import '../screens/registScreen.dart';
 import '../screens/rootScreen.dart';
 
@@ -47,6 +48,13 @@ final router = GoRouter(
           builder: (context, state) {
             // /pop
             return CallenderScreen();
+          },
+        ),
+        GoRoute(
+          path: 'pillDetail',
+          builder: (context, state) {
+            // /pop
+            return PillDetailScreen();
           },
         ),
 

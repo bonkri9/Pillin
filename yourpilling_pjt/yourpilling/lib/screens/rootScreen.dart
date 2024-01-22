@@ -9,13 +9,13 @@ class RootScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Text('소개페이지입니다'),
-          ElevatedButton(
+          Text('소개페이지입니다'),ElevatedButton(
             onPressed: () {
               context.go('/login');
             },
             child: Text('Login Screen'),
           ),
+
           ElevatedButton(
             onPressed: () {
               context.go('/regist');
