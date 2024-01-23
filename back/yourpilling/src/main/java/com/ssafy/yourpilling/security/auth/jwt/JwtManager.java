@@ -23,7 +23,8 @@ public class JwtManager {
     private final MemberRepository memberRepository;
 
     public String createAccessToken(PrincipalDetails principalDetails) {
-        return JWT.create()
+        return jwtProperties.getTokenPrefix() +
+                JWT.create()
                 .withSubject("token")
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getAccessTokenExpirationTime()))
                 .withClaim("memberId", principalDetails.getMember().getMemberId()) // 발행 유저정보 저장

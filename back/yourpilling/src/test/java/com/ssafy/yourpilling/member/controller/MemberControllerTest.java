@@ -62,7 +62,7 @@ class MemberControllerTest {
     @DisplayName("중복된 이메일로 회원가입 시도")
     public void duplicatedEmail() throws Exception {
         // given
-        String email = "testdup@test.com";
+        String email = "testdup12@test.com";
 
         if (memberJpaRepository.findByUsername(email).isEmpty()) {
             memberJpaRepository.save(MemberProfile.builder()
