@@ -6,6 +6,7 @@ void main() {
   runApp(
       SafeArea(
           child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               home: MainPageChild()
           )
       )

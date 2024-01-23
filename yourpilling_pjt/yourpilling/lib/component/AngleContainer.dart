@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class BaseContainer extends StatelessWidget {
+class AngleContainer extends StatelessWidget {
   final double width, height;
   final Widget child;
-  const BaseContainer({super.key, required this.width, required this.height, required this.child});
+  const AngleContainer({super.key, required this.width, required this.height, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,6 @@ class BaseContainer extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
           boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
