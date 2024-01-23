@@ -24,12 +24,12 @@ class _MainAppBarState extends State<MainAppBar> {
           Text(
             "YourPilling",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 14,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.notifications_none),
+            icon: Icon(Icons.notifications_none, size: 22,),
           ),
         ],
       ),

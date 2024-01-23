@@ -15,9 +15,9 @@ class BaseContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            offset: Offset(0.1, 0.1),
-            blurRadius: 1// 그림자 위치 조정
+            color: Color(0x00b5b5b5).withOpacity(0.1),
+            offset: Offset(0.1, 0.2),
+            blurRadius: 4// 그림자 위치 조정
           ),
         ]
       ),

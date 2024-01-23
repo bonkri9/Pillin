@@ -16,19 +16,28 @@ class MyPage extends StatelessWidget {
         children: [
           AngleContainer(
               width: 300,
-              height : 190,
+              height : 130,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-                    SizedBox(width: double.infinity, height: 20,),
-                    Text("성현님", style: TextStyle(
-                      color: HOT_PINK,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                    )),
+                    // IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
+                    SizedBox(width: double.infinity, height: 10,),
+                    Row(
+                      children: [
+                        Text("성현", style: TextStyle(
+                          color: HOT_PINK,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        )),
+                        Text(" 님", style: TextStyle(
+                          color: BASIC_BLACK,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        )),
+                      ],
+                    ),
                     Text("오늘도 건강하세요!", style: TextStyle(
                       color: LIGHT_BLACK,
                       fontSize: 20,
@@ -36,7 +45,7 @@ class MyPage extends StatelessWidget {
                     ),
                     ),
                     Container(
-                      height: 30,
+                      height: 25,
                       child: TextButton(
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all(Size.zero),
@@ -45,7 +54,7 @@ class MyPage extends StatelessWidget {
                         onPressed: () {},
                         child: Text("정보 수정", style: TextStyle(
                           color: Colors.grey,
-                          fontSize: 15,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,),
                         ),
                       ),
@@ -56,27 +65,114 @@ class MyPage extends StatelessWidget {
           // 설정 관리
           AngleContainer(
               width: 300,
-              height : 200,
+              height : 170,
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text("설정 관리", style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: LIGHT_BLACK,
-                ),),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("설정 관리", style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: LIGHT_BLACK,
+                    ),
+                    ),
+                    SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: () {
+                        print('버튼이 클릭되었습니다.');
+                      },
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.edit_notifications_outlined, size: 21,),
+                              SizedBox(width: 8.0),
+                              Text('알림 설정'),
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            children: [
+                              Icon(Icons.watch, size: 19,),
+                              SizedBox(width: 8.0),
+                              Text('건강데이터 및 기기 연동'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               )),
 
           // 고객 지원
           AngleContainer(
               width: 300,
-              height : 300,
+              height :300,
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text("고객 지원", style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: LIGHT_BLACK,
-                ),),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("고객 지원", style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: LIGHT_BLACK,
+                    ),
+                    ),
+                    SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: () {
+                        print('버튼이 클릭되었습니다.');
+                      },
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.share_outlined, size: 21,),
+                              SizedBox(width: 8.0),
+                              Text('앱 공유하기'),
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            children: [
+                              Icon(Icons.comment_outlined, size: 19,),
+                              SizedBox(width: 8.0),
+                              Text('앱 스토어 리뷰 남기기'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: () {
+                        print('버튼이 클릭되었습니다.');
+                      },
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.lock_outline_rounded, size: 21,),
+                              SizedBox(width: 8.0),
+                              Text('개인정보 처리 방침'),
+                            ],
+                          ),
+                          SizedBox(height: 20,),
+                          Row(
+                            children: [
+                              Icon(Icons.logout, size: 19,),
+                              SizedBox(width: 8.0),
+                              Text('로그아웃'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               )),
         ],
       )

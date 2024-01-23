@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yourpilling/screen/search_screen.dart';
 
 class MainAppBarSearch extends StatefulWidget implements PreferredSizeWidget {
   MainAppBarSearch({Key? key, this.barColor}) : super(key: key);
@@ -24,14 +25,16 @@ class _MainAppBarSearchState extends State<MainAppBarSearch> {
           Text(
             "YourPilling",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 14,
             ),
           ),
           Row(
             children: [
               IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.search),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+                },
+                icon: Icon(Icons.search, size: 22,),
               ),
               IconButton(
                 onPressed: () {},
