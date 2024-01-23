@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:yourpilling/route/router.dart';
 
 class RegistScreen extends StatelessWidget {
   const RegistScreen({super.key});

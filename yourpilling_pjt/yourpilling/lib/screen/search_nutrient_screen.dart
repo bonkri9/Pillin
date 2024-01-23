@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/search_health_screen.dart';
-import 'package:yourpilling/screen/search_nutrient_screen.dart';
 import '../component/BaseContainer.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchNutrientScreen extends StatefulWidget {
 
-  const SearchScreen({super.key});
+  const SearchNutrientScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchNutrientScreen> createState() => _SearchNutrientScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchNutrientScreenState extends State<SearchNutrientScreen> {
   // TextEditingController를 생성하여 TextField에 사용자의 입력을 관리합니다.
   final myController = TextEditingController();
 
@@ -57,32 +55,20 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("성분으로 검색하기?", style: TextStyle(
+                    Text("마그네슘", style: TextStyle(
                       color: LIGHT_BLACK,
                     )),
-                    Icon(Icons.search, color: Color(0xFFFF6666)),
+                    Text("오메가3", style: TextStyle(
+                      color: LIGHT_BLACK,
+                    )),
+                    Text("비타민C", style: TextStyle(
+                      color: LIGHT_BLACK,
+                    )),
                   ],
                 ),
               ),
             ),
-            BaseContainer(
-              width: 350,
-              height: 50,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SearchHealthScreen()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("건강고민으로 검색하기", style: TextStyle(
-                      color: LIGHT_BLACK,
-                    )),
-                    Icon(Icons.search, color: Color(0xFFFF6666)),
-                  ],
-                ),
-              ),
-            ),
+
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:yourpilling/component/app_bar.dart';
 import 'search_screen.dart';
 import 'record_screen.dart';
 import 'alarm_screen.dart';
@@ -20,19 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 45,
-          backgroundColor: Color(0xFFFFF5F4),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("YourPilling", style: TextStyle(
-                fontSize: 18,
-              ),),
-              IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none)),
-            ],
-          ),
-        ),
+        appBar: MainAppBar(barColor: Color(0xFFFFF5F4),),
 
         body: Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
