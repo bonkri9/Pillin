@@ -55,6 +55,9 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   drift_dev: ^1.4.0
   build_runner: ^2.1.7
+  weekly_date_picker: ^1.4.2
+  step_progress_indicator: ^1.0.2
+  simple_progress_indicators: ^0.2.0
 
 dependency_overrides:
   path: ^1.8.1
@@ -63,27 +66,26 @@ dependency_overrides:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
-  assets:
-    - asset/
-    - asset/img/sampleImg.jpg
+
 
   fonts:
     - family: parisienne
       fonts:
-        - asset: asset/font/Parisienne-Regular.ttf
+        - asset: assets/font/Parisienne-Regular.ttf
 
     - family: sunflower
       fonts:
-        - asset: asset/font/Sunflower-Light.ttf
-        - asset: asset/font/Sunflower-Medium.ttf
+        - asset: assets/font/Sunflower-Light.ttf
+        - asset: assets/font/Sunflower-Medium.ttf
           weight: 500
-        - asset: asset/font/Sunflower-Bold.ttf
+        - asset: assets/font/Sunflower-Bold.ttf
           weight: 700
 
   # To add assets to your application, add an assets section, like this:

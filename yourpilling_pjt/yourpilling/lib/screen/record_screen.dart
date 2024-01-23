@@ -3,14 +3,14 @@ import 'package:yourpilling/component/today_banner.dart';
 import 'package:flutter/material.dart';
 import '../component/calender.dart';
 
-class CallenderScreen extends StatefulWidget {
-  const CallenderScreen({super.key});
+class RecordScreen extends StatefulWidget {
+  const RecordScreen({super.key});
 
   @override
-  State<CallenderScreen> createState() => _CallenderScreenState();
+  State<RecordScreen> createState() => _RecordScreenState();
 }
 
-class _CallenderScreenState extends State<CallenderScreen> {
+class _RecordScreenState extends State<RecordScreen> {
   DateTime selectedDay = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
   DateTime focusedDay = DateTime.now();
 
