@@ -22,7 +22,6 @@ public class PillServiceImpl implements PillService {
     @Transactional
     @Override
     public void register(PillRegisterVo vo) {
-        System.out.println("----");
         OwnPillRegisterValue value = OwnPillRegisterValue
                 .builder()
                 .vo(vo)
@@ -33,7 +32,5 @@ public class PillServiceImpl implements PillService {
                 .build();
 
         pillDao.register(mapper.mapToOwnPill(value));
-
-        System.out.println("-------");
     }
 }
