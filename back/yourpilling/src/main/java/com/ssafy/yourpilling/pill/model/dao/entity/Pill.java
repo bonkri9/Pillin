@@ -4,6 +4,7 @@ import com.ssafy.yourpilling.common.PillProductForm;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class Pill {
     private String manufacturer;
 
     @Column(name = "expiration_at")
-    private String expirationAt;
+    private LocalDate expirationAt;
 
     @Column(name = "usage_instructions")
     private String usageInstructions;

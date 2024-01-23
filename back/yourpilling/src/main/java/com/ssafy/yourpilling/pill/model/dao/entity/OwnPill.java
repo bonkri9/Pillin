@@ -48,6 +48,5 @@ public class OwnPill {
     private PillMember member;
 
     @OneToOne
-    @JoinColumn(name = "pill_pill_id")
     private Pill pill;
 }

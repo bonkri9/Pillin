@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(name = "member")
+@Table(name = "members")
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
