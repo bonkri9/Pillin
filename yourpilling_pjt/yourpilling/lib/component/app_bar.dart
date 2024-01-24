@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yourpilling/const/colors.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   MainAppBar({Key? key, this.barColor}) : super(key: key);
@@ -25,6 +26,7 @@ class _MainAppBarState extends State<MainAppBar> {
             "YourPilling",
             style: TextStyle(
               fontSize: 14,
+              color: BASIC_BLACK,
             ),
           ),
           IconButton(

@@ -155,7 +155,7 @@ class _MainScreenState extends State<MainScreen> {
                               padding: const EdgeInsets.only(right: 30),
                               child: Align(
                                 alignment: Alignment.centerRight,
-                                child: Text("50%", style: TextStyle(fontWeight: FontWeight.w600, color: BASIC_BLACK),),
+                                child: Text("75%", style: TextStyle(fontWeight: FontWeight.w600, color: BASIC_BLACK),),
                               ),
                             ),
                             // Progress Bar
@@ -163,7 +163,7 @@ class _MainScreenState extends State<MainScreen> {
                               padding: const EdgeInsets.only(top: 5),
                               child: AnimatedProgressBar(
                                 width: 300,
-                                value: 0.5 ,
+                                value: 0.75 ,
                                 duration: const Duration(seconds: 1),
                                 gradient: const LinearGradient(
                                   colors: [
@@ -176,6 +176,7 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                             SizedBox(height: 10,),
                             ListView.builder(
+                                physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
                                 shrinkWrap: true,
                                 itemCount: 3,
                                 itemBuilder: (context, i) {
@@ -208,7 +209,7 @@ class _MainScreenState extends State<MainScreen> {
                                           Container(
                                             width: 50,
                                             decoration: BoxDecoration(
-                                              color: Colors.redAccent,
+                                              color: Colors.white,
                                               border: Border.all(
                                                 color: Colors.redAccent,
                                                 width: 1,
@@ -220,8 +221,8 @@ class _MainScreenState extends State<MainScreen> {
                                               style: ButtonStyle(
                                                 padding: MaterialStateProperty.all(EdgeInsets.zero), // 패딩 없애줘야 함
                                               ),
-                                              child: Text("완료", style: TextStyle(
-                                                color: Colors.white,
+                                              child: Text("복용", style: TextStyle(
+                                                color: Colors.redAccent,
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w600,
                                               )),
@@ -259,6 +260,31 @@ class _MainScreenState extends State<MainScreen> {
                                 ],
                               ),
                             ),
+                            SizedBox(height: 10,),
+                            Expanded(
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: 3, // 홈 화면에는 3개까지만 보여주자
+                                  itemBuilder: (context, i) {
+                                    return Column(
+                                      children: [
+                                        Image.asset("assets/image/비타민B.jpeg", width: 110, height: 80,),
+                                        SizedBox(height: 6),
+                                        Text("비타민B", style: TextStyle(
+                                          fontSize: 10,
+                                          color: BASIC_BLACK,
+                                        ),),
+                                        Text("49/50", style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.green,
+                                        ),),
+
+                                      ],
+                                    );
+                                  }
+                              ),
+                            )
                           ],
                         )
                     )
