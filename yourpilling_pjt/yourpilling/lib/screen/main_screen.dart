@@ -32,44 +32,39 @@ class _MainScreenState extends State<MainScreen> {
             child: SingleChildScrollView(
               child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 5, 0, 25),
-                          child: Row(
-                            children: [
-                              Text(
-                                '성현님',
-                                style: TextStyle(
-                                  color: LIGHT_BLACK,
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                ' 환영해요',
-                                style: TextStyle(
-                                  color: Color(0xFFFF6666),
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 155),
-                                child: Text(
-                                  ' 1월 23일',
-                                  style: TextStyle(
-                                    color: BASIC_BLACK,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ],
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 25),
+                      child: Row(
+                        children: [
+                          Text(
+                            '성현님',
+                            style: TextStyle(
+                              color: LIGHT_BLACK,
+                              fontSize: 19,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-
-                      ],
+                          Text(
+                            ' 환영해요',
+                            style: TextStyle(
+                              color: Color(0xFFFF6666),
+                              fontSize: 19,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 155),
+                            child: Text(
+                              ' 1월 23일',
+                              style: TextStyle(
+                                color: BASIC_BLACK,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     BaseContainer(
                       width: 350,
@@ -179,57 +174,65 @@ class _MainScreenState extends State<MainScreen> {
                                 backgroundColor: Colors.grey.withOpacity(0.2),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                              child: Container(
-                                  width: 300,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.08),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Image.asset('assets/image/1.png', width: 17, height: 17,),
-                                        Text("비타민 C", style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                          color: LIGHT_BLACK,
-                                        )),
-                                        Text("09:00", style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                          color: LIGHT_BLACK,
-                                        )),
-                                        Container(
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.redAccent,
-                                            border: Border.all(
-                                              color: Colors.redAccent,
-                                              width: 1,
-                                            ),
-                                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          ),
-                                          child: TextButton(
-                                            onPressed: () {},
-                                            style: ButtonStyle(
-                                            padding: MaterialStateProperty.all(EdgeInsets.zero), // 패딩 없애줘야 함
-                                            ),
-                                            child: Text("완료", style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                            )),
-                                            ),
-                                        )
-                                      ],
+                            SizedBox(height: 10,),
+                            ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: 2,
+                                itemBuilder: (context, index) {
+
+                              return Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                child: Container(
+                                    width: 300,
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.08),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                  )),
-                            ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Image.asset('assets/image/1.png', width: 17, height: 17,),
+                                          Text("비타민 C", style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                            color: LIGHT_BLACK,
+                                          )),
+                                          Text("09:00", style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                            color: LIGHT_BLACK,
+                                          )),
+                                          Container(
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.redAccent,
+                                              border: Border.all(
+                                                color: Colors.redAccent,
+                                                width: 1,
+                                              ),
+                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                            ),
+                                            child: TextButton(
+                                              onPressed: () {},
+                                              style: ButtonStyle(
+                                                padding: MaterialStateProperty.all(EdgeInsets.zero), // 패딩 없애줘야 함
+                                              ),
+                                              child: Text("완료", style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w600,
+                                              )),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )),
+                              );
+                            })
+
                             // Padding(
                             //   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             //   child: Container(
