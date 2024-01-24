@@ -42,6 +42,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.0.0
   get_it: ^7.2.0
+  custom_navigation_bar: ^0.8.2
 
 dev_dependencies:
   flutter_test:

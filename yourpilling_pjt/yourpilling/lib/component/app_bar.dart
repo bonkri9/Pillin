@@ -29,12 +29,36 @@ class _MainAppBarState extends State<MainAppBar> {
               color: BASIC_BLACK,
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.notifications_none, size: 22,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                icon: Row(
+                  children: [
+                    Icon(Icons.notifications_outlined, size: 20, color: BASIC_BLACK,),
+                  ],
+                ),
+              ),
+              IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                icon: Row(
+                  children: [
+                    Icon(Icons.person_outline, size: 20, color: BASIC_BLACK,),
+                  ],
+                ),
+              ),
+
+            ],
           ),
+
         ],
       ),
     );
   }
 }
+
+
+
