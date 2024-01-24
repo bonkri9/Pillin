@@ -1,5 +1,6 @@
 package com.ssafy.yourpilling.pill_heeju.model.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class NutritionDetail {
     @Id
-    @Column(name="nutrition_id")
+    @Column(name = "nutrition_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long nutritionId;
 
@@ -21,13 +22,13 @@ public class NutritionDetail {
     private String nutrition;
 
     @Column
-    private float amount;
+    private Double amount;
 
     @Column
     private String unit;
 
-    @Column
-    private float includePercent;
+    @Column(name = "include_percent")
+    private String includePercent;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -37,5 +38,6 @@ public class NutritionDetail {
 
     @ManyToOne
     @JoinColumn(name = "pill_pill_id")
+    @JsonBackReference
     private PillDetail pillDetail;
 }

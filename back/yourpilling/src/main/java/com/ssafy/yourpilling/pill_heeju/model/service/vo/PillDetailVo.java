@@ -1,6 +1,5 @@
 package com.ssafy.yourpilling.pill_heeju.model.service.vo;
 
-import com.ssafy.yourpilling.pill_heeju.controller.dto.response.ResponseNutritionInfoDto;
 import lombok.Builder;
 import lombok.Value;
 

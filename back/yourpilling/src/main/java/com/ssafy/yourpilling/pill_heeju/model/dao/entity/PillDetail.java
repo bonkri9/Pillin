@@ -1,5 +1,7 @@
 package com.ssafy.yourpilling.pill_heeju.model.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ssafy.yourpilling.common.PillProductForm;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,32 +28,33 @@ public class PillDetail {
     @Column
     private String manufacturer;
 
-    @Column
+    @Column(name = "expiration_at")
     private LocalDate expirationAt;
 
-    @Column
+    @Column(name = "usage_instructions")
     private String usageInstructions;
 
-    @Column
+    @Column(name = "primary_functionality")
     private String primaryFunctionality;
 
     @Column
     private String precautions;
 
-    @Column
+    @Column(name = "storage_instructions")
     private String storageInstructions;
 
-    @Column
+    @Column(name = "standard_specification")
     private String standardSpecification;
 
-    @Column
-    private String productForm;
+    @Column(name = "product_form")
+    @Enumerated(EnumType.STRING)
+    private PillProductForm productForm;
 
-    @Column
+    @Column(name = "image_url")
     private String imageUrl;
 
-    @Column
-    private float takeCount;
+    @Column(name = "takeCount")
+    private Double takeCount;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -60,6 +63,7 @@ public class PillDetail {
     private LocalDateTime updatedAt;
 
     @OneToMany( mappedBy = "pillDetail") // nutrition 테이블의 pill_id (FK)
-    private List<NutritionDetail> NutritionDetail = new ArrayList<>();
+    @JsonManagedReference
+    private List<NutritionDetail> nutritionDetail = new ArrayList<>();
 }
 

@@ -5,7 +5,7 @@ import com.ssafy.yourpilling.pill_heeju.model.service.vo.PillDetailVo;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PillServiceMapper {
+public class HPillServiceMapper {
 
     public PillDetail mapToPillId(PillDetailVo vo){
         return PillDetail.builder().pillId(vo.getPillId()).build();
