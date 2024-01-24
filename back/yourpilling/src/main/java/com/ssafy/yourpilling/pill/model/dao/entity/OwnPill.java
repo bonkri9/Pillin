@@ -25,8 +25,14 @@ public class OwnPill {
     @Column(name = "take_count")
     private Integer takeCount;
 
+    @Column(name = "take_weekdays")
+    private Integer takeWeekdays; // 한 주 동안 복용 주기(월, 화, ...)
+
     @Column(name = "total_count")
-    private Integer totalCount;
+    private Integer totalCount; // 일일 복용 횟수(1회, 2회, ...)
+
+    @Column(name = "take_once_amount")
+    private Integer takeOnceAmount; // 1회 섭취 량(1정, 2정, ...)
 
     @Column(name = "is_alarm")
     private Boolean isAlarm;
@@ -49,4 +55,8 @@ public class OwnPill {
 
     @OneToOne
     private Pill pill;
+
+    public boolean isTakeYN(){
+        return this.takeYN;
+    }
 }

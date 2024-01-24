@@ -52,8 +52,11 @@ public class Pill {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "takeCount")
-    private Double takeCount;
+    @Column(name = "take_count")
+    private Integer takeCount;
+
+    @Column(name = "take_cycle")
+    private Integer takeCycle;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -9,6 +9,7 @@ import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import com.ssafy.yourpilling.security.auth.entity.Member;
 import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
 import com.ssafy.yourpilling.security.auth.repository.MemberRepository;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,13 +62,24 @@ class PillControllerTest {
 
         String accessToken = getAccessToken(member);
 
+        JSONArray takeWeekdays = new JSONArray();
+        takeWeekdays.put("mOn");
+        takeWeekdays.put("tue");
+        takeWeekdays.put("Wed");
+        takeWeekdays.put("thu");
+        takeWeekdays.put("frI");
+        takeWeekdays.put("SAt");
+        takeWeekdays.put("SUN");
+
         JSONObject body = new JSONObject();
         body.put("pillId", pill.getPillId());
         body.put("startAt", LocalDate.now());
         body.put("takeYn", true);
         body.put("remains", 60);
         body.put("totalCount", 60);
-        body.put("takeCount", 1);
+        body.put("takeWeekdays", takeWeekdays); // 매일
+        body.put("takeCount", 1); // 1회당
+        body.put("takeOnceAmount", 1); // 1정
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post("/api/v1/pill/inventory")
@@ -77,7 +89,6 @@ class PillControllerTest {
 
         // when
         ResultActions perform = mockMvc.perform(request);
-
 
         // then
         perform.andExpect(status().isOk());
@@ -97,7 +108,8 @@ class PillControllerTest {
                 .standardSpecification("standardSpecification")
                 .productForm(PillProductForm.TABLET)
                 .imageUrl("imageUrl")
-                .takeCount(0.5)
+                .takeCount(1)
+                .takeCycle(1)
                 .createdAt(LocalDateTime.now())
                 .build();
 

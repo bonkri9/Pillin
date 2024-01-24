@@ -1,18 +1,14 @@
 package com.ssafy.yourpilling.pill.controller;
 
-import com.ssafy.yourpilling.member.controller.dto.request.RequestRegisterDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestRegisterPillDto;
+import com.ssafy.yourpilling.pill.model.service.vo.response.ResponsePillInventorListVo;
 import com.ssafy.yourpilling.pill.controller.mapper.PillControllerMapper;
 import com.ssafy.yourpilling.pill.model.service.PillService;
-import com.ssafy.yourpilling.pill.model.service.vo.PillRegisterVo;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,4 +26,10 @@ public class PillController {
         return ResponseEntity.ok().build();
     }
 
+
+    @GetMapping("/inventory/list")
+    ResponseEntity<ResponsePillInventorListVo> list(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        pillService.inventoryList(mapper.mapToPillInventoryListVo(principalDetails.getMember().getMemberId()));
+        return null;
+    }
 }

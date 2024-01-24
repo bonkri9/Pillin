@@ -14,6 +14,8 @@ public class PillServiceMapper {
                 .remains(value.getVo().getRemains())
                 .takeCount(value.getVo().getTakeCount())
                 .totalCount(value.getVo().getTotalCount())
+                .takeWeekdays(value.getTakeWeekDaysValue())
+                .takeOnceAmount(value.getTakeOnceAmount())
                 .isAlarm(value.isAlarm())
                 .takeYN(value.getVo().getTakeYn())
                 .startAt(value.getVo().getStartAt())

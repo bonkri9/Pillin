@@ -2,7 +2,7 @@ package com.ssafy.yourpilling.pill.model.service.mapper.value;
 
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
-import com.ssafy.yourpilling.pill.model.service.vo.PillRegisterVo;
+import com.ssafy.yourpilling.pill.model.service.vo.request.PillRegisterVo;
 import lombok.Builder;
 import lombok.Value;
 
@@ -18,4 +18,6 @@ public class OwnPillRegisterValue {
     Pill pill;
     boolean isAlarm;
     LocalDateTime createAt;
+    Integer takeWeekDaysValue;
+    Integer takeOnceAmount;
 }
