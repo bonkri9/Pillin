@@ -36,6 +36,7 @@ public class MemberProfile {
     private LocalDate birth;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @Column(name = "created_at")

@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
@@ -40,7 +41,7 @@ public class SecurityConfig {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         JwtAuthenticationFilter jwtAuthenticationFilter =
                 new JwtAuthenticationFilter(authenticationProvider(), jwtManager, jwtProperties);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/api/v1/member/login");
+        jwtAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
         jwtAuthenticationFilter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
         return jwtAuthenticationFilter;
     }
@@ -62,7 +63,9 @@ public class SecurityConfig {
                 // 인가 설정
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/api/v1/pill/**")
-                                .hasAnyRole(Role.MEMBER.getRole(), Role.ADMIN.getRole())
+                                .access(new WebExpressionAuthorizationManager("hasRole('ADMIN') or hasRole('MEMBER')"))
+                                .requestMatchers("/api/v1/member/**")
+                                .access(new WebExpressionAuthorizationManager("hasRole('ADMIN') or hasRole('MEMBER')"))
                                 .anyRequest().permitAll()
                 )
 

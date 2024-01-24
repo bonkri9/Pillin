@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
         return this.authenticationProvider.authenticate(authenticationToken);
     }
@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
         String jwtAccessToken = jwtTokenProvider.createAccessToken(principalDetails);
 
-        response.addHeader(jwtProperties.getAccessTokenHeader(), jwtProperties.getTokenPrefix() + jwtAccessToken);
+        response.addHeader(jwtProperties.getAccessTokenHeader(), jwtAccessToken);
     }
 }
 

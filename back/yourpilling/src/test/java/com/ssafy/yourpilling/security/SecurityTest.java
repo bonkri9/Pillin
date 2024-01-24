@@ -51,11 +51,11 @@ public class SecurityTest {
                 .build();
 
         JSONObject body = new JSONObject();
-        body.put("username", username);
+        body.put("email", username);
         body.put("password", password);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post("/api/v1/member/login")
+                .post("/api/v1/login")
                 .content(body.toString())
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -85,11 +85,11 @@ public class SecurityTest {
                 .build();
 
         JSONObject body = new JSONObject();
-        body.put("username", "nononononononono");
+        body.put("email", "nononononononono");
         body.put("password", password);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post("/api/v1/member/login")
+                .post("/api/v1/login")
                 .content(body.toString())
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -118,11 +118,11 @@ public class SecurityTest {
                 .build();
 
         JSONObject body = new JSONObject();
-        body.put("username", username);
+        body.put("email", username);
         body.put("password", "nononononononono");
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post("/api/v1/member/login")
+                .post("/api/v1/login")
                 .content(body.toString())
                 .contentType(MediaType.APPLICATION_JSON);
 
