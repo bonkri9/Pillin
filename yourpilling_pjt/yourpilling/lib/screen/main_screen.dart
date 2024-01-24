@@ -129,7 +129,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     BaseContainer(
                         width: 350,
-                        height: 230,
+                        height: 300,
                         child: Column(
                           children: [
                             Padding(
@@ -177,8 +177,8 @@ class _MainScreenState extends State<MainScreen> {
                             SizedBox(height: 10,),
                             ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: 2,
-                                itemBuilder: (context, index) {
+                                itemCount: 3,
+                                itemBuilder: (context, i) {
 
                               return Padding(
                                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -194,7 +194,7 @@ class _MainScreenState extends State<MainScreen> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Image.asset('assets/image/1.png', width: 17, height: 17,),
+                                          Image.asset('assets/image/${i+1}.png', width: 17, height: 17,),
                                           Text("비타민 C", style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14,
@@ -232,58 +232,6 @@ class _MainScreenState extends State<MainScreen> {
                                     )),
                               );
                             })
-
-                            // Padding(
-                            //   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            //   child: Container(
-                            //       width: 300,
-                            //       height: 45,
-                            //       decoration: BoxDecoration(
-                            //         color: Colors.grey.withOpacity(0.08),
-                            //         borderRadius: BorderRadius.circular(10),
-                            //       ),
-                            //       child: Padding(
-                            //         padding: const EdgeInsets.all(10.0),
-                            //         child: Row(
-                            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //           children: [
-                            //             Image.asset('assets/image/2.png', width: 17, height: 17,),
-                            //             Text("루테인", style: TextStyle(
-                            //               fontWeight: FontWeight.w600,
-                            //               fontSize: 14,
-                            //               color: LIGHT_BLACK,
-                            //             )),
-                            //             Text("12:00", style: TextStyle(
-                            //               fontWeight: FontWeight.w600,
-                            //               fontSize: 14,
-                            //               color: LIGHT_BLACK,
-                            //             )),
-                            //             Container(
-                            //               width: 50,
-                            //               decoration: BoxDecoration(
-                            //                 color: Colors.white,
-                            //                 border: Border.all(
-                            //                   color: Colors.redAccent,
-                            //                   width: 1,
-                            //                 ),
-                            //                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                            //               ),
-                            //               child: TextButton(
-                            //                   onPressed: () {},
-                            //                 style: ButtonStyle(
-                            //                   padding: MaterialStateProperty.all(EdgeInsets.zero), // 패딩 없애줘야 함
-                            //                 ),
-                            //                 child: Text("복용", style: TextStyle(
-                            //                 color: Colors.redAccent,
-                            //                 fontSize: 13,
-                            //                 fontWeight: FontWeight.w600,
-                            //                   )),
-                            //               ),
-                            //             )
-                            //           ],
-                            //         ),
-                            //       )),
-                            // )
                           ],
                         )
                     ),
