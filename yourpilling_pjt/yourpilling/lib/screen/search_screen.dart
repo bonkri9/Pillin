@@ -44,7 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Icon(Icons.search, color: Color(0xFFFF6666)),
                 ],
               ),
-            ),
+            ), 
             BaseContainer(
               width: 350,
               height: 50,
