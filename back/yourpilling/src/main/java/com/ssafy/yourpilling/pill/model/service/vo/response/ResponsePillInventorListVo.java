@@ -1,27 +1,30 @@
 package com.ssafy.yourpilling.pill.model.service.vo.response;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
+@Value
+@Builder
 public class ResponsePillInventorListVo {
 
-    private ResponsePillInventorListData takeTrue;
-    private ResponsePillInventorListData takeFalse;
+    ResponsePillInventorListData takeTrue;
+    ResponsePillInventorListData takeFalse;
 
-    @Data
+    @Value
+    @Builder
     public static class ResponsePillInventorListData {
-        private List<ResponsePillInventoryItem> data;
+        List<ResponsePillInventoryItem> data;
     }
 
-    @Data
+    @Value
+    @Builder
     public static class ResponsePillInventoryItem {
-        private String imageURl;
-        private Integer totalCount;
-        private Integer remains;
-        private LocalDate predicateRunOut;
-        private LocalDate predicateBuy;
+        String imageURl;
+        Integer totalCount;
+        Integer remains;
+        LocalDate predicateRunOutAt;
     }
 }

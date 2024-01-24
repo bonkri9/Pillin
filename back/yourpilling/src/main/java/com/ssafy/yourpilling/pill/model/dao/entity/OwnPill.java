@@ -50,7 +50,7 @@ public class OwnPill {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "member_member_id")
+    @JoinColumn(name = "member_id")
     private PillMember member;
 
     @OneToOne

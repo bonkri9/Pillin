@@ -19,10 +19,10 @@ public class PillCategory {
     private Long mappingId;
 
     @ManyToOne
-    @JoinColumn(name = "pill_pill_id")
+    @JoinColumn(name = "pill_id")
     private Pill pill;
 
     @ManyToOne
-    @JoinColumn(name = "midcategory_mid_category_id")
+    @JoinColumn(name = "mid_category_id")
     private MidCategory midCategory;
 }

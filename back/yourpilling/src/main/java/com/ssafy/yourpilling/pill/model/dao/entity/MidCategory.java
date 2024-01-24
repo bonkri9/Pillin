@@ -28,7 +28,7 @@ public class MidCategory {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "bigcategory big_category_id")
+    @JoinColumn(name = "big_category_id")
     private BigCategory bigCategory;
 
     @OneToMany(mappedBy = "midCategory", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

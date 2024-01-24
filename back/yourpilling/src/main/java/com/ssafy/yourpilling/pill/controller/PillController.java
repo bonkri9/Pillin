@@ -22,14 +22,13 @@ public class PillController {
     ResponseEntity<Void> register(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                   @RequestBody RequestRegisterPillDto dto) {
         pillService.register(mapper.mapToPillRegisterVo(principalDetails.getMember().getMemberId(), dto));
-
         return ResponseEntity.ok().build();
     }
 
 
     @GetMapping("/inventory/list")
     ResponseEntity<ResponsePillInventorListVo> list(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        pillService.inventoryList(mapper.mapToPillInventoryListVo(principalDetails.getMember().getMemberId()));
-        return null;
+        ResponsePillInventorListVo data = pillService.inventoryList(mapper.mapToPillInventoryListVo(principalDetails.getMember().getMemberId()));
+        return ResponseEntity.ok(data);
     }
 }
