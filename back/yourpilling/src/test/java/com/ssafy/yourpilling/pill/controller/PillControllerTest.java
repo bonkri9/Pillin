@@ -147,6 +147,89 @@ class PillControllerTest {
     }
 
     @Test
+    @DisplayName("보유중인 영양제 정보 수정. 재고 관리 Ok")
+    public void updateAndMaintainOk() throws Exception {
+        // given
+        Member member = defaultRegisterMember();
+        String accessToken = getAccessToken(member);
+        Pill pill = defaultRegisterPill();
+
+        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill);
+
+        JSONArray takeWeekdays = new JSONArray();
+        takeWeekdays.put("Wed");
+        takeWeekdays.put("SAt");
+
+        JSONObject body = new JSONObject();
+        body.put("ownPillId", ownPill.getOwnPillId());
+        body.put("remains", 3);
+        body.put("totalCount", 30);
+        body.put("takeWeekdays", takeWeekdays);
+        body.put("takeCount", 2);
+        body.put("takeOnceAmount", 2);
+        body.put("takeYn", true);
+        body.put("startAt", LocalDate.now());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/api/v1/pill/inventory")
+                .header("accessToken", accessToken)
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+        OwnPill saved = ownPillJpaRepository.findByOwnPillId(ownPill.getOwnPillId()).get();
+
+        assertEquals(body.getInt("remains"), saved.getRemains());
+        assertEquals(body.getInt("totalCount"), saved.getTotalCount());
+        assertEquals(((1<<2) ^ (1<<5)), saved.getTakeWeekdays()); // 수, 토
+        assertEquals(body.getInt("takeCount"), saved.getTakeCount());
+        assertEquals(body.getInt("takeOnceAmount"), saved.getTakeOnceAmount());
+        assertEquals(body.getBoolean("takeYn"), saved.getTakeYN());
+        assertEquals(body.getString("startAt"), saved.getStartAt().toString());
+    }
+
+    @Test
+    @DisplayName("보유중인 영양제 정보 수정. 재고 관리 No")
+    public void updateAndMaintainNo() throws Exception {
+        // given
+        Member member = defaultRegisterMember();
+        String accessToken = getAccessToken(member);
+        Pill pill = defaultRegisterPill();
+
+        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill);
+
+        JSONObject body = new JSONObject();
+        body.put("ownPillId", ownPill.getOwnPillId());
+        body.put("takeYn", false);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/api/v1/pill/inventory")
+                .header("accessToken", accessToken)
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+        OwnPill saved = ownPillJpaRepository.findByOwnPillId(ownPill.getOwnPillId()).get();
+
+        assertNull(saved.getRemains());
+        assertNull(saved.getTotalCount());
+        assertNull(saved.getTakeWeekdays());
+        assertNull(saved.getTakeCount());
+        assertNull(saved.getTakeOnceAmount());
+        assertNull(saved.getStartAt());
+
+        assertFalse(saved.getTakeYN());
+    }
+
+    @Test
     @DisplayName("보유중인 영양제 조회")
     public void list() throws Exception {
         // given

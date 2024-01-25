@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "ownpill")
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class OwnPill {

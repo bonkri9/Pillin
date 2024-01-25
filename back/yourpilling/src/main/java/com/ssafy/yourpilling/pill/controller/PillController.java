@@ -1,5 +1,6 @@
 package com.ssafy.yourpilling.pill.controller;
 
+import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillUpdateDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestPillDetailDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestRegisterPillDto;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
@@ -33,6 +34,12 @@ public class PillController {
         return ResponseEntity.ok().build();
     }
 
+
+    @PutMapping("/inventory")
+    ResponseEntity<Void> update(@RequestBody RequestOwnPillUpdateDto dto){
+        pillService.update(mapper.mapToOwnPillUpdateVo(dto));
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/inventory/list")
     ResponseEntity<OutPillInventorListVo> list(@AuthenticationPrincipal PrincipalDetails principalDetails){

@@ -1,7 +1,9 @@
 package com.ssafy.yourpilling.pill.controller.mapper;
 
+import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillUpdateDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestPillDetailDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestRegisterPillDto;
+import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.PillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.PillInventoryListVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.PillRegisterVo;
@@ -29,6 +31,20 @@ public class PillControllerMapper {
                 .takeWeekdays(dto.getTakeWeekdays())
                 .takeCount(dto.getTakeCount())
                 .takeOnceAmount(dto.getTakeOnceAmount())
+                .build();
+    }
+
+    public OwnPillUpdateVo mapToOwnPillUpdateVo(RequestOwnPillUpdateDto dto){
+        return OwnPillUpdateVo
+                .builder()
+                .ownPillId(dto.getOwnPillId())
+                .remains(dto.getRemains())
+                .totalCount(dto.getTotalCount())
+                .takeWeekdays(dto.getTakeWeekdays())
+                .takeCount(dto.getTakeCount())
+                .takeOnceAmount(dto.getTakeOnceAmount())
+                .takeYn(dto.getTakeYn())
+                .startAt(dto.getStartAt())
                 .build();
     }
 

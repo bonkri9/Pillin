@@ -8,6 +8,7 @@ import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 import com.ssafy.yourpilling.pill.model.service.PillService;
 import com.ssafy.yourpilling.pill.model.service.mapper.PillServiceMapper;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
+import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.PillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.PillInventoryListVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.PillRegisterVo;
@@ -62,9 +63,17 @@ public class PillServiceImpl implements PillService {
         pillDao.register(mapper.mapToOwnPill(value));
     }
 
+    @Transactional
     @Override
-    public OutPillInventorListVo inventoryList(PillInventoryListVo pillInventoryListVo) {
-        PillMember member = pillDao.findByMemberId(pillInventoryListVo.getMemberId());
+    public void update(OwnPillUpdateVo vo) {
+        OwnPill ownPill = pillDao.findByOwnPillId(vo.getOwnPillId());
+
+        updateValues(vo, ownPill);
+    }
+
+    @Override
+    public OutPillInventorListVo inventoryList(PillInventoryListVo vo) {
+        PillMember member = pillDao.findByMemberId(vo.getMemberId());
 
         Map<Boolean, List<OwnPill>> partition = ownPillsYN(member.getOwnPills());
 
@@ -73,24 +82,40 @@ public class PillServiceImpl implements PillService {
                 calculationPredicateRunOut(partition.get(false)));
     }
 
-    private Map<Boolean, List<OwnPill>> ownPillsYN(List<OwnPill> ownPills){
+    private static void updateValues(OwnPillUpdateVo vo, OwnPill ownPill) {
+        ownPill.setRemains(vo.getRemains());
+        ownPill.setTotalCount(vo.getTotalCount());
+        ownPill.setTakeCount(vo.getTakeCount());
+        ownPill.setTakeOnceAmount(vo.getTakeOnceAmount());
+        ownPill.setTakeYN(vo.getTakeYn());
+        ownPill.setStartAt(vo.getStartAt());
+
+        if(vo.getTakeYn()) {
+            ownPill.setTakeWeekdays(TakeWeekday.toValue(vo.getTakeWeekdays()));
+        }else{
+            ownPill.setTakeWeekdays(null);
+        }
+
+    }
+
+    private Map<Boolean, List<OwnPill>> ownPillsYN(List<OwnPill> ownPills) {
         return ownPills
                 .parallelStream()
                 .collect(Collectors.partitioningBy(OwnPill::isTakeYN));
     }
 
-    private ResponsePillInventorListData calculationPredicateRunOut(List<OwnPill> ownPills){
+    private ResponsePillInventorListData calculationPredicateRunOut(List<OwnPill> ownPills) {
         List<String> imageUrls = imageUrls(ownPills);
         List<LocalDate> predicateRunOutAts = predicateRunOutAts(ownPills);
 
-        if((ownPills.size() != imageUrls.size()) || (ownPills.size() != predicateRunOutAts.size())){
+        if ((ownPills.size() != imageUrls.size()) || (ownPills.size() != predicateRunOutAts.size())) {
             throw new RuntimeException("예상 재고 소진일 계산도중 오류가 발생했습니다.");
         }
 
         return mapper.mapToResponsePillInventorListData(ownPills, imageUrls, predicateRunOutAts);
     }
 
-    private List<String> imageUrls(List<OwnPill> ownPills){
+    private List<String> imageUrls(List<OwnPill> ownPills) {
         List<String> images = new ArrayList<>();
         for (OwnPill ownPill : ownPills) {
             images.add(ownPill.getPill().getImageUrl());
@@ -98,16 +123,16 @@ public class PillServiceImpl implements PillService {
         return images;
     }
 
-    private List<LocalDate> predicateRunOutAts(List<OwnPill> ownPills){
-         List<LocalDate> at = new ArrayList<>();
+    private List<LocalDate> predicateRunOutAts(List<OwnPill> ownPills) {
+        List<LocalDate> at = new ArrayList<>();
         for (OwnPill ownPill : ownPills) {
             at.add(predicateRunOutAt(ownPill));
         }
         return at;
     }
 
-    private LocalDate predicateRunOutAt(OwnPill ownPill){
-        if(!ownPill.getTakeYN()){
+    private LocalDate predicateRunOutAt(OwnPill ownPill) {
+        if (!ownPill.getTakeYN()) {
             return null;
         }
         return LocalDate.now().plusDays(runOutAt(ownPill));
@@ -118,9 +143,9 @@ public class PillServiceImpl implements PillService {
         int nextDay = LocalDate.now().getDayOfWeek().getValue();
         int after = 0;
 
-        while (remains > 0){
+        while (remains > 0) {
             after++;
-            if((ownPill.getTakeWeekdays() & (1<<nextDay)) == 0) continue;
+            if ((ownPill.getTakeWeekdays() & (1 << nextDay)) == 0) continue;
 
             remains -= (ownPill.getTakeCount() * ownPill.getTakeOnceAmount());
             nextDay = ((nextDay + 1) % WEEK);
@@ -128,12 +153,12 @@ public class PillServiceImpl implements PillService {
         return after;
     }
 
-    private List<String> takeWeekDays(Integer value){
+    private List<String> takeWeekDays(Integer value) {
         return TakeWeekday.toTakeWeekdays(value);
     }
 
-    private String runOutMessage(OwnPill ownPill){
-        if(!ownPill.isTakeYN()) return null;
+    private String runOutMessage(OwnPill ownPill) {
+        if (!ownPill.isTakeYN()) return null;
 
         return RunOutWarning.getMessage((double) ownPill.getRemains() / ownPill.getTotalCount());
     }
