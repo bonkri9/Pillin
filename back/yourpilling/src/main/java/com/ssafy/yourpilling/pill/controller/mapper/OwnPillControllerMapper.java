@@ -1,26 +1,26 @@
 package com.ssafy.yourpilling.pill.controller.mapper;
 
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillUpdateDto;
-import com.ssafy.yourpilling.pill.controller.dto.request.RequestPillDetailDto;
-import com.ssafy.yourpilling.pill.controller.dto.request.RequestRegisterPillDto;
+import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillDetailDto;
+import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnRegisterPillDto;
 import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.PillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.PillInventoryListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.PillRegisterVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillDetailVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillInventoryListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillRegisterVo;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PillControllerMapper {
+public class OwnPillControllerMapper {
 
-    public PillDetailVo mapToPillDetailVo(RequestPillDetailDto dto){
-        return PillDetailVo
+    public OwnPillDetailVo mapToPillDetailVo(RequestOwnPillDetailDto dto){
+        return OwnPillDetailVo
                 .builder()
                 .ownPillId(dto.getOwnPillId())
                 .build();
     }
 
-    public PillRegisterVo mapToPillRegisterVo(Long memberId, RequestRegisterPillDto dto){
-        return PillRegisterVo
+    public OwnPillRegisterVo mapToPillRegisterVo(Long memberId, RequestOwnRegisterPillDto dto){
+        return OwnPillRegisterVo
                 .builder()
                 .pillId(dto.getPillId())
                 .memberId(memberId)
@@ -48,8 +48,8 @@ public class PillControllerMapper {
                 .build();
     }
 
-    public PillInventoryListVo mapToPillInventoryListVo(Long memberId){
-        return PillInventoryListVo
+    public OwnPillInventoryListVo mapToPillInventoryListVo(Long memberId){
+        return OwnPillInventoryListVo
                 .builder()
                 .memberId(memberId)
                 .build();

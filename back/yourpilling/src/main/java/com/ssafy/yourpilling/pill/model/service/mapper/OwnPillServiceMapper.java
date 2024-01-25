@@ -5,9 +5,9 @@ import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo.OutOwnPillPillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo.ResponsePillInventorListData;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo.ResponsePillInventoryItem;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo.ResponsePillInventorListData;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo.ResponsePillInventoryItem;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @Component
-public class PillServiceMapper {
+public class OwnPillServiceMapper {
 
     public OutOwnPillDetailVo mapToOutOwnPillDetailVo(OwnPill ownPill, String warningMessage, List<String> takeWeekdays){
         return OutOwnPillDetailVo
@@ -69,9 +69,9 @@ public class PillServiceMapper {
                 .build();
     }
 
-    public OutPillInventorListVo mapToResponsePillInventorListVo(ResponsePillInventorListData takeTrue,
-                                                                 ResponsePillInventorListData takeFalse) {
-        return OutPillInventorListVo
+    public OutOwnPillInventorListVo mapToResponsePillInventorListVo(ResponsePillInventorListData takeTrue,
+                                                                    ResponsePillInventorListData takeFalse) {
+        return OutOwnPillInventorListVo
                 .builder()
                 .takeTrue(takeTrue)
                 .takeFalse(takeFalse)

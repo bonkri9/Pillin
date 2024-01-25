@@ -5,7 +5,7 @@ import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 
-public interface PillDao {
+public interface OwnPillDao {
 
     OwnPill findByOwnPillId(Long ownPillId);
 

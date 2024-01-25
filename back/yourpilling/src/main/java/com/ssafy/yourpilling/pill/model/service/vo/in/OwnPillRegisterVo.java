@@ -9,7 +9,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class PillRegisterVo {
+public class OwnPillRegisterVo {
     Long pillId;
     Long memberId;
     LocalDate startAt;

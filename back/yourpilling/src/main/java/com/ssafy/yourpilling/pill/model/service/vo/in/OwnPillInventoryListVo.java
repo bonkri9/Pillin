@@ -5,6 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class PillDetailVo {
-    Long ownPillId;
+public class OwnPillInventoryListVo {
+
+    Long memberId;
 }

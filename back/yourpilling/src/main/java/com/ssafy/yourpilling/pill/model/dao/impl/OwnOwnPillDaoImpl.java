@@ -1,6 +1,6 @@
 package com.ssafy.yourpilling.pill.model.dao.impl;
 
-import com.ssafy.yourpilling.pill.model.dao.PillDao;
+import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class PillDaoImpl implements PillDao {
+public class OwnOwnPillDaoImpl implements OwnPillDao {
 
     private final OwnPillJpaRepository ownPillJpaRepository;
     private final PillJpaRepository pillJpaRepository;

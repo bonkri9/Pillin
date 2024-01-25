@@ -8,7 +8,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class OutPillInventorListVo {
+public class OutOwnPillInventorListVo {
 
     ResponsePillInventorListData takeTrue;
     ResponsePillInventorListData takeFalse;

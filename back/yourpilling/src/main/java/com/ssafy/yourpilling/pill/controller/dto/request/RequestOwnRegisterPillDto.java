@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class RequestRegisterPillDto {
+public class RequestOwnRegisterPillDto {
     private Long pillId;
     private LocalDate startAt;
     private Boolean takeYn;
