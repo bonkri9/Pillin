@@ -1,10 +1,13 @@
 package com.ssafy.yourpilling.pill.model.service.mapper;
 
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
+import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
-import com.ssafy.yourpilling.pill.model.service.vo.response.ResponsePillInventorListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.response.ResponsePillInventorListVo.ResponsePillInventorListData;
-import com.ssafy.yourpilling.pill.model.service.vo.response.ResponsePillInventorListVo.ResponsePillInventoryItem;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo.OutOwnPillPillDetailVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo.ResponsePillInventorListData;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo.ResponsePillInventoryItem;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -14,6 +17,40 @@ import java.util.List;
 
 @Component
 public class PillServiceMapper {
+
+    public OutOwnPillDetailVo mapToOutOwnPillDetailVo(OwnPill ownPill, String warningMessage, List<String> takeWeekdays){
+        return OutOwnPillDetailVo
+                .builder()
+                .ownPillId(ownPill.getOwnPillId())
+                .remains(ownPill.getRemains())
+                .totalCount(ownPill.getTotalCount())
+                .takeWeekdays(takeWeekdays)
+                .takeCount(ownPill.getTakeCount())
+                .takeOnceAmount(ownPill.getTakeOnceAmount())
+                .isAlarm(ownPill.getIsAlarm())
+                .takeYn(ownPill.getTakeYN())
+                .startAt(ownPill.getStartAt())
+                .warningMessage(warningMessage)
+                .pill(mapToOutOwnPillPillDetailVo(ownPill.getPill()))
+                .build();
+    }
+
+    private static OutOwnPillPillDetailVo mapToOutOwnPillPillDetailVo(Pill pill) {
+        return OutOwnPillPillDetailVo
+                .builder()
+                .pillId(pill.getPillId())
+                .name(pill.getName())
+                .manufacturer(pill.getManufacturer())
+                .expirationAt(pill.getExpirationAt())
+                .usageInstructions(pill.getUsageInstructions())
+                .primaryFunctionality(pill.getPrimaryFunctionality())
+                .precautions(pill.getPrecautions())
+                .storageInstructions(pill.getStorageInstructions())
+                .standardSpecification(pill.getStandardSpecification())
+                .productForm(pill.getProductForm().getKorean())
+                .imageUrl(pill.getImageUrl())
+                .build();
+    }
 
     public OwnPill mapToOwnPill(OwnPillRegisterValue value) {
         return OwnPill
@@ -32,9 +69,9 @@ public class PillServiceMapper {
                 .build();
     }
 
-    public ResponsePillInventorListVo mapToResponsePillInventorListVo(ResponsePillInventorListData takeTrue,
-                                                                      ResponsePillInventorListData takeFalse) {
-        return ResponsePillInventorListVo
+    public OutPillInventorListVo mapToResponsePillInventorListVo(ResponsePillInventorListData takeTrue,
+                                                                 ResponsePillInventorListData takeFalse) {
+        return OutPillInventorListVo
                 .builder()
                 .takeTrue(takeTrue)
                 .takeFalse(takeFalse)

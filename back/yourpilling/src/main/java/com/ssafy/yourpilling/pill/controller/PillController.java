@@ -1,7 +1,9 @@
 package com.ssafy.yourpilling.pill.controller;
 
+import com.ssafy.yourpilling.pill.controller.dto.request.RequestPillDetailDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestRegisterPillDto;
-import com.ssafy.yourpilling.pill.model.service.vo.response.ResponsePillInventorListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo;
 import com.ssafy.yourpilling.pill.controller.mapper.PillControllerMapper;
 import com.ssafy.yourpilling.pill.model.service.PillService;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
@@ -18,6 +20,12 @@ public class PillController {
     private final PillControllerMapper mapper;
     private final PillService pillService;
 
+    @GetMapping("/inventory")
+    ResponseEntity<OutOwnPillDetailVo> detail(@RequestBody RequestPillDetailDto dto) {
+        OutOwnPillDetailVo vo = pillService.detail(mapper.mapToPillDetailVo(dto));
+        return ResponseEntity.ok(vo);
+    }
+
     @PostMapping("/inventory")
     ResponseEntity<Void> register(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                   @RequestBody RequestRegisterPillDto dto) {
@@ -27,8 +35,8 @@ public class PillController {
 
 
     @GetMapping("/inventory/list")
-    ResponseEntity<ResponsePillInventorListVo> list(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        ResponsePillInventorListVo data = pillService.inventoryList(mapper.mapToPillInventoryListVo(principalDetails.getMember().getMemberId()));
+    ResponseEntity<OutPillInventorListVo> list(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        OutPillInventorListVo data = pillService.inventoryList(mapper.mapToPillInventoryListVo(principalDetails.getMember().getMemberId()));
         return ResponseEntity.ok(data);
     }
 }

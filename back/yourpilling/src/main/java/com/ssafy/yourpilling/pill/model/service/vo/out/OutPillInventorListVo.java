@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.pill.model.service.vo.response;
+package com.ssafy.yourpilling.pill.model.service.vo.out;
 
 import lombok.Builder;
 import lombok.Value;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class ResponsePillInventorListVo {
+public class OutPillInventorListVo {
 
     ResponsePillInventorListData takeTrue;
     ResponsePillInventorListData takeFalse;

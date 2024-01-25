@@ -7,6 +7,8 @@ import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 
 public interface PillDao {
 
+    OwnPill findByOwnPillId(Long ownPillId);
+
     void register(OwnPill ownPill);
 
     PillMember findByMemberId(Long memberId);

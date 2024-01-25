@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.pill.model.service.vo.request;
+package com.ssafy.yourpilling.pill.model.service.vo.in;
 
 import com.ssafy.yourpilling.common.TakeWeekday;
 import lombok.Builder;

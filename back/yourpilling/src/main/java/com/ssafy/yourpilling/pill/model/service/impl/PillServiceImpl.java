@@ -1,5 +1,6 @@
 package com.ssafy.yourpilling.pill.model.service.impl;
 
+import com.ssafy.yourpilling.common.RunOutWarning;
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.PillDao;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
@@ -7,10 +8,12 @@ import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 import com.ssafy.yourpilling.pill.model.service.PillService;
 import com.ssafy.yourpilling.pill.model.service.mapper.PillServiceMapper;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
-import com.ssafy.yourpilling.pill.model.service.vo.request.PillInventoryListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.request.PillRegisterVo;
-import com.ssafy.yourpilling.pill.model.service.vo.response.ResponsePillInventorListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.response.ResponsePillInventorListVo.ResponsePillInventorListData;
+import com.ssafy.yourpilling.pill.model.service.vo.in.PillDetailVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.PillInventoryListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.PillRegisterVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutPillInventorListVo.ResponsePillInventorListData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,15 @@ public class PillServiceImpl implements PillService {
     private final PillDao pillDao;
     private final PillServiceMapper mapper;
 
+    @Override
+    public OutOwnPillDetailVo detail(PillDetailVo vo) {
+        OwnPill ownPill = pillDao.findByOwnPillId(vo.getOwnPillId());
+        return mapper.mapToOutOwnPillDetailVo(
+                ownPill,
+                runOutMessage(ownPill),
+                takeWeekDays(ownPill.getTakeWeekdays()));
+    }
+
     @Transactional
     @Override
     public void register(PillRegisterVo vo) {
@@ -51,7 +63,7 @@ public class PillServiceImpl implements PillService {
     }
 
     @Override
-    public ResponsePillInventorListVo inventoryList(PillInventoryListVo pillInventoryListVo) {
+    public OutPillInventorListVo inventoryList(PillInventoryListVo pillInventoryListVo) {
         PillMember member = pillDao.findByMemberId(pillInventoryListVo.getMemberId());
 
         Map<Boolean, List<OwnPill>> partition = ownPillsYN(member.getOwnPills());
@@ -101,7 +113,7 @@ public class PillServiceImpl implements PillService {
         return LocalDate.now().plusDays(runOutAt(ownPill));
     }
 
-    private static int runOutAt(OwnPill ownPill) {
+    private int runOutAt(OwnPill ownPill) {
         int remains = ownPill.getRemains();
         int nextDay = LocalDate.now().getDayOfWeek().getValue();
         int after = 0;
@@ -114,5 +126,15 @@ public class PillServiceImpl implements PillService {
             nextDay = ((nextDay + 1) % WEEK);
         }
         return after;
+    }
+
+    private List<String> takeWeekDays(Integer value){
+        return TakeWeekday.toTakeWeekdays(value);
+    }
+
+    private String runOutMessage(OwnPill ownPill){
+        if(!ownPill.isTakeYN()) return null;
+
+        return RunOutWarning.getMessage((double) ownPill.getRemains() / ownPill.getTotalCount());
     }
 }

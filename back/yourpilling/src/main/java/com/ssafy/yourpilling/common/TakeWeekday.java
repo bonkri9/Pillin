@@ -38,15 +38,14 @@ public enum TakeWeekday {
                 .orElseThrow(() -> new IllegalArgumentException("알맞은 요일 형식이 아닙니다. " + val));
     }
 
-    public static List<TakeWeekday> toTakeWeekdays(Integer val){
-        List<TakeWeekday> takeWeekdays = new ArrayList<>();
+    public static List<String> toTakeWeekdays(Integer val){
+        List<String> takeWeekdays = new ArrayList<>();
 
         for(int i=0; i<TakeWeekday.values().length; i++){
             if((val & (1<<i)) == 0) continue;
 
-            takeWeekdays.add(TakeWeekday.values()[i]);
+            takeWeekdays.add(TakeWeekday.values()[i].getDay());
         }
-
         return takeWeekdays;
     }
 

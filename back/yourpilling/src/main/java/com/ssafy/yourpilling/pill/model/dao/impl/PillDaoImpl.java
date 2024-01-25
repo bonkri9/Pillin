@@ -19,6 +19,12 @@ public class PillDaoImpl implements PillDao {
     private final PillMemberJpaRepository pillMemberJpaRepository;
 
     @Override
+    public OwnPill findByOwnPillId(Long ownPillId) {
+        return ownPillJpaRepository.findByOwnPillId(ownPillId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자가 보유중인 영양제를 찾을 수 없습니다."));
+    }
+
+    @Override
     public void register(OwnPill ownPill) {
         ownPillJpaRepository.save(ownPill);
     }

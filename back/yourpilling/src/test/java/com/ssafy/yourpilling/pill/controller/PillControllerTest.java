@@ -15,6 +15,7 @@ import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
 import com.ssafy.yourpilling.security.auth.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -67,6 +69,40 @@ class PillControllerTest {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @Test
+    @DisplayName("보유중인 영양제 정보 상세 조회")
+    public void detail() throws Exception {
+        // given
+        Member member = defaultRegisterMember();
+        String accessToken = getAccessToken(member);
+        Pill pill = defaultRegisterPill();
+
+        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill);
+        JSONObject body = new JSONObject();
+        body.put("ownPillId", ownPill.getOwnPillId());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/api/v1/pill/inventory")
+                .header("accessToken", accessToken)
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+
+        JSONObject result = new JSONObject(perform.andReturn().getResponse().getContentAsString());
+        assertEquals(ownPill.getOwnPillId(), result.getInt("ownPillId"));
+        assertEquals(ownPill.getRemains(), result.getInt("remains"));
+        assertEquals(ownPill.getTotalCount(), result.getInt("totalCount"));
+        assertEquals(ownPill.getTakeCount(), result.getInt("takeCount"));
+        assertEquals(ownPill.getTakeOnceAmount(), result.getInt("takeOnceAmount"));
+        assertEquals(ownPill.getStartAt().toString(), result.getString("startAt"));
+        assertEquals("danger", result.getString("warningMessage"));
+    }
 
     @Test
     @DisplayName("보유중인 영양제 등록")

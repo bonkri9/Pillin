@@ -1,5 +1,8 @@
 package com.ssafy.yourpilling.common;
 
+import lombok.Getter;
+
+@Getter
 public enum PillProductForm {
     CAPSULE("capsule", "캡슐"),
     TABLET("tablet", "정"),
@@ -13,4 +16,5 @@ public enum PillProductForm {
         this.english = english;
         this.korean = korean;
     }
+
 }
