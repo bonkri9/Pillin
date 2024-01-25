@@ -10,57 +10,67 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: MainAppBarSearch(barColor: Colors.white),
       body: ListView(
         children: [
           AngleContainer(
               width: 300,
-              height : 130,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-                    SizedBox(width: double.infinity, height: 10,),
-                    Row(
+              height : 190,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      SizedBox(width: 8,),
+                      IconButton(onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios, size: 18,)),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("성현", style: TextStyle(
-                          color: HOT_PINK,
+                        // IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
+                        SizedBox(height: 10,),
+                        Row(
+                          children: [
+                            Text("성현", style: TextStyle(
+                              color: HOT_PINK,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                            )),
+                            Text(" 님", style: TextStyle(
+                              color: BASIC_BLACK,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                            )),
+                          ],
+                        ),
+                        Text("오늘도 건강하세요!", style: TextStyle(
+                          color: LIGHT_BLACK,
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
-                        )),
-                        Text(" 님", style: TextStyle(
-                          color: BASIC_BLACK,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                        )),
+                        ),
+                        ),
+                        Container(
+                          height: 25,
+                          child: TextButton(
+                            style: ButtonStyle(
+                              minimumSize: MaterialStateProperty.all(Size.zero),
+                              padding: MaterialStateProperty.all(EdgeInsets.zero), // 버튼의 기본 패딩 없애기
+                            ),
+                            onPressed: () {},
+                            child: Text("정보 수정", style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    Text("오늘도 건강하세요!", style: TextStyle(
-                      color: LIGHT_BLACK,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                    ),
-                    ),
-                    Container(
-                      height: 25,
-                      child: TextButton(
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(Size.zero),
-                          padding: MaterialStateProperty.all(EdgeInsets.zero), // 버튼의 기본 패딩 없애기
-                        ),
-                        onPressed: () {},
-                        child: Text("정보 수정", style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               )),
           // 설정 관리
           AngleContainer(

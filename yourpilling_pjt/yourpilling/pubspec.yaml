@@ -42,10 +42,12 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.0.0
   get_it: ^7.2.0
+  custom_navigation_bar: ^0.8.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_svg: ^2.0.9
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -67,7 +69,9 @@ dependency_overrides:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - assets/icon/
     - assets/image/
+    - assets/logo/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
