@@ -49,7 +49,7 @@ class Calender extends StatelessWidget {
             borderRadius: BorderRadius.circular(6.0),
             border: Border.all(
             width: 1.0,
-            color: PRIMARY_COLOR,
+            color: Colors.white,
             )
           ),
           // focusdate외의 날짜 설정
@@ -60,7 +60,7 @@ class Calender extends StatelessWidget {
           defaultTextStyle: defaultTextStyle, // 평일
           weekendTextStyle: defaultTextStyle, // 주말
           selectedTextStyle: defaultTextStyle.copyWith( // 선택일
-            color: PRIMARY_COLOR,
+            color: Colors.white,
           ),
         ),
 

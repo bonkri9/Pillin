@@ -18,22 +18,20 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MainAppBar(
-          barColor: Color(0xFFFFF5F4),
+          barColor: Color(0xFFF5F6F9),
         ),
         body: Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
             decoration: BoxDecoration(
-              color: Color(0xFFFFF5F4),
+              color: Color(0xFFF5F6F9),
             ),
             child: SingleChildScrollView(
               child: Column(children: [
                 _Welcome(), // 성현님 환영해요
-                _SearchBar(), // 검색창으로 이동
                 _Week(), // 주간 복용 현황
                 _Today(), // 오늘 먹을 영양제
                 _Stock(), // 내 영양제 재고
@@ -78,35 +76,34 @@ class _Welcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 25),
+      padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
       child: Row(
         children: [
           Text(
             '성현님',
             style: TextStyle(
-              color: LIGHT_BLACK,
-              fontSize: 19,
+              color: BASIC_BLACK,
+              fontSize: 25,
               fontWeight: FontWeight.w600,
             ),
           ),
           Text(
-            ' 환영해요',
+            ' 환영해요!',
             style: TextStyle(
               color: Color(0xFFFF6666),
-              fontSize: 19,
+              fontSize: 25,
               fontWeight: FontWeight.w600,
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 155),
+            padding: EdgeInsets.only(left: 110),
             child: Text(
-              ' 1월 23일',
+              ' 1월 26일',
               style: TextStyle(
                 color: BASIC_BLACK,
                 fontSize: 15,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -128,25 +125,25 @@ class _WeekState extends State<_Week> {
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
 
     return BaseContainer(
         width: containerWidth,
-        height: 130,
+        height: 160,
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "주간 복용 현황",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13.5,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Pretendard",
+                      fontSize: 17.5,
                       color: BASIC_BLACK,
                     ),
                   ),
@@ -159,7 +156,7 @@ class _WeekState extends State<_Week> {
                     },
                     icon: Icon(
                       Icons.arrow_forward_ios,
-                      size: 15,
+                      size: 17,
                     ),
                   ),
                 ],
@@ -177,7 +174,7 @@ class _WeekState extends State<_Week> {
                 digitsColor: Colors.grey.withOpacity(0.7),
                 selectedDigitBackgroundColor: Color(0xFFFF6666),
                 weekdayTextColor: Color(0xFFFF6666),
-                weekdays: ["MON", "TUE", "WED", "THR", "FRI", "SAT", "SUN"],
+                weekdays: ["월", "화", "수", "목", "금", "토", "일"],
                 daysInWeek: 7,
               ),
             )
@@ -229,7 +226,6 @@ class _TodayState extends State<_Today> {
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
 
@@ -239,16 +235,19 @@ class _TodayState extends State<_Today> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("오늘 먹을 영양제",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13.5,
-                        color: BASIC_BLACK,
-                      )),
+                  Text(
+                    "오늘 섭취할 영양제",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Pretendard",
+                      fontSize: 17.5,
+                      color: BASIC_BLACK,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () {
                       Navigator.push(
@@ -258,7 +257,7 @@ class _TodayState extends State<_Today> {
                     },
                     icon: Icon(
                       Icons.add,
-                      size: 15,
+                      size: 25,
                     ),
                   ),
                 ],
@@ -270,18 +269,18 @@ class _TodayState extends State<_Today> {
                 alignment: Alignment.centerRight,
                 child: takenNum != pillList.length
                     ? Text(
-                  '${(takenNum * 100 / pillList.length).round()} %',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, color: BASIC_BLACK),
-                )
+                        '${(takenNum * 100 / pillList.length).round()} %',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, color: BASIC_BLACK),
+                      )
                     : Text(
-                  "오늘의 영양 충전 완료 :)",
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                  ),
-                ),
+                        "오늘의 영양 충전 완료 :)",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                      ),
               ),
             ),
             // Progress Bar
@@ -289,31 +288,32 @@ class _TodayState extends State<_Today> {
               padding: const EdgeInsets.only(top: 5),
               child: pillList.length == takenNum
                   ? // 약 모두 다 먹었을 때 초록색 Progress Bar
-              AnimatedProgressBar(
-                width: 300,
-                value: takenNum / pillList.length,
-                duration: const Duration(seconds: 1),
-                gradient: const LinearGradient(
-                  colors: [
-                    Colors.lightGreenAccent,
-                    Colors.greenAccent,
-                  ],
-                ),
-                backgroundColor: Colors.grey.withOpacity(0.2),
-              )
+                  AnimatedProgressBar(
+                      width: 300,
+                      value: takenNum / pillList.length,
+                      duration: const Duration(seconds: 1),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Colors.lightGreenAccent,
+                          Colors.greenAccent,
+                        ],
+                      ),
+                      backgroundColor: Colors.grey.withOpacity(0.2),
+                    )
                   : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
-              AnimatedProgressBar(
-                width: 300,
-                value: takenNum / pillList.length,
-                duration: const Duration(seconds: 1),
-                gradient: const LinearGradient(
-                  colors: [
-                    Colors.orangeAccent,
-                    Colors.redAccent,
-                  ],
-                ),
-                backgroundColor: Colors.grey.withOpacity(0.2),
-              ),
+                  AnimatedProgressBar(
+                      width: 320,
+                      // height: 11,
+                      value: takenNum / pillList.length,
+                      duration: const Duration(seconds: 1),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Colors.orangeAccent,
+                          Colors.redAccent,
+                        ],
+                      ),
+                      backgroundColor: Colors.grey.withOpacity(0.2),
+                    ),
             ),
             SizedBox(
               height: 10,
@@ -346,110 +346,110 @@ class _TodayState extends State<_Today> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
-                                    color: LIGHT_BLACK,
+                                    color: BASIC_BLACK,
                                   )),
                               Text("${pillList[i]['time']}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
-                                    color: LIGHT_BLACK,
+                                    color: BASIC_BLACK,
                                   )),
                               pillList[i]['isTaken'] == false
                                   ? // 복용을 아직 안한 영양제라면
-                              AnimatedContainer(
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Colors.redAccent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                duration: Duration(seconds: 2),
-                                child: TextButton(
-                                  onPressed: () {
-                                    // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
-                                    setState(() {
-                                      pillList[i]['isTaken'] = true;
-                                      takenNum++;
+                                  AnimatedContainer(
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          color: Colors.redAccent,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
+                                          setState(() {
+                                            pillList[i]['isTaken'] = true;
+                                            takenNum++;
 
-                                      print(takenNum);
-                                      if (pillList.length == takenNum) {
-                                        btnColor = Colors.greenAccent;
-                                      }
-                                    });
-                                  },
-                                  style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        EdgeInsets.zero), // 패딩 없애줘야 함
-                                  ),
-                                  child: Text("복용",
-                                      style: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                ),
-                              )
+                                            print(takenNum);
+                                            if (pillList.length == takenNum) {
+                                              btnColor = Colors.greenAccent;
+                                            }
+                                          });
+                                        },
+                                        style: ButtonStyle(
+                                          padding: MaterialStateProperty.all(
+                                              EdgeInsets.zero), // 패딩 없애줘야 함
+                                        ),
+                                        child: Text("복용",
+                                            style: TextStyle(
+                                              color: Colors.redAccent,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                      ),
+                                    )
                                   : pillList.length != takenNum
-                                  ? // 아직 다 먹진 않았고
-                              // 복용한 영양제라면
-                              Container(
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.redAccent,
-                                  border: Border.all(
-                                    color: Colors.redAccent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                    padding:
-                                    MaterialStateProperty.all(
-                                        EdgeInsets
-                                            .zero), // 패딩 없애줘야 함
-                                  ),
-                                  child: Text("완료",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                ),
-                              )
-                                  : Container(
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: btnColor,
-                                  border: Border.all(
-                                    color: btnColor,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: ButtonStyle(
-                                    padding:
-                                    MaterialStateProperty.all(
-                                        EdgeInsets
-                                            .zero), // 패딩 없애줘야 함
-                                  ),
-                                  child: Text("완료",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                ),
-                              )
+                                      ? // 아직 다 먹진 않았고
+                                      // 복용한 영양제라면
+                                      Container(
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            color: Colors.redAccent,
+                                            border: Border.all(
+                                              color: Colors.redAccent,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: TextButton(
+                                            onPressed: () {},
+                                            style: ButtonStyle(
+                                              padding:
+                                                  MaterialStateProperty.all(
+                                                      EdgeInsets
+                                                          .zero), // 패딩 없애줘야 함
+                                            ),
+                                            child: Text("완료",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                          ),
+                                        )
+                                      : Container(
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            color: btnColor,
+                                            border: Border.all(
+                                              color: btnColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: TextButton(
+                                            onPressed: () {},
+                                            style: ButtonStyle(
+                                              padding:
+                                                  MaterialStateProperty.all(
+                                                      EdgeInsets
+                                                          .zero), // 패딩 없애줘야 함
+                                            ),
+                                            child: Text("완료",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                          ),
+                                        )
                             ],
                           ),
                         )),
@@ -503,7 +503,7 @@ class _StockState extends State<_Stock> {
 // 색상 천천히 변경시켜보자 (미완)
   Color btnColor = Colors.redAccent; // 버튼 색상 state
   Color restFullColor = Colors.green; // 영양제 재고가 50% 이상일 때
-  Color restWarningColor = Colors.yellow; // 영양제 재고 50% 미만일 때
+  Color restWarningColor = Colors.orangeAccent; // 영양제 재고 50% 미만일 때
   Color restDangerColor = Colors.redAccent; // 영양제가 6개 미만으로 남았을 때
   Color restDegreeColor = Colors.green; // 초기 설정 색상
 
@@ -521,7 +521,6 @@ class _StockState extends State<_Stock> {
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
 
@@ -531,15 +530,16 @@ class _StockState extends State<_Stock> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "내 영양제 재고",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13.5,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Pretendard",
+                      fontSize: 17.5,
                       color: BASIC_BLACK,
                     ),
                   ),
@@ -584,6 +584,7 @@ class _StockState extends State<_Stock> {
                           "${pillList[i]['rest']}/${pillList[i]['total']}",
                           style: TextStyle(
                             fontSize: 13,
+                            fontWeight: FontWeight.w600,
                             color: setColor(pillList[i]['rest'] as int,
                                 pillList[i]['total'] as int),
                           ),

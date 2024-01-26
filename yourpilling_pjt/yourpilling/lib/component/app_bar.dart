@@ -12,32 +12,43 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   _MainAppBarState createState() => _MainAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(45);
+  Size get preferredSize => Size.fromHeight(70);
 }
 
 class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 45,
       backgroundColor: widget.barColor,
+      toolbarHeight: 120,
       title: Column(
         children: [
-          SizedBox(height: 10,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset('assets/logo/only_pillin_logo.png', width: 55, height: 55),
+              Image.asset('assets/logo/only_pillin_logo.png',
+                  width: 70, height: 70),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.only(right: 15),
+                    visualDensity: const VisualDensity(horizontal: -4),
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.search,
+                      size: 28,
+                    ),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.only(right: 15),
                     visualDensity: const VisualDensity(horizontal: -4),
                     onPressed: () {},
                     icon: Row(
                       children: [
-                        SvgPicture.asset('assets/icon/bell.svg', width: 17, height: 17),
+                        SvgPicture.asset('assets/icon/bell.svg',
+                            width: 26, height: 26, color: BASIC_BLACK,),
+                        // 알람 아이콘 크기
                       ],
                     ),
                   ),
@@ -45,27 +56,27 @@ class _MainAppBarState extends State<MainAppBar> {
                     padding: EdgeInsets.zero,
                     visualDensity: const VisualDensity(horizontal: -4),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => MyPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyPage())); // 마이페이지로 이동
                     },
-                      icon: Row(
-                        children: [
-                          SvgPicture.asset('assets/icon/user.svg', width: 17, height: 17),
-                        ],
+                    icon: Row(
+                      children: [
+                        SvgPicture.asset('assets/icon/user.svg',
+                            width: 28, height: 28),
+                      ],
                     ),
                   ),
-                  SizedBox(width: 15,)
+                  SizedBox(
+                    width: 10,
+                  )
                 ],
               ),
-
             ],
           ),
-          SizedBox(height: 8,),
         ],
       ),
     );
   }
 }
-
-
-

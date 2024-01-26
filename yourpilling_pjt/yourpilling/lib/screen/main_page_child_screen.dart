@@ -13,11 +13,11 @@ class MainPageChild extends StatefulWidget {
 }
 
 class _MyAppState extends State<MainPageChild> {
-  var curTabIdx = 1;
+  var curTabIdx = 0;
 
   final mainTabs = [
-    SearchScreen(),
     MainScreen(),
+    SearchScreen(),
     Inventory(),
     AlarmScreen(),
   ];
@@ -40,14 +40,14 @@ class _MyAppState extends State<MainPageChild> {
         },
         items: [
           BottomNavigationBarItem(
-              label: '검색',
-              icon: Icon(Icons.search_outlined, color: Color(0xFFD3D3D3)),
-              activeIcon: Icon(Icons.search, color: Color(0xFFFF6666)),
-          ),
-          BottomNavigationBarItem(
               label: '홈',
               icon: Icon(Icons.home_outlined, color: Color(0xFFD3D3D3)),
               activeIcon: Icon(Icons.home_filled, color: Color(0xFFFF6666))
+          ),
+          BottomNavigationBarItem(
+              label: '검색',
+              icon: Icon(Icons.search_outlined, color: Color(0xFFD3D3D3)),
+              activeIcon: Icon(Icons.search, color: Color(0xFFFF6666)),
           ),
           BottomNavigationBarItem(
             label: '재고',

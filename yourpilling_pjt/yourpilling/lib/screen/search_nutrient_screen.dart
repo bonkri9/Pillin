@@ -56,13 +56,13 @@ class _SearchNutrientScreenState extends State<SearchNutrientScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("마그네슘", style: TextStyle(
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     )),
                     Text("오메가3", style: TextStyle(
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     )),
                     Text("비타민C", style: TextStyle(
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     )),
                   ],
                 ),

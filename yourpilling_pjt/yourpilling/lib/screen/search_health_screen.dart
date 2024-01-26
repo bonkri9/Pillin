@@ -56,13 +56,13 @@ class _SearchHealthScreenState extends State<SearchHealthScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("눈 건강", style: TextStyle(
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     )),
                     Text("피로 개선", style: TextStyle(
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     )),
                     Text("장 건강", style: TextStyle(
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     )),
                   ],
                 ),

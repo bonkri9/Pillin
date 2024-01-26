@@ -47,7 +47,7 @@ class MyPage extends StatelessWidget {
                           ],
                         ),
                         Text("오늘도 건강하세요!", style: TextStyle(
-                          color: LIGHT_BLACK,
+                          color: BASIC_BLACK,
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
                         ),
@@ -84,7 +84,7 @@ class MyPage extends StatelessWidget {
                     Text("설정 관리", style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     ),
                     ),
                     SizedBox(height: 20,),
@@ -128,7 +128,7 @@ class MyPage extends StatelessWidget {
                     Text("고객 지원", style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: LIGHT_BLACK,
+                      color: BASIC_BLACK,
                     ),
                     ),
                     SizedBox(height: 20,),

@@ -6,6 +6,9 @@ void main() {
   runApp(
       SafeArea(
           child: MaterialApp(
+            theme: ThemeData(
+              fontFamily: "Pretendard",
+            ),
               debugShowCheckedModeBanner: false,
               home: MainPageChild()
           )

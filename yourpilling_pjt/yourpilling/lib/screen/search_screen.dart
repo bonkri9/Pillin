@@ -118,7 +118,7 @@ class _MiddleTap extends StatelessWidget {
               children: [
                 Text("성분검색",
                     style:
-                    TextStyle(color: LIGHT_BLACK, fontSize: 30)),
+                    TextStyle(color: BASIC_BLACK, fontSize: 30)),
               ],
             ),
           ),
@@ -141,7 +141,7 @@ class _MiddleTap extends StatelessWidget {
               children: [
                 Text("건강 검색",
                     style:
-                    TextStyle(color: LIGHT_BLACK, fontSize: 30)),
+                    TextStyle(color: BASIC_BLACK, fontSize: 30)),
               ],
             ),
           ),
