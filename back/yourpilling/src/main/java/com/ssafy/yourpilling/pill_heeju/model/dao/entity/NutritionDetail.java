@@ -37,7 +37,7 @@ public class NutritionDetail {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "pill_pill_id")
+    @JoinColumn(name = "pill_id")
     @JsonBackReference
     private PillDetail pillDetail;
 }
