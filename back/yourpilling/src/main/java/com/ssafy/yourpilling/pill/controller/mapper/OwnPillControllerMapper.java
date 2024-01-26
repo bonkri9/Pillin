@@ -1,12 +1,10 @@
 package com.ssafy.yourpilling.pill.controller.mapper;
 
+import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillRemoveDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillUpdateDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillDetailDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnRegisterPillDto;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillInventoryListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillRegisterVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -52,6 +50,13 @@ public class OwnPillControllerMapper {
         return OwnPillInventoryListVo
                 .builder()
                 .memberId(memberId)
+                .build();
+    }
+
+    public OwnPillRemoveVo mapToOwnPillRemoveVo(RequestOwnPillRemoveDto dto) {
+        return OwnPillRemoveVo
+                .builder()
+                .ownPillId(dto.getOwnPillId())
                 .build();
     }
 }

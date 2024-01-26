@@ -1,5 +1,6 @@
 package com.ssafy.yourpilling.pill.controller;
 
+import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillRemoveDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillUpdateDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillDetailDto;
 import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnRegisterPillDto;
@@ -38,6 +39,12 @@ public class OwnPillController {
     @PutMapping("/inventory")
     ResponseEntity<Void> update(@RequestBody RequestOwnPillUpdateDto dto){
         ownPillService.update(mapper.mapToOwnPillUpdateVo(dto));
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/inventory")
+    ResponseEntity<Void> remove(@RequestBody RequestOwnPillRemoveDto dto){
+        ownPillService.remove(mapper.mapToOwnPillRemoveVo(dto));
         return ResponseEntity.ok().build();
     }
 

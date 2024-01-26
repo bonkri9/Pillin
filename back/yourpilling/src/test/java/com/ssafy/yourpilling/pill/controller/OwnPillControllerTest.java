@@ -13,9 +13,8 @@ import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import com.ssafy.yourpilling.security.auth.entity.Member;
 import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
 import com.ssafy.yourpilling.security.auth.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -276,6 +274,38 @@ class OwnPillControllerTest {
         assertEquals("null", takeFalseData.getJSONObject(0).getString("predicateRunOutAt"));
     }
 
+    @Test
+    public void remove() throws Exception {
+        // given
+        Member member = defaultRegisterMember();
+        String accessToken = getAccessToken(member);
+        Pill pill = defaultRegisterPill();
+        Pill pill2 = defaultRegisterPill();
+        Pill pill3 = defaultRegisterPill();
+
+        OwnPill one = registerOwnPill(true, member.getMemberId(), pill);
+        OwnPill two = registerOwnPill(true, member.getMemberId(), pill2);
+        OwnPill three = registerOwnPill(false, member.getMemberId(), pill3);
+
+        JSONObject body = new JSONObject();
+        body.put("ownPillId", one.getOwnPillId());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete("/api/v1/pill/inventory")
+                .header("accessToken", accessToken)
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+        assertTrue(ownPillJpaRepository.findByOwnPillId(one.getOwnPillId()).isEmpty());
+        assertFalse(ownPillJpaRepository.findByOwnPillId(two.getOwnPillId()).isEmpty());
+        assertFalse(ownPillJpaRepository.findByOwnPillId(three.getOwnPillId()).isEmpty());
+    }
+
     private OwnPill registerOwnPill(boolean takeYN, Long memberId, Pill pill){
         OwnPill ownPill = OwnPill
                 .builder()
@@ -314,9 +344,9 @@ class OwnPillControllerTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        if(pillJpaRepository.findByName(pill.getName()).isEmpty()){
-            pillJpaRepository.save(pill);
-        }
+
+        pillJpaRepository.save(pill);
+
         return pill;
     }
 

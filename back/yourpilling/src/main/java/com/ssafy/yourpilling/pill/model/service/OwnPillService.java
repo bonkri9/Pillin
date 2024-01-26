@@ -1,9 +1,6 @@
 package com.ssafy.yourpilling.pill.model.service;
 
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillInventoryListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillRegisterVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.*;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
 
@@ -16,4 +13,6 @@ public interface OwnPillService {
     OutOwnPillDetailVo detail(OwnPillDetailVo vo);
 
     void update(OwnPillUpdateVo vo);
+
+    void remove(OwnPillRemoveVo vo);
 }

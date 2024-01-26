@@ -40,4 +40,10 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
         return pillJpaRepository.findByPillId(pillId)
                 .orElseThrow(() -> new IllegalArgumentException("영양제를 찾을 수 없습니다."));
     }
+
+    @Override
+    public void removeByOwnPillId(Long ownPillId) {
+        ownPillJpaRepository.deleteByOwnPillId(ownPillId)
+                .orElseThrow(() -> new IllegalArgumentException("보유중인 영양제 삭제에 실패했습니다."));
+    }
 }

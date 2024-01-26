@@ -8,10 +8,7 @@ import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
 import com.ssafy.yourpilling.pill.model.service.mapper.OwnPillServiceMapper;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillInventoryListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillRegisterVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.*;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo.ResponsePillInventorListData;
@@ -46,6 +43,17 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 takeWeekDays(ownPill.getTakeWeekdays()));
     }
 
+    @Override
+    public OutOwnPillInventorListVo inventoryList(OwnPillInventoryListVo vo) {
+        PillMember member = ownPillDao.findByMemberId(vo.getMemberId());
+
+        Map<Boolean, List<OwnPill>> partition = ownPillsYN(member.getOwnPills());
+
+        return mapper.mapToResponsePillInventorListVo(
+                calculationPredicateRunOut(partition.get(true)),
+                calculationPredicateRunOut(partition.get(false)));
+    }
+
     @Transactional
     @Override
     public void register(OwnPillRegisterVo vo) {
@@ -62,15 +70,10 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
         updateValues(vo, ownPill);
     }
 
+    @Transactional
     @Override
-    public OutOwnPillInventorListVo inventoryList(OwnPillInventoryListVo vo) {
-        PillMember member = ownPillDao.findByMemberId(vo.getMemberId());
-
-        Map<Boolean, List<OwnPill>> partition = ownPillsYN(member.getOwnPills());
-
-        return mapper.mapToResponsePillInventorListVo(
-                calculationPredicateRunOut(partition.get(true)),
-                calculationPredicateRunOut(partition.get(false)));
+    public void remove(OwnPillRemoveVo vo) {
+        ownPillDao.removeByOwnPillId(vo.getOwnPillId());
     }
 
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo) {

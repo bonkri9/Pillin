@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface OwnPillJpaRepository extends JpaRepository<OwnPill, Long> {
 
     Optional<OwnPill> findByOwnPillId(Long ownPillId);
+
+    Optional<Void> deleteByOwnPillId(Long ownPillId);
 }
