@@ -35,7 +35,6 @@ public class OwnPillController {
         return ResponseEntity.ok().build();
     }
 
-
     @PutMapping("/inventory")
     ResponseEntity<Void> update(@RequestBody RequestOwnPillUpdateDto dto){
         ownPillService.update(mapper.mapToOwnPillUpdateVo(dto));

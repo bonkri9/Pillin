@@ -8,8 +8,6 @@ import lombok.Value;
 
 import java.time.LocalDateTime;
 
-import static java.time.LocalDateTime.now;
-
 @Value
 @Builder
 public class OwnPillRegisterValue {

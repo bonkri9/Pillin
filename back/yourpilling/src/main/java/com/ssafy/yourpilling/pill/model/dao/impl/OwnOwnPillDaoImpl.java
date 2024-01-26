@@ -1,5 +1,6 @@
 package com.ssafy.yourpilling.pill.model.dao.impl;
 
+import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
@@ -7,6 +8,7 @@ import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
+import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -42,8 +44,25 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     }
 
     @Override
+    public void update(OwnPillUpdateVo vo) {
+        OwnPill ownPill = findByOwnPillId(vo.getOwnPillId());
+
+        updateValues(vo, ownPill);
+    }
+
+    @Override
     public void removeByOwnPillId(Long ownPillId) {
         ownPillJpaRepository.deleteByOwnPillId(ownPillId)
                 .orElseThrow(() -> new IllegalArgumentException("보유중인 영양제 삭제에 실패했습니다."));
+    }
+
+    private static void updateValues(OwnPillUpdateVo vo, OwnPill ownPill) {
+        ownPill.setRemains(vo.getRemains());
+        ownPill.setTotalCount(vo.getTotalCount());
+        ownPill.setTakeCount(vo.getTakeCount());
+        ownPill.setTakeOnceAmount(vo.getTakeOnceAmount());
+        ownPill.setTakeYN(vo.getTakeYn());
+        ownPill.setStartAt(vo.getStartAt());
+        ownPill.setTakeWeekdays(vo.getTakeYn() ? TakeWeekday.toValue(vo.getTakeWeekdays()) : null);
     }
 }
