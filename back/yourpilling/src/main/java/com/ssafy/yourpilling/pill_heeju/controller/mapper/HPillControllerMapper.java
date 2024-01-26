@@ -8,4 +8,7 @@ public class HPillControllerMapper {
     public PillDetailVo mapToPillIdVo(Long pillId){
         return PillDetailVo.builder().pillId(pillId).build();
     }
+    public PillDetailVo mapToPillNameVo(String pillName) {
+        return PillDetailVo.builder().pillName(pillName).build();
+    }
 }

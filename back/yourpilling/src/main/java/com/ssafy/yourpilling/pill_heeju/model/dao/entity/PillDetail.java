@@ -53,7 +53,7 @@ public class PillDetail {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "takeCount")
+    @Column(name = "take_count")
     private Double takeCount;
 
     @Column(name = "created_at")
