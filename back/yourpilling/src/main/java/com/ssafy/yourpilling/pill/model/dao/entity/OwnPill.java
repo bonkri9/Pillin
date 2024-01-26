@@ -1,10 +1,15 @@
 package com.ssafy.yourpilling.pill.model.dao.entity;
 
+import com.ssafy.yourpilling.common.RunOutWarning;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "ownpill")
@@ -59,5 +64,55 @@ public class OwnPill {
 
     public boolean isTakeYN(){
         return this.takeYN;
+    }
+
+    public static Map<Boolean, List<OwnPill>> ownPillsYN(List<OwnPill> ownPills){
+        return ownPills
+                .parallelStream()
+                .collect(Collectors.partitioningBy(OwnPill::isTakeYN));
+    }
+
+    public String runOutMessage() {
+        if (!this.isTakeYN()) return null;
+
+        return RunOutWarning.getMessage((double) this.getRemains() / this.getTotalCount());
+    }
+
+    public static List<String> imageUrls(List<OwnPill> ownPills) {
+        List<String> images = new ArrayList<>();
+        for (OwnPill ownPill : ownPills) {
+            images.add(ownPill.getPill().getImageUrl());
+        }
+        return images;
+    }
+
+    public static List<LocalDate> predicateRunOutAts(List<OwnPill> ownPills, Integer week) {
+        List<LocalDate> at = new ArrayList<>();
+        for (OwnPill ownPill : ownPills) {
+            at.add(ownPill.predicateRunOutAt(week));
+        }
+        return at;
+    }
+
+    public LocalDate predicateRunOutAt(Integer week) {
+        if (!this.getTakeYN()) {
+            return null;
+        }
+        return LocalDate.now().plusDays(runOutAt(week));
+    }
+
+    private int runOutAt(Integer week) {
+        int remains = this.getRemains();
+        int nextDay = LocalDate.now().getDayOfWeek().getValue();
+        int after = 0;
+
+        while (remains > 0) {
+            after++;
+            if ((this.getTakeWeekdays() & (1 << nextDay)) == 0) continue;
+
+            remains -= (this.getTakeCount() * this.getTakeOnceAmount());
+            nextDay = ((nextDay + 1) % week);
+        }
+        return after;
     }
 }
