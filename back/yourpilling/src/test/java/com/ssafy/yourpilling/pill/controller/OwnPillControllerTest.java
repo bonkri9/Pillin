@@ -266,12 +266,15 @@ class OwnPillControllerTest {
                 LocalDate.parse(takeTrueData.getJSONObject(0).getString("predicateRunOutAt"), formatter))); // 10일 차이
         assertEquals(10, ChronoUnit.DAYS.between(now(),
                 LocalDate.parse(takeTrueData.getJSONObject(1).getString("predicateRunOutAt"), formatter)));
+        assertEquals(takeTrueData.getJSONObject(0).getLong("ownPillId"), one.getOwnPillId());
+        assertEquals(takeTrueData.getJSONObject(1).getLong("ownPillId"), two.getOwnPillId());
 
         JSONObject takeFalse = response.getJSONObject("takeFalse");
         JSONArray takeFalseData = takeFalse.getJSONArray("data");
         assertEquals(1, takeFalseData.length());
 
         assertEquals("null", takeFalseData.getJSONObject(0).getString("predicateRunOutAt"));
+        assertEquals(takeFalseData.getJSONObject(0).getLong("ownPillId"), three.getOwnPillId());
     }
 
     @Test

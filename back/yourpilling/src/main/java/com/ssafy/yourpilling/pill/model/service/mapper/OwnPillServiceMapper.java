@@ -95,7 +95,8 @@ public class OwnPillServiceMapper {
     private ResponsePillInventoryItem mapToResponsePillInventoryItem(OwnPill ownPill, String imageUrl, LocalDate at) {
         return ResponsePillInventoryItem
                 .builder()
-                .imageURl(imageUrl)
+                .ownPillId(ownPill.getOwnPillId())
+                .imageUrl(imageUrl)
                 .totalCount(ownPill.getTotalCount())
                 .remains(ownPill.getRemains())
                 .predicateRunOutAt(at)

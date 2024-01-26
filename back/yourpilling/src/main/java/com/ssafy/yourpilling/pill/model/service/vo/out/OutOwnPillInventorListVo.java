@@ -22,7 +22,8 @@ public class OutOwnPillInventorListVo {
     @Value
     @Builder
     public static class ResponsePillInventoryItem {
-        String imageURl;
+        Long ownPillId;
+        String imageUrl;
         Integer totalCount;
         Integer remains;
         LocalDate predicateRunOutAt;
