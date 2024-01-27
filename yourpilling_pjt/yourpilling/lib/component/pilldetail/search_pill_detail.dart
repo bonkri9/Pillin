@@ -1,147 +1,152 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/screen/inventory_screen.dart';
+import 'package:yourpilling/screen/main_screen.dart';
+import 'package:share/share.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import '../../const/colors.dart';
+var pillDetailInfo = [
+  {
+    'pillName': '오메가-3', // 영양제 이름
+    'manufacturer': '나우푸드', // 제조사
+    'productForm': '고체형', // 제형
+  },
+];
 
 class PillDetailScreen extends StatefulWidget {
   const PillDetailScreen({super.key});
 
-  // int pillNo;
   // String pillName;
-  // String pillImgUrl;
-  // int rank;
+  // String manufacturer;
+  // String productForm;
   //
-  // PillDetailScreen(
-  //     {super.key,
-  //     required this.pillNo,
-  //     required this.pillName,
-  //     required this.pillImgUrl,
-  //     required this.rank});
+  // PillDetailScreen({
+  //   super.key,
+  //   required this.pillName,
+  //   required this.manufacturer,
+  //   required this.productForm,
+  // });
 
   @override
-  State<PillDetailScreen> createState() => _PillDetailScreenState();
+  State<PillDetailScreen> createState() => _pillDetailScreenState();
 }
 
-class _PillDetailScreenState extends State<PillDetailScreen> {
+class _pillDetailScreenState extends State<PillDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    var containerWidth = MediaQuery.of(context).size.width * 0.9;
     return Scaffold(
-      backgroundColor: Color(0xFFFFF5F4),
       appBar: AppBar(
-        title: Text('영양제 상세 페이지'),
+        backgroundColor: BACKGROUND_COLOR,
+        title: const Text("영양제 상세 페이지"),
         centerTitle: true,
-        backgroundColor: Color(0xFFFFF5F4),
       ),
+      backgroundColor: BACKGROUND_COLOR,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
-        child:  Center(
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: Colors.white,
             ),
-            elevation: 4.0, //shadow
+            width: containerWidth,
             child: Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(30, 30, 20, 20),
+                          child: Text(
+                            // widget.pillName,
+                            '${pillDetailInfo[0]['pillName']}',
+                            textScaleFactor: 1.5,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(10, 40, 0, 20),
+                          child: Text(
+                            // widget.manufacturer,
+                            '${pillDetailInfo[0]['manufacturer']}',
+                            textScaleFactor: 1.3,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          onPressed: () {
+                            // String content = 'kakao로 공유슝!';
+                          },
+                          icon: Icon(Icons.share_outlined, size: 30),
+                        ),
+                        SizedBox(
+                          width: 30,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
                 Container(
-                  color: Colors.white,
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.all(60),
-                  child: Image(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/image/비타민B.jpeg")
-                    // imageUrl: widget.productImageUrl,
-                    // placeholder: (context, url){
-                    //   return const Center(
-                    //     child: CircularProgressIndicator(
-                    //       strokeWidth: 2,
-                    //     ),
-                    //   );
-                    // },
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    // widget.pillName,
-                    // textScaleFactor: 1.5,
-                    // style: const TextStyle(
-                    //   fontWeight: FontWeight.bold,
-                    // ),
-                    '뉴트리코스트',
-                    style: TextStyle(fontWeight: FontWeight.w100),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical:10),
-                  child: Text(
-                    '비타민B',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  padding: const EdgeInsets.all(15),
+                  width: MediaQuery.of(context).size.width,
+                  child: Image.asset(
+                    fit: BoxFit.cover,
+                    'assets/image/비타민B.jpg',
                   ),
                 ),
 
               ],
             ),
           ),
-
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xFFFFF5F4),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // '내 영양제 등록하기' 버튼 클릭 시 수행할 작업 추가
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.redAccent),
-                ),
-                child: Text(
-                  '내 영양제 등록하기',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: BACKGROUND_COLOR,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        items: [
+          BottomNavigationBarItem(
+            label: '등록하기',
+            icon: ElevatedButton(
+              child: Text('등록하기'),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Inventory()));
+                //   builder:(context) => InsertInventory()));
+              },
             ),
-            SizedBox(width: 16.0), // 간격 조절
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // '구매하러 가기' 버튼 클릭 시 수행할 작업 추가
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.redAccent),
-                ),
-                child: Text(
-                  '구매하러 가기',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+          ),
+          BottomNavigationBarItem(
+            label: '구매하기',
+            icon: ElevatedButton(
+              child: const Text('구매하기'),
+              onPressed: () async {
+                final url = Uri.parse(
+                    'https://www.coupang.com/vp/products/7559679373?itemId=20998974266&vendorItemId=70393847077&q=%EB%82%98%EC%9A%B0%ED%91%B8%EB%93%9C+%EC%98%A4%EB%A9%94%EA%B0%803&itemsCount=36&searchId=042c491feb4b4cc699aea94c1b27be04&rank=1&isAddedCart=');
+                if (await canLaunchUrl(url)) {
+                  launchUrl(url, mode: LaunchMode.externalApplication);
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      // Center(
-      //   child: Column(
-      //     children: [
-      //       Padding(
-      //         padding:
-      //             const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      //         child: Column(
-      //           children: [
-      //             Image.asset(
-      //               "assets/image/비타민B.jpeg",
-      //               width: 350,
-      //               height: 350,
-      //             ),
-      //             Text('뉴트리코스트'),
-      //             Text('비타민B')
-      //           ],
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
