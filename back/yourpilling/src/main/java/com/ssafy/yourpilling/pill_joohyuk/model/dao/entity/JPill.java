@@ -19,4 +19,13 @@ public class JPill {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "take_count")
+    private Integer takeCount;
+
+    @Column(name = "take_cycle")
+    private Integer takeCycle;
+
+    @Column(name = "take_once_amount")
+    private Integer takeOnceAmount;
+
 }

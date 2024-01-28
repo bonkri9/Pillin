@@ -13,6 +13,7 @@ import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo.ResponsePillInventorListData;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,6 +107,11 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 .builder()
                 .needToUpdateWeeklyHistory(needToUpdate)
                 .build();
+    }
+
+    @Override
+    public OutWeeklyTakerHistoryVo weeklyTakerHistory(WeeklyTakerHistoryVo weeklyTakerHistoryVo) {
+        return ownPillDao.findWeeklyTakerHistoriesByMemberId(weeklyTakerHistoryVo);
     }
 
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo) {

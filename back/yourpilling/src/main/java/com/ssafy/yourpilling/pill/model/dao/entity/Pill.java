@@ -72,4 +72,6 @@ public class Pill {
 
     @OneToMany(mappedBy = "pill", fetch = FetchType.LAZY)
     private List<PillCategory> pillCategories;
+
+
 }
