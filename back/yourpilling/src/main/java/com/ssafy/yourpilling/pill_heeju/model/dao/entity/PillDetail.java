@@ -2,6 +2,7 @@ package com.ssafy.yourpilling.pill_heeju.model.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssafy.yourpilling.common.PillProductForm;
+import com.ssafy.yourpilling.pill_heeju.model.dao.entity.HPillCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -65,5 +66,8 @@ public class PillDetail {
     @OneToMany( mappedBy = "pillDetail") // nutrition 테이블의 pill_id (FK)
     @JsonManagedReference
     private List<NutritionDetail> nutritionDetail = new ArrayList<>();
+
+    @OneToMany( mappedBy = "pillDetail", fetch = FetchType.LAZY)
+    private List<HPillCategory> pillCategories = new ArrayList<>();
 }
 

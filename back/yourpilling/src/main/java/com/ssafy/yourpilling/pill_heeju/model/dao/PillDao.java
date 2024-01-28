@@ -10,4 +10,6 @@ public interface PillDao {
     PillDetail pillDetail(PillDetail pillDetail);
     List<PillDetail> pillSearchList(PillDetail pillDetail);
     List<PillDetail> pillSearchListByNutrition(NutritionDetail nutritionDetail);
+
+    List<PillDetail> pillSearchListByHealthConcern(List<Integer> categories);
 }
