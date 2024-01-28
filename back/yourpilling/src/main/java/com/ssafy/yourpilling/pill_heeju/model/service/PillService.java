@@ -2,6 +2,7 @@ package com.ssafy.yourpilling.pill_heeju.model.service;
 
 
 import com.ssafy.yourpilling.pill_heeju.model.dao.entity.PillDetail;
+import com.ssafy.yourpilling.pill_heeju.model.service.vo.NutritionVo;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.PillDetailVo;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchListVo.ResponsePillSearchListData;
 
@@ -12,4 +13,6 @@ public interface PillService {
     PillDetail pillDetail(PillDetailVo vo);
 
     ResponsePillSearchListData pillSearchList(PillDetailVo vo);
+
+    ResponsePillSearchListData pillSearchList(NutritionVo vo);
 }
