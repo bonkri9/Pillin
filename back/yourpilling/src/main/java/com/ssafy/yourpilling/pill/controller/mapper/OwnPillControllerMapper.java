@@ -77,4 +77,12 @@ public class OwnPillControllerMapper {
                 .build();
 
     }
+
+    public MonthlyTakerHistoryVo mapToMonthlyTakerHistoryVo(Long memberId, RequestDateDto requestDateDto) {
+        return MonthlyTakerHistoryVo
+                .builder()
+                .memberId(memberId)
+                .date(requestDateDto.getDate())
+                .build();
+    }
 }

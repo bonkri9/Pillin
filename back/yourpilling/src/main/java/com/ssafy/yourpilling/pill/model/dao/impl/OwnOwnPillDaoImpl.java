@@ -7,11 +7,14 @@ import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.TakerHistoryRepository;
+import com.ssafy.yourpilling.pill.model.service.vo.in.MonthlyTakerHistoryVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.WeeklyTakerHistoryVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -63,6 +66,11 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
                 .builder()
                 .data(takerHistoryRepository.findWeeklyTakerHistoriesByMemberId(weeklyTakerHistoryVo.getMemberId()))
                 .build();
+    }
+
+    @Override
+    public List<MonthlyTakerHistory> findMonthlyTakerHistoriesByMemberIdAndDate(MonthlyTakerHistoryVo monthlyTakerHistoryVo) {
+        return takerHistoryRepository.findTakerHistoryDetailsByMemberIdAndMonth(monthlyTakerHistoryVo.getMemberId(), monthlyTakerHistoryVo.getDate().getYear(),  monthlyTakerHistoryVo.getDate().getMonthValue());
     }
 
     @Override

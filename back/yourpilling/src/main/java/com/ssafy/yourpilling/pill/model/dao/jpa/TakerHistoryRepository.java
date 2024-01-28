@@ -1,5 +1,6 @@
 package com.ssafy.yourpilling.pill.model.dao.jpa;
 
+import com.ssafy.yourpilling.pill.model.dao.entity.MonthlyTakerHistory;
 import com.ssafy.yourpilling.pill.model.dao.entity.TakerHistory;
 import com.ssafy.yourpilling.pill.model.dao.entity.WeeklyHistoryInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,13 @@ public interface TakerHistoryRepository  extends JpaRepository<TakerHistory, Lon
             "WHERE op.member_id = ?1 AND YEAR(th.take_at) = YEAR(NOW()) AND WEEK(th.take_at, 1) = WEEK(NOW(), 1) " +
             "GROUP BY th.take_at", nativeQuery = true)
     List<WeeklyHistoryInterface> findWeeklyTakerHistoriesByMemberId(Long memberId);
+
+
+    @Query("SELECT " +
+            "new com.ssafy.yourpilling.pill.model.dao.entity.MonthlyTakerHistory(th.takeAt, p.name, th.currentTakeCount, th.needToTakeCount) " +
+            "FROM TakerHistory th JOIN th.ownPill op JOIN op.pill p " +
+            "WHERE op.member.memberId = :memberId AND YEAR(th.takeAt) = :year AND MONTH(th.takeAt) = :month")
+    List<MonthlyTakerHistory> findTakerHistoryDetailsByMemberIdAndMonth(Long memberId, int year, int month);
+
 
 }

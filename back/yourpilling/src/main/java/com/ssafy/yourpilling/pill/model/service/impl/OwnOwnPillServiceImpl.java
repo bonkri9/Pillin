@@ -2,23 +2,25 @@ package com.ssafy.yourpilling.pill.model.service.impl;
 
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
+import com.ssafy.yourpilling.pill.model.dao.entity.MonthlyTakerHistory;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 import com.ssafy.yourpilling.pill.model.dao.entity.TakerHistory;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
+import com.ssafy.yourpilling.pill.model.service.dto.TakerHistorySummary;
 import com.ssafy.yourpilling.pill.model.service.mapper.OwnPillServiceMapper;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
 import com.ssafy.yourpilling.pill.model.service.vo.in.*;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.*;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo.ResponsePillInventorListData;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,6 +114,26 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     @Override
     public OutWeeklyTakerHistoryVo weeklyTakerHistory(WeeklyTakerHistoryVo weeklyTakerHistoryVo) {
         return ownPillDao.findWeeklyTakerHistoriesByMemberId(weeklyTakerHistoryVo);
+    }
+
+    @Override
+    public OutMonthlyTakerHistoryVo monthlyTakerHistory(MonthlyTakerHistoryVo monthlyTakerHistoryVo) {
+        List<MonthlyTakerHistory> list = ownPillDao.findMonthlyTakerHistoriesByMemberIdAndDate(monthlyTakerHistoryVo);
+
+        HashMap<LocalDate, TakerHistorySummary> response = new HashMap<>();
+
+        for(MonthlyTakerHistory mth : list) {
+            response.putIfAbsent(mth.getTakeAt(), new TakerHistorySummary(0, 0, new ArrayList<MonthlyTakerHistory>()));
+            TakerHistorySummary ths = response.get(mth.getTakeAt());
+            ths.increaseActualTakenCount(mth.getCurrentTakeCount());
+            ths.increaseNeedToTakenCount(mth.getNeedToTakeCount());
+            ths.addTakerHistory(mth);
+        }
+
+        return OutMonthlyTakerHistoryVo
+                .builder()
+                .data(response)
+                .build();
     }
 
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo) {

@@ -1,10 +1,8 @@
 package com.ssafy.yourpilling.pill.model.service;
 
 import com.ssafy.yourpilling.pill.model.service.vo.in.*;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.*;
+
 
 public interface OwnPillService {
 
@@ -21,4 +19,6 @@ public interface OwnPillService {
     OutOwnPillTakeVo take(OwnPillTakeVo ownPillTakeVo);
 
     OutWeeklyTakerHistoryVo weeklyTakerHistory(WeeklyTakerHistoryVo weeklyTakerHistoryVo);
+
+    OutMonthlyTakerHistoryVo monthlyTakerHistory(MonthlyTakerHistoryVo monthlyTakerHistoryVo);
 }

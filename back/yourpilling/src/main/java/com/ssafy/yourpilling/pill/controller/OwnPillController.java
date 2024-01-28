@@ -1,12 +1,9 @@
 package com.ssafy.yourpilling.pill.controller;
 
 import com.ssafy.yourpilling.pill.controller.dto.request.*;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.*;
 import com.ssafy.yourpilling.pill.controller.mapper.OwnPillControllerMapper;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
-import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -63,6 +61,12 @@ public class OwnPillController {
     @GetMapping("/history/weekly")
     ResponseEntity<OutWeeklyTakerHistoryVo> weeklyList(@AuthenticationPrincipal PrincipalDetails principalDetails){
         OutWeeklyTakerHistoryVo vo = ownPillService.weeklyTakerHistory(mapper.mapToWeeklyTakerHistoryVo(principalDetails.getMember().getMemberId(), LocalDate.now()));
+        return ResponseEntity.ok(vo);
+    }
+
+    @GetMapping("/history/monthly")
+    ResponseEntity<OutMonthlyTakerHistoryVo> monthlyList(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody RequestDateDto requestDateDto ){
+        OutMonthlyTakerHistoryVo vo = ownPillService.monthlyTakerHistory(mapper.mapToMonthlyTakerHistoryVo(principalDetails.getMember().getMemberId(), requestDateDto));
         return ResponseEntity.ok(vo);
     }
 
