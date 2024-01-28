@@ -18,4 +18,6 @@ public interface OwnPillDao {
     void removeByOwnPillId(Long ownPillId);
 
     void update(OwnPillUpdateVo vo);
+
+    OwnPill takeByOwnPillId(Long ownPillId);
 }

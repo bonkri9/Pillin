@@ -64,9 +64,9 @@ public class Pill {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "pill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pill", fetch = FetchType.LAZY)
     private List<Nutrition> nutritions;
 
-    @OneToMany(mappedBy = "pill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pill", fetch = FetchType.LAZY)
     private List<PillCategory> pillCategories;
 }
