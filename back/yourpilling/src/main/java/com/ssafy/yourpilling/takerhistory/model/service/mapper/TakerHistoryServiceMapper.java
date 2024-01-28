@@ -1,14 +1,14 @@
 package com.ssafy.yourpilling.takerhistory.model.service.mapper;
 
-import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistory;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryTakerHistory;
 import com.ssafy.yourpilling.takerhistory.model.service.mapper.value.TakerHistoryGenerateValue;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TakerHistoryServiceMapper {
 
-    public TakerHistory toTakerHistory(TakerHistoryGenerateValue value) {
-        return TakerHistory
+    public TakerHistoryTakerHistory toTakerHistory(TakerHistoryGenerateValue value) {
+        return TakerHistoryTakerHistory
                 .builder()
                 .takeAt(value.getTakeAt())
                 .needToTakeCount(value.getNeedToTakeCount())

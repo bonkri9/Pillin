@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @DisplayName("영양제 통합 테스트")
-class TakerHistoryOwnTakerHistoryPillControllerTest {
+class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

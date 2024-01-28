@@ -1,7 +1,7 @@
 package com.ssafy.yourpilling.takerhistory.model.dao.impl;
 
 import com.ssafy.yourpilling.takerhistory.model.dao.TakerHistoryDao;
-import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistory;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryTakerHistory;
 import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryOwnPill;
 import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryOwnPillRepository;
 import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryRepository;
@@ -23,8 +23,8 @@ public class TakerHistoryDaoImpl implements TakerHistoryDao {
     }
 
     @Override
-    public void generateAllMemberTakerHistory(List<TakerHistory> takerHistories) {
-        for (TakerHistory history : takerHistories) {
+    public void generateAllMemberTakerHistory(List<TakerHistoryTakerHistory> takerHistories) {
+        for (TakerHistoryTakerHistory history : takerHistories) {
             if(takerHistoryRepository.findByTakeAtAndOwnPillOwnPillId(history.getTakeAt(),
                     history.getOwnPill().getOwnPillId()).isEmpty()){
                 takerHistoryRepository.save(history);

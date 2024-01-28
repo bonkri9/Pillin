@@ -35,7 +35,7 @@ public class TakerHistoryOwnPill {
     private TakerHistoryPillMember member;
 
     @OneToMany(mappedBy = "ownPill")
-    private List<TakerHistory> takerHistories;
+    private List<TakerHistoryTakerHistory> takerHistories;
 
     @OneToOne
     private TakerHistoryPill pill;

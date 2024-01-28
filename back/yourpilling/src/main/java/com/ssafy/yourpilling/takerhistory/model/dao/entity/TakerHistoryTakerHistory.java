@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class TakerHistory {
+public class TakerHistoryTakerHistory {
 
     @Id
     @Column(name="take_record_id")

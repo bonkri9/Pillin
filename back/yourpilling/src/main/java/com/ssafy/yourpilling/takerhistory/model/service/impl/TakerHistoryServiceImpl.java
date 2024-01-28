@@ -1,7 +1,7 @@
 package com.ssafy.yourpilling.takerhistory.model.service.impl;
 
 import com.ssafy.yourpilling.takerhistory.model.dao.TakerHistoryDao;
-import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistory;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryTakerHistory;
 import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryOwnPill;
 import com.ssafy.yourpilling.takerhistory.model.service.TakerHistoryService;
 import com.ssafy.yourpilling.takerhistory.model.service.mapper.TakerHistoryServiceMapper;
@@ -34,7 +34,7 @@ public class TakerHistoryServiceImpl implements TakerHistoryService {
         }
 
         int tomorrow = (LocalDate.now().getDayOfWeek().getValue() % 7);
-        List<TakerHistory> takerHistories = new ArrayList<>();
+        List<TakerHistoryTakerHistory> takerHistories = new ArrayList<>();
         List<TakerHistoryOwnPill> needToTakeOwnPillsTomorrow = takerHistoryDao.findByTomorrow(1 << tomorrow);
 
         for (TakerHistoryOwnPill own : needToTakeOwnPillsTomorrow) {
