@@ -59,7 +59,7 @@ public class OwnPill {
     @JoinColumn(name = "member_id")
     private PillMember member;
 
-    @OneToOne
+    @ManyToOne
     private Pill pill;
 
     // 연관관계 주인 설정

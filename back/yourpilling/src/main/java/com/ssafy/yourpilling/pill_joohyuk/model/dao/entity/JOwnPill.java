@@ -33,7 +33,7 @@ public class JOwnPill {
     private List<JTakerHistory> takerHistories;
 
     // 단방향이기 때문에 연관관계 주인 설정을 할 필요가 없다.
-    @OneToOne
+    @ManyToOne
     private JPill pill;
 
 }
