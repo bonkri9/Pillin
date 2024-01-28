@@ -4,6 +4,7 @@ import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
+import com.ssafy.yourpilling.pill.model.dao.entity.TakerHistory;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
 import com.ssafy.yourpilling.pill.model.service.mapper.OwnPillServiceMapper;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
@@ -11,6 +12,7 @@ import com.ssafy.yourpilling.pill.model.service.vo.in.*;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo.ResponsePillInventorListData;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +71,41 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     @Override
     public void remove(OwnPillRemoveVo vo) {
         ownPillDao.removeByOwnPillId(vo.getOwnPillId());
+    }
+
+    @Transactional
+    @Override
+    public OutOwnPillTakeVo take(OwnPillTakeVo ownPillTakeVo) {
+        boolean needToUpdate = false;
+        OwnPill ownPill = ownPillDao.takeByOwnPillId(ownPillTakeVo.getOwnPillId());
+
+        for(TakerHistory th : ownPill.getTakerHistories()) {
+            if(th.getTakeAt().equals(LocalDate.now())) {
+                if(th.getCurrentTakeCount() >= th.getNeedToTakeCount()) {
+                    throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
+                }
+
+
+                // if 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
+//                int actualTakeCount = ownPill.decreaseRemains();
+                // th.increaseCurrentTakeCount(actualTakeCount);
+
+                // if 복용 직후 재고가 다 떨어졌을 때, 복용 누르면 TakerHistory의 섭취량 컬럼 신경 안쓰고 완료로 할 경우
+                ownPill.decreaseRemains();
+                th.increaseCurrentTakeCount(ownPill.getTakeOnceAmount());
+
+                if(th.getCurrentTakeCount() >= th.getNeedToTakeCount()) {
+                    needToUpdate = true;
+                }
+                break;
+            }
+        }
+
+
+        return OutOwnPillTakeVo
+                .builder()
+                .needToUpdateWeeklyHistory(needToUpdate)
+                .build();
     }
 
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo) {

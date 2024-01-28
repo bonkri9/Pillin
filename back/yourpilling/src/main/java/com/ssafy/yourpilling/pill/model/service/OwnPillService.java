@@ -3,6 +3,7 @@ package com.ssafy.yourpilling.pill.model.service;
 import com.ssafy.yourpilling.pill.model.service.vo.in.*;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
 
 public interface OwnPillService {
 
@@ -15,4 +16,6 @@ public interface OwnPillService {
     void update(OwnPillUpdateVo vo);
 
     void remove(OwnPillRemoveVo vo);
+
+    OutOwnPillTakeVo take(OwnPillTakeVo ownPillTakeVo);
 }

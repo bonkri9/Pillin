@@ -1,13 +1,11 @@
 package com.ssafy.yourpilling.pill.controller;
 
-import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillRemoveDto;
-import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillUpdateDto;
-import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnPillDetailDto;
-import com.ssafy.yourpilling.pill.controller.dto.request.RequestOwnRegisterPillDto;
+import com.ssafy.yourpilling.pill.controller.dto.request.*;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
 import com.ssafy.yourpilling.pill.controller.mapper.OwnPillControllerMapper;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +37,12 @@ public class OwnPillController {
     ResponseEntity<Void> update(@RequestBody RequestOwnPillUpdateDto dto){
         ownPillService.update(mapper.mapToOwnPillUpdateVo(dto));
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/take")
+    ResponseEntity<OutOwnPillTakeVo> take(@RequestBody RequestOwnPillTakeDto dto){
+        OutOwnPillTakeVo vo = ownPillService.take(mapper.mapToOwnPillTakeVo(dto));
+        return ResponseEntity.ok(vo);
     }
 
     @DeleteMapping("/inventory")

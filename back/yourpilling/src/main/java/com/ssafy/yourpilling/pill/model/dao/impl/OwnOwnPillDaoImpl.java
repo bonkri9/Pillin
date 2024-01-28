@@ -51,12 +51,17 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     }
 
     @Override
+    public OwnPill takeByOwnPillId(Long ownPillId) {
+        return findByOwnPillId(ownPillId);
+    }
+
+    @Override
     public void removeByOwnPillId(Long ownPillId) {
         ownPillJpaRepository.deleteByOwnPillId(ownPillId)
                 .orElseThrow(() -> new IllegalArgumentException("보유중인 영양제 삭제에 실패했습니다."));
     }
 
-    private static void updateValues(OwnPillUpdateVo vo, OwnPill ownPill) {
+    private void updateValues(OwnPillUpdateVo vo, OwnPill ownPill) {
         ownPill.setRemains(vo.getRemains());
         ownPill.setTotalCount(vo.getTotalCount());
         ownPill.setTakeCount(vo.getTakeCount());

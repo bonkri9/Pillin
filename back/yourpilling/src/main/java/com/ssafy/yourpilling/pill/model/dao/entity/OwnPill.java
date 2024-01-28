@@ -62,11 +62,15 @@ public class OwnPill {
     @OneToOne
     private Pill pill;
 
-    public boolean isTakeYN(){
+    // 연관관계 주인 설정
+    @OneToMany(mappedBy = "ownPill", fetch = FetchType.LAZY)
+    private List<TakerHistory> takerHistories;
+
+    public boolean isTakeYN() {
         return this.takeYN;
     }
 
-    public static Map<Boolean, List<OwnPill>> ownPillsYN(List<OwnPill> ownPills){
+    public static Map<Boolean, List<OwnPill>> ownPillsYN(List<OwnPill> ownPills) {
         return ownPills
                 .parallelStream()
                 .collect(Collectors.partitioningBy(OwnPill::isTakeYN));
@@ -114,5 +118,24 @@ public class OwnPill {
             nextDay = ((nextDay + 1) % week);
         }
         return after;
+    }
+
+    public int decreaseRemains() {
+
+        int returnVal = this.takeOnceAmount;
+
+        if(this.remains - this.takeOnceAmount > 0) {
+            this.remains -= this.takeOnceAmount;
+        }
+        else if(this.remains - this.takeOnceAmount < 0) {
+            returnVal = this.remains;
+            this.remains = 0;
+            this.takeYN = false;
+        }
+        else {
+            this.takeYN = false;
+        }
+
+        return returnVal;
     }
 }
