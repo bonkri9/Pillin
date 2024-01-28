@@ -1,15 +1,13 @@
 package com.ssafy.yourpilling.pill_heeju.controller;
 
+import com.ssafy.yourpilling.pill_heeju.controller.dto.request.RequestHealthConcernsCategoryDto;
 import com.ssafy.yourpilling.pill_heeju.controller.mapper.HPillControllerMapper;
 import com.ssafy.yourpilling.pill_heeju.model.dao.entity.PillDetail;
 import com.ssafy.yourpilling.pill_heeju.model.service.PillService;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchListVo.ResponsePillSearchListData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,6 +37,13 @@ public class HPillController {
     ResponseEntity<ResponsePillSearchListData> pillSearchByNutritionName(@RequestParam(value = "nutritionName") String nutritionName){
         // 영양제 이름(제품명)을 받으면 영양제에 대한 영양제 리스트 반환
         ResponsePillSearchListData data = pillService.pillSearchList(mapper.mapToNutritionIdVo(nutritionName));
+
+        return ResponseEntity.ok(data);
+    }
+    @PostMapping("/search/category")
+    ResponseEntity<ResponsePillSearchListData> pillSearchByCategory(@RequestBody RequestHealthConcernsCategoryDto dto){
+        // 영양제 이름(제품명)을 받으면 영양제에 대한 영양제 리스트 반환
+        ResponsePillSearchListData data = pillService.pillSearchList(mapper.mapToCategoryVo(dto.getHealthConcerns()));
 
         return ResponseEntity.ok(data);
     }

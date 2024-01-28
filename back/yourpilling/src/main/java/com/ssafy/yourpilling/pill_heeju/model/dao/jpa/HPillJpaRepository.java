@@ -18,4 +18,11 @@ public interface HPillJpaRepository extends JpaRepository<PillDetail, Long> {
             "JOIN p.nutritionDetail n " +
             "WHERE n.nutrition LIKE :nutritionName")
     List<PillDetail> findByNutritionName(@Param("nutritionName")String nutritionName);
+
+    @Query("SELECT p " +
+            "FROM PillDetail p " +
+            "JOIN p.pillCategories pc " +
+            "JOIN pc.midCategory mc " +
+            "WHERE mc.midCategoryId IN :categories")
+    List<PillDetail> findByCategories(@Param("categories")List<Integer> categories);
 }

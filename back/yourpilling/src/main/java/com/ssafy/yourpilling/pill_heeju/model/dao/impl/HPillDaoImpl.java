@@ -39,4 +39,13 @@ public class HPillDaoImpl implements PillDao {
                 .filter(pillList -> !pillList.isEmpty())
                 .orElseThrow(() -> new IllegalArgumentException("해당 성분을 가진 영양제가 존재하지 않습니다."));
     }
+
+    @Override
+    public List<PillDetail> pillSearchListByHealthConcern(List<Integer> categories) {
+        List<PillDetail> pills = pillJpaRepository.findByCategories(categories);
+
+        return Optional.of(pills)
+                .filter(pillList -> !pillList.isEmpty())
+                .orElseThrow(() -> new IllegalArgumentException("해당 건강고민을 가진 영양제가 존재하지 않습니다."));
+    }
 }

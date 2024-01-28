@@ -2,6 +2,7 @@ package com.ssafy.yourpilling.pill_heeju.model.service.mapper;
 
 import com.ssafy.yourpilling.pill_heeju.model.dao.entity.NutritionDetail;
 import com.ssafy.yourpilling.pill_heeju.model.dao.entity.PillDetail;
+import com.ssafy.yourpilling.pill_heeju.model.service.vo.MidCategoryVo;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.NutritionVo;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.PillDetailVo;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchListVo;
@@ -25,6 +26,10 @@ public class HPillServiceMapper {
 
     public NutritionDetail mapToNutritionName(NutritionVo vo) {
         return NutritionDetail.builder().nutrition(vo.getNutrition()).build();
+    }
+
+    public List<Integer> mapToMidCategories(MidCategoryVo vo) {
+        return vo.getCategories();
     }
 
     public ResponsePillSearchListData mapToResponsePillSearchListData(List<PillDetail> pillDetailList){
