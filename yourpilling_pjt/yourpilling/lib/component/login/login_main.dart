@@ -72,13 +72,6 @@ class _LoginState extends State<LoginMainScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // IconButton(
-                      //   icon: Icon(Icons.arrow_back_ios_new_rounded,
-                      //       color: Colors.black),
-                      //   onPressed: () {
-                      //     Navigator.pop(context);
-                      //   },
-                      // ),
                       Text(
                         '자동로그인',
                         style: TextStyle(
