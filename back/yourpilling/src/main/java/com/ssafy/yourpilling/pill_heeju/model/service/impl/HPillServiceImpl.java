@@ -4,6 +4,7 @@ import com.ssafy.yourpilling.pill_heeju.model.dao.PillDao;
 import com.ssafy.yourpilling.pill_heeju.model.dao.entity.PillDetail;
 import com.ssafy.yourpilling.pill_heeju.model.service.PillService;
 import com.ssafy.yourpilling.pill_heeju.model.service.mapper.HPillServiceMapper;
+import com.ssafy.yourpilling.pill_heeju.model.service.vo.NutritionVo;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.PillDetailVo;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchListVo.ResponsePillSearchListData;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,11 @@ public class HPillServiceImpl implements PillService {
     public ResponsePillSearchListData pillSearchList(PillDetailVo vo) {
 
         return mapper.mapToResponsePillSearchListData(pillDao.pillSearchList(mapper.mapToPillName(vo)));
+    }
+
+    @Override
+    public ResponsePillSearchListData pillSearchList(NutritionVo vo) {
+        return mapper.mapToResponsePillSearchListData
+                (pillDao.pillSearchListByNutrition(mapper.mapToNutritionName(vo)));
     }
 }
