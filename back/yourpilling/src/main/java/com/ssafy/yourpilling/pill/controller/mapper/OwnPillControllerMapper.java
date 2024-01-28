@@ -4,6 +4,8 @@ import com.ssafy.yourpilling.pill.controller.dto.request.*;
 import com.ssafy.yourpilling.pill.model.service.vo.in.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class OwnPillControllerMapper {
 
@@ -62,6 +64,16 @@ public class OwnPillControllerMapper {
         return OwnPillTakeVo.
                 builder()
                 .ownPillId(dto.getOwnPillId())
+                .build();
+
+    }
+
+    public WeeklyTakerHistoryVo mapToWeeklyTakerHistoryVo(Long memberId, LocalDate now) {
+
+        return  WeeklyTakerHistoryVo.
+                builder()
+                .memberId(memberId)
+                .date(now)
                 .build();
 
     }

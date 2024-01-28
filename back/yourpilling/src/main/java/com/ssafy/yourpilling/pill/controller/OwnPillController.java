@@ -6,11 +6,14 @@ import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
 import com.ssafy.yourpilling.pill.controller.mapper.OwnPillControllerMapper;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,4 +59,11 @@ public class OwnPillController {
         OutOwnPillInventorListVo data = ownPillService.inventoryList(mapper.mapToPillInventoryListVo(principalDetails.getMember().getMemberId()));
         return ResponseEntity.ok(data);
     }
+
+    @GetMapping("/history/weekly")
+    ResponseEntity<OutWeeklyTakerHistoryVo> weeklyList(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        OutWeeklyTakerHistoryVo vo = ownPillService.weeklyTakerHistory(mapper.mapToWeeklyTakerHistoryVo(principalDetails.getMember().getMemberId(), LocalDate.now()));
+        return ResponseEntity.ok(vo);
+    }
+
 }

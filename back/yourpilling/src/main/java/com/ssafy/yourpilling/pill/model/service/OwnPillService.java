@@ -4,6 +4,7 @@ import com.ssafy.yourpilling.pill.model.service.vo.in.*;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillTakeVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 
 public interface OwnPillService {
 
@@ -18,4 +19,6 @@ public interface OwnPillService {
     void remove(OwnPillRemoveVo vo);
 
     OutOwnPillTakeVo take(OwnPillTakeVo ownPillTakeVo);
+
+    OutWeeklyTakerHistoryVo weeklyTakerHistory(WeeklyTakerHistoryVo weeklyTakerHistoryVo);
 }

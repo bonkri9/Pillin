@@ -58,6 +58,9 @@ public class Pill {
     @Column(name = "take_cycle")
     private Integer takeCycle;
 
+    @Column(name = "take_once_amount")
+    private Integer takeOnceAmount;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -69,4 +72,6 @@ public class Pill {
 
     @OneToMany(mappedBy = "pill", fetch = FetchType.LAZY)
     private List<PillCategory> pillCategories;
+
+
 }

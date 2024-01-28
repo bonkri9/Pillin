@@ -4,6 +4,8 @@ import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
 import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.WeeklyTakerHistoryVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 
 public interface OwnPillDao {
 
@@ -20,4 +22,6 @@ public interface OwnPillDao {
     void update(OwnPillUpdateVo vo);
 
     OwnPill takeByOwnPillId(Long ownPillId);
+
+    OutWeeklyTakerHistoryVo findWeeklyTakerHistoriesByMemberId(WeeklyTakerHistoryVo weeklyTakerHistoryVo);
 }

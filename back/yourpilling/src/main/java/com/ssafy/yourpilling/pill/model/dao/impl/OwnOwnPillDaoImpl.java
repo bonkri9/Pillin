@@ -2,13 +2,14 @@ package com.ssafy.yourpilling.pill.model.dao.impl;
 
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
-import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
-import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
-import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
+import com.ssafy.yourpilling.pill.model.dao.entity.*;
 import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
+import com.ssafy.yourpilling.pill.model.dao.jpa.TakerHistoryRepository;
 import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
+import com.ssafy.yourpilling.pill.model.service.vo.in.WeeklyTakerHistoryVo;
+import com.ssafy.yourpilling.pill.model.service.vo.out.OutWeeklyTakerHistoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,7 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     private final OwnPillJpaRepository ownPillJpaRepository;
     private final PillJpaRepository pillJpaRepository;
     private final PillMemberJpaRepository pillMemberJpaRepository;
+    private final TakerHistoryRepository takerHistoryRepository;
 
     @Override
     public OwnPill findByOwnPillId(Long ownPillId) {
@@ -56,6 +58,14 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     }
 
     @Override
+    public OutWeeklyTakerHistoryVo findWeeklyTakerHistoriesByMemberId(WeeklyTakerHistoryVo weeklyTakerHistoryVo) {
+        return  OutWeeklyTakerHistoryVo
+                .builder()
+                .data(takerHistoryRepository.findWeeklyTakerHistoriesByMemberId(weeklyTakerHistoryVo.getMemberId()))
+                .build();
+    }
+
+    @Override
     public void removeByOwnPillId(Long ownPillId) {
         ownPillJpaRepository.deleteByOwnPillId(ownPillId)
                 .orElseThrow(() -> new IllegalArgumentException("보유중인 영양제 삭제에 실패했습니다."));
@@ -70,4 +80,6 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
         ownPill.setStartAt(vo.getStartAt());
         ownPill.setTakeWeekdays(vo.getTakeYn() ? TakeWeekday.toValue(vo.getTakeWeekdays()) : null);
     }
+
+
 }
