@@ -45,7 +45,12 @@ android {
         applicationId "com.example.url_launcher_example"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+<<<<<<< HEAD
         minSdkVersion flutter.minSdkVersion
+=======
+//        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
+>>>>>>> front#999/test
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

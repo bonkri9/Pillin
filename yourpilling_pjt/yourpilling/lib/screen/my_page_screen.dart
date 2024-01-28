@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:yourpilling/component/AngleContainer.dart';
+import 'package:yourpilling/component/angle_container.dart';
 import 'package:yourpilling/component/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
 
