@@ -91,6 +91,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 // th.increaseCurrentTakeCount(actualTakeCount);
 
                 // if 복용 직후 재고가 다 떨어졌을 때, 복용 누르면 TakerHistory의 섭취량 컬럼 신경 안쓰고 완료로 할 경우
+                ownPill.decreaseRemains();
                 th.increaseCurrentTakeCount(ownPill.getTakeOnceAmount());
 
                 if(th.getCurrentTakeCount() >= th.getNeedToTakeCount()) {
