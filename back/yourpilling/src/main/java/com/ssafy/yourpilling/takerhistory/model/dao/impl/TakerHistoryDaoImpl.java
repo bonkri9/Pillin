@@ -4,7 +4,7 @@ import com.ssafy.yourpilling.takerhistory.model.dao.TakerHistoryDao;
 import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryTakerHistory;
 import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryOwnPill;
 import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryOwnPillRepository;
-import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryRepository;
+import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryTakerHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class TakerHistoryDaoImpl implements TakerHistoryDao {
 
     private final TakerHistoryOwnPillRepository takerHistoryOwnPillRepository;
-    private final TakerHistoryRepository takerHistoryRepository;
+    private final TakerHistoryTakerHistoryRepository takerHistoryRepository;
 
     @Override
     public List<TakerHistoryOwnPill> findByTomorrow(int tomorrow) {

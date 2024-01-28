@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public interface TakerHistoryRepository extends JpaRepository<TakerHistoryTakerHistory, Long> {
+public interface TakerHistoryTakerHistoryRepository extends JpaRepository<TakerHistoryTakerHistory, Long> {
 
     Optional<TakerHistoryTakerHistory> findByTakeAtAndOwnPillOwnPillId(LocalDate takeAt, Long ownPillId);
 }
