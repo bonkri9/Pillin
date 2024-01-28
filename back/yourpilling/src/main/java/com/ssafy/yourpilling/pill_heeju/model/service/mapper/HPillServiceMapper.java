@@ -2,7 +2,9 @@ package com.ssafy.yourpilling.pill_heeju.model.service.mapper;
 
 import com.ssafy.yourpilling.pill_heeju.model.dao.entity.PillDetail;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.PillDetailVo;
-import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchDataVo;
+import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchListVo;
+import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchListVo.ResponsePillSearchItem;
+import com.ssafy.yourpilling.pill_heeju.model.service.vo.response.ResponsePillSearchListVo.ResponsePillSearchListData;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,18 +21,18 @@ public class HPillServiceMapper {
         return PillDetail.builder().name(vo.getPillName()).build();
     }
 
-    public List<ResponsePillSearchDataVo> mapToResponsePillSearchListDate(List<PillDetail> pillDetailList){
+    public ResponsePillSearchListData mapToResponsePillSearchListData(List<PillDetail> pillDetailList){
 
-        List<ResponsePillSearchDataVo> items = new ArrayList<ResponsePillSearchDataVo>();
+        List<ResponsePillSearchItem> items = new ArrayList<>();
 
         for (PillDetail pillDetail : pillDetailList) {
-            items.add(mapToResponsePillSearchListItem(pillDetail));
+            items.add(mapToResponsePillSearchItem(pillDetail));
         }
 
-        return items;
+        return ResponsePillSearchListData.builder().data(items).build();
     }
-    private ResponsePillSearchDataVo mapToResponsePillSearchListItem(PillDetail pillDetail){
-        return ResponsePillSearchDataVo
+    private ResponsePillSearchItem mapToResponsePillSearchItem(PillDetail pillDetail){
+        return ResponsePillSearchItem
                 .builder()
                 .pillId(pillDetail.getPillId())
                 .pillName(pillDetail.getName())
