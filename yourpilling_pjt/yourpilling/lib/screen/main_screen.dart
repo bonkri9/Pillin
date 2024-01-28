@@ -6,7 +6,7 @@ import 'search_screen.dart';
 import 'record_screen.dart';
 import 'alarm_screen.dart';
 import 'inventory_screen.dart';
-import '../component/BaseContainer.dart';
+import '../component/base_container.dart';
 import 'package:weekly_date_picker/weekly_date_picker.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
@@ -526,7 +526,7 @@ class _StockState extends State<_Stock> {
 
     return BaseContainer(
         width: containerWidth,
-        height: 200,
+        height: 250,
         child: Column(
           children: [
             Padding(

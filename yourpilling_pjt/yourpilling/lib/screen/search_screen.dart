@@ -3,7 +3,7 @@ import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_health_screen.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import 'package:yourpilling/screen/search_nutrient_screen.dart';
-import '../component/BaseContainer.dart';
+import '../component/base_container.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
