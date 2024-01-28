@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.pill_joohyuk.model.dao.entity;
+package com.ssafy.yourpilling.takerhistory.model.dao.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,17 +7,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TakerHistory")
+@Table(name = "takerhistory")
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class JTakerHistory {
+public class TakerHistory {
 
     @Id
-    @Column(name = "take_record_id")
+    @Column(name="take_record_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long takerHistoryId;
 
     @Column(name = "take_at")
     private LocalDate takeAt;
@@ -35,6 +35,6 @@ public class JTakerHistory {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "own_pill_id") // 외래키 컬럼 이름
-    private JOwnPill ownPill;
+    @JoinColumn(name="own_pill_id")
+    private TakerHistoryOwnPill ownPill;
 }

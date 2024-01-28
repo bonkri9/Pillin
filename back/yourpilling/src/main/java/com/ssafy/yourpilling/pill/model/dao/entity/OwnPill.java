@@ -107,7 +107,7 @@ public class OwnPill {
 
     private int runOutAt(Integer week) {
         int remains = this.getRemains();
-        int nextDay = LocalDate.now().getDayOfWeek().getValue();
+        int nextDay = LocalDate.now().getDayOfWeek().getValue()%week;
         int after = 0;
 
         while (remains > 0) {

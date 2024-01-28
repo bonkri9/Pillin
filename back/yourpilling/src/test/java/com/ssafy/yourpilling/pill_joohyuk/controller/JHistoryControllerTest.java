@@ -157,7 +157,7 @@ class JHistoryControllerTest {
                 .needToTakeCount(1)
                 .currentTakeCount(1)
                 .takeAt(now)
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .ownPill(ownPill)
                 .build();
 
