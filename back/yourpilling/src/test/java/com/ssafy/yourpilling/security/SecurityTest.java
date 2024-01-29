@@ -1,9 +1,9 @@
 package com.ssafy.yourpilling.security;
 
 import com.ssafy.yourpilling.common.Role;
-import com.ssafy.yourpilling.security.auth.entity.Member;
+import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.jwt.JwtProperties;
-import com.ssafy.yourpilling.security.auth.repository.MemberRepository;
+import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("dev")
 @DisplayName("시큐리티 로그인 테스트")
 public class SecurityTest {
 

@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.security.auth.entity;
+package com.ssafy.yourpilling.security.auth.model.dao.entity;
 
 import com.ssafy.yourpilling.common.Gender;
 import com.ssafy.yourpilling.common.Role;
@@ -40,6 +40,9 @@ public class Member {
     @Column
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Column(name = "provider_id")
+    private String providerId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

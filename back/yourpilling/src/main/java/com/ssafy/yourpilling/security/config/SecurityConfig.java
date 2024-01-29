@@ -1,6 +1,5 @@
 package com.ssafy.yourpilling.security.config;
 
-import com.ssafy.yourpilling.common.Role;
 import com.ssafy.yourpilling.security.auth.CustomAuthenticationProvider;
 import com.ssafy.yourpilling.security.auth.error.CustomAuthenticationFailureHandler;
 import com.ssafy.yourpilling.security.auth.jwt.*;
@@ -73,7 +72,6 @@ public class SecurityConfig {
                 .exceptionHandling(ex ->
                         ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 )
-
                 .build();
     }
 }

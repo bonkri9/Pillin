@@ -11,9 +11,9 @@ import com.ssafy.yourpilling.pill_joohyuk.model.dao.jpa.JOwnPillJpaRepository;
 import com.ssafy.yourpilling.pill_joohyuk.model.dao.jpa.JPillJpaRepository;
 import com.ssafy.yourpilling.pill_joohyuk.model.dao.jpa.JPillMemberJpaRepository;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
-import com.ssafy.yourpilling.security.auth.entity.Member;
+import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
-import com.ssafy.yourpilling.security.auth.repository.MemberRepository;
+import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -45,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@ActiveProfiles("dev")
 @DisplayName("일일 복용 기록 통합 테스트")
 class JHistoryControllerTest {
 

@@ -1,6 +1,6 @@
 package com.ssafy.yourpilling.security.auth;
 
-import com.ssafy.yourpilling.security.auth.repository.MemberRepository;
+import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
