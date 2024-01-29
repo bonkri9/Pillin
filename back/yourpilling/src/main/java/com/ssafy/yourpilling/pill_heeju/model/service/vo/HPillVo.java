@@ -1,5 +1,7 @@
 package com.ssafy.yourpilling.pill_heeju.model.service.vo;
 
+import com.ssafy.yourpilling.common.PillProductForm;
+import com.ssafy.yourpilling.pill_heeju.model.dao.entity.HPillCategory;
 import lombok.Builder;
 import lombok.Value;
 
@@ -8,7 +10,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class PillDetailVo {
+public class HPillVo {
     Long pillId;
     String pillName;
     String manufacturer;
@@ -18,8 +20,11 @@ public class PillDetailVo {
     String precautions;
     String storageInstructions;
     String standardSpecification;
-    String productForm;
+    PillProductForm productForm;
     String imageUrl;
-    float takeCount;
+    int takeCount;
+    int takeCycle;
+    int takeOnceAmount;
     List<NutritionVo> nutrients;
+    List<HPillCategory> pillCategories;
 }

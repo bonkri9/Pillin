@@ -1,6 +1,5 @@
 package com.ssafy.yourpilling.pill_heeju.model.dao.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +19,7 @@ public class HPillCategory {
 
     @ManyToOne
     @JoinColumn(name = "pill_id")
-    private PillDetail pillDetail;
+    private HPill pill;
 
     @ManyToOne
     @JoinColumn(name = "mid_category_id")

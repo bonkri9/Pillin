@@ -8,7 +8,7 @@ import lombok.Value;
 public class NutritionVo {
     Long nutritionId;
     String nutrition;
-    float amount;
+    Double amount;
     String unit;
-    float includePercent;
+    Double includePercent;
 }

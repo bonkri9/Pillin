@@ -1,14 +1,11 @@
 package com.ssafy.yourpilling.pill_heeju.model.dao.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssafy.yourpilling.common.PillProductForm;
-import com.ssafy.yourpilling.pill_heeju.model.dao.entity.HPillCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +14,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class PillDetail {
+public class HPill {
+
     @Id
     @Column(name = "pill_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,7 +53,13 @@ public class PillDetail {
     private String imageUrl;
 
     @Column(name = "take_count")
-    private Double takeCount;
+    private Integer takeCount;
+
+    @Column(name = "take_cycle")
+    private Integer takeCycle;
+
+    @Column(name = "take_once_amount")
+    private Integer takeOnceAmount;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -63,11 +67,11 @@ public class PillDetail {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany( mappedBy = "pillDetail") // nutrition 테이블의 pill_id (FK)
-    @JsonManagedReference
-    private List<NutritionDetail> nutritionDetail = new ArrayList<>();
+    @OneToMany(mappedBy = "pill", fetch = FetchType.LAZY)
+    private List<HNutrition> nutritions;
 
-    @OneToMany( mappedBy = "pillDetail", fetch = FetchType.LAZY)
-    private List<HPillCategory> pillCategories = new ArrayList<>();
+    @OneToMany(mappedBy = "pill", fetch = FetchType.LAZY)
+    private List<HPillCategory> pillCategories;
+
+
 }
-

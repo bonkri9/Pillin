@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.pill_heeju.model.service.vo.response;
+package com.ssafy.yourpilling.pill_heeju.model.service.vo.out;
 
 import lombok.Builder;
 import lombok.Value;
