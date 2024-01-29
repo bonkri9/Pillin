@@ -2,11 +2,9 @@
 Flutter_project title pill
 
 01.22 플러터 프로젝트 구조 구현
-## 필독
 
 font는 추가할때마다 yaml 파일에서 수동으로 추가해줄것
 - googlefont 에서 원하는 거 받아서 사용가능
-- 우선 내가 추가해둔 폰트 사용, 기능 구현 다 하고 폰트 추가할 것
 
 const 폴더는 우리가 고정적으로 사용할 css 적고 import해서 사용
 
@@ -14,6 +12,7 @@ component 한 screen에 들어갈 세부 기능들의 모음
 
 screen 한 화면 화면단을 나누어 둔 폴더
 
+<<<<<<< HEAD
 route 여기서 route설정, bool에 세션 or 토큰 담아서 로그인 확인
 
 ### 캘린더 참고사항
