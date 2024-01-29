@@ -1,6 +1,6 @@
 package com.ssafy.yourpilling.security.auth;
 
-import com.ssafy.yourpilling.security.auth.entity.Member;
+import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
