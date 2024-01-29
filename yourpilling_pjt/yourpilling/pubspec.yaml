@@ -46,6 +46,8 @@ dependencies:
   custom_navigation_bar: ^0.8.2
   url_launcher: ^6.2.4
   kakao_flutter_sdk: ^1.8.0
+  lite_rolling_switch: ^1.0.1
+  input_quantity: ^2.2.0
 
 dev_dependencies:
   flutter_test:

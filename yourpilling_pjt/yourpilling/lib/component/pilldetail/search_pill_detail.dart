@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/inventory_screen.dart';
-import 'package:yourpilling/screen/main_screen.dart';
-import 'package:share/share.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+
+import '../inventory/insert_inventory.dart';
+
 
 var pillDetailInfo = [
   {
@@ -17,10 +16,13 @@ var pillDetailInfo = [
     'storageInstructions': '상온 보관', //보관방법
     'standardSpecification': '붕해시험 : 적합', //기준규격
     'productForm': '고체형', // 제형
-    'takeCount': '1.0', //일일 복용량
+    'takecycle': '1', //1일
+    'takeCount': '1', //1회
+    'takeOnceAmount' : '2', //2정
+    'createdAt' : '',
+    'updatedAt' : '2024-01-29', //제품 정보 수정날짜
     'nutrients': [
       {
-        'nutritionId': '',
         'nutrition': '오메가3',
         'amount': '40',
         'unit': 'mg',
@@ -28,6 +30,15 @@ var pillDetailInfo = [
       } //사람마다 등록한 날이 다를텐데 userId없어도 되는지? createAt, updateAt 관련.
     ]
   },
+];
+
+var nutients = [
+  {
+    'nutrition': '오메가3',
+    'amount': '40',
+    'unit': 'mg',
+    'includePercent': '3.33',
+  }
 ];
 
 class PillDetailScreen extends StatefulWidget {
@@ -117,6 +128,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                           text: TextSpan(
                             text: '${pillDetailInfo[0]['pillName']}',
                             style: const TextStyle(
+                              color: Colors.black,
                               fontSize: 20,
                               fontWeight: FontWeight.w300,
                             ),
@@ -221,181 +233,30 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                                 ],
                               ),
                             ),
+                            Divider(
+                              height: 50,
+                              indent: 50,
+                              endIndent: 50,
+                            ),
+                            Center(
+                              child: Column(
+                                children: [
+                                  PillDetailInfo(),
+                                  PillNutrientInfo(),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
+
                     ),
-                    Image(image: AssetImage('assets/image/비타민B.jpg')),
-                    Image(image: AssetImage('assets/image/비타민B.jpg')),
-                    Image(image: AssetImage('assets/image/비타민B.jpg')),
-                    Image(image: AssetImage('assets/image/비타민B.jpg')),
                   ],
                 ),
               ),
             ],
           ),
           onRefresh: () => Future.value(true)),
-      // body: CustomScrollView(
-      //   slivers: <Widget>[
-      //     const SliverAppBar(
-      //       pinned: true,
-      //       snap : false,
-      //       floating: false,
-      //       expandedHeight: 160.0,
-      //       backgroundColor: Colors.pinkAccent,
-      //       flexibleSpace: const FlexibleSpaceBar(
-      //         title: Text('SliverAppBar'),
-      //       ),
-      //     ),
-      //     const SliverToBoxAdapter(
-      //       child: SizedBox(
-      //         height: 20,
-      //         child: Center(
-      //           child: Text(''),
-      //         ),
-      //       ),
-      //     )
-      //   ],
-      //   child: Center(
-      //     child: Container(
-      //       decoration: BoxDecoration(
-      //         borderRadius: BorderRadius.circular(30),
-      //         color: Colors.white,
-      //       ),
-      //       width: containerWidth,
-      //       child: Column(
-      //         children: [
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               SizedBox(
-      //                 width: 30,
-      //               ),
-      //               Row(
-      //                 children: [
-      //                   IconButton(
-      //                     padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
-      //                     onPressed: () {
-      //                       // String content = 'kakao로 공유슝!';
-      //                     },
-      //                     icon: Icon(Icons.share_outlined, size: 30),
-      //                   ),
-      //                   SizedBox(
-      //                     width: 30,
-      //                   )
-      //                 ],
-      //               ),
-      //             ],
-      //           ),
-      //           Container(
-      //             alignment: Alignment.center,
-      //             padding: const EdgeInsets.all(15),
-      //             width: MediaQuery.of(context).size.width,
-      //             child: Image.asset(
-      //               fit: BoxFit.cover,
-      //               'assets/image/비타민B.jpg',
-      //             ),
-      //           ),
-      //           Container(
-      //             padding: const EdgeInsets.fromLTRB(10, 40, 0, 20),
-      //             child: Text(
-      //               // widget.manufacturer,
-      //               '${pillDetailInfo[0]['manufacturer']}',
-      //               textScaleFactor: 1.3,
-      //               style: const TextStyle(
-      //                 fontSize: 15,
-      //                 fontWeight: FontWeight.w300,
-      //               ),
-      //             ),
-      //           ),
-      //           Container(
-      //             width: 300,
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.start,
-      //               children: [
-      //                 Flexible(
-      //                     child: RichText(
-      //                   overflow: TextOverflow.ellipsis,
-      //                   maxLines: 2,
-      //                   strutStyle: StrutStyle(fontSize: 16),
-      //                   text: TextSpan(
-      //                     text: '${pillDetailInfo[0]['pillName']}',
-      //                     style: const TextStyle(
-      //                       fontSize: 20,
-      //                       fontWeight: FontWeight.bold,
-      //                     ),
-      //                   ),
-      //                 )),
-      //               ],
-      //             ),
-      //           ),
-      //           ////////////
-      //           Container(
-      //             width: 300,
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.start,
-      //               children: [
-      //                 Flexible(
-      //                     child: RichText(
-      //                       overflow: TextOverflow.ellipsis,
-      //                       maxLines: 2,
-      //                       strutStyle: StrutStyle(fontSize: 16),
-      //                       text: TextSpan(
-      //                         text: '${pillDetailInfo[0]['pillName']}',
-      //                         style: const TextStyle(
-      //                           fontSize: 20,
-      //                           fontWeight: FontWeight.bold,
-      //                         ),
-      //                       ),
-      //                     )),
-      //               ],
-      //             ),
-      //           ),Container(
-      //             width: 300,
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.start,
-      //               children: [
-      //                 Flexible(
-      //                     child: RichText(
-      //                       overflow: TextOverflow.ellipsis,
-      //                       maxLines: 2,
-      //                       strutStyle: StrutStyle(fontSize: 16),
-      //                       text: TextSpan(
-      //                         text: '${pillDetailInfo[0]['pillName']}',
-      //                         style: const TextStyle(
-      //                           fontSize: 20,
-      //                           fontWeight: FontWeight.bold,
-      //                         ),
-      //                       ),
-      //                     )),
-      //               ],
-      //             ),
-      //           ),Container(
-      //             width: 300,
-      //             child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.start,
-      //               children: [
-      //                 Flexible(
-      //                     child: RichText(
-      //                       overflow: TextOverflow.ellipsis,
-      //                       maxLines: 2,
-      //                       strutStyle: StrutStyle(fontSize: 16),
-      //                       text: TextSpan(
-      //                         text: '${pillDetailInfo[0]['pillName']}',
-      //                         style: const TextStyle(
-      //                           fontSize: 20,
-      //                           fontWeight: FontWeight.bold,
-      //                         ),
-      //                       ),
-      //                     )),
-      //               ],
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: BACKGROUND_COLOR,
         showSelectedLabels: false,
@@ -407,7 +268,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
               child: Text('등록하기'),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Inventory()));
+                    MaterialPageRoute(builder: (context) => InsertInventory()));
                 //   builder:(context) => InsertInventory()));
               },
             ),
@@ -440,3 +301,222 @@ class NoBehavior extends ScrollBehavior {
     return child;
   }
 }
+
+
+class PillDetailInfo extends StatefulWidget {
+  const PillDetailInfo({super.key});
+
+  @override
+  State<PillDetailInfo> createState() => _PillDetailInfoState();
+}
+
+class _PillDetailInfoState extends State<PillDetailInfo> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        //유효 복용 기간
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('유효복용기간 : '),
+              Text(
+                '${pillDetailInfo[0]['expirationAt']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        //주요 기능
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('주요기능 : '),
+              Text(
+                '${pillDetailInfo[0]['primaryFunctionality']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        //주의사항
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('주의사항 : '),
+              Text(
+                '${pillDetailInfo[0]['precautions']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        //복약지도
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('복용방법 : '),
+              Text(
+                '${pillDetailInfo[0]['usageInstructions']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        //보관 방법
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('보관방법 : '),
+              Text(
+                '${pillDetailInfo[0]['storageInstructions']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        //기준 규격
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('기준 규격 : '),
+              Text(
+                '${pillDetailInfo[0]['standardSpecification']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        //제형
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('영양제형 : '),
+              Text(
+                '${pillDetailInfo[0]['productForm']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        //일일복용량
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('일일복용량 : '),
+              Text(
+                '${pillDetailInfo[0]['takeCount']}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+              Text(' 정'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+//영양소 정보
+class PillNutrientInfo extends StatefulWidget {
+  const PillNutrientInfo({super.key});
+
+  @override
+  State<PillNutrientInfo> createState() => _PillNutrientInfoState();
+}
+
+class _PillNutrientInfoState extends State<PillNutrientInfo> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('함유분석 : '),
+              Text(
+                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['nutrition']:null} ',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+              Text(
+                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['amount']:null}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+              Text(
+                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['unit']:null}',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text(
+                '함유비율 ${pillDetailInfo[0]['nutrients'] != null?nutients[0]['includePercent']:null} %',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
