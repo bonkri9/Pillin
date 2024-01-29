@@ -13,3 +13,13 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: 이메일
+    password: 비밀번호
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.naver.com

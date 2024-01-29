@@ -2,10 +2,7 @@ package com.ssafy.yourpilling.member.controller.mapper;
 
 import com.ssafy.yourpilling.member.controller.dto.request.RequestRegisterDto;
 import com.ssafy.yourpilling.member.controller.dto.request.RequestUpdateDto;
-import com.ssafy.yourpilling.member.model.service.vo.in.MemberDeleteVo;
-import com.ssafy.yourpilling.member.model.service.vo.in.MemberInfoVo;
-import com.ssafy.yourpilling.member.model.service.vo.in.MemberRegisterVo;
-import com.ssafy.yourpilling.member.model.service.vo.in.MemberUpdateVo;
+import com.ssafy.yourpilling.member.model.service.vo.in.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,6 +38,13 @@ public class MemberControllerMapper {
 
     public MemberDeleteVo mapToMemberDeleteVo(Long memberId) {
         return MemberDeleteVo
+                .builder()
+                .memberId(memberId)
+                .build();
+    }
+
+    public MemberPasswordReIssueVo mapToMemberPasswordReIssueVo(Long memberId) {
+        return MemberPasswordReIssueVo
                 .builder()
                 .memberId(memberId)
                 .build();

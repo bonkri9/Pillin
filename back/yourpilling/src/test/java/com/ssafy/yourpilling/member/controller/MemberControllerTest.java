@@ -9,6 +9,7 @@ import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
 import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
 import net.minidev.json.JSONObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static java.time.LocalDate.now;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -181,10 +181,53 @@ class MemberControllerTest {
         assertTrue(memberJpaRepository.findByUsername(member.getUsername()).isEmpty());
     }
 
+
+    @Test
+    @DisplayName("임시 비밀번호 발급 후 메일로 전송")
+    @Disabled
+    public void passwordReIssue() throws Exception {
+        // when
+        Member member = registerMember("zhfldk35@naver.com");
+        String accessToken = getAccessToken(member);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/api/v1/member/password-reissue")
+                .header("accessToken", accessToken)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+        assertFalse(encoder.matches("1234", memberJpaRepository.findByUsername(member.getUsername()).get().getPassword()));
+    }
+
+
+
     private Member defaultRegisterMember(){
         Member member = Member
                 .builder()
                 .username("q123123")
+                .password(encoder.encode("1234"))
+                .name("ksb")
+                .nickname("k")
+                .birth(now())
+                .gender(Gender.MAN)
+                .createdAt(LocalDateTime.now())
+                .role(Role.MEMBER)
+                .build();
+
+        if(memberRepository.findByUsername(member.getUsername()).isEmpty()){
+            memberRepository.save(member);
+        }
+        return member;
+    }
+
+    private Member registerMember(String username){
+        Member member = Member
+                .builder()
+                .username(username)
                 .password(encoder.encode("1234"))
                 .name("ksb")
                 .nickname("k")
