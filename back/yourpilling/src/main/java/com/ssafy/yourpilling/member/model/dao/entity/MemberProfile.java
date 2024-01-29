@@ -1,6 +1,7 @@
 package com.ssafy.yourpilling.member.model.dao.entity;
 
 import com.ssafy.yourpilling.common.Gender;
+import com.ssafy.yourpilling.common.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,5 +45,20 @@ public class MemberProfile {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "provider_id")
+    private String providerId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private Role role;
+
+    public void updatePassword(String password){
+        this.password = password;
+    }
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
 
 }

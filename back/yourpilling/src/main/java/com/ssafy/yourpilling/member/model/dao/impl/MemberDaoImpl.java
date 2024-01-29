@@ -21,4 +21,10 @@ public class MemberDaoImpl implements MemberDao {
 
         memberJpaRepository.save(memberProfile);
     }
+
+    @Override
+    public MemberProfile findByMemberId(Long memberId) {
+        return memberJpaRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
 }

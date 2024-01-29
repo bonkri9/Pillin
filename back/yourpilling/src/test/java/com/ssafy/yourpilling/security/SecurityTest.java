@@ -41,7 +41,7 @@ public class SecurityTest {
     @DisplayName("로그인")
     public void login() throws Exception {
         // given
-        String username = "qkfka9045@gmail.com";
+        String username = "teststst@qweqwe.com";
         String password = "1234";
 
         Member member = Member.builder()
