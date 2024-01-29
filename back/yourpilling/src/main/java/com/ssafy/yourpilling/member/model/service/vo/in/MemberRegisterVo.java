@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.member.model.service.vo;
+package com.ssafy.yourpilling.member.model.service.vo.in;
 
 import com.ssafy.yourpilling.common.Gender;
 import lombok.Builder;

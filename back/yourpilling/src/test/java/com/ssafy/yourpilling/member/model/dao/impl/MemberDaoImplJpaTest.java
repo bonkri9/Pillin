@@ -1,6 +1,7 @@
 package com.ssafy.yourpilling.member.model.dao.impl;
 
 import com.ssafy.yourpilling.common.Gender;
+import com.ssafy.yourpilling.common.Role;
 import com.ssafy.yourpilling.member.model.dao.MemberDao;
 import com.ssafy.yourpilling.member.model.dao.entity.MemberProfile;
 import com.ssafy.yourpilling.member.model.dao.jpa.MemberJpaRepository;
@@ -44,6 +45,7 @@ class MemberDaoImplJpaTest {
                 .birth(now())
                 .gender(Gender.MAN)
                 .createdAt(LocalDateTime.now())
+                .role(Role.MEMBER)
                 .build();
 
         // when
