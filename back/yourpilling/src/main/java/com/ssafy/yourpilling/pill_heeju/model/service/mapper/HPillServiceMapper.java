@@ -49,7 +49,7 @@ public class HPillServiceMapper {
         return HNutrition.builder().nutrition(vo.getNutrition()).build();
     }
 
-    public List<Integer> mapToMidCategories(MidCategoryVo vo) {
+    public Long mapToMidCategories(MidCategoryVo vo) {
         return vo.getCategories();
     }
 

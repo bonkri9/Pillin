@@ -11,7 +11,11 @@ import java.util.Optional;
 public interface HPillJpaRepository extends JpaRepository<HPill, Long> {
 
     Optional<HPill> findByPillId(Long aLong);
-    List<HPill> findByNameContains(String pillName);
+    @Query("SELECT p " +
+            "FROM HPill p " +
+            "WHERE p.name LIKE %:searchName% " +
+            "OR p.manufacturer LIKE %:searchName% ")
+    List<HPill> findByNameAndManufacturer(@Param("searchName") String searchName);
 
     @Query("SELECT p " +
             "FROM HPill p " +
@@ -23,6 +27,8 @@ public interface HPillJpaRepository extends JpaRepository<HPill, Long> {
             "FROM HPill p " +
             "JOIN p.pillCategories pc " +
             "JOIN pc.midCategory mc " +
-            "WHERE mc.midCategoryId IN :categories")
-    List<HPill> findByCategories(@Param("categories")List<Integer> categories);
+            "WHERE mc.midCategoryId = :categories")
+//            "WHERE mc.midCategoryId IN :categories")
+//    List<HPill> findByCategories(@Param("categories")List<Integer> categories);
+    List<HPill> findByCategories(@Param("categories")Long category);
 }

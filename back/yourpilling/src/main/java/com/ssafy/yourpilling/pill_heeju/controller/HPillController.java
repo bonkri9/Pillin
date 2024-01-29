@@ -39,10 +39,10 @@ public class HPillController {
 
         return ResponseEntity.ok(data);
     }
-    @PostMapping("/search/category")
-    ResponseEntity<ResponsePillSearchListData> pillSearchByCategory(@RequestBody RequestHealthConcernsCategoryDto dto){
+    @GetMapping("/search/category")
+    ResponseEntity<ResponsePillSearchListData> pillSearchByCategory(@RequestParam(value = "healthConcerns") Long healthConcerns){
         // 영양제 이름(제품명)을 받으면 영양제에 대한 영양제 리스트 반환
-        ResponsePillSearchListData data = pillService.pillSearchList(mapper.mapToCategoryVo(dto.getHealthConcerns()));
+        ResponsePillSearchListData data = pillService.pillSearchList(mapper.mapToCategoryVo(healthConcerns));
 
         return ResponseEntity.ok(data);
     }

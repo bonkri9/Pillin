@@ -7,5 +7,5 @@ import java.util.List;
 @Value
 @Builder
 public class MidCategoryVo {
-    List<Integer> categories;
+    Long categories;
 }

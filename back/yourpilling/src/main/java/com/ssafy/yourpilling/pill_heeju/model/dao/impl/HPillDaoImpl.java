@@ -24,7 +24,7 @@ public class HPillDaoImpl implements PillDao {
 
     @Override
     public List<HPill> pillSearchList(HPill pillDetail) {
-        List<HPill> pills = pillJpaRepository.findByNameContains(pillDetail.getName());
+        List<HPill> pills = pillJpaRepository.findByNameAndManufacturer(pillDetail.getName());
 
         return Optional.of(pills)
                 .filter(pillList -> !pillList.isEmpty())
@@ -41,7 +41,7 @@ public class HPillDaoImpl implements PillDao {
     }
 
     @Override
-    public List<HPill> pillSearchListByHealthConcern(List<Integer> categories) {
+    public List<HPill> pillSearchListByHealthConcern(Long categories) {
         List<HPill> pills = pillJpaRepository.findByCategories(categories);
 
         return Optional.of(pills)
