@@ -21,4 +21,6 @@ public interface OwnPillService {
     OutWeeklyTakerHistoryVo weeklyTakerHistory(WeeklyTakerHistoryVo weeklyTakerHistoryVo);
 
     OutMonthlyTakerHistoryVo monthlyTakerHistory(MonthlyTakerHistoryVo monthlyTakerHistoryVo);
+
+    void updateTakeYn(OwnPillTakeYnVo ownPillTakeYnVo);
 }

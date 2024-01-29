@@ -1,9 +1,6 @@
 package com.ssafy.yourpilling.pill.model.dao;
 
-import com.ssafy.yourpilling.pill.model.dao.entity.MonthlyTakerHistory;
-import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
-import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
-import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
+import com.ssafy.yourpilling.pill.model.dao.entity.*;
 import com.ssafy.yourpilling.pill.model.service.vo.in.MonthlyTakerHistoryVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.WeeklyTakerHistoryVo;
@@ -14,6 +11,8 @@ import java.util.List;
 public interface OwnPillDao {
 
     OwnPill findByOwnPillId(Long ownPillId);
+
+    void registerHistory(TakerHistory takerHistory);
 
     void register(OwnPill ownPill);
 

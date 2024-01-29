@@ -70,4 +70,12 @@ public class OwnPillController {
         return ResponseEntity.ok(vo);
     }
 
+    @PutMapping("/inventory/take-yn")
+    ResponseEntity<Void> take(@RequestBody RequestOwnPillTakeYnDto dto){
+        ownPillService.updateTakeYn(mapper.mapToOwnPillTakeYnVo(dto));
+        // OutOwnPillTakeYnVo vo = ownPillService.updateTakeYn(mapper.mapToOwnPillTakeYnVo(dto));
+        return ResponseEntity.ok().build();
+    }
+
+
 }

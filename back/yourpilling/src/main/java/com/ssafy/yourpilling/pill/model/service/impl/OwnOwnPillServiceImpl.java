@@ -136,6 +136,51 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 .build();
     }
 
+    @Transactional
+    @Override
+    public void updateTakeYn(OwnPillTakeYnVo ownPillTakeYnVo) {
+
+
+        OwnPill ownPill = ownPillDao.findByOwnPillId(ownPillTakeYnVo.getOwnPillId());
+
+        LocalDate today = LocalDate.now();
+        TakerHistory todayHistory = null;
+
+        for(TakerHistory th : ownPill.getTakerHistories()) {
+                if(th.getTakeAt().equals(today)) {
+                    todayHistory = th;
+                    break;
+                }
+        }
+
+        if(todayHistory == null) {
+            todayHistory = TakerHistory
+                    .builder()
+                    .needToTakeCount(ownPill.getTakeCount())
+                    .currentTakeCount(0)
+                    .ownPill(ownPill)
+                    .build();
+            // 오늘의 일일 복용 기록 생성!!
+            ownPillDao.registerHistory(todayHistory);
+        }
+
+        if(ownPill.getTakeYN()) {
+
+            // 섭취에서 미섭취로 전환
+            ownPill.setTakeYN(false);
+            todayHistory.decreaseNeedToTakeByUpdateTakeYn();
+
+
+        } else {
+
+            // 미섭취에서 섭취로 전환
+            ownPill.setTakeYN(true);
+            todayHistory.increaseNeedToTakeByUpdateTakeYn();
+
+        }
+
+    }
+
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo) {
         return OwnPillRegisterValue
                 .builder()
@@ -163,4 +208,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     private List<String> takeWeekDays(Integer value) {
         return TakeWeekday.toTakeWeekdays(value);
     }
+
+
 }
