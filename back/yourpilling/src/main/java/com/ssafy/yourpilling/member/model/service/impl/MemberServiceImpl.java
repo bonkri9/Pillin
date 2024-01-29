@@ -5,6 +5,7 @@ import com.ssafy.yourpilling.member.model.dao.MemberDao;
 import com.ssafy.yourpilling.member.model.dao.entity.MemberProfile;
 import com.ssafy.yourpilling.member.model.service.MemberService;
 import com.ssafy.yourpilling.member.model.service.mapper.MemberServiceMapper;
+import com.ssafy.yourpilling.member.model.service.vo.in.MemberDeleteVo;
 import com.ssafy.yourpilling.member.model.service.vo.in.MemberInfoVo;
 import com.ssafy.yourpilling.member.model.service.vo.in.MemberRegisterVo;
 import com.ssafy.yourpilling.member.model.service.vo.in.MemberUpdateVo;
@@ -42,5 +43,11 @@ public class MemberServiceImpl implements MemberService {
         MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
 
         member.updateNickname(vo.getNickname());
+    }
+
+    @Transactional
+    @Override
+    public void delete(MemberDeleteVo vo) {
+        memberDao.deleteByMemberId(vo.getMemberId());
     }
 }

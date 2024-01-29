@@ -10,4 +10,6 @@ public interface MemberJpaRepository extends JpaRepository<MemberProfile, Long> 
     Optional<MemberProfile> findByMemberId(Long memberId);
 
     Optional<MemberProfile> findByUsername(String username);
+
+    void deleteByMemberId(Long memberId);
 }

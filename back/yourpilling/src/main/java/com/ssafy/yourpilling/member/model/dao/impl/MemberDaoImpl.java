@@ -27,4 +27,9 @@ public class MemberDaoImpl implements MemberDao {
         return memberJpaRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
+
+    @Override
+    public void deleteByMemberId(Long memberId) {
+        memberJpaRepository.deleteByMemberId(memberId);
+    }
 }

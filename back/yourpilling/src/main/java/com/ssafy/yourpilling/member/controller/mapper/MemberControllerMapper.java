@@ -2,6 +2,7 @@ package com.ssafy.yourpilling.member.controller.mapper;
 
 import com.ssafy.yourpilling.member.controller.dto.request.RequestRegisterDto;
 import com.ssafy.yourpilling.member.controller.dto.request.RequestUpdateDto;
+import com.ssafy.yourpilling.member.model.service.vo.in.MemberDeleteVo;
 import com.ssafy.yourpilling.member.model.service.vo.in.MemberInfoVo;
 import com.ssafy.yourpilling.member.model.service.vo.in.MemberRegisterVo;
 import com.ssafy.yourpilling.member.model.service.vo.in.MemberUpdateVo;
@@ -35,6 +36,13 @@ public class MemberControllerMapper {
                 .builder()
                 .memberId(memberId)
                 .nickname(dto.getNickname())
+                .build();
+    }
+
+    public MemberDeleteVo mapToMemberDeleteVo(Long memberId) {
+        return MemberDeleteVo
+                .builder()
+                .memberId(memberId)
                 .build();
     }
 }

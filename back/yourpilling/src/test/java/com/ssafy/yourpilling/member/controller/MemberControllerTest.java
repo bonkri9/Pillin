@@ -31,6 +31,7 @@ import java.util.Optional;
 
 import static java.time.LocalDate.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -158,6 +159,26 @@ class MemberControllerTest {
         // then
         perform.andExpect(status().isOk());
         assertEquals(memberJpaRepository.findByMemberId(member.getMemberId()).get().getNickname(), change);
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴")
+    public void delete() throws Exception {
+        // when
+        Member member = defaultRegisterMember();
+        String accessToken = getAccessToken(member);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete("/api/v1/member")
+                .header("accessToken", accessToken)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+        assertTrue(memberJpaRepository.findByUsername(member.getUsername()).isEmpty());
     }
 
     private Member defaultRegisterMember(){

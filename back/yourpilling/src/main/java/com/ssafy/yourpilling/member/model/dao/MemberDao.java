@@ -8,4 +8,6 @@ public interface MemberDao {
     void register(MemberProfile memberProfile);
 
     MemberProfile findByMemberId(Long memberId);
+
+    void deleteByMemberId(Long memberId);
 }

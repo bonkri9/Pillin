@@ -37,4 +37,10 @@ public class MemberController {
         memberService.update(mapper.mapToMemberUpdateVo(principalDetails.getMember().getMemberId(), dto));
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/member")
+    ResponseEntity<Void> update(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        memberService.delete(mapper.mapToMemberDeleteVo(principalDetails.getMember().getMemberId()));
+        return ResponseEntity.ok().build();
+    }
 }
