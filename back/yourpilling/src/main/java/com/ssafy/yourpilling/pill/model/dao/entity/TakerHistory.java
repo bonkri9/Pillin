@@ -41,4 +41,9 @@ public class TakerHistory {
     public void increaseCurrentTakeCount(int actualTakeCount) {
         this.currentTakeCount += actualTakeCount;
     }
+
+    public void decreaseNeedToTakeByUpdateTakeYn() { this.needToTakeCount = this.currentTakeCount; }
+
+    public void increaseNeedToTakeByUpdateTakeYn() { this.needToTakeCount = this.getOwnPill().getTakeOnceAmount() * this.getOwnPill().getTakeCount(); }
+
 }

@@ -68,6 +68,15 @@ public class OwnPillControllerMapper {
 
     }
 
+    public OwnPillTakeYnVo mapToOwnPillTakeYnVo(RequestOwnPillTakeYnDto dto) {
+
+        return OwnPillTakeYnVo.
+                builder()
+                .ownPillId(dto.getOwnPillId())
+                .build();
+
+    }
+
     public WeeklyTakerHistoryVo mapToWeeklyTakerHistoryVo(Long memberId, LocalDate now) {
 
         return  WeeklyTakerHistoryVo.
