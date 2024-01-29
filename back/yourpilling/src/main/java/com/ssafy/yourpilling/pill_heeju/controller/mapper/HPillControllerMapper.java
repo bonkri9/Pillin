@@ -18,7 +18,7 @@ public class HPillControllerMapper {
     public NutritionVo mapToNutritionIdVo(String nutritionName) {
         return NutritionVo.builder().nutrition(nutritionName).build();
     }
-    public MidCategoryVo mapToCategoryVo(List<Integer> categories) {
+    public MidCategoryVo mapToCategoryVo(Long categories) {
         return MidCategoryVo.builder().categories(categories).build();
     }
 }

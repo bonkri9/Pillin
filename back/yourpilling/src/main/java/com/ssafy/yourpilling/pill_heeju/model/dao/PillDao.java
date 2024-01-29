@@ -12,5 +12,5 @@ public interface PillDao {
     List<HPill> pillSearchList(HPill pillDetail);
     List<HPill> pillSearchListByNutrition(HNutrition nutritionDetail);
 
-    List<HPill> pillSearchListByHealthConcern(List<Integer> categories);
+    List<HPill> pillSearchListByHealthConcern(Long categories);
 }
