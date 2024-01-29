@@ -25,6 +25,33 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var pillList = [
+      {
+        'pillName': '비타민 C', // 영양제 이름
+        'time': '09:00', // 복용 시간
+        'isTaken': false, // 복용 여부
+        'total': 50,
+        'rest': 49,
+      },
+      {
+        'pillName': '아연',
+        'time': '11:00',
+        'isTaken': false,
+        'total': 50,
+        'rest': 24,
+      },
+      {
+        'pillName': '마그네슘',
+        'time': '21:00',
+        'isTaken': false,
+        'total': 50,
+        'rest': 1,
+      },
+    ];
+
+
+
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
@@ -72,6 +99,7 @@ class _SearchBar extends StatelessWidget {
               controller: myController,
               decoration: InputDecoration(
                 labelText: '검색어를 입력하세요',
+                hoverColor: BASIC_GREY,
               ),
             ),
           ),
