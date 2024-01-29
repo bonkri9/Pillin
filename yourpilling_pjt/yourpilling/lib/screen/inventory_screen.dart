@@ -507,7 +507,7 @@ class _EtcZone extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           BaseContainer(
-            width: 130,
+            width: 140,
             height: 35,
             child: TextButton(
               onPressed: () {
