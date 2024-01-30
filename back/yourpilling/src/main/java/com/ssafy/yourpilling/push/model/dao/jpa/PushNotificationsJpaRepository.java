@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PushNotificationsJpaRepository extends JpaRepository<PushNotification, Long> {
     List<PushNotification> findByPushDayAndPushTime(Byte pushDay, LocalDateTime pushTime);
+
 }

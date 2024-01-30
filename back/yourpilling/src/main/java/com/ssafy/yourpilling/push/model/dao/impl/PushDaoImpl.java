@@ -4,6 +4,7 @@ import com.ssafy.yourpilling.push.model.dao.PushDao;
 import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
 import com.ssafy.yourpilling.push.model.dao.jpa.DeviceTokenJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushNotificationsJpaRepository;
+import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationsVo;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,11 @@ public class PushDaoImpl implements PushDao {
                         pushNotificationsJpaRepository.findByPushDayAndPushTime(vo.getPushDay(), vo.getPushTime())
                 )
                 .build();
+    }
+
+    @Override
+    public void deleteByMemberIdAndDeviceToken(DeviceTokenVo deviceTokenVo) {
+        deviceTokenJpaRepository.deleteByMemberMemberIdAndDeviceToken(deviceTokenVo.getMemberId(), deviceTokenVo.getDeviceToken());
     }
 
 

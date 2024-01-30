@@ -30,7 +30,14 @@ public class PushController {
     @PostMapping("/device-token")
     ResponseEntity<Void> register(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                   @RequestBody RequestDeviceTokenDto dto) {
-        pushService.register(mapper.mapToDeviceTokenVo(principalDetails.getMember().getMemberId(), dto));
+        pushService.registToken(mapper.mapToDeviceTokenVo(principalDetails.getMember().getMemberId(), dto));
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/device-token")
+    ResponseEntity<Void> deleteToken(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                  @RequestBody RequestDeviceTokenDto dto) {
+        pushService.deleteToken(mapper.mapToDeviceTokenVo(principalDetails.getMember().getMemberId(), dto));
         return ResponseEntity.ok().build();
     }
 

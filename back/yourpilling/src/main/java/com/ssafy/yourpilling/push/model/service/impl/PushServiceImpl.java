@@ -20,7 +20,7 @@ public class PushServiceImpl implements PushService {
 
     @Transactional
     @Override
-    public void register(DeviceTokenVo deviceTokenVo) {
+    public void registToken(DeviceTokenVo deviceTokenVo) {
 
         pushDao.tokenRegister(mapper.mapToDeviceToken(deviceTokenVo));
 
@@ -31,6 +31,12 @@ public class PushServiceImpl implements PushService {
     @Override
     public OutNotificationsVo findAllByPushDayAndPushTime(PushNotificationsVo vo) {
         return pushDao.findAllByPushDayAndPushTime(vo);
+    }
+
+    @Transactional
+    @Override
+    public void deleteToken(DeviceTokenVo deviceTokenVo) {
+        pushDao.deleteByMemberIdAndDeviceToken(deviceTokenVo);
     }
 
 

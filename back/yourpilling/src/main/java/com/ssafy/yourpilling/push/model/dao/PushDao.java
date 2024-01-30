@@ -1,6 +1,7 @@
 package com.ssafy.yourpilling.push.model.dao;
 
 import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
+import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationsVo;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 
@@ -10,4 +11,5 @@ public interface PushDao {
 
     OutNotificationsVo findAllByPushDayAndPushTime(PushNotificationsVo vo);
 
+    void deleteByMemberIdAndDeviceToken(DeviceTokenVo deviceTokenVo);
 }
