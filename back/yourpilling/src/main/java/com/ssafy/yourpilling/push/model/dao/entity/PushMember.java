@@ -19,4 +19,8 @@ public class PushMember {
 
         @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
         private List<DeviceToken> deviceTokens;
+
+        @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        private List<PushNotification> pushNotifications;
+
 }

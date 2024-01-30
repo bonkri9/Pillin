@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.push.model.service.vo;
+package com.ssafy.yourpilling.push.model.service.vo.in;
 
 import lombok.Builder;
 import lombok.Value;
