@@ -71,7 +71,6 @@ dev_dependencies:
   simple_progress_indicators: ^0.2.0
   table_calendar: ^3.0.9
   circle_progress_bar: ^0.1.1
-  firebase_core: ^2.24.2
   firebase_messaging: ^14.7.10
 
 dependency_overrides:
