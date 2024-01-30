@@ -5,7 +5,7 @@ import 'package:yourpilling/const/colors.dart';
 import 'search_screen.dart';
 import 'record_screen.dart';
 import 'alarm_screen.dart';
-import 'inventory_screen.dart';
+import '../component/inventory/inventory_screen.dart';
 import '../component/base_container.dart';
 import 'package:weekly_date_picker/weekly_date_picker.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';

@@ -3,11 +3,15 @@ import 'package:yourpilling/component/angle_container.dart';
 import 'package:yourpilling/component/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/component/pilldetail/search_pill_detail.dart';
+import 'package:getwidget/getwidget.dart';
+import '../base_container.dart';
+import '../app_bar.dart';
+import '../login/login_main.dart';
+import '../login/login_screen.dart';
+import '../login/member_register.dart';
+import '../sign_up/sign_up_screen.dart';
 
-import '../component/base_container.dart';
-import '../component/app_bar.dart';
-import '../component/login/login_main.dart';
-import '../component/login/member_register.dart';
+bool _takeYnChecked = false;
 
 class Inventory extends StatefulWidget {
   const Inventory({super.key});
@@ -203,20 +207,20 @@ class _InventoryContentState extends State<_InventoryContent> {
     );
   }
 
-  // Widget buildTabContent(bool takeYn) {
-  //   // takeYn에 따라 다른 내용을 반환
-  //   List<Widget> pillsInTab = takenPillInven
-  //       .where((pill) => pill['takeYn'] == takeYn)
-  //       .map((pill) => ListTile(
-  //     title: Text('Pill Name: ${pill['pillName']}'),
-  //     subtitle: Text('Num1: ${pill['num1']}'),
-  //   ))
-  //       .toList();
-  //
-  //   return ListView(
-  //     children: pillsInTab,
-  //   );
-  // }
+// Widget buildTabContent(bool takeYn) {
+//   // takeYn에 따라 다른 내용을 반환
+//   List<Widget> pillsInTab = takenPillInven
+//       .where((pill) => pill['takeYn'] == takeYn)
+//       .map((pill) => ListTile(
+//     title: Text('Pill Name: ${pill['pillName']}'),
+//     subtitle: Text('Num1: ${pill['num1']}'),
+//   ))
+//       .toList();
+//
+//   return ListView(
+//     children: pillsInTab,
+//   );
+// }
 }
 
 class _TakenTab extends StatefulWidget {
@@ -297,6 +301,53 @@ class _TakenTabState extends State<_TakenTab> {
       );
     }
   }
+  final TextEditingController _textFieldController = TextEditingController();
+  Future<void> _updateInvenDialog(BuildContext context) async{
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('TextField라능'),
+          content: TextField(
+            onChanged: (value){
+              setState(() {
+                valueText = value;
+              });
+            },
+            controller: _textFieldController,
+            decoration:
+            const InputDecoration(hintText: "Text Field"),
+        ),
+          actions: <Widget>[
+            MaterialButton(
+              color: Colors.redAccent,
+                textColor: Colors.white,
+                child: const Text('취소'),
+                onPressed: (){
+                setState(() {
+                  Navigator.pop(context);
+                });
+                },
+            ),
+            MaterialButton(
+                color: Colors.greenAccent,
+                textColor: Colors.white,
+                child: const Text('완료'),
+                onPressed: (){
+                  setState(() {
+                    codeDialog = valueText;
+                    Navigator.pop(context);
+                  });
+                },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  String? codeDialog;
+  String? valueText;
 
   @override
   Widget build(BuildContext context) {
@@ -319,37 +370,86 @@ class _TakenTabState extends State<_TakenTab> {
           child: Container(
             decoration: BoxDecoration(
               color: Color(0xFFF5F6F9),
-              borderRadius: BorderRadius.all(Radius.circular(50)),
+              borderRadius: BorderRadius.all(Radius.circular(30)),
             ),
             width: 500,
-            height: 70,
+            height: 100,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "${takenPillInven[i]['pillName']}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: BASIC_BLACK,
-                    ),
-                  ),
-                  Row(
+                  Column(
                     children: [
                       Text(
-                        "${takenPillInven[i]['currPill']}/${takenPillInven[i]['totalPill']}",
+                        "${takenPillInven[i]['pillName']}",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 20,
                           color: BASIC_BLACK,
                         ),
                       ),
-                      SizedBox(
-                        width: 15,
+                      IconButton(
+                        iconSize: 16,
+                          onPressed: () {_updateInvenDialog(context);},
+                          icon: Icon(Icons.edit),
                       ),
-                      pillStatus(i, takenPillInven),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        children: [
+                          Text('복용여부'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          GFToggle(
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _takeYnChecked = value ?? false;
+                              });
+                            },
+                            value: _takeYnChecked,
+                            enabledTrackColor: Colors.redAccent,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "${takenPillInven[i]['currPill']}/${takenPillInven[i]['totalPill']}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                              color: BASIC_BLACK,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          pillStatus(i, takenPillInven),
+                        ],
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          textStyle: const TextStyle(fontSize: 10),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PillDetailScreen()));
+                        },
+                        child: const Text(
+                          '상세 보기',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -533,7 +633,7 @@ class _EtcZone extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginMain()));
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -552,7 +652,7 @@ class _EtcZone extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MemberRegister()));
+                    MaterialPageRoute(builder: (context) => SignupScreen()));
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

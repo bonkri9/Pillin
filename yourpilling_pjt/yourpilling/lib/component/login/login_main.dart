@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yourpilling/component/login/member_register.dart';
-import 'package:yourpilling/component/login/login_db.dart';
 import 'package:yourpilling/screen/main_page_child_screen.dart';
-import 'package:yourpilling/screen/main_screen.dart';
 
 class LoginMain extends StatelessWidget {
   const LoginMain({super.key});
