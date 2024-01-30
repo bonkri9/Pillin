@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../component/app_bar.dart';
 import '../component/base_container.dart';
 import '../const/colors.dart';
@@ -11,27 +11,29 @@ class AlarmScreen extends StatefulWidget {
 }
 
 class _AlarmScreenState extends State<AlarmScreen> {
+
+
   DateTime _selectedTime = DateTime.now();
   var eatpill = [
     {
       'pillName': '비타민 C', // 영양제 이름
       'img': 'pill1', // 사진정보
       'company': '동양제당',
-      'time': '1700',
+      'time': '17:00',
       'routine' : []
     },
     {
       'pillName': '아연', // 영양제 이름
       'img': 'pill2', // 사진정보
       'company': '서양제당',
-      'time': '1700',
+      'time': '17:00',
       'routine' :[],
     },
     {
       'pillName': '마그네슘', // 영양제 이름
       'img': 'pill3', // 사진정보
       'company': '중동제당',
-      'time': '1700',
+      'time': '17:00',
       'routine' :[],
     },
     {
@@ -113,6 +115,10 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // get the notifcation message and display on screen
+    final message = ModalRoute.of(context)!.settings;
+    // 모달 경로를 가져오고 인수를 가져옵니다. 알림을 위해. 이 메시지를 받으면
+
 
 
     return Scaffold(
@@ -191,6 +197,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
                     ),
                   );
                 }),
+
+
           ],
         ),
       ),

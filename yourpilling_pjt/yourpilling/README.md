@@ -22,3 +22,11 @@ route 여기서 route설정, bool에 세션 or 토큰 담아서 로그인 확인
 
 ## 01.22 프론트가 해야할 것. http 통신으로 백엔드와 데이터 연결할것.
 ### 못할시 로그인 or 검색 or router 수정할것
+
+### 파이어베이스 설정
+1. firebase login
+2. dart pub global activate flutterfire_cli
+3. flutterfire configure ( 경로 설정이 되어있으면 바로 가능 )
+4. firebase 해당 프로젝트에 android가 등록됐는지 확인
+5. flutter pub add firebase_core
+6. flutter pub add firebase messaging  yaml파일에 의존성 추가
