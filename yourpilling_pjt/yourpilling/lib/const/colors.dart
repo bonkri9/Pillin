@@ -10,3 +10,15 @@ const BASIC_GREY = Color(0xFFD3D3D3); // 연한 회색
 // 글씨 크기
 const TITLE_FONT_SIZE = 17.5; // 제목 글씨 크기
 const CONTENT_FONT_SIZE = 13; // 내용 글씨 크기
+
+//임시 폰트
+const String fontFamily = 'Montserrat';
+
+//경고창
+showScaffold(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(text),
+    ),
+  );
+}

@@ -4,6 +4,7 @@ import 'package:yourpilling/screen/alarm_screen.dart';
 import 'package:yourpilling/screen/main_page_child_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:yourpilling/firebase_options.dart';
+import 'package:yourpilling/splash.dart';
 
 import 'api/firebase_api.dart';
 
@@ -23,7 +24,8 @@ void main() async {
             fontFamily: "Pretendard",
           ),
           debugShowCheckedModeBanner: false,
-          home: MainPageChild(),
+          // home: MainPageChild(),
+        home: Splash(),
         navigatorKey: navigatorKey,
         routes: {
           '/alarm_screen':(context) => AlarmScreen(), //AlarmScreen 앞에 const 있었음

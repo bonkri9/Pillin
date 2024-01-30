@@ -9,6 +9,8 @@ import '../app_bar.dart';
 import '../login/login_main.dart';
 import '../login/login_screen.dart';
 import '../login/member_register.dart';
+import '../login/regist_login_screen.dart';
+import '../sign_up/regist_signup_screen.dart';
 import '../sign_up/sign_up_screen.dart';
 
 bool _takeYnChecked = false;
@@ -607,7 +609,7 @@ class _EtcZone extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           BaseContainer(
-            width: 140,
+            width: 100,
             height: 35,
             child: TextButton(
               onPressed: () {
@@ -628,7 +630,7 @@ class _EtcZone extends StatelessWidget {
             ),
           ),
           BaseContainer(
-            width: 100,
+            width: 60,
             height: 35,
             child: TextButton(
               onPressed: () {
@@ -647,7 +649,7 @@ class _EtcZone extends StatelessWidget {
             ),
           ),
           BaseContainer(
-            width: 100,
+            width: 70,
             height: 35,
             child: TextButton(
               onPressed: () {
@@ -658,6 +660,25 @@ class _EtcZone extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("회원가입",
+                      style: TextStyle(
+                        color: Colors.black,
+                      )),
+                ],
+              ),
+            ),
+          ),
+          BaseContainer(
+            width: 70,
+            height: 35,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreenView()));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("로그인2",
                       style: TextStyle(
                         color: Colors.black,
                       )),
