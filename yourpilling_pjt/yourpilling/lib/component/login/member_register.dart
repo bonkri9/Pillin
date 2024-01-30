@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:yourpilling/component/login/login_db.dart';
 
 class MemberRegister extends StatefulWidget {
   const MemberRegister({Key? key}) : super(key: key);

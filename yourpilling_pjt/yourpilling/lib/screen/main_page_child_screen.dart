@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:yourpilling/screen/alarm_screen.dart';
-import 'package:yourpilling/screen/inventory_screen.dart';
+import 'package:yourpilling/component/inventory/inventory_screen.dart';
 import 'search_screen.dart';
 import 'main_screen.dart';
 

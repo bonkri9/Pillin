@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/inventory_screen.dart';
+import 'package:yourpilling/component/inventory/inventory_screen.dart';
 import 'package:input_quantity/input_quantity.dart';
 
 var insertInvenInfo = [
@@ -100,8 +100,31 @@ class _InsertInventoryState extends State<InsertInventory> {
           style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
           child: Text('등록', style: TextStyle(color: Colors.white),),
           onPressed: (){
-            Navigator.push(context, 
-               MaterialPageRoute(builder: (context)=>Inventory()) );
+            // Navigator.push(context,
+            //    MaterialPageRoute(builder: (context)=>Inventory()) );
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context){
+                  return Container(
+                    width: 450,
+                    height: 200,
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          // mainAxisSize: MainAxisSize.,
+                          children: [
+                            // const Text('modal bottomsheet'),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(Colors.redAccent)),
+                                // onPressed: () => Navigator.pop(context),
+                                onPressed: () => Navigator.push(context,
+                                   MaterialPageRoute(builder: (context)=>Inventory()) ),
+                                child: const Text('등록완료!', style: TextStyle(color: Colors.white),)),
+                          ],
+                      ),
+                  );
+                });
           },
         ),
       ),
