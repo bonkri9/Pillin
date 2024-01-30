@@ -29,11 +29,6 @@ public class RankDaoImpl implements RankDao {
     }
 
     @Override
-    public List<EachCountPerPill> rankPillMemberRepository(int startAgeGroup, int endAgeGroup, String gender) {
-        return rankPillMemberRepository.countPillTotalMember(startAgeGroup, endAgeGroup, gender);
-    }
-
-    @Override
     public RankMidCategory searchMidCategoryByMidCategoryName(String midCategoryName) {
         return rankMidCategoryRepository.findByCategoryNm(midCategoryName)
                 .orElseThrow(() -> new IllegalArgumentException("알맞은 중분류를 찾을 수 없습니다."));
@@ -43,5 +38,15 @@ public class RankDaoImpl implements RankDao {
     public RankPill searchPillByPillId(Long pillId) {
         return rankPillRepository.findByPillId(pillId)
                 .orElseThrow(() -> new IllegalArgumentException("알맞은 영양제를 찾을 수 없습니다."));
+    }
+
+    @Override
+    public List<EachCountPerPill> rankAgeAndGender(int startAgeGroup, int endAgeGroup, String gender) {
+        return rankPillMemberRepository.countPillTotalMemberWithAgeAndGender(startAgeGroup, endAgeGroup, gender);
+    }
+
+    @Override
+    public List<EachCountPerPill> rankNutrition(String nutrient) {
+        return rankPillMemberRepository.countPillTotalMemberWithNutrient(nutrient);
     }
 }

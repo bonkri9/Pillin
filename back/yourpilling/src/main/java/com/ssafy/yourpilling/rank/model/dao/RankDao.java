@@ -11,7 +11,9 @@ public interface RankDao {
 
     void registerAll(List<Rank> rank);
 
-    List<EachCountPerPill> rankPillMemberRepository(int startAgeGroup, int endAgeGroup, String gender);
+    List<EachCountPerPill> rankAgeAndGender(int startAgeGroup, int endAgeGroup, String gender);
+
+    List<EachCountPerPill> rankNutrition(String nutrient);
 
     RankMidCategory searchMidCategoryByMidCategoryName(String midCategoryName);
 

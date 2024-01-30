@@ -2,7 +2,7 @@ package com.ssafy.yourpilling.rank.model.service.impl;
 
 import com.ssafy.yourpilling.common.AgeGroup;
 import com.ssafy.yourpilling.common.Gender;
-import com.ssafy.yourpilling.pill.model.dao.entity.MidCategory;
+import com.ssafy.yourpilling.common.Nutrient;
 import com.ssafy.yourpilling.rank.model.dao.RankDao;
 import com.ssafy.yourpilling.rank.model.dao.entity.EachCountPerPill;
 import com.ssafy.yourpilling.rank.model.dao.entity.Rank;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -44,6 +43,11 @@ public class RankServiceImpl implements RankService {
         // 나이 및 성별
         ageAndGenderRank(weeks, year, infos);
 
+        // 영양소
+        nutrientRank(weeks, year, infos);
+
+        // 건강고민
+
         rankDao.registerAll(infos);
     }
 
@@ -53,17 +57,31 @@ public class RankServiceImpl implements RankService {
                 String midCategoryName = a.getRange() + "," + g.getGender();
 
                 List<EachCountPerPill> each =
-                        rankDao.rankPillMemberRepository(a.getStartAge(), a.getEndAge(), g.getGender());
+                        rankDao.rankAgeAndGender(a.getStartAge(), a.getEndAge(), g.getGender());
 
-                RankMidCategory midCategoryId = rankDao.searchMidCategoryByMidCategoryName(midCategoryName);
-
-                for(int i=0; i<Math.min(LIMIT, each.size()); i++){
-                    RankPill rankPill = rankDao.searchPillByPillId(each.get(i).getPillId());
-
-                    Rank save = mapper.mapToRank(weeks, year, i, rankPill, midCategoryId, now());
-                    infos.add(save);
-                }
+                limitSave(weeks, year, infos, each, getMidCategory(midCategoryName));
             }
+        }
+    }
+
+    private void nutrientRank(int weeks, int year, List<Rank> infos){
+        for (Nutrient n : Nutrient.values()) {
+            List<EachCountPerPill> each = rankDao.rankNutrition(n.getEnglish());
+
+            limitSave(weeks, year, infos, each, getMidCategory(n.getEnglish()));
+        }
+    }
+
+    private RankMidCategory getMidCategory(String midCategoryName) {
+        return rankDao.searchMidCategoryByMidCategoryName(midCategoryName);
+    }
+
+    private void limitSave(int weeks, int year, List<Rank> infos, List<EachCountPerPill> each, RankMidCategory midCategoryId) {
+        for(int i = 0; i<Math.min(LIMIT, each.size()); i++){
+            RankPill rankPill = rankDao.searchPillByPillId(each.get(i).getPillId());
+
+            Rank save = mapper.mapToRank(weeks, year, i, rankPill, midCategoryId, now());
+            infos.add(save);
         }
     }
 }

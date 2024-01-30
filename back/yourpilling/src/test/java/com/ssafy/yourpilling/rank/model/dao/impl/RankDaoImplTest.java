@@ -25,7 +25,7 @@ class RankDaoImplTest {
     public void rankCal(){
         // given, when
         List<EachCountPerPill> eachCountPerPills =
-                rankPillMemberRepository.countPillTotalMember(20, 20, Gender.MAN.getGender());
+                rankPillMemberRepository.countPillTotalMemberWithAgeAndGender(20, 20, Gender.MAN.getGender());
 
         // then
         System.out.println("[total size] : " + eachCountPerPills.size());
