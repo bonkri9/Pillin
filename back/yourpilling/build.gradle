@@ -42,8 +42,12 @@ dependencies {
 
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 
+<<<<<<< HEAD
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+=======
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
+>>>>>>> back#319/push/firebase
 }
 
 tasks.named('test') {
