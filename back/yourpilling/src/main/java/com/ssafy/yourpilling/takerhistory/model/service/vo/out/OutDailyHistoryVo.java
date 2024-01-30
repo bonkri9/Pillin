@@ -1,11 +1,11 @@
-package com.ssafy.yourpilling.pill_joohyuk.model.service.vo.out;
+package com.ssafy.yourpilling.takerhistory.model.service.vo.out;
 
 import lombok.Builder;
 import lombok.Value;
 
 @Value
 @Builder
-public class JResponseDailyHistoryVo {
+public class OutDailyHistoryVo {
     String name;
     int actualTakeCount;
     int needToTakeTotalCount;

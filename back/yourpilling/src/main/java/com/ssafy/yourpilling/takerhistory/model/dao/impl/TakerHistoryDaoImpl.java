@@ -8,6 +8,7 @@ import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryTakerHistory
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -30,5 +31,10 @@ public class TakerHistoryDaoImpl implements TakerHistoryDao {
                 takerHistoryRepository.save(history);
             }
         }
+    }
+
+    @Override
+    public List<TakerHistoryTakerHistory> findByTakeAtAndMemberId(LocalDate takeAt, Long ownPillId) {
+        return takerHistoryRepository.findByTakeAtAndMemberId(takeAt, ownPillId);
     }
 }

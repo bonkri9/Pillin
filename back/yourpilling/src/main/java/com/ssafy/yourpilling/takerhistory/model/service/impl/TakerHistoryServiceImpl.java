@@ -1,11 +1,14 @@
 package com.ssafy.yourpilling.takerhistory.model.service.impl;
 
 import com.ssafy.yourpilling.takerhistory.model.dao.TakerHistoryDao;
-import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryTakerHistory;
 import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryOwnPill;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryTakerHistory;
 import com.ssafy.yourpilling.takerhistory.model.service.TakerHistoryService;
 import com.ssafy.yourpilling.takerhistory.model.service.mapper.TakerHistoryServiceMapper;
 import com.ssafy.yourpilling.takerhistory.model.service.mapper.value.TakerHistoryGenerateValue;
+import com.ssafy.yourpilling.takerhistory.model.service.vo.in.DailyHistoryVo;
+import com.ssafy.yourpilling.takerhistory.model.service.vo.out.OutDailyHistoryVo;
+import com.ssafy.yourpilling.takerhistory.model.service.vo.out.wrapper.OutDailyHistoryVos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -44,6 +47,21 @@ public class TakerHistoryServiceImpl implements TakerHistoryService {
         takerHistoryDao.generateAllMemberTakerHistory(takerHistories);
     }
 
+    @Override
+    public OutDailyHistoryVos findByTakeAtAndMemberId(DailyHistoryVo dailyHistoryVo) {
+        List<TakerHistoryTakerHistory> dailyHistories = takerHistoryDao.findByTakeAtAndMemberId(dailyHistoryVo.getTakeAt(), dailyHistoryVo.getMemberId());
+        List<OutDailyHistoryVo> responses = new ArrayList<>();
+
+        for (TakerHistoryTakerHistory dailyHistory : dailyHistories) {
+            boolean isTake = dailyHistory.getNeedToTakeCount().equals(dailyHistory.getCurrentTakeCount());
+
+            responses.add(mapper.mapToResponseDailyHistoryVo(dailyHistory, isTake));
+        }
+
+        return new OutDailyHistoryVos(responses);
+
+    }
+
     private static boolean isTomorrow() {
         return LocalDateTime.now().getHour() == 0;
     }
@@ -58,4 +76,6 @@ public class TakerHistoryServiceImpl implements TakerHistoryService {
                 .ownPill(own)
                 .build();
     }
+
+
 }

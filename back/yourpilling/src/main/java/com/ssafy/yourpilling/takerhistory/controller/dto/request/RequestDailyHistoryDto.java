@@ -1,4 +1,4 @@
-package com.ssafy.yourpilling.pill_joohyuk.controller.dto.request;
+package com.ssafy.yourpilling.takerhistory.controller.dto.request;
 
 import lombok.Data;
 

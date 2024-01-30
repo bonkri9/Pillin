@@ -2,18 +2,18 @@ package com.ssafy.yourpilling.pill_joohyuk.controller;
 
 import com.ssafy.yourpilling.common.Gender;
 import com.ssafy.yourpilling.common.Role;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.entity.JOwnPill;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.entity.JPill;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.entity.JPillMember;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.entity.JTakerHistory;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.jpa.JHistoryJpaRepository;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.jpa.JOwnPillJpaRepository;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.jpa.JPillJpaRepository;
-import com.ssafy.yourpilling.pill_joohyuk.model.dao.jpa.JPillMemberJpaRepository;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
-import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
+import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryOwnPill;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryPill;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryPillMember;
+import com.ssafy.yourpilling.takerhistory.model.dao.entity.TakerHistoryTakerHistory;
+import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryOwnPillRepository;
+import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryPillMemberRepository;
+import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryPillRepository;
+import com.ssafy.yourpilling.takerhistory.model.dao.jpa.TakerHistoryTakerHistoryRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
 @DisplayName("일일 복용 기록 통합 테스트")
-class JHistoryControllerTest {
+class HistoryControllerTest {
 
     // 통합 테스트 코드 작성
     // 크게 두가지가 있음
@@ -67,16 +67,16 @@ class JHistoryControllerTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private JPillJpaRepository pillJpaRepository;
+    private TakerHistoryPillRepository pillJpaRepository;
 
     @Autowired
-    private JOwnPillJpaRepository ownPillJpaRepository;
+    private TakerHistoryOwnPillRepository ownPillJpaRepository;
 
     @Autowired
-    private JPillMemberJpaRepository pillMemberJpaRepository;
+    private TakerHistoryPillMemberRepository pillMemberJpaRepository;
 
     @Autowired
-    private JHistoryJpaRepository historyJpaRepository;
+    private TakerHistoryTakerHistoryRepository historyJpaRepository;
 
     @Autowired
     private JwtManager jwtManager;
@@ -101,27 +101,25 @@ class JHistoryControllerTest {
         // given : 이게 주어졌을때
         Member member = defaultRegisterMember();
         String accessToken = getAccessToken(member);
-        JPillMember pillMember = pillMemberJpaRepository.findByMemberId(member.getMemberId()).get();
-        JPill pill1 = defaultRegisterPill("비타민A");
-        JPill pill2 = defaultRegisterPill("비타민B");
-        JPill pill3 = defaultRegisterPill("비타민C");
+        TakerHistoryPillMember pillMember = pillMemberJpaRepository.findByMemberId(member.getMemberId()).get();
 
-        JOwnPill one = registerOwnPill(true, member.getMemberId(), pill1);
-        JOwnPill two = registerOwnPill(true, member.getMemberId(), pill2);
-        JOwnPill three = registerOwnPill(false, member.getMemberId(), pill3);
+        TakerHistoryPill pill1 = defaultRegisterPill("비타민A");
+        TakerHistoryPill pill2 = defaultRegisterPill("비타민B");
+        TakerHistoryPill pill3 = defaultRegisterPill("비타민C");
 
-        JTakerHistory history1 = defaultRegisterTakerHistory(one);
-        JTakerHistory history2 = defaultRegisterTakerHistory(two);
-        JTakerHistory history3 = defaultRegisterTakerHistory(three);
+        TakerHistoryOwnPill one = registerOwnPill(true, member.getMemberId(), pill1);
+        TakerHistoryOwnPill two = registerOwnPill(true, member.getMemberId(), pill2);
+        TakerHistoryOwnPill three = registerOwnPill(false, member.getMemberId(), pill3);
+
+        TakerHistoryTakerHistory history1 = defaultRegisterTakerHistory(one);
+        TakerHistoryTakerHistory history2 = defaultRegisterTakerHistory(two);
+        TakerHistoryTakerHistory history3 = defaultRegisterTakerHistory(three);
 
         // 날짜
         LocalDate date = LocalDate.now();
 
         JSONObject requestJSON = new JSONObject();
         requestJSON.put("date", date);
-
-//        // 날짜에 맞는 복용한 영양제 목록(List<DailyHistory>)
-//        List<DailyHistory> list =
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get("/api/v1/history/daily")
@@ -150,11 +148,11 @@ class JHistoryControllerTest {
 
     }
 
-    private JTakerHistory defaultRegisterTakerHistory(JOwnPill ownPill) {
+    private TakerHistoryTakerHistory defaultRegisterTakerHistory(TakerHistoryOwnPill ownPill) {
 
         LocalDate now = LocalDate.now();
 
-        JTakerHistory takerHistory = JTakerHistory
+        TakerHistoryTakerHistory takerHistory = TakerHistoryTakerHistory
                 .builder()
                 .needToTakeCount(1)
                 .currentTakeCount(1)
@@ -202,8 +200,8 @@ class JHistoryControllerTest {
     }
 
 
-    private JOwnPill registerOwnPill(boolean takeYN, Long memberId, JPill pill) {
-        JOwnPill ownPill = JOwnPill
+    private TakerHistoryOwnPill registerOwnPill(boolean takeYN, Long memberId, TakerHistoryPill pill) {
+        TakerHistoryOwnPill ownPill = TakerHistoryOwnPill
                 .builder()
                 .takeCount(1)
                 .takeOnceAmount(1)
@@ -215,8 +213,8 @@ class JHistoryControllerTest {
         return ownPill;
     }
 
-    private JPill defaultRegisterPill(String name) {
-        JPill pill = JPill
+    private TakerHistoryPill defaultRegisterPill(String name) {
+        TakerHistoryPill pill = TakerHistoryPill
                 .builder()
                 .name(name)
                 .build();
