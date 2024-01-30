@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_health_screen.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
@@ -24,39 +25,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var pillList = [
-      {
-        'pillName': '비타민 C', // 영양제 이름
-        'time': '09:00', // 복용 시간
-        'isTaken': false, // 복용 여부
-        'total': 50,
-        'rest': 49,
-      },
-      {
-        'pillName': '아연',
-        'time': '11:00',
-        'isTaken': false,
-        'total': 50,
-        'rest': 24,
-      },
-      {
-        'pillName': '마그네슘',
-        'time': '21:00',
-        'isTaken': false,
-        'total': 50,
-        'rest': 1,
-      },
-    ];
-
-
-
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
       },
       child: Scaffold(
         backgroundColor: BACKGROUND_COLOR,
+        appBar: MainAppBar(
+          barColor: Color(0xFFF5F6F9),
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -97,7 +74,7 @@ class _SearchBar extends StatelessWidget {
             child: TextField(
               controller: myController,
               decoration: InputDecoration(
-                labelText: '검색어를 입력하세요',
+                labelText: '영양제명,제조사명',
                 hoverColor: BASIC_GREY,
               ),
             ),
@@ -108,7 +85,7 @@ class _SearchBar extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SearchListScreen()));
+                        builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
               }),
         ],
       ),
@@ -144,7 +121,7 @@ class _MiddleTap extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("성분검색",
+                    Text("영양소 검색",
                         style: TextStyle(color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
                   ],
                 ),
@@ -187,7 +164,7 @@ class _Ranking extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseContainer(
       width: 350,
-      height: 550,
+      height: 485,
       child: DefaultTabController(
         length: 3, // 탭의 수
         child: Column(
@@ -296,7 +273,7 @@ class _AgeTabState extends State<_AgeTab> {
                   child: _SearchRanking(
                   title: '${_index}',
                 ))
-              : Expanded(child: Text('버튼 누르세용')),
+              : Expanded(child: Text('선택')),
         ],
       ),
     );
@@ -370,7 +347,7 @@ class _NutrientTabState extends State<_NutrientTab> {
                   child: _SearchRanking(
                   title: '${_index}',
                 ))
-              : Expanded(child: Text('버튼 누르세용')),
+              : Expanded(child: Text('선택2')),
         ],
       ),
     );
@@ -441,7 +418,7 @@ class _HealthTabState extends State<_HealthTab> {
                   child: _SearchRanking(
                   title: '${_index}',
                 ))
-              : Expanded(child: Text('버튼 누르세용')),
+              : Expanded(child: Text('선택3')),
         ],
       ),
     );

@@ -31,15 +31,15 @@ class _MainAppBarState extends State<MainAppBar> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                    padding: EdgeInsets.only(right: 15),
-                    visualDensity: const VisualDensity(horizontal: -4),
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.search,
-                      size: 28,
-                    ),
-                  ),
+                  // IconButton(
+                  //   padding: EdgeInsets.only(right: 15),
+                  //   visualDensity: const VisualDensity(horizontal: -4),
+                  //   onPressed: () {},
+                  //   icon: Icon(
+                  //     Icons.search,
+                  //     size: 28,
+                  //   ),
+                  // ),
                   IconButton(
                     padding: EdgeInsets.only(right: 15),
                     visualDensity: const VisualDensity(horizontal: -4),
