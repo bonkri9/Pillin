@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:yourpilling/component/base_container.dart';
 
+import '../component/app_bar.dart';
 import '../const/colors.dart';
 
 class SearchListScreen extends StatefulWidget {
-  const SearchListScreen({super.key});
+  final String myControllerValue;
+
+  const SearchListScreen({super.key, required this.myControllerValue});
 
   @override
   State<SearchListScreen> createState() => _SearchListScreenState();
 }
 
 class _SearchListScreenState extends State<SearchListScreen> {
+  late final String searchInsert;
   final myController = TextEditingController();
 
   _SearchListScreenState() {
@@ -20,18 +24,32 @@ class _SearchListScreenState extends State<SearchListScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    searchInsert = widget.myControllerValue; // widget 키워드를 통해 myControllerValue에 접근합니다.
+    myController.text = searchInsert;
+    myController.addListener(() {
+      print("TextField content: ${myController.text}");
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
       },
       child: Scaffold(
+        appBar: MainAppBar(
+          barColor: Color(0xFFF5F6F9),
+        ),
         backgroundColor: BACKGROUND_COLOR,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _SearchBar(
-              myController: myController,
+              myController: myController, searchInsert: searchInsert,
             ),
             SizedBox(
               height: 20,
@@ -47,9 +65,10 @@ class _SearchListScreenState extends State<SearchListScreen> {
 
 // 검색바
 class _SearchBar extends StatelessWidget {
+  final String searchInsert;
   final TextEditingController myController;
 
-  const _SearchBar({Key? key, required this.myController}) : super(key: key);
+  const _SearchBar({Key? key, required this.myController, required this.searchInsert}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +78,11 @@ class _SearchBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // IconButton(
-          //   icon: Icon(Icons.arrow_back_ios_new_rounded,
-          //       color: Colors.black),
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
-          // TextField 위젯을 추가합니다.
           Expanded(
             child: TextField(
               controller: myController,
               decoration: InputDecoration(
-                labelText: '검색어를 입력하세요',
+                labelText: '검색어를 입력해주세요',
               ),
             ),
           ),
@@ -85,7 +96,7 @@ class _SearchBar extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SearchListScreen()));
+                        builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
               }),
         ],
       ),
@@ -162,7 +173,7 @@ class _SearchResult extends StatelessWidget {
     ];
 
     return Container(
-      height: 700,
+      height: 650,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: ListView.builder(
