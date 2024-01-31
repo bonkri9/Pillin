@@ -1,7 +1,6 @@
 package com.ssafy.yourpilling.pill_heeju.model.service.impl;
 
 import com.ssafy.yourpilling.pill_heeju.model.dao.PillDao;
-import com.ssafy.yourpilling.pill_heeju.model.dao.entity.HPill;
 import com.ssafy.yourpilling.pill_heeju.model.service.PillService;
 import com.ssafy.yourpilling.pill_heeju.model.service.mapper.HPillServiceMapper;
 import com.ssafy.yourpilling.pill_heeju.model.service.vo.MidCategoryVo;
@@ -25,7 +24,9 @@ public class HPillServiceImpl implements PillService {
 
     @Override
     public ResponsePillVo pillDetail(HPillVo vo) {
-        return mapper.mapToPill(pillDao.pillDetail(mapper.mapToPillId(vo)));
+        boolean alreadyHave = pillDao.alreadyHavePill(vo.getMemberId(), vo.getPillId());
+
+        return mapper.mapToPill(pillDao.pillDetail(mapper.mapToPillId(vo)), alreadyHave);
     }
 
     @Override

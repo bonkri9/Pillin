@@ -1,7 +1,6 @@
 package com.ssafy.yourpilling.pill_heeju.model.service.vo.out;
 
 import com.ssafy.yourpilling.common.PillProductForm;
-import com.ssafy.yourpilling.pill_heeju.model.dao.entity.HMidCategory;
 import lombok.Builder;
 import lombok.Value;
 
@@ -25,8 +24,9 @@ public class ResponsePillVo {
     int takeCount;
     int takeCycle;
     int takeOnceAmount;
-    ResponsePillNutrientsListData nutrientsListData;
-    ResponsePillCategoryListData categoryListData;
+    Boolean alreadyHave;
+    ResponsePillNutrientsListData nutrients;
+    ResponsePillCategoryListData categories;
 
 
     @Value

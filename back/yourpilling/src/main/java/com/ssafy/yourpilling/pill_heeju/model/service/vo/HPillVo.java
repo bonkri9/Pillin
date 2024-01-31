@@ -11,6 +11,7 @@ import java.util.List;
 @Value
 @Builder
 public class HPillVo {
+    Long memberId;
     Long pillId;
     String pillName;
     String manufacturer;
