@@ -48,11 +48,19 @@ dependencies:
   custom_navigation_bar: ^0.8.2
   url_launcher: ^6.2.4
   kakao_flutter_sdk: ^1.8.0
+<<<<<<< HEAD
   lite_rolling_switch: ^1.0.1
   input_quantity: ^2.2.0
   firebase_core: ^2.24.2
   firebase: ^9.0.3
   messaging: ^0.2.1
+=======
+  custom_dropdown_2: ^1.0.2
+  animated_custom_dropdown_v2: ^1.5.2
+  animated_dropdown_button: ^1.1.5
+  dropdown_button2: ^2.3.9
+  just_bottom_sheet: ^1.3.0
+>>>>>>> front#391/calendar
 
 dev_dependencies:
   flutter_test:
@@ -72,7 +80,11 @@ dev_dependencies:
   simple_progress_indicators: ^0.2.0
   table_calendar: ^3.0.9
   circle_progress_bar: ^0.1.1
+<<<<<<< HEAD
   firebase_messaging: ^14.7.10
+=======
+  just_bottom_sheet: ^1.3.0
+>>>>>>> front#391/calendar
 
 dependency_overrides:
   path: ^1.8.1

@@ -7,8 +7,87 @@ import 'record_screen.dart';
 import 'alarm_screen.dart';
 import '../component/inventory/inventory_screen.dart';
 import '../component/base_container.dart';
-import 'package:weekly_date_picker/weekly_date_picker.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:circle_progress_bar/circle_progress_bar.dart';
+// dummy data
+// 1월 29일에 먹은 영양제 목록
+List<Event> taken31 = [
+  Event(
+      name: "비타민 D",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
+  Event(
+      name: "비타민 A",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
+  Event(
+      name: "루테인", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
+  Event(
+      name: "아연", actualTakenCount: 2, needToTakeTotalCount: 4, takeYn: false),
+];
+
+// 1월 30일에 먹은 영양제 목록
+List<Event> taken30 = [
+  Event(
+      name: "비타 500",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
+  Event(
+      name: "홍삼", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
+  Event(
+      name: "미에로 화이바", actualTakenCount: 4, needToTakeTotalCount: 4, takeYn: true),
+];
+
+
+// 1월 29일에 먹은 영양제 목록
+List<Event> taken29 = [
+  Event(
+      name: "비타민 C",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
+  Event(
+      name: "루테인", actualTakenCount: 1, needToTakeTotalCount: 2, takeYn: false),
+  Event(
+      name: "아연", actualTakenCount: 2, needToTakeTotalCount: 4, takeYn: false),
+];
+
+// 1월 28일에 먹은 영양제 목록
+List<Event> taken28 = [
+  Event(
+      name: "비토닌", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
+  Event(
+      name: "오메가3",
+      actualTakenCount: 2,
+      needToTakeTotalCount: 4,
+      takeYn: false),
+];
+
+// 날짜와 해당일에 섭취한 영양제 매핑
+Map<DateTime, dynamic> pillSource = {
+  DateTime(2024, 1, 29): taken29,
+  DateTime(2024, 1, 28): taken28,
+  DateTime(2024, 1, 30): taken30,
+  DateTime(2024, 1, 31): taken31,
+};
+
+// dummy data (해당일 영양제 섭취도 데이터)
+class Event {
+  String name;
+  int actualTakenCount;
+  bool takeYn;
+  int needToTakeTotalCount;
+
+  Event(
+      {required this.name,
+        required this.actualTakenCount,
+        required this.needToTakeTotalCount,
+        required this.takeYn});
+}
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
@@ -76,6 +155,7 @@ class _Welcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
       child: Row(
@@ -99,11 +179,11 @@ class _Welcome extends StatelessWidget {
           Container(
             padding: EdgeInsets.only(left: 110),
             child: Text(
-              ' 1월 26일',
+              ' ${now.month}월 ${now.day}일',
               style: TextStyle(
                 color: BASIC_BLACK,
                 fontSize: 15,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
@@ -122,7 +202,11 @@ class _Week extends StatefulWidget {
 
 class _WeekState extends State<_Week> {
   DateTime _selectedDay = DateTime.now();
-
+  Color fullColor = Colors.greenAccent;
+  Color overFiftyColor = Colors.lightGreenAccent;
+  Color underFiftyColor = Colors.redAccent.withOpacity(0.65);
+  Color fiftyColor = Colors.yellow;
+  double dayGauge = 0;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -164,19 +248,78 @@ class _WeekState extends State<_Week> {
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: WeeklyDatePicker(
-                selectedDay: _selectedDay,
-                changeDay: (value) => setState(() {
-                  _selectedDay = value;
+              child: TableCalendar(
+                calendarFormat: CalendarFormat.week,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                availableCalendarFormats: const {
+                  CalendarFormat.week: 'Week',
+                },
+                focusedDay: DateTime(2024, 1, 31),
+                firstDay: DateTime(2024, 1, 1),
+                lastDay: DateTime(2024, 12, 31),
+                headerVisible: false,
+                locale: 'ko-KR',
+                daysOfWeekStyle: DaysOfWeekStyle(
+                    weekendStyle: TextStyle(
+                      color: Color(0xFFD0D0D0),
+                      fontSize: 13,
+                    ),
+                    weekdayStyle: TextStyle(
+                      color: Color(0xFFD0D0D0),
+                      fontSize: 13,
+                    )),
+                calendarStyle: CalendarStyle(
+                  outsideDaysVisible: false,
+                  todayTextStyle: TextStyle(color: Colors.red.withOpacity(0.8)),
+                  weekendTextStyle: TextStyle(color: Colors.grey),
+                  defaultTextStyle: TextStyle(color: Colors.grey),
+                  todayDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                    // color: Colors.red.withOpacity(0.1),
+                  ),
+                  defaultDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                  ),
+                  weekendDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                  ),
+                  markersMaxCount: 1,
+                ),
+
+                calendarBuilders:
+                CalendarBuilders(markerBuilder: (context, date, events) {
+                  int tmpTakenCnt = 0;
+                  List<Event>? tmp = pillSource[DateTime(date.year, date.month, date.day)];
+                  if (tmp == null || tmp.isEmpty) {
+                    dayGauge = 0;
+                  } else {
+                    for (int i = 0; i < tmp.length; i++) {
+                      if (tmp[i].takeYn == true) tmpTakenCnt++;
+                    }
+
+                    dayGauge = (tmpTakenCnt / tmp.length);
+                  }
+
+                  return Positioned(
+                    bottom: 5,
+                    child: SizedBox(
+                      width: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 1),
+                        child: CircleProgressBar(
+                          strokeWidth: 2.6,
+                          foregroundColor: dayGauge == 1 ? fullColor : dayGauge > 0.5 ? overFiftyColor : dayGauge == 0.5 ? fiftyColor : underFiftyColor,
+                          backgroundColor: BASIC_GREY.withOpacity(0.2),
+                          value: dayGauge, // dayGauge
+                        ),
+                      ),
+                    ),
+                  );
                 }),
-                enableWeeknumberText: false,
-                backgroundColor: Colors.white,
-                digitsColor: Colors.grey.withOpacity(0.7),
-                selectedDigitBackgroundColor: Color(0xFFFF6666),
-                weekdayTextColor: Color(0xFFFF6666),
-                weekdays: ["월", "화", "수", "목", "금", "토", "일"],
-                daysInWeek: 7,
-              ),
+              )
             )
           ],
         ));

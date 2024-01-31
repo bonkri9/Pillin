@@ -33,6 +33,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.1"
+  animated_custom_dropdown_v2:
+    dependency: "direct main"
+    description:
+      name: animated_custom_dropdown_v2
+      sha256: "8c6754d2e4a9bcb3f4d894556f45edc68a404ddaee1d3a40af7aed457f063095"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.2"
+  animated_dropdown_button:
+    dependency: "direct main"
+    description:
+      name: animated_dropdown_button
+      sha256: "78f8dfa0a8a60933da3e003ac1cd1926b1e3fffe08b51c8e5a1b224c8f082576"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.5"
   args:
     dependency: transitive
     description:
@@ -217,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  custom_dropdown_2:
+    dependency: "direct main"
+    description:
+      name: custom_dropdown_2
+      sha256: b8569a35a3bf14a5444e3a7e8b86ad16bdd714ab5db3c57c85a847c74f981a91
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   custom_navigation_bar:
     dependency: "direct main"
     description:
@@ -257,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.1"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.9"
   encrypt:
     dependency: transitive
     description:
@@ -504,6 +536,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  just_bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: just_bottom_sheet
+      sha256: be6cff8e8bf5e956a093d138dfafa452aa4d2ab8d1029929b07b4a3c16eac5b8
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   kakao_flutter_sdk:
     dependency: "direct main"
     description:
@@ -1161,10 +1201,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: "4d062ad505390ecef1c4bfb6001cd857a51e00912cc9dfb66edb1886a9ebd80c"
+      sha256: b99ca8d8bae9c6b43d568218691aa537fb0aeae1d7d34eadf112a6aa36d26506
       url: "https://pub.dev"
     source: hosted
-    version: "3.10.2"
+    version: "3.11.0"
   week_of_year:
     dependency: transitive
     description:
@@ -1214,5 +1254,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.0 <4.0.0"
-  flutter: ">=3.16.0"
+  dart: ">=3.2.3 <4.0.0"
+  flutter: ">=3.16.6"
