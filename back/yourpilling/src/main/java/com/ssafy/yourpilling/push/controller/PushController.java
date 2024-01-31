@@ -7,11 +7,11 @@ import com.google.firebase.messaging.Notification;
 import com.ssafy.yourpilling.push.controller.dto.request.RequestDeviceTokenDto;
 import com.ssafy.yourpilling.push.controller.dto.request.RequestPushFcmDto;
 import com.ssafy.yourpilling.push.controller.dto.request.RequestPushNotificationsDto;
+import com.ssafy.yourpilling.push.controller.dto.request.RequestUpdatePushNotificationDto;
 import com.ssafy.yourpilling.push.controller.mapper.PushControllerMapper;
 import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
-import com.ssafy.yourpilling.push.model.dao.entity.PushNotification;
+import com.ssafy.yourpilling.push.model.dao.entity.PushMessageInfo;
 import com.ssafy.yourpilling.push.model.service.PushService;
-
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +43,22 @@ public class PushController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/notification")
+    ResponseEntity<Void> updatePushNotification(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                @RequestBody RequestUpdatePushNotificationDto dto) {
+
+        pushService.updatePushNotification(mapper.mapToUpdatePushNotificationVo(principalDetails.getMember().getMemberId(), dto));
+        return ResponseEntity.ok().build();
+    }
+
+
 
     @GetMapping("/send-pushMessage")
     ResponseEntity<Void> sendPushMessage(@RequestBody RequestPushFcmDto dto) {
         OutNotificationsVo vo = pushService.findAllByPushDayAndPushTime(mapper.mapToPushNotificationsVo(dto));
 
-        for(PushNotification pushMessage : vo.getPushNotifications()) {
-            for(DeviceToken deviceToken : pushMessage.getMember().getDeviceTokens()) {
+        for(PushMessageInfo pushMessage : vo.getPushMessageInfos()) {
+            for(DeviceToken deviceToken : pushMessage.getPushNotification().getMember().getDeviceTokens()) {
                 if(deviceToken.getDeviceToken() == null) {
                     System.err.println("디바이스 토큰이 존재하지 않습니다!");
                     continue;
@@ -57,7 +66,7 @@ public class PushController {
                 Message fcmMessage = Message
                         .builder()
                                 .setNotification(
-                                Notification.builder().setBody(pushMessage.getMessage()).build()
+                                Notification.builder().setBody(pushMessage.getPushNotification().getMessage()).build()
                         )
                         .setToken(deviceToken.getDeviceToken())
                         .build();

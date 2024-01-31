@@ -3,14 +3,19 @@ package com.ssafy.yourpilling.push.model.dao.impl;
 import com.ssafy.yourpilling.push.model.dao.PushDao;
 import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
 import com.ssafy.yourpilling.push.model.dao.entity.PushMember;
+import com.ssafy.yourpilling.push.model.dao.entity.PushMessageInfo;
 import com.ssafy.yourpilling.push.model.dao.entity.PushNotification;
 import com.ssafy.yourpilling.push.model.dao.jpa.DeviceTokenJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushMemberJpaRepository;
+import com.ssafy.yourpilling.push.model.dao.jpa.PushMessageInfoJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushNotificationsJpaRepository;
 import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
+import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
 
 
 @Repository
@@ -19,6 +24,7 @@ public class PushDaoImpl implements PushDao {
 
     private final PushMemberJpaRepository pushMemberJpaRepository;
     private final DeviceTokenJpaRepository deviceTokenJpaRepository;
+    private final PushMessageInfoJpaRepository pushMessageInfoJpaRepository;
     private final PushNotificationsJpaRepository pushNotificationsJpaRepository;
 
     @Override
@@ -36,14 +42,36 @@ public class PushDaoImpl implements PushDao {
 
         return OutNotificationsVo
                 .builder()
-                .pushNotifications(
-                        pushNotificationsJpaRepository.findByPushDayAndHourAndMinute(vo.getPushDay(), vo.getHour(), vo.getMinute())
+                .pushMessageInfos(
+                        pushMessageInfoJpaRepository.findByPushDayAndPushHourAndPushMinute(vo.getPushDay(), vo.getHour(), vo.getMinute())
                 )
                 .build();
     }
 
     @Override
-    public void registPushNotification(PushNotification pushNotification) {
+    public void registPushNotification(RegistPushNotificationVo vo) {
+
+        PushNotification pushNotification = PushNotification
+                .builder()
+                .member(findByMemberId(vo.getMemberId()))
+                .messageInfos(new ArrayList<>())
+                .message(vo.getMessage())
+                .build();
+
+        Boolean[] days = vo.getDay();
+        for(int day=0; day<days.length; day++) {
+            if(days[day]) {
+                pushNotification.addMessageInfo(
+                        PushMessageInfo
+                        .builder()
+                        .pushNotification(pushNotification)
+                        .pushHour(vo.getHour())
+                        .pushMinute(vo.getMinute())
+                        .pushDay(day+1)
+                        .build()
+                );
+            }
+        }
 
         pushNotificationsJpaRepository.save(pushNotification);
 

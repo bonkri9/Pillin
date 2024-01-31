@@ -1,6 +1,6 @@
 package com.ssafy.yourpilling.push.model.service.vo.out;
 
-import com.ssafy.yourpilling.push.model.dao.entity.PushNotification;
+import com.ssafy.yourpilling.push.model.dao.entity.PushMessageInfo;
 import lombok.Builder;
 import lombok.Value;
 
@@ -10,6 +10,6 @@ import java.util.List;
 @Builder
 public class OutNotificationsVo {
 
-    private List<PushNotification> pushNotifications;
+    List<PushMessageInfo> pushMessageInfos;
 
 }

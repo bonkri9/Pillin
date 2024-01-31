@@ -3,9 +3,11 @@ package com.ssafy.yourpilling.push.controller.mapper;
 import com.ssafy.yourpilling.push.controller.dto.request.RequestDeviceTokenDto;
 import com.ssafy.yourpilling.push.controller.dto.request.RequestPushFcmDto;
 import com.ssafy.yourpilling.push.controller.dto.request.RequestPushNotificationsDto;
+import com.ssafy.yourpilling.push.controller.dto.request.RequestUpdatePushNotificationDto;
 import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
+import com.ssafy.yourpilling.push.model.service.vo.in.UpdatePushNotificationVo;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,5 +43,17 @@ public class PushControllerMapper {
                 .message(dto.getOwnPillName() + SUFFIX)
                 .build();
 
+    }
+
+    public UpdatePushNotificationVo mapToUpdatePushNotificationVo(Long memberId, RequestUpdatePushNotificationDto dto) {
+
+        return UpdatePushNotificationVo
+                .builder()
+                .memberId(memberId)
+                .pushId(dto.getPushId())
+                .day(dto.getDay())
+                .hour(dto.getHour())
+                .minute(dto.getMinute())
+                .build();
     }
 }

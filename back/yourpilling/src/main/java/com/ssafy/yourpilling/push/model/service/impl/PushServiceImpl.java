@@ -6,6 +6,7 @@ import com.ssafy.yourpilling.push.model.service.mapper.PushServiceMapper;
 import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
+import com.ssafy.yourpilling.push.model.service.vo.in.UpdatePushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,21 @@ public class PushServiceImpl implements PushService {
     @Transactional
     @Override
     public void registPushNotification(RegistPushNotificationVo vo) {
+//        Boolean[] days = vo.getDay();
+//        for(int day=0; day<days.length; day++) {
+//            if(days[day]) {
+//                pushDao.registPushNotification(mapper.mapToPushNotification(day+1, vo, pushDao.findByMemberId(vo.getMemberId())));
+//            }
+//        }
+        pushDao.registPushNotification(vo);
+    }
+
+    @Override
+    public void updatePushNotification(UpdatePushNotificationVo vo) {
         Boolean[] days = vo.getDay();
         for(int day=0; day<days.length; day++) {
             if(days[day]) {
-                pushDao.registPushNotification(mapper.mapToPushNotification(day+1, vo, pushDao.findByMemberId(vo.getMemberId())));
+//                pushDao.registPushNotification(mapper.mapToPushNotification(day+1, vo, pushDao.findByMemberId(vo.getMemberId())));
             }
         }
     }
