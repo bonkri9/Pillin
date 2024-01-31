@@ -1,9 +1,6 @@
 package com.ssafy.yourpilling.push.model.service;
 
-import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.UpdatePushNotificationVo;
+import com.ssafy.yourpilling.push.model.service.vo.in.*;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 
 public interface PushService {
@@ -14,4 +11,6 @@ public interface PushService {
     void registPushNotification(RegistPushNotificationVo registPushNotificationVo);
 
     void updatePushNotification(UpdatePushNotificationVo updatePushNotificationVo);
+
+    void DeletePushNotification(DeletePushNotificationsVo deletePushNotificationsVo);
 }

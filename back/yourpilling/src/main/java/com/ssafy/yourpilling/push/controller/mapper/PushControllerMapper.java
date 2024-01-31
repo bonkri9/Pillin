@@ -1,13 +1,7 @@
 package com.ssafy.yourpilling.push.controller.mapper;
 
-import com.ssafy.yourpilling.push.controller.dto.request.RequestDeviceTokenDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestPushFcmDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestPushNotificationsDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestUpdatePushNotificationDto;
-import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.UpdatePushNotificationVo;
+import com.ssafy.yourpilling.push.controller.dto.request.*;
+import com.ssafy.yourpilling.push.model.service.vo.in.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -54,6 +48,14 @@ public class PushControllerMapper {
                 .day(dto.getDay())
                 .hour(dto.getHour())
                 .minute(dto.getMinute())
+                .build();
+    }
+
+    public DeletePushNotificationsVo mapToDeletePushNotificationVo(Long memberId, RequestDeletePushNotificationsDto dto) {
+
+        return DeletePushNotificationsVo
+                .builder()
+                .pushId(dto.getPushId())
                 .build();
     }
 }

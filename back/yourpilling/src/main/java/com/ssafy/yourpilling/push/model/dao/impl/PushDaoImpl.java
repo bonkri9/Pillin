@@ -9,6 +9,7 @@ import com.ssafy.yourpilling.push.model.dao.jpa.DeviceTokenJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushMemberJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushMessageInfoJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushNotificationsJpaRepository;
+import com.ssafy.yourpilling.push.model.service.vo.in.DeletePushNotificationsVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
@@ -81,6 +82,11 @@ public class PushDaoImpl implements PushDao {
         return pushMemberJpaRepository
                 .findByMemberId(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
+    @Override
+    public void deletePushNotificationById(DeletePushNotificationsVo vo) {
+        pushNotificationsJpaRepository.deleteByPushId(vo.getPushId());
     }
 
 

@@ -4,10 +4,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestDeviceTokenDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestPushFcmDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestPushNotificationsDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestUpdatePushNotificationDto;
+import com.ssafy.yourpilling.push.controller.dto.request.*;
 import com.ssafy.yourpilling.push.controller.mapper.PushControllerMapper;
 import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
 import com.ssafy.yourpilling.push.model.dao.entity.PushMessageInfo;
@@ -48,6 +45,14 @@ public class PushController {
                                                 @RequestBody RequestUpdatePushNotificationDto dto) {
 
         pushService.updatePushNotification(mapper.mapToUpdatePushNotificationVo(principalDetails.getMember().getMemberId(), dto));
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/notification")
+    ResponseEntity<Void> deletePushNotification(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                @RequestBody RequestDeletePushNotificationsDto dto) {
+
+        pushService.DeletePushNotification(mapper.mapToDeletePushNotificationVo(principalDetails.getMember().getMemberId(), dto));
         return ResponseEntity.ok().build();
     }
 
