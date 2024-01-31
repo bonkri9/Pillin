@@ -3,6 +3,8 @@ import 'package:yourpilling/const/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yourpilling/screen/my_page_screen.dart';
 
+import '../screen/login.dart';
+
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   MainAppBar({Key? key, this.barColor}) : super(key: key);
 
@@ -44,7 +46,12 @@ class _MainAppBarState extends State<MainAppBar> {
                   IconButton(
                     padding: EdgeInsets.only(right: 15),
                     visualDensity: const VisualDensity(horizontal: -4),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => kakaoLogin()));
+                    },
                     icon: Row(
                       children: [
                         SvgPicture.asset('assets/icon/bell.svg',

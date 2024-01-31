@@ -30,10 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  kakao_flutter_sdk_user: ^1.7.0
   flutter_time_picker_spinner: ^2.0.0
-  intl:
-  share:
-  kakao_flutter_sdk_share: ^1.8.0 # 카카오톡 공유
+
   getwidget: ^2.0.4 #토글위젯
 
 
