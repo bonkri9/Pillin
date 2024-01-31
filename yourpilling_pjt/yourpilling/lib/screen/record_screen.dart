@@ -394,7 +394,7 @@ class _CalenderState extends State<Calender> {
     // 맨 첫 화면에서 그날의 영양제 복용 목록 띄워주기
     Future.microtask(() {
       setState(() {
-        widget.getPillListOfTheDay(pillSource[DateTime(selectedDay.year, selectedDay.month, selectedDay.day)]);
+        widget.getPillListOfTheDay(pillSource[DateTime(selectedDay.year, selectedDay.month,s electedDay.day)]);
       });
     });
   }
