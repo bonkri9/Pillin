@@ -74,4 +74,13 @@ public class Pill {
     private List<PillCategory> pillCategories;
 
 
+    public void setNutritions(List<Nutrition> nutritions){
+        this.nutritions = nutritions;
+
+        if(nutritions == null) return;
+
+        for (Nutrition nutrition : nutritions) {
+            nutrition.setPill(this);
+        }
+    }
 }

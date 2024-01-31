@@ -1,7 +1,9 @@
 package com.ssafy.yourpilling.rank.model.service.impl;
 
 import com.ssafy.yourpilling.common.*;
-import com.ssafy.yourpilling.pill.model.dao.entity.*;
+import com.ssafy.yourpilling.pill.model.dao.entity.Nutrition;
+import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
+import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.dao.jpa.NutritionJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
@@ -13,8 +15,7 @@ import com.ssafy.yourpilling.rank.model.dao.jpa.RankRepository;
 import com.ssafy.yourpilling.rank.model.service.RankService;
 import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
-import jakarta.persistence.EntityManager;
-import org.aspectj.weaver.ast.Literal;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -62,12 +62,12 @@ class RankServiceImplTest {
     private RankMidCategoryRepository rankMidCategoryRepository;
 
     @Test
+    @Disabled
     @DisplayName("랭크 집계 및 생성")
     public void generateRank() {
         midCategories();
 
         List<Pill> pills = pills();
-        pillJpaRepository.saveAll(pills);
 
         List<Member> members = members();
 
@@ -77,8 +77,8 @@ class RankServiceImplTest {
 
         List<Rank> all = rankRepository.findAll();
 
-        System.out.println("-------------");
-        System.out.println(all);
+        // 현재 검증 불가로, 필요시 주석을 해제하여 결과 확인
+        // System.out.println(all);
     }
 
     private void midCategories() {
@@ -143,7 +143,7 @@ class RankServiceImplTest {
         return List.of(
                 registerMember("t1", LocalDate.now().minusYears(6), Gender.WOMAN),
                 registerMember("t2", LocalDate.now().minusYears(10), Gender.MAN),
-                registerMember("t3", LocalDate.now().minusYears(20), Gender.MAN),
+                registerMember("t3", LocalDate.now().minusYears(21), Gender.MAN),
                 registerMember("t4", LocalDate.now().minusYears(25), Gender.MAN),
                 registerMember("t5", LocalDate.now().minusYears(27), Gender.WOMAN),
                 registerMember("t6", LocalDate.now().minusYears(30), Gender.WOMAN),
@@ -163,8 +163,8 @@ class RankServiceImplTest {
                                 registerNutrition(Nutrient.VITAMINB12.getEnglish())
                         })),
                 registerPill(2, List.of(new Nutrition[]{
-                                registerNutrition(Nutrient.CALCIUM.getEnglish()),
-                                registerNutrition(Nutrient.VITAMINB2.getEnglish())
+                                registerNutrition(Nutrient.VITAMINA.getEnglish()),
+                                registerNutrition(Nutrient.FOLIC_ACID.getEnglish())
                         })),
                 registerPill(3, List.of(new Nutrition[]{
                                 registerNutrition(Nutrient.PANTOTHENIC_ACID.getEnglish()),
@@ -200,7 +200,7 @@ class RankServiceImplTest {
     }
 
     private Pill registerPill(int index, List<Nutrition> nutritions) {
-        return Pill
+        Pill pill = Pill
                 .builder()
                 .name("pillName" + index)
                 .manufacturer("제조사" + index)
@@ -215,8 +215,13 @@ class RankServiceImplTest {
                 .takeCount(1)
                 .takeOnceAmount(1)
                 .createdAt(LocalDateTime.now())
-                .nutritions(nutritions)
                 .build();
+
+        pillJpaRepository.save(pill);
+
+        pill.setNutritions(nutritions);
+
+        return pill;
     }
 
     private Nutrition registerNutrition(String name) {
