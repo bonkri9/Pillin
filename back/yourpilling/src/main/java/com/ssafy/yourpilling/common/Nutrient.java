@@ -10,7 +10,7 @@ public enum Nutrient {
     VITAMINB1("VitaminB1", "비타민B1", List.of(10)),
     VITAMINB2("VitaminB2", "비타민B2", List.of(1, 2, 3, 5, 6)),
     VITAMINB3("VitaminB3", "비타민B3", List.of(5)),
-    VITAMINB6("Vita minB6", "비타민B6", List.of(2, 5, 6, 12)),
+    VITAMINB6("VitaminB6", "비타민B6", List.of(2, 5, 6, 12)),
     VITAMINB12("VitaminB12", "비타민B12", List.of(2, 3, 4, 7, 9, 11, 12)),
     VITAMINC("VitaminC", "비타민C", List.of(0, 2, 6, 9, 10, 13)),
     VITAMIND("VitaminD", "비타민D", List.of(0, 6, 13)),
@@ -25,7 +25,7 @@ public enum Nutrient {
     AMINO_ACID("AminoAcid", "아미노산", List.of(1, 2, 3, 5, 6, 9, 10, 11, 13)),
     PANTOTHENIC_ACID("PantothenicAcid", "판토텐산", List.of(4, 5, 6, 10, 12)),
     BIOTIN("Biotin", "비오틴", List.of(5, 6, 12, 13)),
-    STEEL("Steel", "철", List.of(2, 7, 11)),
+    IRON("Iron", "철분", List.of(2, 7, 11)),
     OMEGA3("Omega3", "오메가3", List.of(2, 8, 9)),
     CHROMIUM("Chromium", "크롬", List.of(9));
 

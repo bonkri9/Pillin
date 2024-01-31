@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.*;
 
 import static java.time.LocalDateTime.*;
@@ -27,15 +28,16 @@ import static java.time.LocalDateTime.*;
 public class RankServiceImpl implements RankService {
 
     private final static int LIMIT = 5;
-    private final static int MAX_WEEK_YEAR = 52;
 
     private final RankDao rankDao;
     private final RankServiceMapper mapper;
 
-    @Scheduled(cron = "0 30 10 * * SUN")
+    //@Scheduled(cron = "0 30 10 * * SUN")
+    @Transactional
     @Override
     public void generateWeeklyRank() {
-        int weeks = (Calendar.getInstance().getWeekYear() + 1) % MAX_WEEK_YEAR;
+        int weeks = (LocalDate.now().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()) + 1)
+                % Calendar.getInstance().getWeekYear();
         int year = LocalDate.now().getYear();
 
         List<Rank> infos = new ArrayList<>();
@@ -120,7 +122,7 @@ public class RankServiceImpl implements RankService {
         for(int i = 0; i<Math.min(LIMIT, each.size()); i++){
             RankPill rankPill = rankDao.searchPillByPillId(each.get(i).getPillId());
 
-            Rank save = mapper.mapToRank(weeks, year, i, rankPill, midCategory, now());
+            Rank save = mapper.mapToRank(weeks, year, i+1, rankPill, midCategory, now());
             infos.add(save);
         }
     }

@@ -15,7 +15,7 @@ public enum AgeGroup {
     FORTY(41, 49, "40대"),
     FIFTY(51, 59, "50대"),
     SIXTY(61, 69, "60대"),
-    SEVENTY(71, 79, "70대 이후");
+    SEVENTY(71, 200, "70대 이후");
 
 
     private final int startAge;
