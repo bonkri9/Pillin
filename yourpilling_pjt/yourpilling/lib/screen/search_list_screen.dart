@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yourpilling/component/base_container.dart';
 
 import '../component/app_bar.dart';
+import '../component/inventory/detail_inventory.dart';
 import '../const/colors.dart';
 
 class SearchListScreen extends StatefulWidget {
@@ -189,17 +190,47 @@ class _SearchResult extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${pillList[i]['company']}',
-                        style: TextStyle(
-                            color: BASIC_GREY,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        '${pillList[i]['pillName']}',
-                        style: TextStyle(
-                            color: BASIC_BLACK, fontWeight: FontWeight.w600),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  '${pillList[i]['company']}',
+                                  style: TextStyle(
+                                      color: BASIC_GREY,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Text(
+                                  '${pillList[i]['pillName']}',
+                                  style: TextStyle(
+                                      color: BASIC_BLACK, fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                minimumSize: Size.zero,
+                                padding: EdgeInsets.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                textStyle: const TextStyle(fontSize: 10),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PillDetailScreen()));
+                              },
+                              child: const Text(
+                                '상세 보기',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Row(
                         children: [
@@ -218,6 +249,7 @@ class _SearchResult extends StatelessWidget {
                           ),
                         ],
                       ),
+
                     ],
                   ),
                 ),

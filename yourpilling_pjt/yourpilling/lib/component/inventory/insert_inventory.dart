@@ -214,7 +214,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
             child: Image.asset(
               fit: BoxFit.cover,
               'assets/image/비타민B.jpg',
-              width: 200,
+              width: 250,
             ),
           ),
           Container(
@@ -332,33 +332,33 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                       ],
                     )
                 ),
-                Container(
-                    child: Row(
-                      children: [
-                        Text('섭취 루틴 : '),
-                        Text('${insertInvenInfo[0]['takeWeekdays']}'),
-                      ],
-                    )
-                ),
-                ToggleButtons(
-                  onPressed: (int index) {
-                    // All buttons are selectable.
-                    setState(() {
-                      _selectedDays[index] = !_selectedDays[index];
-                    });
-                  },
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  selectedBorderColor: Colors.green[700],
-                  selectedColor: Colors.white,
-                  fillColor: Colors.green[200],
-                  color: Colors.green[400],
-                  constraints: const BoxConstraints(
-                    minHeight: 40.0,
-                    minWidth: 40.0,
-                  ),
-                  isSelected: _selectedDays,
-                  children: days,
-                ),
+                // Container(
+                //     child: Row(
+                //       children: [
+                //         Text('섭취 루틴 : '),
+                //         Text('${insertInvenInfo[0]['takeWeekdays']}'),
+                //       ],
+                //     )
+                // ),
+                // ToggleButtons(
+                //   onPressed: (int index) {
+                //     // All buttons are selectable.
+                //     setState(() {
+                //       _selectedDays[index] = !_selectedDays[index];
+                //     });
+                //   },
+                //   borderRadius: const BorderRadius.all(Radius.circular(8)),
+                //   selectedBorderColor: Colors.green[700],
+                //   selectedColor: Colors.white,
+                //   fillColor: Colors.green[200],
+                //   color: Colors.green[400],
+                //   constraints: const BoxConstraints(
+                //     minHeight: 40.0,
+                //     minWidth: 40.0,
+                //   ),
+                //   isSelected: _selectedDays,
+                //   children: days,
+                // ),
                 Container(
                     child: Row(
                       children: [

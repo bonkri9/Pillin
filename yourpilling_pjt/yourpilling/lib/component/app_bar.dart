@@ -19,6 +19,7 @@ class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: widget.barColor,
       toolbarHeight: 120,
       title: Column(
