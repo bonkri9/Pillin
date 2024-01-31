@@ -14,11 +14,17 @@ spring:
     properties:
       hibernate.format_sql: true
 
+  oauth:
+    kakao:
+      client-id: {cliend-id}
+      redirect-uri: "http://localhost:8080/login/oauth2/kakao"
+      grant_type: authorization_code
+
   mail:
     host: smtp.naver.com
     port: 465
-    username: 이메일
-    password: 비밀번호
+    username: {id}
+    password: {passowrd}
     properties:
       mail.smtp.auth: true
       mail.smtp.ssl.enable: true

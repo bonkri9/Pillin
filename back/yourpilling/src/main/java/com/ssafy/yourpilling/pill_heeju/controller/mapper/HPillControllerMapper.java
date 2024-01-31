@@ -9,8 +9,12 @@ import java.util.List;
 
 @Component
 public class HPillControllerMapper {
-    public HPillVo mapToPillIdVo(Long pillId){
-        return HPillVo.builder().pillId(pillId).build();
+    public HPillVo mapToPillIdVo(Long memberId, Long pillId){
+        return HPillVo
+                .builder()
+                .memberId(memberId)
+                .pillId(pillId)
+                .build();
     }
     public HPillVo mapToPillNameVo(String pillName) {
         return HPillVo.builder().pillName(pillName).build();

@@ -22,7 +22,7 @@ public class HPillServiceMapper {
     public HPill mapToPillId(HPillVo vo){
         return HPill.builder().pillId(vo.getPillId()).build();
     }
-    public ResponsePillVo mapToPill(HPill pill){
+    public ResponsePillVo mapToPill(HPill pill, Boolean alreadyHave){
         return ResponsePillVo.builder()
                 .pillId(pill.getPillId())
                 .pillName(pill.getName())
@@ -37,8 +37,9 @@ public class HPillServiceMapper {
                 .imageUrl(pill.getImageUrl())
                 .takeCount(pill.getTakeCount())
                 .takeCycle(pill.getTakeCycle())
-                .nutrientsListData(mapToResponsPillNutrientsListData(pill.getNutritions()))
-                .categoryListData(mapToResponsPillCategoryListData(pill.getPillCategories()))
+                .nutrients(mapToResponsPillNutrientsListData(pill.getNutritions()))
+                .categories(mapToResponsPillCategoryListData(pill.getPillCategories()))
+                .alreadyHave(alreadyHave)
                 .build();
     }
     public HPill mapToPillName(HPillVo vo) {
