@@ -5,7 +5,8 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.ssafy.yourpilling.push.controller.dto.request.RequestDeviceTokenDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestPushMessageDto;
+import com.ssafy.yourpilling.push.controller.dto.request.RequestPushFcmDto;
+import com.ssafy.yourpilling.push.controller.dto.request.RequestPushNotificationsDto;
 import com.ssafy.yourpilling.push.controller.mapper.PushControllerMapper;
 import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
 import com.ssafy.yourpilling.push.model.dao.entity.PushNotification;
@@ -34,8 +35,17 @@ public class PushController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/notification")
+    ResponseEntity<Void> registPushNotification(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                  @RequestBody RequestPushNotificationsDto dto) {
+
+        pushService.registPushNotification(mapper.mapToRegistPushNotificationVo(principalDetails.getMember().getMemberId(), dto));
+        return ResponseEntity.ok().build();
+    }
+
+
     @GetMapping("/send-pushMessage")
-    ResponseEntity<Void> sendPushMessage(@RequestBody RequestPushMessageDto dto) {
+    ResponseEntity<Void> sendPushMessage(@RequestBody RequestPushFcmDto dto) {
         OutNotificationsVo vo = pushService.findAllByPushDayAndPushTime(mapper.mapToPushNotificationsVo(dto));
 
         for(PushNotification pushMessage : vo.getPushNotifications()) {
