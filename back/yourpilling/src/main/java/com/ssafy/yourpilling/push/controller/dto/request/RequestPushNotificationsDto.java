@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class RequestPushNotificationsDto {
 
+    Long ownPillId;
     String ownPillName;
     Boolean[] day;
     int hour;

@@ -3,25 +3,23 @@ package com.ssafy.yourpilling.push.model.dao.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
-@Table(name = "messageinfos")
+@Table(name = "pill")
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class PushMessageInfo {
+public class PushPill {
 
     @Id
-    @Column(name = "message_id")
+    @Column(name = "pill_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long messageId;
+    private Long pillId;
 
-    @Column(name = "push_day")
-    private int pushDay;
-
-    @ManyToOne
-    @JoinColumn(name = "push_id")
-    private PushNotification pushNotification;
+    @Column
+    private String name;
 
 
 }

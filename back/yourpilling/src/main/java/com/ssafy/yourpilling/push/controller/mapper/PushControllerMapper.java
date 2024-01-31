@@ -26,11 +26,11 @@ public class PushControllerMapper {
                 .build();
     }
 
-    public RegistPushNotificationVo mapToRegistPushNotificationVo(Long memberId, RequestPushNotificationsDto dto) {
+    public RegistPushNotificationVo mapToRegistPushNotificationVo(RequestPushNotificationsDto dto) {
 
         return RegistPushNotificationVo
                 .builder()
-                .memberId(memberId)
+                .ownPillId(dto.getOwnPillId())
                 .day(dto.getDay())
                 .hour(dto.getHour())
                 .minute(dto.getMinute())

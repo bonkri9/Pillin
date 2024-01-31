@@ -11,6 +11,6 @@ public class RegistPushNotificationVo {
     int minute;
     Boolean[] day;
     String message;
-    Long memberId;
+    Long ownPillId;
 
 }

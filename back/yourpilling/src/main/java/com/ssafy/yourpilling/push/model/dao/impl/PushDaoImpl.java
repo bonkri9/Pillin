@@ -1,14 +1,11 @@
 package com.ssafy.yourpilling.push.model.dao.impl;
 
 import com.ssafy.yourpilling.push.model.dao.PushDao;
-import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
-import com.ssafy.yourpilling.push.model.dao.entity.PushMember;
-import com.ssafy.yourpilling.push.model.dao.entity.PushMessageInfo;
-import com.ssafy.yourpilling.push.model.dao.entity.PushNotification;
+import com.ssafy.yourpilling.push.model.dao.entity.*;
 import com.ssafy.yourpilling.push.model.dao.jpa.DeviceTokenJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushMemberJpaRepository;
-import com.ssafy.yourpilling.push.model.dao.jpa.PushMessageInfoJpaRepository;
 import com.ssafy.yourpilling.push.model.dao.jpa.PushNotificationsJpaRepository;
+import com.ssafy.yourpilling.push.model.dao.jpa.PushOwnPillJpaRepository;
 import com.ssafy.yourpilling.push.model.service.vo.in.DeletePushNotificationsVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
@@ -17,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Repository
@@ -24,8 +22,8 @@ import java.util.ArrayList;
 public class PushDaoImpl implements PushDao {
 
     private final PushMemberJpaRepository pushMemberJpaRepository;
+    private final PushOwnPillJpaRepository pushOwnPillJpaRepository;
     private final DeviceTokenJpaRepository deviceTokenJpaRepository;
-    private final PushMessageInfoJpaRepository pushMessageInfoJpaRepository;
     private final PushNotificationsJpaRepository pushNotificationsJpaRepository;
 
     @Override
@@ -41,11 +39,11 @@ public class PushDaoImpl implements PushDao {
     @Override
     public OutNotificationsVo findAllByPushDayAndPushTime(PushNotificationVo vo) {
 
+        List<PushNotification> list = pushNotificationsJpaRepository.findByPushTimeAndDay(vo.getHour(), vo.getMinute(), vo.getPushDay());
+
         return OutNotificationsVo
                 .builder()
-                .pushMessageInfos(
-                        pushMessageInfoJpaRepository.findByPushDayAndPushHourAndPushMinute(vo.getPushDay(), vo.getHour(), vo.getMinute())
-                )
+                .pushNotifications(list)
                 .build();
     }
 
@@ -54,9 +52,11 @@ public class PushDaoImpl implements PushDao {
 
         PushNotification pushNotification = PushNotification
                 .builder()
-                .member(findByMemberId(vo.getMemberId()))
+                .pushOwnPill(findOwnPill(vo.getOwnPillId()))
                 .messageInfos(new ArrayList<>())
                 .message(vo.getMessage())
+                .pushHour(vo.getHour())
+                .pushMinute(vo.getMinute())
                 .build();
 
         Boolean[] days = vo.getDay();
@@ -66,8 +66,6 @@ public class PushDaoImpl implements PushDao {
                         PushMessageInfo
                         .builder()
                         .pushNotification(pushNotification)
-                        .pushHour(vo.getHour())
-                        .pushMinute(vo.getMinute())
                         .pushDay(day+1)
                         .build()
                 );
@@ -76,6 +74,11 @@ public class PushDaoImpl implements PushDao {
 
         pushNotificationsJpaRepository.save(pushNotification);
 
+    }
+
+    private PushOwnPill findOwnPill(Long ownPillId) {
+        return pushOwnPillJpaRepository.findById(ownPillId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 보유 영양제 ID입니다."));
     }
 
     public PushMember findByMemberId(Long memberId) {
@@ -88,6 +91,5 @@ public class PushDaoImpl implements PushDao {
     public void deletePushNotificationById(DeletePushNotificationsVo vo) {
         pushNotificationsJpaRepository.deleteByPushId(vo.getPushId());
     }
-
 
 }

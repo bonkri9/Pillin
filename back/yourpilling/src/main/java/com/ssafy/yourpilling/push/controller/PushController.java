@@ -7,9 +7,10 @@ import com.google.firebase.messaging.Notification;
 import com.ssafy.yourpilling.push.controller.dto.request.*;
 import com.ssafy.yourpilling.push.controller.mapper.PushControllerMapper;
 import com.ssafy.yourpilling.push.model.dao.entity.DeviceToken;
-import com.ssafy.yourpilling.push.model.dao.entity.PushMessageInfo;
+import com.ssafy.yourpilling.push.model.dao.entity.PushNotification;
 import com.ssafy.yourpilling.push.model.service.PushService;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
+import com.ssafy.yourpilling.push.model.service.vo.out.OutPushMessageInfoMapVo;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +33,16 @@ public class PushController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/notification")
-    ResponseEntity<Void> registPushNotification(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                  @RequestBody RequestPushNotificationsDto dto) {
+    @GetMapping("/notification")
+    ResponseEntity<OutPushMessageInfoMapVo> selectPushNotifications(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        pushService.registPushNotification(mapper.mapToRegistPushNotificationVo(principalDetails.getMember().getMemberId(), dto));
+        OutPushMessageInfoMapVo vo = pushService.selectPushNotification(principalDetails.getMember().getMemberId());
+        return ResponseEntity.ok(vo);
+    }
+    @PostMapping("/notification")
+    ResponseEntity<Void> registPushNotification(@RequestBody RequestPushNotificationsDto dto) {
+
+        pushService.registPushNotification(mapper.mapToRegistPushNotificationVo(dto));
         return ResponseEntity.ok().build();
     }
 
@@ -62,31 +68,32 @@ public class PushController {
     ResponseEntity<Void> sendPushMessage(@RequestBody RequestPushFcmDto dto) {
         OutNotificationsVo vo = pushService.findAllByPushDayAndPushTime(mapper.mapToPushNotificationsVo(dto));
 
-        for(PushMessageInfo pushMessage : vo.getPushMessageInfos()) {
-            for(DeviceToken deviceToken : pushMessage.getPushNotification().getMember().getDeviceTokens()) {
+        for(PushNotification noti : vo.getPushNotifications()) {
+            for(DeviceToken deviceToken : noti.getPushOwnPill().getMember().getDeviceTokens()) {
                 if(deviceToken.getDeviceToken() == null) {
                     System.err.println("디바이스 토큰이 존재하지 않습니다!");
                     continue;
                 }
+
                 Message fcmMessage = Message
                         .builder()
-                                .setNotification(
-                                Notification.builder().setBody(pushMessage.getPushNotification().getMessage()).build()
-                        )
+                        .setNotification(getNotification(noti))
                         .setToken(deviceToken.getDeviceToken())
                         .build();
+
                 try{
                     firebaseMessaging.send(fcmMessage);
                 } catch (FirebaseMessagingException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }
 
-
         return ResponseEntity.ok().build();
+    }
+
+    private static Notification getNotification(PushNotification noti) {
+        return Notification.builder().setBody(noti.getMessage()).build();
     }
 
     @GetMapping("/send-pushMessageTest")
