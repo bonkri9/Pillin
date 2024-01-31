@@ -4,7 +4,8 @@ import com.ssafy.yourpilling.push.model.dao.PushDao;
 import com.ssafy.yourpilling.push.model.service.PushService;
 import com.ssafy.yourpilling.push.model.service.mapper.PushServiceMapper;
 import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationsVo;
+import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationVo;
+import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,19 @@ public class PushServiceImpl implements PushService {
 
 
     @Override
-    public OutNotificationsVo findAllByPushDayAndPushTime(PushNotificationsVo vo) {
+    public OutNotificationsVo findAllByPushDayAndPushTime(PushNotificationVo vo) {
         return pushDao.findAllByPushDayAndPushTime(vo);
+    }
+
+    @Transactional
+    @Override
+    public void registPushNotification(RegistPushNotificationVo vo) {
+        Boolean[] days = vo.getDay();
+        for(int day=0; day<days.length; day++) {
+            if(days[day]) {
+                pushDao.registPushNotification(mapper.mapToPushNotification(day+1, vo, pushDao.findByMemberId(vo.getMemberId())));
+            }
+        }
     }
 
 

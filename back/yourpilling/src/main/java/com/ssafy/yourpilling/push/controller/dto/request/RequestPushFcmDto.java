@@ -3,12 +3,11 @@ package com.ssafy.yourpilling.push.controller.dto.request;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
-public class RequestPushMessageDto {
+public class RequestPushFcmDto {
 
     private Byte pushDay;
-    private LocalDateTime pushTime;
+    private int hour;
+    private int minute;
 
 }

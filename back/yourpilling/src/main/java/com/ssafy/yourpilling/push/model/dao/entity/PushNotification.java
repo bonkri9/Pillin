@@ -22,10 +22,13 @@ public class PushNotification {
     private String message;
 
     @Column(name = "push_day")
-    private Byte pushDay;
+    private int pushDay;
 
-    @Column(name = "push_time")
-    private LocalDateTime pushTime;
+    @Column(name = "hour")
+    private int hour;
+
+    @Column(name = "minute")
+    private int minute;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
