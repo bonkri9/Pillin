@@ -1,15 +1,55 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:just_bottom_sheet/drag_zone_position.dart';
+import 'package:just_bottom_sheet/just_bottom_sheet_configuration.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
+import 'package:just_bottom_sheet/just_bottom_sheet.dart';
 
 // dummy data
-
-// 1월 27일에 먹은 영양제 목록
-List<Event> taken27 = [
+// 1월 29일에 먹은 영양제 목록
+List<Event> taken31 = [
   Event(
-      name: "비타민 C", actualTakenCount: 1, needToTakeTotalCount: 1, takeYn: true),
+      name: "비타민 D",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
+  Event(
+      name: "비타민 A",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
+  Event(
+      name: "루테인", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
+  Event(
+      name: "아연", actualTakenCount: 2, needToTakeTotalCount: 4, takeYn: false),
+];
+
+// 1월 30일에 먹은 영양제 목록
+List<Event> taken30 = [
+  Event(
+      name: "비타 500",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
+  Event(
+      name: "홍삼", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
+  Event(
+      name: "미에로 화이바", actualTakenCount: 4, needToTakeTotalCount: 4, takeYn: true),
+];
+
+
+// 1월 29일에 먹은 영양제 목록
+List<Event> taken29 = [
+  Event(
+      name: "비타민 C",
+      actualTakenCount: 1,
+      needToTakeTotalCount: 1,
+      takeYn: true),
   Event(
       name: "루테인", actualTakenCount: 1, needToTakeTotalCount: 2, takeYn: false),
   Event(
@@ -19,25 +59,28 @@ List<Event> taken27 = [
 // 1월 28일에 먹은 영양제 목록
 List<Event> taken28 = [
   Event(
-      name: "비아그라", actualTakenCount: 5, needToTakeTotalCount: 5, takeYn: true),
-  Event(
       name: "비토닌", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
   Event(
-      name: "오메가3", actualTakenCount: 2, needToTakeTotalCount: 4, takeYn: false),
+      name: "오메가3",
+      actualTakenCount: 2,
+      needToTakeTotalCount: 4,
+      takeYn: false),
 ];
 
 // 날짜와 해당일에 섭취한 영양제 매핑
 Map<DateTime, dynamic> pillSource = {
-  DateTime(2024, 1, 27): taken27,
+  DateTime(2024, 1, 29): taken29,
   DateTime(2024, 1, 28): taken28,
+  DateTime(2024, 1, 30): taken30,
+  DateTime(2024, 1, 31): taken31,
 };
 
 // dummy data (해당일 영양제 섭취도 데이터)
 class Event {
   String name;
   int actualTakenCount;
-  int needToTakeTotalCount;
   bool takeYn;
+  int needToTakeTotalCount;
 
   Event(
       {required this.name,
@@ -56,10 +99,17 @@ class RecordScreen extends StatefulWidget {
 class _RecordScreenState extends State<RecordScreen> {
   DateTime selectedDay = DateTime.now();
   List<Event> pillListOfTheDay = [];
+  int curMonth = DateTime.now().month; // 현재 월 state
+  final scrollController = ScrollController();
 
-  getPillListOfTheDay(List<Event> list) {
+  getPillListOfTheDay(List<Event>? list) {
     setState(() {
-      pillListOfTheDay = list;
+      if (list != null) {
+        pillListOfTheDay = list;
+      } else {
+        pillListOfTheDay = [];
+      }
+
       print(pillListOfTheDay);
     });
   }
@@ -73,21 +123,113 @@ class _RecordScreenState extends State<RecordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Color theDayCompleteBoxColor = Colors.greenAccent.withOpacity(0.1);
+    Color theDayCompleteContentColor = Color(0xFF4CAF50);
+    Color theDayUnCompleteBoxColor = Colors.redAccent.withOpacity(0.1);
+    Color theDayUnCompleteContentColor = Colors.deepOrange;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.red.withOpacity(0.8),
         toolbarHeight: 75,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             color: Colors.white,
             onPressed: () => {Navigator.pop(context)}),
-        title: TextButton(
-          onPressed: () {},
-          child: Text(
-            "1월",
-            style: TextStyle(color: Colors.white, fontSize: 17),
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () {
+                // 월 선택
+                showJustBottomSheet(
+                  context: context,
+                  dragZoneConfiguration: JustBottomSheetDragZoneConfiguration(
+                    dragZonePosition: DragZonePosition.outside,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        height: 4,
+                        width: 30,
+                        color: Theme.of(context).brightness == Brightness.light
+                            ? Colors.grey[100]
+                            : Colors.white,
+                      ),
+                    ),
+                  ),
+                  configuration: JustBottomSheetPageConfiguration(
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    builder: (context) {
+                      return ListView.builder(
+                        padding: EdgeInsets.all(20),
+                        // controller: scrollController,
+                        itemBuilder: (context, i) {
+                          return Material(
+                            color: Colors.transparent,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40)),
+                              child: InkWell(
+                                onTap: () {
+                                  // 월 선택하면 해당 월로 이동
+                                  setState(() {
+                                    curMonth = i + 1;
+                                    selectedDay = (curMonth != DateTime.now().month) ? DateTime(DateTime.now().year, i+1, 1) : DateTime(DateTime.now().year, curMonth, DateTime.now().day);
+                                    pillListOfTheDay = []; // 초기화
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                splashColor: BASIC_GREY.withOpacity(0.1),
+                                child: ListTile(
+                                  title: Center(
+                                      child: TextButton(
+                                    onPressed: null,
+                                    child: Text(
+                                      "${i + 1}월",
+                                      style: TextStyle(
+                                        color: BASIC_BLACK,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  )),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: 12,
+                      );
+                    },
+                    scrollController: scrollController,
+                    closeOnScroll: true,
+                    cornerRadius: 30,
+                    backgroundColor: Colors.white,
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 145),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 50,
+                    ),
+                    Text(
+                      "$curMonth월",
+                      style: TextStyle(color: Colors.white, fontSize: 19),
+                    ),
+                    Icon(
+                      Icons.arrow_drop_down_rounded,
+                      size: 25,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -105,6 +247,7 @@ class _RecordScreenState extends State<RecordScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(25),
                   child: Calender(
+                      curMonth: curMonth,
                       getPillListOfTheDay: getPillListOfTheDay,
                       getSelectedDay: getSelectedDay),
                 ),
@@ -127,7 +270,7 @@ class _RecordScreenState extends State<RecordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${selectedDay.month}월 ${selectedDay.day}일", // date 설정하기
+                        "${selectedDay.month}월 ${selectedDay.day}일 (${DateFormat('EEEE', 'ko-KR').format(selectedDay)[0]})", // date 설정하기
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
@@ -139,13 +282,20 @@ class _RecordScreenState extends State<RecordScreen> {
                       ListView.builder(
                           physics: NeverScrollableScrollPhysics(), // 스크롤 막기
                           shrinkWrap: true,
-                          itemCount: pillListOfTheDay.isNotEmpty ? pillListOfTheDay.length : 0 ,
+                          itemCount: pillListOfTheDay.isNotEmpty
+                              ? pillListOfTheDay.length
+                              : 0,
                           itemBuilder: (context, i) {
+                            bool isComplete =
+                                pillListOfTheDay[i].actualTakenCount ==
+                                    pillListOfTheDay[i].needToTakeTotalCount;
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 8),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.deepPurple.withOpacity(0.13),
+                                  color: isComplete
+                                      ? theDayCompleteBoxColor
+                                      : theDayUnCompleteBoxColor,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 width: MediaQuery.of(context).size.width,
@@ -162,7 +312,9 @@ class _RecordScreenState extends State<RecordScreen> {
                                         style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w500,
-                                          color: Colors.deepPurple,
+                                          color: isComplete
+                                              ? theDayCompleteContentColor
+                                              : theDayUnCompleteContentColor,
                                         ),
                                       ),
                                       Row(
@@ -172,7 +324,9 @@ class _RecordScreenState extends State<RecordScreen> {
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.deepPurpleAccent,
+                                              color: isComplete
+                                                  ? theDayCompleteContentColor
+                                                  : theDayUnCompleteContentColor,
                                             ),
                                           ),
                                           Text(
@@ -180,7 +334,9 @@ class _RecordScreenState extends State<RecordScreen> {
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.deepPurpleAccent.withOpacity(0.7),
+                                              color: isComplete
+                                                  ? theDayCompleteContentColor
+                                                  : theDayUnCompleteContentColor,
                                             ),
                                           ),
                                         ],
@@ -207,11 +363,14 @@ class _RecordScreenState extends State<RecordScreen> {
 class Calender extends StatefulWidget {
   Calender(
       {Key? key,
+      required this.curMonth,
       required this.getPillListOfTheDay,
       required this.getSelectedDay})
       : super(key: key);
   var getPillListOfTheDay;
   var getSelectedDay;
+  var curMonth;
+  var _focusedDay;
 
   @override
   State<Calender> createState() => _CalenderState();
@@ -219,8 +378,26 @@ class Calender extends StatefulWidget {
 
 // 캘린더 class -> selectedDay, pillListOfTheDay
 class _CalenderState extends State<Calender> {
+  // 페이지 컨트롤러 선언
   DateTime selectedDay = DateTime.now();
   List<Event> pillListOfTheDay = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // 외부 변수를 DateTime 객체로 변환
+    widget._focusedDay = DateTime(DateTime.now().year, widget.curMonth);
+    DateTime now = DateTime.now();
+    // 현재 월의 마지막 날짜 계산
+    int lastDayOfMonth = DateTime(now.year, widget.curMonth + 1, 0).day; // 1월 기준 31 잘 나옴
+
+    // 맨 첫 화면에서 그날의 영양제 복용 목록 띄워주기
+    Future.microtask(() {
+      setState(() {
+        widget.getPillListOfTheDay(pillSource[DateTime(selectedDay.year, selectedDay.month, selectedDay.day)]);
+      });
+    });
+  }
 
   // day : 유저가 선택한 날짜
   // focusedDay : 현재 포커스 된 날짜
@@ -243,6 +420,11 @@ class _CalenderState extends State<Calender> {
   // 캘린더
   @override
   Widget build(BuildContext context) {
+    Color fullColor = Colors.greenAccent;
+    Color overFiftyColor = Colors.lightGreenAccent;
+    Color underFiftyColor = Colors.redAccent.withOpacity(0.65);
+    Color fiftyColor = Colors.yellow;
+    double dayGauge = 0;
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: TableCalendar(
@@ -250,7 +432,6 @@ class _CalenderState extends State<Calender> {
           DateTime selectedDate = DateTime(day.year, day.month, day.day);
           return getEventsForDay(selectedDate);
         },
-
         calendarFormat: CalendarFormat.month,
         locale: 'ko-KR',
         daysOfWeekHeight: 30,
@@ -265,16 +446,16 @@ class _CalenderState extends State<Calender> {
             )),
         headerVisible: false,
         // 헤더 월 보일지 말지
-        focusedDay: selectedDay,
         rowHeight: 65,
-        firstDay: DateTime.utc(2015, 1, 1),
-        lastDay: DateTime.utc(2025, 12, 12),
+        focusedDay: DateTime(2024, widget.curMonth, 1),
+        firstDay: DateTime.utc(2023, 12, 1),
+        lastDay: DateTime.utc(2024, 12, 31),
 
         // 월 설정하는 스타일 바꾸기
         headerStyle: HeaderStyle(
           formatButtonVisible: false,
-          leftChevronVisible: false,
-          rightChevronVisible: false,
+          // leftChevronVisible: true, // 월 이동 불가
+          // rightChevronVisible: true, // 월 이동 불가
           titleCentered: true,
           titleTextFormatter: (DateTime date, dynamic locale) {
             return '${date.month}월';
@@ -286,6 +467,12 @@ class _CalenderState extends State<Calender> {
         onDaySelected: _onDaySelected,
         calendarStyle: CalendarStyle(
           outsideDaysVisible: false,
+          todayDecoration: BoxDecoration(
+            color: Colors.redAccent.withOpacity(0.3),
+            shape: BoxShape.circle,
+            border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 4),
+            // color: Colors.red.withOpacity(0.1),
+          ),
           defaultDecoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 4),
@@ -297,8 +484,19 @@ class _CalenderState extends State<Calender> {
           markersMaxCount: 1,
         ),
         calendarBuilders:
-            CalendarBuilders(markerBuilder: (context, data, events) {
-          if (events.isNotEmpty) {
+            CalendarBuilders(markerBuilder: (context, date, events) {
+              int tmpTakenCnt = 0;
+              List<Event>? tmp = pillSource[DateTime(date.year, date.month, date.day)];
+              if (tmp == null || tmp.isEmpty) {
+                dayGauge = 0;
+              } else {
+                for (int i = 0; i < tmp.length; i++) {
+                  if (tmp[i].takeYn == true) tmpTakenCnt++;
+                }
+
+                dayGauge = (tmpTakenCnt / tmp.length);
+              }
+
             return Positioned(
               bottom: 11,
               child: SizedBox(
@@ -306,16 +504,14 @@ class _CalenderState extends State<Calender> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 1),
                   child: CircleProgressBar(
-                    strokeWidth: 4,
-                    foregroundColor: Colors.greenAccent,
+                    strokeWidth: 3,
+                    foregroundColor: dayGauge == 1 ? fullColor : dayGauge > 0.5 ? overFiftyColor : dayGauge == 0.5 ? fiftyColor : underFiftyColor,
                     backgroundColor: BASIC_GREY.withOpacity(0.2),
-                    value: 0.3,
+                    value: dayGauge, // dayGauge
                   ),
                 ),
               ),
             );
-          }
-          return Container();
         }),
       ),
     );
