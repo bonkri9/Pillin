@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/component/sign_up/sign_up_screen.dart';
 import 'package:yourpilling/screen/main_screen.dart';
-import '../../screen/main_page_child_screen.dart';
+import 'main_page_child_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -127,7 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           obscureText: true,
         ),
-        const SizedBox(height: 80),
+        KakaoLogin(),
+         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             login();

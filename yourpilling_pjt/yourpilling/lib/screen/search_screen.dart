@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yourpilling/component/app_bar.dart';
+import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_health_screen.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
@@ -536,14 +537,15 @@ class _SearchRanking extends StatelessWidget {
 Future<void> searchName(url,pillName) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("이름검색 요청");
-  var response = await http.get(Uri.parse('${url}?pillName=${pillName}'),
+  var response = await http.get(Uri.parse('${url}?pillName=비아노스'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NzE1OTEsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.5q4m1xXSyEhyww84SVKNPTNfv7pyXGm4ehSJR9ab9ZdFph0npBNu-7aIrucg-U_U13hjdjktgD43W0D_ghHL1Q",
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",
       });
 
   if (response.statusCode == 200) {
     print('검색 통신성공');
+    print(response.body);
   } else {
     print(response.body);
     throw http.ClientException(

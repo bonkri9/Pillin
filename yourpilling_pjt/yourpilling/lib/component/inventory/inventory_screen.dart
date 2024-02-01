@@ -12,7 +12,7 @@ import 'package:getwidget/getwidget.dart';
 import '../base_container.dart';
 import '../app_bar.dart';
 import '../login/login_main.dart';
-import '../login/login_screen.dart';
+import '../../screen/login_screen.dart';
 import '../login/member_register.dart';
 import '../login/regist_login_screen.dart';
 import '../sign_up/regist_signup_screen.dart';
@@ -32,31 +32,44 @@ class _InventoryState extends State<Inventory> {
   // var takeTrue;
   // var takeFalse;
 
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3Nzc1MzAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.RI-0CFL-CEEjW91YRfUyX-bhqm4eGqVd92vYw3Yq-KNJXi9AGmeKchR_1fwImvKOHnajacD7YFvksFIMc542rA";
-  final String invenListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
+  /**
+   * {
+   *   "ownPillId": int,
+   *   "remains": int,
+   *   "totalCount": int,
+   *   "takeCount": int,
+   *   "takeOnceAmount": int,
+   *   "takeYn": boolean
+   *   }
+   */
 
 
   getInvenList() async {
-
     print("재고 목록 요청");
 
     DateTime now = DateTime.now();
     print('${now.year} 년 ${now.month}월');
 
+    const String invenListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
 
     var response = await http.get(Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'), headers: {
       'Content-Type' : 'application/json',
       'accessToken': accessToken,
     }, );
 
+    String jsonData = response.body;
+
+
     if (response.statusCode == 200) {
       print("재고 목록 데이터 수신 성공");
-      print(response);
+      print(response.body);
     } else {
       print(response.body);
       print("재고 목록 데이터 수신 실패");
     }
   }
+
 
 
   @override
@@ -102,6 +115,20 @@ var takeTrue = [
     'totalCount' : 60,
     'remains' : 10,
     'predicateRunOutAt' : '2024-01-12',
+  },
+  {
+    'pillId' : '123',
+    'imageUrl' : '이미지 URL입니다',
+    'totalCount' : 60,
+    'remains' : 50,
+    'predicateRunOutAt' : '2024-01-01',
+  },
+  {
+    'pillId' : '123',
+    'imageUrl' : '이미지 URL입니다',
+    'totalCount' : 60,
+    'remains' : 50,
+    'predicateRunOutAt' : '2024-01-01',
   },
   {
     'pillId' : '123',
@@ -198,8 +225,61 @@ class _InventoryContent extends StatefulWidget {
 }
 
 class _InventoryContentState extends State<_InventoryContent> {
+  var pillId;
+  var takeYn;
+  var remains;
+  var totalCount;
+  var takeCount;
+  var takeOnceAmount;
+
   @override
   Widget build(BuildContext context) {
+    String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDI3NjksIm1lbWJlcklkIjoyMTAzLCJ1c2VybmFtZSI6InEifQ.YN-wLSRWpj9AglYORSfRdBTl1hQCAojG_xPep6BULk2rsTgb3u0LPM7WWqL470362HfztFuwtg1WL6qR-dGNrA";
+
+    getTotalNumber (number) {
+      setState(() {
+        totalCount = number.round();
+      });
+    }
+
+    getRestNumber (number) {
+      setState(() {
+        remains = number.round();
+      });
+
+    }
+
+    reviseInven() async {
+      print(remains);
+      print(totalCount);
+
+      const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+      print("재고 수정 요청");
+      var response = await http.put(Uri.parse(reviseUrl), headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      }, body: json.encode({
+          'ownPillId': 253,
+          'takeYn': true,
+          'remains': remains,
+          'totalCount': totalCount,
+          'takeCount': 1,
+          'takeOnceAmount': 1,
+          'takeWeekdays' : ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        })
+      );
+      // 바디 다시 보기
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        print("재고 수정 성공!");
+      } else {
+        print("재고 수정 요청 실패");
+        print(response.body);
+      }
+    }
+
+
     return BaseContainer(
       width: 400,
       height: 600,
@@ -222,7 +302,7 @@ class _InventoryContentState extends State<_InventoryContent> {
                 child: TabBarView(
               // TabBarView(
               children: [
-                _TakenTab(),
+                _TakenTab(getTotalNumber: getTotalNumber, getRestNumber : getRestNumber, reviseInven: reviseInven),
                 _UntakenTab(),
               ],
             ))
@@ -244,13 +324,43 @@ class _InventoryContentState extends State<_InventoryContent> {
 
 //takeTrue
 class _TakenTab extends StatefulWidget {
-  const _TakenTab({super.key});
+  _TakenTab({super.key, this.getTotalNumber, this.getRestNumber, this.reviseInven});
+
+  var getTotalNumber;
+  var getRestNumber;
+  var reviseInven;
 
   @override
   State<_TakenTab> createState() => _TakenTabState();
 }
 
 class _TakenTabState extends State<_TakenTab> {
+  final String invenTakeYnUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
+
+  putInvenTakeYn() async {
+    print("재고 섭취/미섭취 요청");
+
+    var response = await http.put(
+      Uri.parse('$invenTakeYnUrl?ownPillId=256'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("재고 섭취/미섭취 요청 수신 성공");
+      print(response.body);
+      var accessToken =
+      response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+      print(accessToken);
+    } else {
+      print(response.body);
+      print("재고 섭취/미섭취 요청 수신 실패");
+    }
+  }
+
   //영양제 상태에 따른 조건문
   Container pillStatus(int i, var takeTrue) {
     // int currPill = pillInvenInfo[i]['currPill'];
@@ -258,6 +368,369 @@ class _TakenTabState extends State<_TakenTab> {
 
     int remains = takeTrue[i]['remains'];
     int totalCount = takeTrue[i]['totalCount'];
+
+    if (remains / totalCount >= 0.5) {
+      return Container(
+        width: 50,
+        decoration: BoxDecoration(
+          color: Colors.green,
+          border: Border.all(
+            color: Colors.green,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Text(
+          "충분",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    } else if (remains / totalCount >= 0.1) {
+      return Container(
+        width: 50,
+        decoration: BoxDecoration(
+          color: Colors.orangeAccent,
+          border: Border.all(
+            color: Colors.orangeAccent,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Text(
+          "적당",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        width: 50,
+        decoration: BoxDecoration(
+          color: Colors.red,
+          border: Border.all(
+            color: Colors.redAccent,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Text(
+          "부족",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    }
+  }
+
+  final TextEditingController _textFieldController = TextEditingController();
+
+  Future<void> _updateInvenDialog(BuildContext context) async {
+    var restNumber = 0;
+    var totalNumber = 0;
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('재고 수정'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Text('총 알약 수 : '),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InputQty(
+                            maxVal: 500,
+                            initVal: 1,
+                            steps: 1,
+                            minVal: 0,
+                            validator: (value) {
+                              if (value == null) return "입력이 필요합니다.";
+                              if (value < 0) {
+                                return "";
+                              } else if (value > 500) {
+                                return "입력값 초과";
+                              }
+                              return null;
+                            },
+                            onQtyChanged: (value) {
+                                totalNumber = value.round();
+                                widget.getTotalNumber(totalNumber);
+                            },
+                            // qtyFormProps: QtyFormProps(enableTyping: false),
+                            decoration: QtyDecorationProps(
+                              isBordered: false,
+                              // borderShape: BorderShapeBtn.circle,
+                              minusBtn:
+                                  Icon(Icons.remove_circle_outline_rounded),
+                              plusBtn: Icon(Icons.add_circle_outline_rounded),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Text('잔여 알약 수 : '),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InputQty(
+                            maxVal: 500,
+                            initVal: 1,
+                            steps: 1,
+                            minVal: 0,
+                            validator: (value) {
+                              if (value == null) return "입력이 필요합니다.";
+                              if (value < 0) {
+                                return "";
+                              } else if (value > 500) {
+                                return "입력값 초과";
+                              }
+                              return null;
+                            },
+                            onQtyChanged: (value) {
+                                restNumber = value.round();
+                                widget.getRestNumber(restNumber);
+                            },
+
+                            // qtyFormProps: QtyFormProps(enableTyping: false),
+                            decoration: QtyDecorationProps(
+                              isBordered: false,
+                              // borderShape: BorderShapeBtn.circle,
+                              minusBtn:
+                                  Icon(Icons.remove_circle_outline_rounded),
+                              plusBtn: Icon(Icons.add_circle_outline_rounded),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.greenAccent,
+                textColor: Colors.white,
+                child: const Text('완료'),
+                onPressed: () {
+                  widget.reviseInven();
+                  setState(() {
+                    codeDialog = valueText;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              MaterialButton(
+                color: Colors.redAccent,
+                textColor: Colors.white,
+                child: const Text('취소'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  String? codeDialog;
+  String? valueText;
+
+  @override
+  Widget build(BuildContext context) {
+    //영양제 잔여량 비율 정렬
+    takeTrue.sort((a, b) {
+      double resultA = ((a['remains'] as int).toDouble() /
+          (a['totalCount'] as int).toDouble());
+      double resultB = ((b['remains'] as int).toDouble() /
+          (b['totalCount'] as int).toDouble());
+      return resultA.compareTo(resultB);
+    });
+
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: takeTrue.length,
+      itemBuilder: (context, i) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0xFFF5F6F9),
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            width: 500,
+            height: 120,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        "${takeTrue[i]['pillId']}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                          color: BASIC_BLACK,
+                        ),
+                      ),
+                      IconButton(
+                        iconSize: 16,
+                        onPressed: () {
+                          _updateInvenDialog(context);
+                        },
+                        icon: Icon(Icons.edit),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                          Row(
+                            children: [
+                              // Text('복용중'),
+                              TextButton(
+                                  onPressed: (){
+                                    putInvenTakeYn();
+                                  },
+                                  child: Text("복용중단", style: TextStyle(color: Colors.redAccent),)
+                              ),
+                            ],
+                          ),
+
+                          GFToggle(
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _takeYnChecked = value ?? false;
+                              });
+                            },
+                            value: _takeYnChecked,
+                            enabledTrackColor: Colors.redAccent,
+                          ),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text(
+                            "${takeTrue[i]['remains']}/${takeTrue[i]['totalCount']}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: BASIC_BLACK,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          pillStatus(i, takeTrue),
+                        ],
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          textStyle: const TextStyle(fontSize: 10),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => InvenDetailScreen()));
+                        },
+                        child: const Text(
+                          '상세 보기',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
+              ),
+            ),
+          );
+      },
+    );
+  }
+}
+
+
+class _UntakenTab extends StatefulWidget {
+  const _UntakenTab({super.key});
+
+  @override
+  State<_UntakenTab> createState() => _UntakenTabState();
+}
+
+class _UntakenTabState extends State<_UntakenTab> {
+  final String invenTakeYnUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
+
+  putInvenTakeYn() async {
+    print("재고 섭취/미섭취 요청");
+
+    var response = await http.put(
+      Uri.parse('$invenTakeYnUrl?ownPillId=256'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("재고 섭취/미섭취 요청 수신 성공");
+      print(response.body);
+      var accessToken =
+      response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+      print(accessToken);
+    } else {
+      print(response.body);
+      print("재고 섭취/미섭취 요청 수신 실패");
+    }
+  }
+
+  //영양제 상태에 따른 조건문
+  Container pillStatus(int i, var takeFalse) {
+    // int currPill = pillInvenInfo[i]['currPill'];
+    // int totalPill = pillInvenInfo[i]['totalPill'];
+
+    int remains = takeFalse[i]['remains'];
+    int totalCount = takeFalse[i]['totalCount'];
 
     if (remains / totalCount >= 0.5) {
       return Container(
@@ -367,7 +840,7 @@ class _TakenTabState extends State<_TakenTab> {
                               isBordered: false,
                               // borderShape: BorderShapeBtn.circle,
                               minusBtn:
-                                  Icon(Icons.remove_circle_outline_rounded),
+                              Icon(Icons.remove_circle_outline_rounded),
                               plusBtn: Icon(Icons.add_circle_outline_rounded),
                             ),
                           )
@@ -406,7 +879,7 @@ class _TakenTabState extends State<_TakenTab> {
                               isBordered: false,
                               // borderShape: BorderShapeBtn.circle,
                               minusBtn:
-                                  Icon(Icons.remove_circle_outline_rounded),
+                              Icon(Icons.remove_circle_outline_rounded),
                               plusBtn: Icon(Icons.add_circle_outline_rounded),
                             ),
                           )
@@ -471,7 +944,7 @@ class _TakenTabState extends State<_TakenTab> {
               borderRadius: BorderRadius.all(Radius.circular(30)),
             ),
             width: 500,
-            height: 100,
+            height: 120,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
               child: Row(
@@ -497,32 +970,35 @@ class _TakenTabState extends State<_TakenTab> {
                     ],
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         children: [
-                          Text('복용여부'),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          GFToggle(
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _takeYnChecked = value ?? false;
-                              });
-                            },
-                            value: _takeYnChecked,
-                            enabledTrackColor: Colors.redAccent,
+                          // Text('복용여부'),
+                          TextButton(
+                              onPressed: (){
+                                putInvenTakeYn();
+                              },
+                              child: Text("복용시작", style: TextStyle(color: Colors.redAccent),)
                           ),
                         ],
                       ),
+                      // GFToggle(
+                      //   onChanged: (bool? value) {
+                      //     setState(() {
+                      //       _takeYnChecked = value ?? false;
+                      //     });
+                      //   },
+                      //   value: _takeYnChecked,
+                      //   enabledTrackColor: Colors.redAccent,
+                      // ),
                       Row(
                         children: [
                           Text(
                             "${takeTrue[i]['remains']}/${takeTrue[i]['totalCount']}",
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 20,
+                              fontSize: 15,
                               color: BASIC_BLACK,
                             ),
                           ),
@@ -562,140 +1038,6 @@ class _TakenTabState extends State<_TakenTab> {
   }
 }
 
-class _UntakenTab extends StatefulWidget {
-  const _UntakenTab({super.key});
-
-  @override
-  State<_UntakenTab> createState() => _UntakenTabState();
-}
-
-class _UntakenTabState extends State<_UntakenTab> {
-  //영양제 상태에 따른 조건문
-  Container pillStatus(int i, var takeFalse) {
-    int remains = takeFalse[i]['remains'];
-    int totalCount = takeFalse[i]['totalCount'];
-
-    if (remains / totalCount >= 0.5) {
-      return Container(
-        width: 50,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          border: Border.all(
-            color: Colors.green,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Text(
-          "충분",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      );
-    } else if (remains / totalCount >= 0.1) {
-      return Container(
-        width: 50,
-        decoration: BoxDecoration(
-          color: Colors.orangeAccent,
-          border: Border.all(
-            color: Colors.orangeAccent,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Text(
-          "적당",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      );
-    } else {
-      return Container(
-        width: 50,
-        decoration: BoxDecoration(
-          color: Colors.red,
-          border: Border.all(
-            color: Colors.redAccent,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Text(
-          "부족",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      itemCount: takeFalse.length,
-      itemBuilder: (context, i) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Color(0xFFF5F6F9),
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-            ),
-            width: 500,
-            height: 70,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${takeFalse[i]['pillId']}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: BASIC_BLACK,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "${takeFalse[i]['remains']}/${takeFalse[i]['totalCount']}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                          color: BASIC_BLACK,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      pillStatus(i, takeFalse),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
 class _EtcZone extends StatelessWidget {
   const _EtcZone({super.key});
 
@@ -706,27 +1048,6 @@ class _EtcZone extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          BaseContainer(
-            width: 200,
-            height: 35,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PillDetailScreen()));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("영양제 상세페이지",
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ],
-              ),
-            ),
-          ),
           BaseContainer(
             width: 200,
             height: 35,
