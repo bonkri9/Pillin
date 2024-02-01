@@ -14,7 +14,7 @@ public class ResponsePillVo {
     Long pillId;
     String pillName;
     String manufacturer;
-    LocalDate expirationAt;
+    String expirationAt;
     String usageInstructions;
     String primaryFunctionality;
     String precautions;
