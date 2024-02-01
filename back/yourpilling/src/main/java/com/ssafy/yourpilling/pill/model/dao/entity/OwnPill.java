@@ -72,7 +72,7 @@ public class OwnPill {
 
     public static Map<Boolean, List<OwnPill>> ownPillsYN(List<OwnPill> ownPills) {
         return ownPills
-                .parallelStream()
+                .stream()
                 .collect(Collectors.partitioningBy(OwnPill::isTakeYN));
     }
 

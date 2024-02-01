@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.time.LocalDateTime.now;
 
@@ -50,9 +47,15 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
         Map<Boolean, List<OwnPill>> partition = OwnPill.ownPillsYN(member.getOwnPills());
 
+        sorByRemains(partition.get(true));
+
         return mapper.mapToResponsePillInventorListVo(
                 calculationPredicateRunOut(partition.get(true)),
                 calculationPredicateRunOut(partition.get(false)));
+    }
+
+    private static void sorByRemains(List<OwnPill> partition) {
+        partition.sort(Comparator.comparing(OwnPill::getRemains));
     }
 
     @Transactional
