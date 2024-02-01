@@ -15,7 +15,7 @@ public interface TakerHistoryRepository  extends JpaRepository<TakerHistory, Lon
             "JOIN ownPill op ON th.own_pill_id = op.own_pill_id " +
             "WHERE op.member_id = ?1 AND YEAR(th.take_at) = YEAR(NOW()) AND WEEK(th.take_at, 1) = WEEK(NOW(), 1) " +
             "GROUP BY th.take_at", nativeQuery = true)
-    List<WeeklyHistoryInterface> findWeeklyTakerHistoriesByMemberId(Long memberId);
+    List<WeeklyHistoryInterface> findWeeklyTakerHistoriesByMemberId(@Param("memberId") Long memberId);
 
 
     @Query("SELECT " +
