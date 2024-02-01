@@ -4,7 +4,6 @@ import 'package:yourpilling/const/colors.dart';
 
 import '../inventory/insert_inventory.dart';
 
-
 var pillDetailInfo = [
   {
     'pillName': '트리플 스트렝스 오메가3 피쉬오일 (오메가3 1040mg)', // 영양제 이름
@@ -18,9 +17,9 @@ var pillDetailInfo = [
     'productForm': '고체형', // 제형
     'takecycle': '1', //1일
     'takeCount': '1', //1회
-    'takeOnceAmount' : '2', //2정
-    'createdAt' : '',
-    'updatedAt' : '2024-01-29', //제품 정보 수정날짜
+    'takeOnceAmount': '2', //2정
+    'createdAt': '',
+    'updatedAt': '2024-01-29', //제품 정보 수정날짜
     'nutrients': [
       {
         'nutrition': '오메가3',
@@ -41,14 +40,14 @@ var nutients = [
   }
 ];
 
-class PillDetailScreen extends StatefulWidget {
-  const PillDetailScreen({super.key});
+class DetailInventory extends StatefulWidget {
+  const DetailInventory({super.key});
 
   @override
-  State<PillDetailScreen> createState() => _pillDetailScreenState();
+  State<DetailInventory> createState() => _detailInventoryState();
 }
 
-class _pillDetailScreenState extends State<PillDetailScreen> {
+class _detailInventoryState extends State<DetailInventory> {
   final _scrollController = ScrollController();
   double scrollOpacity = 0;
 
@@ -122,18 +121,18 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                       children: [
                         Flexible(
                             child: RichText(
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              strutStyle: StrutStyle(fontSize: 16),
-                              text: TextSpan(
-                                text: '${pillDetailInfo[0]['pillName']}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            )),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          strutStyle: StrutStyle(fontSize: 16),
+                          text: TextSpan(
+                            text: '${pillDetailInfo[0]['pillName']}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        )),
                       ],
                     ),
                   ),
@@ -218,18 +217,19 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                                 children: [
                                   Flexible(
                                       child: RichText(
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        strutStyle: StrutStyle(fontSize: 16),
-                                        text: TextSpan(
-                                          text: '${pillDetailInfo[0]['pillName']}',
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      )),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    strutStyle: StrutStyle(fontSize: 16),
+                                    text: TextSpan(
+                                      text: '${pillDetailInfo[0]['pillName']}',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )),
                                 ],
                               ),
                             ),
@@ -249,7 +249,6 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                           ],
                         ),
                       ),
-
                     ),
                   ],
                 ),
@@ -257,26 +256,12 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
             ],
           ),
           onRefresh: () => Future.value(true)),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: BACKGROUND_COLOR,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: [
-          BottomNavigationBarItem(
-            label: '등록하기',
-            icon: ElevatedButton(
-              child: Text('등록하기'),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => InsertInventory()));
-                //   builder:(context) => InsertInventory()));
-              },
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: '구매하기',
-            icon: ElevatedButton(
-              child: const Text('구매하기'),
+      bottomNavigationBar: BottomAppBar(
+        color: Color(0xFFF5F6F9),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
               onPressed: () async {
                 final url = Uri.parse(
                     'https://www.coupang.com/vp/products/7559679373?itemId=20998974266&vendorItemId=70393847077&q=%EB%82%98%EC%9A%B0%ED%91%B8%EB%93%9C+%EC%98%A4%EB%A9%94%EA%B0%803&itemsCount=36&searchId=042c491feb4b4cc699aea94c1b27be04&rank=1&isAddedCart=');
@@ -284,9 +269,18 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                   launchUrl(url, mode: LaunchMode.externalApplication);
                 }
               },
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: Colors.redAccent,
+              ),
+              child: const Text(
+                "구매하기",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -301,7 +295,6 @@ class NoBehavior extends ScrollBehavior {
     return child;
   }
 }
-
 
 class PillDetailInfo extends StatefulWidget {
   const PillDetailInfo({super.key});
@@ -456,6 +449,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
     );
   }
 }
+
 //영양소 정보
 class PillNutrientInfo extends StatefulWidget {
   const PillNutrientInfo({super.key});
@@ -476,27 +470,26 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
             children: [
               Text('함유분석 : '),
               Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['nutrition']:null} ',
+                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['nutrition'] : null} ',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
               Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['amount']:null}',
+                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['amount'] : null}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
               Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['unit']:null}',
+                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['unit'] : null}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
-
             ],
           ),
         ),
@@ -506,7 +499,7 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
           child: Row(
             children: [
               Text(
-                '함유비율 ${pillDetailInfo[0]['nutrients'] != null?nutients[0]['includePercent']:null} %',
+                '함유비율 ${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['includePercent'] : null} %',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -519,4 +512,3 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
     );
   }
 }
-

@@ -225,6 +225,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                                     text: TextSpan(
                                       text: '${pillDetailInfo[0]['pillName']}',
                                       style: const TextStyle(
+                                        color: Colors.black,
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
                                       ),

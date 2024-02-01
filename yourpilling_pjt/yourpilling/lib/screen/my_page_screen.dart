@@ -4,6 +4,9 @@ import 'package:yourpilling/component/angle_container.dart';
 import 'package:yourpilling/component/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
 
+import '../component/mypage/update_my_info.dart';
+import '../component/mypage/update_my_info_before_check.dart';
+
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
 // todo : 상단바 위젯 스크롤 내리면 사라지고 올리면 뜨게 하기
@@ -59,7 +62,12 @@ class MyPage extends StatelessWidget {
                               minimumSize: MaterialStateProperty.all(Size.zero),
                               padding: MaterialStateProperty.all(EdgeInsets.zero), // 버튼의 기본 패딩 없애기
                             ),
-                            onPressed: () {},
+                            onPressed: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UpdateInfoBeforeCheck()));
+                            },
                             child: Text("정보 수정", style: TextStyle(
                               color: Colors.grey,
                               fontSize: 14,
