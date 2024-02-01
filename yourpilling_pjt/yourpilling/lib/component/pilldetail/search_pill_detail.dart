@@ -166,6 +166,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Text('검색 상세 페이지'),
                                 SizedBox(
                                   width: 30,
                                 ),
