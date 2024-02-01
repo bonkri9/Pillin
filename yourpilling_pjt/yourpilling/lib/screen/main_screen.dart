@@ -111,8 +111,6 @@ class _MainScreenState extends State<MainScreen> {
   // 일단 토큰 여기에 저장
   String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk2NzksIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.DT01XONbfPqBKctpgEIwUUvybT1MQp9zrkNkQXwJbPk9uEhWKnjJB-K44cg678Mhga5mBx19ExdekYS3GXuZHA";
 
-
-
   // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
   getWeeklyData() async {
     const String weeklyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/weekly';

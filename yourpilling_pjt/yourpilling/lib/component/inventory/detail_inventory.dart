@@ -54,15 +54,13 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
   double scrollOpacity = 0;
 
   var ownPillId;
-  String accessToken =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
+  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTg5ODksIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.1wAs3Wg6In4Lpj0YRcxyV1HjR5c7BiKeYF_11Rg5KpukhSkQtUJfLriX-yG1txKNf3vW30um5Tgqx4U_WNqOkQ";
   final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
 
   getInvenDetail() async {
     print("재고 상세 요청");
 
     // int pillId = 256;
-
     var response = await http.get(
         Uri.parse('$invenDetailUrl?ownPillId=256'),
         headers: {
@@ -139,6 +137,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                 pinned: true,
                 elevation: 0,
                 bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(0),
                   child: Opacity(
                     opacity: scrollOpacity,
                     child: Container(
@@ -146,7 +145,6 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                       height: 1,
                     ),
                   ),
-                  preferredSize: Size.fromHeight(0),
                 ),
                 backgroundColor: Colors.white.withOpacity(scrollOpacity),
                 title: Opacity(

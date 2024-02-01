@@ -33,14 +33,25 @@ class _InventoryState extends State<Inventory> {
   // var takeFalse;
 
   String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
-  final String invenListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+  /**
+   * {
+   *   "ownPillId": int,
+   *   "remains": int,
+   *   "totalCount": int,
+   *   "takeCount": int,
+   *   "takeOnceAmount": int,
+   *   "takeYn": boolean
+   *   }
+   */
+
 
   getInvenList() async {
-
     print("재고 목록 요청");
 
     DateTime now = DateTime.now();
     print('${now.year} 년 ${now.month}월');
+
+    const String invenListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
 
     var response = await http.get(Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'), headers: {
       'Content-Type' : 'application/json',
@@ -214,8 +225,61 @@ class _InventoryContent extends StatefulWidget {
 }
 
 class _InventoryContentState extends State<_InventoryContent> {
+  var pillId;
+  var takeYn;
+  var remains;
+  var totalCount;
+  var takeCount;
+  var takeOnceAmount;
+
   @override
   Widget build(BuildContext context) {
+    String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDI3NjksIm1lbWJlcklkIjoyMTAzLCJ1c2VybmFtZSI6InEifQ.YN-wLSRWpj9AglYORSfRdBTl1hQCAojG_xPep6BULk2rsTgb3u0LPM7WWqL470362HfztFuwtg1WL6qR-dGNrA";
+
+    getTotalNumber (number) {
+      setState(() {
+        totalCount = number.round();
+      });
+    }
+
+    getRestNumber (number) {
+      setState(() {
+        remains = number.round();
+      });
+
+    }
+
+    reviseInven() async {
+      print(remains);
+      print(totalCount);
+
+      const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+      print("재고 수정 요청");
+      var response = await http.put(Uri.parse(reviseUrl), headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      }, body: json.encode({
+          'ownPillId': 253,
+          'takeYn': true,
+          'remains': remains,
+          'totalCount': totalCount,
+          'takeCount': 1,
+          'takeOnceAmount': 1,
+          'takeWeekdays' : ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        })
+      );
+      // 바디 다시 보기
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        print("재고 수정 성공!");
+      } else {
+        print("재고 수정 요청 실패");
+        print(response.body);
+      }
+    }
+
+
     return BaseContainer(
       width: 400,
       height: 600,
@@ -238,7 +302,7 @@ class _InventoryContentState extends State<_InventoryContent> {
                 child: TabBarView(
               // TabBarView(
               children: [
-                _TakenTab(),
+                _TakenTab(getTotalNumber: getTotalNumber, getRestNumber : getRestNumber, reviseInven: reviseInven),
                 _UntakenTab(),
               ],
             ))
@@ -260,7 +324,11 @@ class _InventoryContentState extends State<_InventoryContent> {
 
 //takeTrue
 class _TakenTab extends StatefulWidget {
-  const _TakenTab({super.key});
+  _TakenTab({super.key, this.getTotalNumber, this.getRestNumber, this.reviseInven});
+
+  var getTotalNumber;
+  var getRestNumber;
+  var reviseInven;
 
   @override
   State<_TakenTab> createState() => _TakenTabState();
@@ -370,6 +438,8 @@ class _TakenTabState extends State<_TakenTab> {
   final TextEditingController _textFieldController = TextEditingController();
 
   Future<void> _updateInvenDialog(BuildContext context) async {
+    var restNumber = 0;
+    var totalNumber = 0;
     return showDialog(
         context: context,
         builder: (context) {
@@ -403,6 +473,10 @@ class _TakenTabState extends State<_TakenTab> {
                                 return "입력값 초과";
                               }
                               return null;
+                            },
+                            onQtyChanged: (value) {
+                                totalNumber = value.round();
+                                widget.getTotalNumber(totalNumber);
                             },
                             // qtyFormProps: QtyFormProps(enableTyping: false),
                             decoration: QtyDecorationProps(
@@ -443,6 +517,11 @@ class _TakenTabState extends State<_TakenTab> {
                               }
                               return null;
                             },
+                            onQtyChanged: (value) {
+                                restNumber = value.round();
+                                widget.getRestNumber(restNumber);
+                            },
+
                             // qtyFormProps: QtyFormProps(enableTyping: false),
                             decoration: QtyDecorationProps(
                               isBordered: false,
@@ -465,6 +544,7 @@ class _TakenTabState extends State<_TakenTab> {
                 textColor: Colors.white,
                 child: const Text('완료'),
                 onPressed: () {
+                  widget.reviseInven();
                   setState(() {
                     codeDialog = valueText;
                     Navigator.pop(context);
@@ -552,15 +632,19 @@ class _TakenTabState extends State<_TakenTab> {
                               ),
                             ],
                           ),
-                          // GFToggle(
-                          //   onChanged: (bool? value) {
-                          //     setState(() {
-                          //       _takeYnChecked = value ?? false;
-                          //     });
-                          //   },
-                          //   value: _takeYnChecked,
-                          //   enabledTrackColor: Colors.redAccent,
-                          // ),
+
+                          GFToggle(
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _takeYnChecked = value ?? false;
+                              });
+                            },
+                            value: _takeYnChecked,
+                            enabledTrackColor: Colors.redAccent,
+                          ),
+                        ],
+                      ),
+
                       Row(
                         children: [
                           Text(
@@ -597,11 +681,9 @@ class _TakenTabState extends State<_TakenTab> {
                       ),
                     ],
                   ),
-                ],
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }
