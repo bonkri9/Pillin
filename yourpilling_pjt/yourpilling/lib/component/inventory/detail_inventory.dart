@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/const/colors.dart';
-
+import 'package:http/http.dart' as http;
 import '../inventory/insert_inventory.dart';
-
 
 var pillDetailInfo = [
   {
@@ -18,9 +19,9 @@ var pillDetailInfo = [
     'productForm': '고체형', // 제형
     'takecycle': '1', //1일
     'takeCount': '1', //1회
-    'takeOnceAmount' : '2', //2정
-    'createdAt' : '',
-    'updatedAt' : '2024-01-29', //제품 정보 수정날짜
+    'takeOnceAmount': '2', //2정
+    'createdAt': '',
+    'updatedAt': '2024-01-29', //제품 정보 수정날짜
     'nutrients': [
       {
         'nutrition': '오메가3',
@@ -41,16 +42,50 @@ var nutients = [
   }
 ];
 
-class PillDetailScreen extends StatefulWidget {
-  const PillDetailScreen({super.key});
+class InvenDetailScreen extends StatefulWidget {
+  const InvenDetailScreen({super.key});
 
   @override
-  State<PillDetailScreen> createState() => _pillDetailScreenState();
+  State<InvenDetailScreen> createState() => _invenDetailScreenState();
 }
 
-class _pillDetailScreenState extends State<PillDetailScreen> {
+class _invenDetailScreenState extends State<InvenDetailScreen> {
   final _scrollController = ScrollController();
   double scrollOpacity = 0;
+
+  var ownPillId;
+  String accessToken =
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3Nzk0ODIsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.8I8M8gpfkzdEkv_0eQv76AGlIZ2b5vlZHJ-nCRzRJK8J3CWNSZk0xtg-FZb_rCaWBE1CjvYckfe5NY1dG1Vq_g";
+  final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+
+  getInvenDetail() async {
+    print("재고 상세 요청");
+
+    // int pillId = 256;
+
+    var response = await http.get(
+        Uri.parse('$invenDetailUrl?ownPillId=256'),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },
+    );
+
+    if (response.statusCode == 200) {
+      print("재고 상세 요청 수신 성공");
+      print(response);
+      var accessToken =
+          response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+      print(accessToken);
+    } else {
+      print(response.body);
+      print("재고 상세 요청 수신 실패");
+    }
+  }
+
+  // setownPillId(ownPillIdInput) {
+  //   ownPillId = ownPillIdInput;
+  // }
 
   //스크롤에 따른 투명도 계산
   onScroll() {
@@ -70,6 +105,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
   void initState() {
     _scrollController.addListener(onScroll);
     super.initState();
+    getInvenDetail();
   }
 
   //사라지는 과정
@@ -122,18 +158,18 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                       children: [
                         Flexible(
                             child: RichText(
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              strutStyle: StrutStyle(fontSize: 16),
-                              text: TextSpan(
-                                text: '${pillDetailInfo[0]['pillName']}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            )),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          strutStyle: StrutStyle(fontSize: 16),
+                          text: TextSpan(
+                            text: '${pillDetailInfo[0]['pillName']}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        )),
                       ],
                     ),
                   ),
@@ -218,18 +254,18 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                                 children: [
                                   Flexible(
                                       child: RichText(
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        strutStyle: StrutStyle(fontSize: 16),
-                                        text: TextSpan(
-                                          text: '${pillDetailInfo[0]['pillName']}',
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      )),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    strutStyle: StrutStyle(fontSize: 16),
+                                    text: TextSpan(
+                                      text: '${pillDetailInfo[0]['pillName']}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )),
                                 ],
                               ),
                             ),
@@ -249,7 +285,6 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                           ],
                         ),
                       ),
-
                     ),
                   ],
                 ),
@@ -301,7 +336,6 @@ class NoBehavior extends ScrollBehavior {
     return child;
   }
 }
-
 
 class PillDetailInfo extends StatefulWidget {
   const PillDetailInfo({super.key});
@@ -456,6 +490,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
     );
   }
 }
+
 //영양소 정보
 class PillNutrientInfo extends StatefulWidget {
   const PillNutrientInfo({super.key});
@@ -476,27 +511,26 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
             children: [
               Text('함유분석 : '),
               Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['nutrition']:null} ',
+                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['nutrition'] : null} ',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
               Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['amount']:null}',
+                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['amount'] : null}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
               Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['unit']:null}',
+                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['unit'] : null}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
-
             ],
           ),
         ),
@@ -506,7 +540,7 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
           child: Row(
             children: [
               Text(
-                '함유비율 ${pillDetailInfo[0]['nutrients'] != null?nutients[0]['includePercent']:null} %',
+                '함유비율 ${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['includePercent'] : null} %',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -519,4 +553,3 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
     );
   }
 }
-

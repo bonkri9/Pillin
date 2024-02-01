@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:ui';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:yourpilling/component/angle_container.dart';
@@ -13,6 +17,7 @@ import '../login/member_register.dart';
 import '../login/regist_login_screen.dart';
 import '../sign_up/regist_signup_screen.dart';
 import '../sign_up/sign_up_screen.dart';
+import 'detail_inventory.dart';
 
 bool _takeYnChecked = false;
 
@@ -24,6 +29,42 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
+  // var takeTrue;
+  // var takeFalse;
+
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3Nzc1MzAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.RI-0CFL-CEEjW91YRfUyX-bhqm4eGqVd92vYw3Yq-KNJXi9AGmeKchR_1fwImvKOHnajacD7YFvksFIMc542rA";
+  final String invenListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+
+
+  getInvenList() async {
+
+    print("재고 목록 요청");
+
+    DateTime now = DateTime.now();
+    print('${now.year} 년 ${now.month}월');
+
+
+    var response = await http.get(Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'), headers: {
+      'Content-Type' : 'application/json',
+      'accessToken': accessToken,
+    }, );
+
+    if (response.statusCode == 200) {
+      print("재고 목록 데이터 수신 성공");
+      print(response);
+    } else {
+      print(response.body);
+      print("재고 목록 데이터 수신 실패");
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getInvenList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -312,11 +353,11 @@ class _TakenTabState extends State<_TakenTab> {
                             initVal: 1,
                             steps: 1,
                             minVal: 0,
-                            validator: (value){
-                              if(value == null) return "입력이 필요합니다.";
-                              if(value < 0){
+                            validator: (value) {
+                              if (value == null) return "입력이 필요합니다.";
+                              if (value < 0) {
                                 return "";
-                              }else if(value>500){
+                              } else if (value > 500) {
                                 return "입력값 초과";
                               }
                               return null;
@@ -325,12 +366,9 @@ class _TakenTabState extends State<_TakenTab> {
                             decoration: QtyDecorationProps(
                               isBordered: false,
                               // borderShape: BorderShapeBtn.circle,
-                              minusBtn: Icon(
-                                  Icons.remove_circle_outline_rounded
-                              ),
-                              plusBtn: Icon(
-                                  Icons.add_circle_outline_rounded
-                              ),
+                              minusBtn:
+                                  Icon(Icons.remove_circle_outline_rounded),
+                              plusBtn: Icon(Icons.add_circle_outline_rounded),
                             ),
                           )
                         ],
@@ -354,11 +392,11 @@ class _TakenTabState extends State<_TakenTab> {
                             initVal: 1,
                             steps: 1,
                             minVal: 0,
-                            validator: (value){
-                              if(value == null) return "입력이 필요합니다.";
-                              if(value < 0){
+                            validator: (value) {
+                              if (value == null) return "입력이 필요합니다.";
+                              if (value < 0) {
                                 return "";
-                              }else if(value>500){
+                              } else if (value > 500) {
                                 return "입력값 초과";
                               }
                               return null;
@@ -367,12 +405,9 @@ class _TakenTabState extends State<_TakenTab> {
                             decoration: QtyDecorationProps(
                               isBordered: false,
                               // borderShape: BorderShapeBtn.circle,
-                              minusBtn: Icon(
-                                  Icons.remove_circle_outline_rounded
-                              ),
-                              plusBtn: Icon(
-                                  Icons.add_circle_outline_rounded
-                              ),
+                              minusBtn:
+                                  Icon(Icons.remove_circle_outline_rounded),
+                              plusBtn: Icon(Icons.add_circle_outline_rounded),
                             ),
                           )
                         ],
@@ -508,7 +543,7 @@ class _TakenTabState extends State<_TakenTab> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PillDetailScreen()));
+                                  builder: (context) => InvenDetailScreen()));
                         },
                         child: const Text(
                           '상세 보기',

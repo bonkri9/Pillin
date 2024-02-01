@@ -4,7 +4,9 @@ import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/component/inventory/inventory_screen.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:convert';
+
 
 var insertInvenInfo = [
   {
@@ -76,6 +78,7 @@ class InsertInventory extends StatefulWidget {
 }
 
 class _InsertInventoryState extends State<InsertInventory> {
+
   @override
   Widget build(BuildContext context) {
     // 영양제 등록 때 보낼 데이터 변수명

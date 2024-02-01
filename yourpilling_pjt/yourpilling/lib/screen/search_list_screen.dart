@@ -3,6 +3,7 @@ import 'package:yourpilling/component/base_container.dart';
 
 import '../component/app_bar.dart';
 import '../component/inventory/detail_inventory.dart';
+import '../component/pilldetail/search_pill_detail.dart';
 import '../const/colors.dart';
 
 class SearchListScreen extends StatefulWidget {
