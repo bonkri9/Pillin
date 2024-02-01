@@ -76,7 +76,8 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
 
     @Override
     public List<MonthlyTakerHistory> findMonthlyTakerHistoriesByMemberIdAndDate(MonthlyTakerHistoryVo monthlyTakerHistoryVo) {
-        return takerHistoryRepository.findTakerHistoryDetailsByMemberIdAndMonth(monthlyTakerHistoryVo.getMemberId(), monthlyTakerHistoryVo.getDate().getYear(),  monthlyTakerHistoryVo.getDate().getMonthValue());
+        List<MonthlyTakerHistory> tmp = takerHistoryRepository.findTakerHistoryDetailsByMemberIdAndMonth(monthlyTakerHistoryVo.getMemberId(), monthlyTakerHistoryVo.getDate().getYear(), monthlyTakerHistoryVo.getDate().getMonthValue());
+        return tmp;
     }
 
     @Override

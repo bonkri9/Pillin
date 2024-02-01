@@ -9,6 +9,8 @@ import 'package:yourpilling/const/colors.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:just_bottom_sheet/just_bottom_sheet.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // dummy data
 // 1월 29일에 먹은 영양제 목록
@@ -102,6 +104,31 @@ class _RecordScreenState extends State<RecordScreen> {
   int curMonth = DateTime.now().month; // 현재 월 state
   final scrollController = ScrollController();
 
+  final String url = "http://10.0.2.2:8080/api/v1/pill/history/monthly";
+
+  // 일단 토큰 여기에 저장
+  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NTY4MjEsIm1lbWJlcklkIjo1MywidXNlcm5hbWUiOiJoYWhhaGEifQ.hRNjrv8o-ZrQG5vvRVIDLnIh-w9ppbmbZ9hscYk_u0uTmdbdy9oztjEskIIDd24ylIpWJcjDqpGelTSDt5HJ_w";
+
+
+  // 데이터 서버에서 받자
+  getData() async {
+    DateTime now = DateTime.now();
+    print('${now.year} 년 ${now.month}월');
+
+
+    var response = await http.get(Uri.parse('$url?year=${now.year}&month=${now.month}'), headers: {
+      'Content-Type' : 'application/json',
+      'accessToken': accessToken,
+    }, );
+
+    if (response.statusCode == 200 ) {
+      print("response 월간 기록 데이터 수선 성공 : $response");
+    } else {
+      print(response.body);
+      print("월간 기록 데이터 수신 실패");
+    }
+  }
+
   getPillListOfTheDay(List<Event>? list) {
     setState(() {
       if (list != null) {
@@ -119,6 +146,12 @@ class _RecordScreenState extends State<RecordScreen> {
       selectedDay = date;
       print(selectedDay);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
   }
 
   @override

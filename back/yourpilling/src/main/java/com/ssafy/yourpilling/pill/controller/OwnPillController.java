@@ -6,6 +6,7 @@ import com.ssafy.yourpilling.pill.controller.mapper.OwnPillControllerMapper;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,8 @@ public class OwnPillController {
     }
 
     @GetMapping("/history/monthly")
-    ResponseEntity<OutMonthlyTakerHistoryVo> monthlyList(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestParam int year, @RequestParam int month){
+    ResponseEntity<OutMonthlyTakerHistoryVo> monthlyList(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                         @RequestParam(name = "year") Integer year, @RequestParam(name="month") Integer month){
         LocalDate date = LocalDate.of(year, month, 1);
         OutMonthlyTakerHistoryVo vo = ownPillService.monthlyTakerHistory(mapper.mapToMonthlyTakerHistoryVo(principalDetails.getMember().getMemberId(), date));
         return ResponseEntity.ok(vo);

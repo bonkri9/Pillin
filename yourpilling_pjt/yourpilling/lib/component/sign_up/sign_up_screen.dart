@@ -1,13 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:yourpilling/component/login/login_main.dart';
-
 import '../login/login_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
   @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  @override
   Widget build(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    var name;
+    var email;
+    var password;
+    var url = "http://10.0.2.2:8080/api/v1/register";
+
+    signUp() async {
+      var response = await http.post(Uri.parse(url), headers: {
+          'Content-Type' : 'application/json',
+        }
+      ,body: json.encode({
+            'name' : name,
+            'email' : email,
+            'password' : password,
+          }));
+      print(response);
+
+      if (response.statusCode == 200) {
+        print("회원가입 성공");
+        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      }
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -24,7 +54,6 @@ class SignupScreen extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     const SizedBox(height: 60.0),
-
                     const Text(
                       "회원가입",
                       style: TextStyle(
@@ -44,6 +73,10 @@ class SignupScreen extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     TextField(
+                      controller: nameController,
+                      onChanged: (value) {
+                          name = value;
+                      },
                       decoration: InputDecoration(
                           hintText: "이름",
                           border: OutlineInputBorder(
@@ -54,8 +87,11 @@ class SignupScreen extends StatelessWidget {
                           prefixIcon: const Icon(Icons.person)),
                     ),
                     const SizedBox(height: 20),
-
                     TextField(
+                      controller: emailController,
+                      onChanged: (value) {
+                          email = value; // 이 부분에서 이름을 state에 저장합니다.
+                      },
                       decoration: InputDecoration(
                           hintText: "이메일",
                           border: OutlineInputBorder(
@@ -65,10 +101,12 @@ class SignupScreen extends StatelessWidget {
                           filled: true,
                           prefixIcon: const Icon(Icons.email)),
                     ),
-
                     const SizedBox(height: 20),
-
                     TextField(
+                      controller: passwordController,
+                      onChanged: (value) {
+                          password = value; // 이 부분에서 이름을 state에 저장합니다.
+                      },
                       decoration: InputDecoration(
                         hintText: "비밀번호",
                         border: OutlineInputBorder(
@@ -80,42 +118,28 @@ class SignupScreen extends StatelessWidget {
                       ),
                       obscureText: true,
                     ),
-
                     const SizedBox(height: 20),
-
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: "비밀번호 재확인",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: BorderSide.none),
-                        fillColor: Colors.purple.withOpacity(0.1),
-                        filled: true,
-                        prefixIcon: const Icon(Icons.password),
-                      ),
-                      obscureText: true,
-                    ),
                   ],
                 ),
                 Container(
                     padding: const EdgeInsets.only(top: 3, left: 3),
-
                     child: ElevatedButton(
                       onPressed: () {
+                        print("is click?");
+                        signUp();
                       },
-                      child: const Text(
-                        "완료",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
                       style: ElevatedButton.styleFrom(
                         shape: const StadiumBorder(),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         backgroundColor: Colors.redAccent,
                       ),
-                    )
-                ),
-                
-                //소셜 로그인 밑에 둘거면 주석 풀고 넣기 
+                      child: const Text(
+                        "완료",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    )),
+
+                //소셜 로그인 밑에 둘거면 주석 풀고 넣기
                 // const Center(child: Text("Or")),
                 //
                 // Container(
@@ -169,11 +193,15 @@ class SignupScreen extends StatelessWidget {
                     const Text("이미 Pillin 회원이시군요?"),
                     TextButton(
                         onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => LoginScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
                         },
-                        child: const Text("Login", style: TextStyle(color: Colors.redAccent),)
-                    )
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(color: Colors.redAccent),
+                        ))
                   ],
                 )
               ],
