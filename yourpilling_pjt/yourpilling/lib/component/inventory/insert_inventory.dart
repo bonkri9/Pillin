@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 
-
 var insertInvenInfo = [
   {
     'pillId': 2, //영양제 번호
@@ -78,38 +77,59 @@ class InsertInventory extends StatefulWidget {
 }
 
 class _InsertInventoryState extends State<InsertInventory> {
+  var pillId;
+  var takeYn;
+  var remains;
+  var totalCount;
+  var takeCount;
+  var takeOnceAmount;
 
   @override
   Widget build(BuildContext context) {
     // 영양제 등록 때 보낼 데이터 변수명
-    var pillId;
-    var takeYn;
-    var remains;
-    var totalCount;
-    var takeCount;
-    var takeOnceAmount;
+    String accessToken =
+        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDgwOTAsIm1lbWJlcklkIjoyMTE1LCJ1c2VybmFtZSI6InExMiJ9.wtnmMso3FLShqnGJnIik9ODZLYXRxMBpD--_yM2XV8pjnouHRPrz4WNaDjaSmpT75sj0r-t6dlMgjdu6z6HgSQ";
 
-    String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTg5ODksIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.1wAs3Wg6In4Lpj0YRcxyV1HjR5c7BiKeYF_11Rg5KpukhSkQtUJfLriX-yG1txKNf3vW30um5Tgqx4U_WNqOkQ";
+    getCurPillCount(count) {
+      setState(() {
+        remains = count;
+      });
+      print(remains);
+
+    }
+
+    getTotalPillCount(count) {
+      setState(() {
+        totalCount = count;
+      });
+      print(totalCount);
+    }
+
     registPill() async {
       String url = 'http://10.0.2.2:8080/api/v1/pill/inventory';
-
+      print(remains);
       try {
-        var response = await http.post(Uri.parse(url), headers: {
-          'Content-Type': 'application/json',
-          'acceessToken': accessToken,
-        }, body: {
-          json.encode({
-            pillId: pillId,
-            takeYn: takeYn,
-            remains: remains,
-            totalCount: totalCount,
-            takeCount: takeCount,
-            takeOnceAmount: takeOnceAmount,
-          })
-        });
+        var response = await http.post(Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              'accessToken': accessToken,
+            },
+            body: json.encode({
+              'pillId': 98,
+              'takeYn': true,
+              'remains': remains,
+              'totalCount': totalCount,
+              'takeCount': 1,
+              'takeOnceAmount': 1,
+              "takeWeekdays": ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+            }));
 
+        print(response.statusCode);
         if (response.statusCode == 200) {
           print("재고 등록 요청 성공");
+          print(response.body);
+        } else {
+          print("재고 등록 요청 실패");
           print(response.body);
         }
 
@@ -141,7 +161,9 @@ class _InsertInventoryState extends State<InsertInventory> {
             SizedBox(
               height: 30,
             ),
-            _InsertInvenContent(),
+            _InsertInvenContent(
+                getCurPillCount: getCurPillCount,
+                getTotalPillCount: getTotalPillCount),
           ],
         ),
       ),
@@ -155,6 +177,7 @@ class _InsertInventoryState extends State<InsertInventory> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () {
+            registPill();
             // Navigator.push(context,
             //    MaterialPageRoute(builder: (context)=>Inventory()) );
             showModalBottomSheet<void>(
@@ -203,7 +226,6 @@ class _InsertInvenUpper extends StatefulWidget {
 class _InsertInvenUpperState extends State<_InsertInvenUpper> {
   @override
   Widget build(BuildContext context) {
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -247,19 +269,22 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
 }
 
 class _InsertInvenContent extends StatefulWidget {
-  const _InsertInvenContent({super.key});
+  _InsertInvenContent(
+      {super.key, this.getCurPillCount, this.getTotalPillCount});
+
+  var getCurPillCount;
+  var getTotalPillCount;
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
 }
 
 class _InsertInvenContentState extends State<_InsertInvenContent> {
+  var curPillCount;
+  var totalPillCount;
+
   @override
   Widget build(BuildContext context) {
-
-    int curPillCount;
-    int totalPillCount;
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -325,7 +350,8 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                               minVal: 0,
                               onQtyChanged: (value) {
                                 setState(() {
-                                  totalPillCount = value;
+                                  totalPillCount = value.round();
+                                  widget.getTotalPillCount(value.round());
                                 });
                               },
                               validator: (value) {
@@ -379,7 +405,8 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                               },
                               onQtyChanged: (value) {
                                 setState(() {
-                                  curPillCount = value;
+                                  curPillCount = value.round();
+                                  widget.getCurPillCount(value.round());
                                 });
                               },
                               // qtyFormProps: QtyFormProps(enableTyping: false),
