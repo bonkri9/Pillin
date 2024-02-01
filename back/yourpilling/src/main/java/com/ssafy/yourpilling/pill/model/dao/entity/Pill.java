@@ -28,7 +28,7 @@ public class Pill {
     private String manufacturer;
 
     @Column(name = "expiration_at")
-    private LocalDate expirationAt;
+    private String expirationAt;
 
     @Column(name = "usage_instructions")
     private String usageInstructions;
@@ -72,6 +72,4 @@ public class Pill {
 
     @OneToMany(mappedBy = "pill", fetch = FetchType.LAZY)
     private List<PillCategory> pillCategories;
-
-
 }
