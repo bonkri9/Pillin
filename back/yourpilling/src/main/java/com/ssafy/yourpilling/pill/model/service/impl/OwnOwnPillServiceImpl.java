@@ -163,8 +163,10 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     .builder()
                     .needToTakeCount(ownPill.getTakeCount())
                     .currentTakeCount(0)
+                    .takeAt(today)
                     .ownPill(ownPill)
                     .build();
+
             // 오늘의 일일 복용 기록 생성!!
             ownPillDao.registerHistory(todayHistory);
         }
