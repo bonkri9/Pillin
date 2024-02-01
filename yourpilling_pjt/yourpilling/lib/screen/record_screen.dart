@@ -107,7 +107,7 @@ class _RecordScreenState extends State<RecordScreen> {
   final String url = "http://10.0.2.2:8080/api/v1/pill/history/monthly";
 
   // 일단 토큰 여기에 저장
-  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTg5ODksIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.1wAs3Wg6In4Lpj0YRcxyV1HjR5c7BiKeYF_11Rg5KpukhSkQtUJfLriX-yG1txKNf3vW30um5Tgqx4U_WNqOkQ";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
   // 데이터 서버에서 받자
   getData() async {
@@ -122,7 +122,8 @@ class _RecordScreenState extends State<RecordScreen> {
       },);
 
       if (response.statusCode == 200) {
-        print("response 월간 기록 데이터 수선 성공 : ${response.body}");
+        print("response 월간 기록 데이터 수신 성공 : ${response.body}");
+        print(response.body);
       } else {
         print(response.body);
         print("월간 기록 데이터 수신 실패");
