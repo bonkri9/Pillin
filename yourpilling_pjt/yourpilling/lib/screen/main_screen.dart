@@ -428,6 +428,33 @@ class _TodayState extends State<_Today> {
     },
   ];
 
+  final String putPillTakeUrl = "http://10.0.2.2:8080/api/v1/pill/take";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTYxNTAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.XNi3UkBGSzOw1DgVpDd8pk_OcmexPluy4NMGJ8jdr73ffZuipDDwyGWDMRyWjR6XsU0JWvy8B8H2cU8c28mibg";
+
+  putPillTake() async {
+    print("영양제 복용 완료 요청");
+
+    var response = await http.put(
+      Uri.parse('$putPillTakeUrl?ownPillId=256'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("영양제 복용 완료 요청 수신 성공");
+      print(response);
+      var accessToken =
+      response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+      print(accessToken);
+    } else {
+      print(response.body);
+      print("영양제 복용 완료 요청 수신 실패");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -583,6 +610,7 @@ class _TodayState extends State<_Today> {
                                             if (pillList.length == takenNum) {
                                               btnColor = Colors.greenAccent;
                                             }
+                                            putPillTake();
                                           });
                                         },
                                         style: ButtonStyle(

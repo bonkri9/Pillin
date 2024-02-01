@@ -55,7 +55,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
 
   var ownPillId;
   String accessToken =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3Nzk0ODIsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.8I8M8gpfkzdEkv_0eQv76AGlIZ2b5vlZHJ-nCRzRJK8J3CWNSZk0xtg-FZb_rCaWBE1CjvYckfe5NY1dG1Vq_g";
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTYxNTAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.XNi3UkBGSzOw1DgVpDd8pk_OcmexPluy4NMGJ8jdr73ffZuipDDwyGWDMRyWjR6XsU0JWvy8B8H2cU8c28mibg";
   final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
 
   getInvenDetail() async {
@@ -203,6 +203,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Text('재고 상세 페이지'),
                                 SizedBox(
                                   width: 30,
                                 ),
@@ -292,36 +293,22 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
             ],
           ),
           onRefresh: () => Future.value(true)),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: BACKGROUND_COLOR,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: [
-          BottomNavigationBarItem(
-            label: '등록하기',
-            icon: ElevatedButton(
-              child: Text('등록하기'),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => InsertInventory()));
-                //   builder:(context) => InsertInventory()));
-              },
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: '구매하기',
-            icon: ElevatedButton(
-              child: const Text('구매하기'),
-              onPressed: () async {
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+        child: const Text('구매하기'),
+                onPressed: () async {
                 final url = Uri.parse(
                     'https://www.coupang.com/vp/products/7559679373?itemId=20998974266&vendorItemId=70393847077&q=%EB%82%98%EC%9A%B0%ED%91%B8%EB%93%9C+%EC%98%A4%EB%A9%94%EA%B0%803&itemsCount=36&searchId=042c491feb4b4cc699aea94c1b27be04&rank=1&isAddedCart=');
                 if (await canLaunchUrl(url)) {
                   launchUrl(url, mode: LaunchMode.externalApplication);
                 }
               },
-            ),
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
