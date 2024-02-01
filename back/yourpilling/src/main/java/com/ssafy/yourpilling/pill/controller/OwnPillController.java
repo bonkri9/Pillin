@@ -65,8 +65,9 @@ public class OwnPillController {
     }
 
     @GetMapping("/history/monthly")
-    ResponseEntity<OutMonthlyTakerHistoryVo> monthlyList(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody RequestDateDto requestDateDto ){
-        OutMonthlyTakerHistoryVo vo = ownPillService.monthlyTakerHistory(mapper.mapToMonthlyTakerHistoryVo(principalDetails.getMember().getMemberId(), requestDateDto));
+    ResponseEntity<OutMonthlyTakerHistoryVo> monthlyList(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestParam int year, @RequestParam int month){
+        LocalDate date = LocalDate.of(year, month, 1);
+        OutMonthlyTakerHistoryVo vo = ownPillService.monthlyTakerHistory(mapper.mapToMonthlyTakerHistoryVo(principalDetails.getMember().getMemberId(), date));
         return ResponseEntity.ok(vo);
     }
 
