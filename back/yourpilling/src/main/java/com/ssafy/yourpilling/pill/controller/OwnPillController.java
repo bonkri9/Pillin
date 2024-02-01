@@ -23,8 +23,8 @@ public class OwnPillController {
     private final OwnPillService ownPillService;
 
     @GetMapping("/inventory")
-    ResponseEntity<OutOwnPillDetailVo> detail(@RequestBody RequestOwnPillDetailDto dto) {
-        OutOwnPillDetailVo vo = ownPillService.detail(mapper.mapToPillDetailVo(dto));
+    ResponseEntity<OutOwnPillDetailVo> detail(@RequestParam(name = "ownPillId") Long ownPillId) {
+        OutOwnPillDetailVo vo = ownPillService.detail(mapper.mapToPillDetailVo(ownPillId));
         return ResponseEntity.ok(vo);
     }
 

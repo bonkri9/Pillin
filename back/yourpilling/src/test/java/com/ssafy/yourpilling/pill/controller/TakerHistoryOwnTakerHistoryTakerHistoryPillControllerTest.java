@@ -79,13 +79,10 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         Pill pill = defaultRegisterPill();
 
         OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill);
-        JSONObject body = new JSONObject();
-        body.put("ownPillId", ownPill.getOwnPillId());
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get("/api/v1/pill/inventory")
+                .get("/api/v1/pill/inventory?ownPillId="+ownPill.getOwnPillId())
                 .header("accessToken", accessToken)
-                .content(body.toString())
                 .contentType(MediaType.APPLICATION_JSON);
 
         // when

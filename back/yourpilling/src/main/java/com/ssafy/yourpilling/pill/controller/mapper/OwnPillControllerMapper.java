@@ -9,10 +9,10 @@ import java.time.LocalDate;
 @Component
 public class OwnPillControllerMapper {
 
-    public OwnPillDetailVo mapToPillDetailVo(RequestOwnPillDetailDto dto){
+    public OwnPillDetailVo mapToPillDetailVo(Long ownPillId){
         return OwnPillDetailVo
                 .builder()
-                .ownPillId(dto.getOwnPillId())
+                .ownPillId(ownPillId)
                 .build();
     }
 
