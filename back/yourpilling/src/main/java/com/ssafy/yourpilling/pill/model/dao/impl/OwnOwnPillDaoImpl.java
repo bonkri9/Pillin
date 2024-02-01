@@ -26,11 +26,19 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     private final TakerHistoryRepository takerHistoryRepository;
 
     @Override
+    public void isAlreadyRegister(Long memberId, Long pillId) {
+        List<OwnPill> ownPills = findByMemberId(memberId).getOwnPills();
+
+        if (ownPills.stream().anyMatch(ownPill -> ownPill.getPill().equals(pillId))) {
+            throw new IllegalArgumentException("이미 등록된 영양제를 재등록할 수 없습니다.");
+        }
+    }
+
+    @Override
     public OwnPill findByOwnPillId(Long ownPillId) {
         return ownPillJpaRepository.findByOwnPillId(ownPillId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 보유중인 영양제를 찾을 수 없습니다."));
     }
-
 
     @Override
     public void registerHistory(TakerHistory takerHistory) {

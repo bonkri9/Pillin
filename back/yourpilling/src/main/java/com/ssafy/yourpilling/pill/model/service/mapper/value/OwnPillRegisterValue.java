@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 public class OwnPillRegisterValue {
     OwnPillRegisterVo vo;
+    int adjustRemain;
+    boolean adjustIsTaken;
     PillMember member;
     Pill pill;
     boolean isAlarm;

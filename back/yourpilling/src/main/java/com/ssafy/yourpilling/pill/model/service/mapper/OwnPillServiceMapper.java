@@ -55,13 +55,13 @@ public class OwnPillServiceMapper {
     public OwnPill mapToOwnPill(OwnPillRegisterValue value) {
         return OwnPill
                 .builder()
-                .remains(value.getVo().getRemains())
+                .remains(value.getAdjustRemain())
                 .takeCount(value.getVo().getTakeCount())
                 .totalCount(value.getVo().getTotalCount())
                 .takeWeekdays(value.getTakeWeekDaysValue())
                 .takeOnceAmount(value.getTakeOnceAmount())
                 .isAlarm(value.isAlarm())
-                .takeYN(value.getVo().getTakeYn())
+                .takeYN(value.isAdjustIsTaken())
                 .startAt(value.getVo().getStartAt())
                 .createdAt(value.getCreateAt())
                 .member(value.getMember())

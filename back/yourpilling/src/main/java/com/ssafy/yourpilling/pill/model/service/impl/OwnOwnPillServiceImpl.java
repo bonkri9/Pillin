@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +58,12 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     @Transactional
     @Override
     public void register(OwnPillRegisterVo vo) {
-        OwnPillRegisterValue value = mapToOwnPillRegisterValue(vo);
+        ownPillDao.isAlreadyRegister(vo.getMemberId(), vo.getPillId());
+
+
+        int adjustRemain = Math.max(vo.getRemains(), 0);
+        boolean adjustIsTaken = (adjustRemain > 0) ? vo.getTakeYn() : false;
+        OwnPillRegisterValue value = mapToOwnPillRegisterValue(vo, adjustRemain, adjustIsTaken);
 
         ownPillDao.register(mapper.mapToOwnPill(value));
     }
@@ -88,7 +92,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
                 }
 
-
                 // if 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
 //                int actualTakeCount = ownPill.decreaseRemains();
                 // th.increaseCurrentTakeCount(actualTakeCount);
@@ -103,7 +106,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 break;
             }
         }
-
 
         return OutOwnPillTakeVo
                 .builder()
@@ -181,10 +183,12 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
     }
 
-    private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo) {
+    private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo, int adjustRemain, boolean adjustIsTaken) {
         return OwnPillRegisterValue
                 .builder()
                 .vo(vo)
+                .adjustRemain(adjustRemain)
+                .adjustIsTaken(adjustIsTaken)
                 .member(ownPillDao.findByMemberId(vo.getMemberId()))
                 .pill(ownPillDao.findByPillId(vo.getPillId()))
                 .isAlarm(false)
