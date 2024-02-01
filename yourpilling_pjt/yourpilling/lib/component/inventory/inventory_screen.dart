@@ -505,18 +505,15 @@ class _TakenTabState extends State<_TakenTab> {
                           SizedBox(
                             width: 10,
                           ),
-                          TextButton(
-                              onPressed: onPressed,
-                              child: child)
-                          // GFToggle(
-                          //   onChanged: (bool? value) {
-                          //     setState(() {
-                          //       _takeYnChecked = value ?? false;
-                          //     });
-                          //   },
-                          //   value: _takeYnChecked,
-                          //   enabledTrackColor: Colors.redAccent,
-                          // ),
+                          GFToggle(
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _takeYnChecked = value ?? false;
+                              });
+                            },
+                            value: _takeYnChecked,
+                            enabledTrackColor: Colors.redAccent,
+                          ),
                         ],
                       ),
                       Row(
