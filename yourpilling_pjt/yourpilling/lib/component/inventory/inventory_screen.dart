@@ -623,7 +623,7 @@ class _TakenTabState extends State<_TakenTab> {
                     children: [
                           Row(
                             children: [
-                              Text('복용여부'),
+                              // Text('복용중'),
                               TextButton(
                                   onPressed: (){
                                     putInvenTakeYn();
@@ -974,7 +974,7 @@ class _UntakenTabState extends State<_UntakenTab> {
                     children: [
                       Row(
                         children: [
-                          Text('복용여부'),
+                          // Text('복용여부'),
                           TextButton(
                               onPressed: (){
                                 putInvenTakeYn();
@@ -1048,27 +1048,6 @@ class _EtcZone extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          BaseContainer(
-            width: 200,
-            height: 35,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PillDetailScreen()));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("영양제 상세페이지",
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ],
-              ),
-            ),
-          ),
           BaseContainer(
             width: 200,
             height: 35,

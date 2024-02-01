@@ -537,7 +537,7 @@ class _SearchRanking extends StatelessWidget {
 Future<void> searchName(url,pillName) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("이름검색 요청");
-  var response = await http.get(Uri.parse('${url}?pillName=비타민'),
+  var response = await http.get(Uri.parse('${url}?pillName=비아노스'),
       headers: {
         'Content-Type': 'application/json',
         'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",

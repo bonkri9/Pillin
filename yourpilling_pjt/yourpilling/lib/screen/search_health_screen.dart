@@ -199,15 +199,16 @@ class _MiddleTab extends StatelessWidget {
 // 통신추가
 Future<void> searchHealth() async {
   // 반환 타입을 'Future<void>'로 변경합니다
-  print("영양소 검색 요청");
+  print("영양소 건강고민 검색 요청");
   var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=1'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3ODI2NjIsIm1lbWJlcklkIjo0NTgsInVzZXJuYW1lIjoicXFxcXEifQ.ysPdZwS5kQC12AyCcUOEegk3g2EM7YCFgUFuuNZFTiY4rhH6nCs454r_jBcBSs-Wb2X-3nuZ7twWkSlSv-Zi0g",
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",
       } );
 
   if (response.statusCode == 200) {
-    print('영양소 통신성공');
+    print('영양소 건강고민 통신성공');
+    print(response.body);
   } else {
     print(response.body);
     throw http.ClientException(
