@@ -55,7 +55,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
 
   var ownPillId;
   String accessToken =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTYxNTAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.XNi3UkBGSzOw1DgVpDd8pk_OcmexPluy4NMGJ8jdr73ffZuipDDwyGWDMRyWjR6XsU0JWvy8B8H2cU8c28mibg";
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
   final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
 
   getInvenDetail() async {
@@ -73,7 +73,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
 
     if (response.statusCode == 200) {
       print("재고 상세 요청 수신 성공");
-      print(response);
+      print(response.body);
       var accessToken =
           response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
       print(accessToken);

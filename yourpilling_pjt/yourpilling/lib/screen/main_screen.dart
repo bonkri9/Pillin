@@ -109,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // 일단 토큰 여기에 저장
-  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NzE1OTEsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.5q4m1xXSyEhyww84SVKNPTNfv7pyXGm4ehSJR9ab9ZdFph0npBNu-7aIrucg-U_U13hjdjktgD43W0D_ghHL1Q";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk2NzksIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.DT01XONbfPqBKctpgEIwUUvybT1MQp9zrkNkQXwJbPk9uEhWKnjJB-K44cg678Mhga5mBx19ExdekYS3GXuZHA";
 
 
 
@@ -429,7 +429,7 @@ class _TodayState extends State<_Today> {
   ];
 
   final String putPillTakeUrl = "http://10.0.2.2:8080/api/v1/pill/take";
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTYxNTAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.XNi3UkBGSzOw1DgVpDd8pk_OcmexPluy4NMGJ8jdr73ffZuipDDwyGWDMRyWjR6XsU0JWvy8B8H2cU8c28mibg";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk2NzksIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.DT01XONbfPqBKctpgEIwUUvybT1MQp9zrkNkQXwJbPk9uEhWKnjJB-K44cg678Mhga5mBx19ExdekYS3GXuZHA";
 
   putPillTake() async {
     print("영양제 복용 완료 요청");

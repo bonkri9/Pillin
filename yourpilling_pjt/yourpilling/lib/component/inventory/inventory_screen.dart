@@ -32,7 +32,7 @@ class _InventoryState extends State<Inventory> {
   // var takeTrue;
   // var takeFalse;
 
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTYxNTAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.XNi3UkBGSzOw1DgVpDd8pk_OcmexPluy4NMGJ8jdr73ffZuipDDwyGWDMRyWjR6XsU0JWvy8B8H2cU8c28mibg";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
   final String invenListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
 
   getInvenList() async {
@@ -42,15 +42,17 @@ class _InventoryState extends State<Inventory> {
     DateTime now = DateTime.now();
     print('${now.year} 년 ${now.month}월');
 
-
     var response = await http.get(Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'), headers: {
       'Content-Type' : 'application/json',
       'accessToken': accessToken,
     }, );
 
+    String jsonData = response.body;
+
+
     if (response.statusCode == 200) {
       print("재고 목록 데이터 수신 성공");
-      print(response);
+      print(response.body);
     } else {
       print(response.body);
       print("재고 목록 데이터 수신 실패");
@@ -266,7 +268,7 @@ class _TakenTab extends StatefulWidget {
 
 class _TakenTabState extends State<_TakenTab> {
   final String invenTakeYnUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTYxNTAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.XNi3UkBGSzOw1DgVpDd8pk_OcmexPluy4NMGJ8jdr73ffZuipDDwyGWDMRyWjR6XsU0JWvy8B8H2cU8c28mibg";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
 
   putInvenTakeYn() async {
     print("재고 섭취/미섭취 요청");
@@ -281,7 +283,7 @@ class _TakenTabState extends State<_TakenTab> {
 
     if (response.statusCode == 200) {
       print("재고 섭취/미섭취 요청 수신 성공");
-      print(response);
+      print(response.body);
       var accessToken =
       response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
       print(accessToken);
@@ -615,7 +617,7 @@ class _UntakenTab extends StatefulWidget {
 
 class _UntakenTabState extends State<_UntakenTab> {
   final String invenTakeYnUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTYxNTAsIm1lbWJlcklkIjozMDIsInVzZXJuYW1lIjoidGVzdCJ9.XNi3UkBGSzOw1DgVpDd8pk_OcmexPluy4NMGJ8jdr73ffZuipDDwyGWDMRyWjR6XsU0JWvy8B8H2cU8c28mibg";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
 
   putInvenTakeYn() async {
     print("재고 섭취/미섭취 요청");
@@ -630,7 +632,7 @@ class _UntakenTabState extends State<_UntakenTab> {
 
     if (response.statusCode == 200) {
       print("재고 섭취/미섭취 요청 수신 성공");
-      print(response);
+      print(response.body);
       var accessToken =
       response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
       print(accessToken);
@@ -895,7 +897,7 @@ class _UntakenTabState extends State<_UntakenTab> {
                               onPressed: (){
                                 putInvenTakeYn();
                               },
-                              child: Text("복용중단", style: TextStyle(color: Colors.redAccent),)
+                              child: Text("복용시작", style: TextStyle(color: Colors.redAccent),)
                           ),
                         ],
                       ),

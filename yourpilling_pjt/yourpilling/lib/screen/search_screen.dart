@@ -540,11 +540,12 @@ Future<void> searchName(url,pillName) async {
   var response = await http.get(Uri.parse('${url}?pillName=비타민'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3ODI2NjIsIm1lbWJlcklkIjo0NTgsInVzZXJuYW1lIjoicXFxcXEifQ.ysPdZwS5kQC12AyCcUOEegk3g2EM7YCFgUFuuNZFTiY4rhH6nCs454r_jBcBSs-Wb2X-3nuZ7twWkSlSv-Zi0g",
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",
       });
 
   if (response.statusCode == 200) {
     print('검색 통신성공');
+    print(response.body);
   } else {
     print(response.body);
     throw http.ClientException(

@@ -107,7 +107,7 @@ class _RecordScreenState extends State<RecordScreen> {
   final String url = "http://10.0.2.2:8080/api/v1/pill/history/monthly";
 
   // 일단 토큰 여기에 저장
-  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NzE1OTEsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.5q4m1xXSyEhyww84SVKNPTNfv7pyXGm4ehSJR9ab9ZdFph0npBNu-7aIrucg-U_U13hjdjktgD43W0D_ghHL1Q";
+  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
 
 
   // 데이터 서버에서 받자
