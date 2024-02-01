@@ -22,19 +22,24 @@ class _SignupScreenState extends State<SignupScreen> {
     var url = "http://10.0.2.2:8080/api/v1/register";
 
     signUp() async {
-      var response = await http.post(Uri.parse(url), headers: {
-          'Content-Type' : 'application/json',
+      try {
+        var response = await http.post(Uri.parse(url), headers: {
+          'Content-Type': 'application/json',
         }
-      ,body: json.encode({
-            'name' : name,
-            'email' : email,
-            'password' : password,
-          }));
-      print(response);
+            , body: json.encode({
+              'name': name,
+              'email': email,
+              'password': password,
+            }));
+        print(response);
 
-      if (response.statusCode == 200) {
-        print("회원가입 성공");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        if (response.statusCode == 200) {
+          print("회원가입 성공");
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        }
+      } catch (error) {
+        print(error);
       }
     }
 

@@ -24,21 +24,27 @@ class _LoginScreenState extends State<LoginScreen> {
     String url = "http://10.0.2.2:8080/api/v1/login";
 
     login() async {
-      print("로그인 요청");
-      var response = await http.post(Uri.parse(url), headers: {
-        'Content-Type' : 'application/json',
-      }
-          ,body: json.encode({
-            'email' : email,
-            'password' : password,
-          }));
+      try {
+        print("로그인 요청");
+        var response = await http.post(Uri.parse(url), headers: {
+          'Content-Type': 'application/json',
+        }
+            , body: json.encode({
+              'email': email,
+              'password': password,
+            }));
 
 
-      if (response.statusCode == 200) {
-        print("로그인 성공");
-        var accessToken = response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
-        print(accessToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => MainPageChild()));
+        if (response.statusCode == 200) {
+          print("로그인 성공");
+          var accessToken = response
+              .headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+          print(accessToken);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MainPageChild()));
+        }
+      } catch(error) {
+        print(error);
       }
     }
 

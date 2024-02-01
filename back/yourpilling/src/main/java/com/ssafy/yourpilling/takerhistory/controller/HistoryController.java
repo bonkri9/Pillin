@@ -9,14 +9,13 @@ import com.ssafy.yourpilling.takerhistory.model.service.vo.out.wrapper.OutDailyH
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/history")
+@RequestMapping("/api/v1/pill/history")
 public class HistoryController {
 
     private final TakerHistoryService takerHistoryService;
@@ -24,8 +23,9 @@ public class HistoryController {
 
     @GetMapping("/daily")
     ResponseEntity<OutDailyHistoryVos> dailyList(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                 @RequestBody RequestDailyHistoryDto requestDailyHistoryDto){
-        DailyHistoryVo dailyHistoryVo = mapper.mapToMemberRegisterVo(requestDailyHistoryDto, principalDetails.getMember().getMemberId());
+                                                 @RequestParam(name = "year") Integer year, @RequestParam(name="month") Integer month, @RequestParam(name="day") Integer day){
+        LocalDate date = LocalDate.of(year, month, day);
+        DailyHistoryVo dailyHistoryVo = mapper.mapToMemberRegisterVo(date, principalDetails.getMember().getMemberId());
         OutDailyHistoryVos data = takerHistoryService.findByTakeAtAndMemberId(dailyHistoryVo);
         return ResponseEntity.ok(data);
     }

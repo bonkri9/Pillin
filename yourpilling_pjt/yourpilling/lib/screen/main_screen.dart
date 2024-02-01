@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'search_screen.dart';
@@ -104,32 +105,56 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     getWeeklyData();
+    getDailyData();
   }
 
   // 일단 토큰 여기에 저장
-  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NjAwNDEsIm1lbWJlcklkIjo1MywidXNlcm5hbWUiOiJoYWhhaGEifQ.o9WbU7b2sr7nqUC64kXGGl0GICzcDzDLQqZ_MgtjhawDUe2mQAi_EfDnsHQctJZmxcWn_XfEalGyeJTmH0erow";
+  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NjkxNzIsIm1lbWJlcklkIjo1MywidXNlcm5hbWUiOiJoYWhhaGEifQ.dP11FOa0f3l3fFF3TtuYXgOspQfEwPmvqrayoGq2kIEwl-fP4b09IP9u4sPrI4hsOzv-3o7FfpwHhSYfezSDig";
 
-  final String url = 'http://10.0.2.2:8080/api/v1/pill/history/weekly';
 
-  // 주간 데이터 복용 기록 데이터 가져오기
+
+  // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
   getWeeklyData() async {
-    var response = await http.get(Uri.parse(url), headers: {
-      'Content-Type' : 'application/json',
-      'accessToken' : accessToken,
-    });
+    const String weeklyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/weekly';
 
-    if (response.statusCode == 200) {
-      print("주간 복용 기록 수신 성공");
-      print(response);
-    } else {
-      print(response.body);
-      print("주간 복용 기록 요청 실패");
+    try {
+      var response = await http.get(Uri.parse(weeklyUrl), headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      });
+
+      if (response.statusCode == 200) {
+        print("주간 복용 기록 수신 성공");
+        print(response);
+      } else {
+        print(response.body);
+        print("주간 복용 기록 조회 실패");
+      }
+    } catch (error) {
+      print(error);
     }
   }
 
   // 일간 복용 기록(status Bar) 부분 조회
   getDailyData() async {
+    DateTime now = DateTime.now();
+    String dailyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/daily'; // url
 
+    try {
+      var response = await http.get(Uri.parse('$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}'), headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      });
+
+      if (response.statusCode == 200) {
+        print("일간 복용 기록 수신 성공");
+      } else {
+        print("일간 복용 기록 조회 실패");
+        print(response.body);
+      }
+    } catch (error) {
+      print(error);
+    }
   }
 
 
