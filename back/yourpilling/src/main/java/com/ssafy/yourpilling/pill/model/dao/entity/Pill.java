@@ -28,7 +28,7 @@ public class Pill {
     private String manufacturer;
 
     @Column(name = "expiration_at")
-    private LocalDate expirationAt;
+    private String expirationAt;
 
     @Column(name = "usage_instructions")
     private String usageInstructions;
@@ -74,4 +74,13 @@ public class Pill {
     private List<PillCategory> pillCategories;
 
 
+    public void setNutritions(List<Nutrition> nutritions){
+        this.nutritions = nutritions;
+
+        if(nutritions == null) return;
+
+        for (Nutrition nutrition : nutritions) {
+            nutrition.setPill(this);
+        }
+    }
 }

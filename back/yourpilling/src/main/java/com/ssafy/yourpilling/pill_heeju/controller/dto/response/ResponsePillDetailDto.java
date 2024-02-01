@@ -10,7 +10,7 @@ import java.util.List;
 public class ResponsePillDetailDto {
     private String pillName;
     private String manufacturer;
-    private LocalDate expirationAt;
+    private String expirationAt;
     private String usageInstructions;
     private String primaryFunctionality;
     private String precautions;

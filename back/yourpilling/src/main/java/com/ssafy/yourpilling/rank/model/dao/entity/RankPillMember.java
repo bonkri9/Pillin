@@ -1,8 +1,11 @@
-package com.ssafy.yourpilling.pill.model.dao.entity;
+package com.ssafy.yourpilling.rank.model.dao.entity;
 
+import com.ssafy.yourpilling.common.Gender;
+import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -11,7 +14,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class PillMember {
+@ToString
+public class RankPillMember {
 
     @Id
     @Column(name = "member_id")
@@ -19,17 +23,12 @@ public class PillMember {
     private Long memberId;
 
     @Column
-    private String username;
+    private LocalDate birth;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<OwnPill> ownPills;
-
-    public void addOwnPill(OwnPill ownPill){
-        this.ownPills.add(ownPill);
-
-        if(ownPill.getMember() == null){
-            ownPill.setMember(this);
-        }
-    }
+    private List<RankOwnPill> ownPills;
 }

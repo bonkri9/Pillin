@@ -40,4 +40,8 @@ public class Nutrition {
     @ManyToOne
     @JoinColumn(name = "pill_id")
     private Pill pill;
+
+    public void setPill(Pill pill){
+        this.pill = pill;
+    }
 }
