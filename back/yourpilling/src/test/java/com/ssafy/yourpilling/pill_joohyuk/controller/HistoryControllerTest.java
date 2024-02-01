@@ -115,23 +115,23 @@ class HistoryControllerTest {
         TakerHistoryTakerHistory history2 = defaultRegisterTakerHistory(two);
         TakerHistoryTakerHistory history3 = defaultRegisterTakerHistory(three);
 
-        // 날짜
-        LocalDate date = LocalDate.now();
-
-        JSONObject requestJSON = new JSONObject();
-        requestJSON.put("date", date);
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonth().getValue();
+        int day = LocalDate.now().getDayOfMonth();
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get("/api/v1/history/daily")
+                .get(String.format("/api/v1/pill/history/daily?year=%d&month=%d&day=%d", year, month, day))
                 .header("accessToken", accessToken)
-                .content(requestJSON.toString())
                 .contentType(MediaType.APPLICATION_JSON);
 
         // when : 동작이 되고
         ResultActions perform = mockMvc.perform(request);
 
         // then : 결과가 어떤가
-        perform.andExpect(status().isOk());
+        String contentAsString = perform.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        System.out.println("-----------");
+        System.out.println(contentAsString);
 
         JSONObject responseJSON = new JSONObject(perform.andReturn().getResponse().getContentAsString());
 
@@ -224,6 +224,4 @@ class HistoryControllerTest {
         }
         return pill;
     }
-
-
 }
