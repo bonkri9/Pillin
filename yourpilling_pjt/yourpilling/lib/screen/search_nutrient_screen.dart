@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import '../component/base_container.dart';
+import 'package:http/http.dart' as http;
 
 class SearchNutrientScreen extends StatefulWidget {
 
@@ -157,6 +160,7 @@ class _MiddleTab extends StatelessWidget {
               height: 50,
               child: TextButton(
                 onPressed: () {
+                  searchNutrient();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -169,5 +173,25 @@ class _MiddleTab extends StatelessWidget {
         }).toList(),
       ),
     );
+  }
+}
+
+
+// 통신추가
+Future<void> searchNutrient() async {
+  // 반환 타입을 'Future<void>'로 변경합니다
+  print("영양소 검색 요청");
+  var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=루테인'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken' : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3ODI2NjIsIm1lbWJlcklkIjo0NTgsInVzZXJuYW1lIjoicXFxcXEifQ.ysPdZwS5kQC12AyCcUOEegk3g2EM7YCFgUFuuNZFTiY4rhH6nCs454r_jBcBSs-Wb2X-3nuZ7twWkSlSv-Zi0g",
+      } );
+
+  if (response.statusCode == 200) {
+    print('영양소 통신성공');
+  } else {
+    print(response.body);
+    throw http.ClientException(
+        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
   }
 }

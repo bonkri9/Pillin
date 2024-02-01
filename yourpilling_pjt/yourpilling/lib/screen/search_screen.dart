@@ -536,10 +536,10 @@ class _SearchRanking extends StatelessWidget {
 Future<void> searchName(url,pillName) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("이름검색 요청");
-  var response = await http.get(Uri.parse('${url}?pillName=${pillName}'),
+  var response = await http.get(Uri.parse('${url}?pillName=비타민'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NzE1OTEsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.5q4m1xXSyEhyww84SVKNPTNfv7pyXGm4ehSJR9ab9ZdFph0npBNu-7aIrucg-U_U13hjdjktgD43W0D_ghHL1Q",
+        'accessToken' : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3ODI2NjIsIm1lbWJlcklkIjo0NTgsInVzZXJuYW1lIjoicXFxcXEifQ.ysPdZwS5kQC12AyCcUOEegk3g2EM7YCFgUFuuNZFTiY4rhH6nCs454r_jBcBSs-Wb2X-3nuZ7twWkSlSv-Zi0g",
       });
 
   if (response.statusCode == 200) {
