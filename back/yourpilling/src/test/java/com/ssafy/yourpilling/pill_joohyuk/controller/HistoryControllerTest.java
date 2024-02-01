@@ -128,7 +128,10 @@ class HistoryControllerTest {
         ResultActions perform = mockMvc.perform(request);
 
         // then : 결과가 어떤가
-        perform.andExpect(status().isOk());
+        String contentAsString = perform.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        System.out.println("-----------");
+        System.out.println(contentAsString);
 
         JSONObject responseJSON = new JSONObject(perform.andReturn().getResponse().getContentAsString());
 
