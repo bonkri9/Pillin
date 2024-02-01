@@ -97,12 +97,5 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     private void updateValues(OwnPillUpdateVo vo, OwnPill ownPill) {
         ownPill.setRemains(vo.getRemains());
         ownPill.setTotalCount(vo.getTotalCount());
-        ownPill.setTakeCount(vo.getTakeCount());
-        ownPill.setTakeOnceAmount(vo.getTakeOnceAmount());
-        ownPill.setTakeYN(vo.getTakeYn());
-        ownPill.setStartAt(vo.getStartAt());
-        ownPill.setTakeWeekdays(vo.getTakeYn() ? TakeWeekday.toValue(vo.getTakeWeekdays()) : null);
     }
-
-
 }

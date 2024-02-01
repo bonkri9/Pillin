@@ -56,13 +56,12 @@ public class OwnPillServiceMapper {
         return OwnPill
                 .builder()
                 .remains(value.getAdjustRemain())
-                .takeCount(value.getVo().getTakeCount())
-                .totalCount(value.getVo().getTotalCount())
+                .takeCount(value.getTakeCount())
+                .totalCount(value.getTotalCount())
                 .takeWeekdays(value.getTakeWeekDaysValue())
                 .takeOnceAmount(value.getTakeOnceAmount())
                 .isAlarm(value.isAlarm())
                 .takeYN(value.isAdjustIsTaken())
-                .startAt(value.getVo().getStartAt())
                 .createdAt(value.getCreateAt())
                 .member(value.getMember())
                 .pill(value.getPill())
@@ -96,6 +95,7 @@ public class OwnPillServiceMapper {
         return ResponsePillInventoryItem
                 .builder()
                 .ownPillId(ownPill.getOwnPillId())
+                .pillName(ownPill.getPill().getName())
                 .imageUrl(imageUrl)
                 .totalCount(ownPill.getTotalCount())
                 .remains(ownPill.getRemains())

@@ -21,13 +21,10 @@ public class OwnPillControllerMapper {
                 .builder()
                 .pillId(dto.getPillId())
                 .memberId(memberId)
-                .startAt(dto.getStartAt())
                 .takeYn(dto.getTakeYn())
                 .remains(dto.getRemains())
                 .totalCount(dto.getTotalCount())
                 .takeWeekdays(dto.getTakeWeekdays())
-                .takeCount(dto.getTakeCount())
-                .takeOnceAmount(dto.getTakeOnceAmount())
                 .build();
     }
 
@@ -37,11 +34,6 @@ public class OwnPillControllerMapper {
                 .ownPillId(dto.getOwnPillId())
                 .remains(dto.getRemains())
                 .totalCount(dto.getTotalCount())
-                .takeWeekdays(dto.getTakeWeekdays())
-                .takeCount(dto.getTakeCount())
-                .takeOnceAmount(dto.getTakeOnceAmount())
-                .takeYn(dto.getTakeYn())
-                .startAt(dto.getStartAt())
                 .build();
     }
 
