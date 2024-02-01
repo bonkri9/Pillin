@@ -5,6 +5,8 @@ import 'package:yourpilling/screen/search_health_screen.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import 'package:yourpilling/screen/search_nutrient_screen.dart';
 import 'package:yourpilling/component/base_container.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -59,17 +61,11 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30, ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 30,
+      ),
       child: Row(
         children: [
-          // IconButton(
-          //   icon: Icon(Icons.arrow_back_ios_new_rounded,
-          //       color: Colors.black),
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
-          // TextField 위젯을 추가합니다.
           Expanded(
             child: TextField(
               controller: myController,
@@ -80,12 +76,32 @@ class _SearchBar extends StatelessWidget {
             ),
           ),
           IconButton(
-              icon: Icon(Icons.search, color: Color(0xFFFF6666),size: 34,),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
+              icon: Icon(
+                Icons.search,
+                color: Color(0xFFFF6666),
+                size: 34,
+              ),
+              onPressed: () async {
+                // 통신추가 - 희태
+
+                String url = "http://10.0.2.2:8080/api/v1/pill/search";
+                try {
+                  await searchName(url, '비타민');
+                  print('통신성공');
+                  // 절취선 이부분만 살리면 이전과 동일
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SearchListScreen(
+                                myControllerValue: myController.text,
+                              )));
+                  // 절취선 종료
+                }catch(error){
+                  print(error);
+                }
+
+                // 통신끝 - 희태
               }),
         ],
       ),
@@ -100,7 +116,7 @@ class _MiddleTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 15, 8,0),
+      padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
       child: Container(
         child: Row(
           children: [
@@ -122,7 +138,8 @@ class _MiddleTap extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("영양소 검색",
-                        style: TextStyle(color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
+                        style: TextStyle(
+                            color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
                   ],
                 ),
               ),
@@ -144,7 +161,8 @@ class _MiddleTap extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("건강 검색",
-                        style: TextStyle(color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
+                        style: TextStyle(
+                            color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
                   ],
                 ),
               ),
@@ -270,9 +288,9 @@ class _AgeTabState extends State<_AgeTab> {
           ),
           _showText
               ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
+              child: _SearchRanking(
+                title: '${_index}',
+              ))
               : Expanded(child: Text('선택')),
         ],
       ),
@@ -344,9 +362,9 @@ class _NutrientTabState extends State<_NutrientTab> {
           ),
           _showText
               ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
+              child: _SearchRanking(
+                title: '${_index}',
+              ))
               : Expanded(child: Text('선택2')),
         ],
       ),
@@ -415,9 +433,9 @@ class _HealthTabState extends State<_HealthTab> {
           ),
           _showText
               ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
+              child: _SearchRanking(
+                title: '${_index}',
+              ))
               : Expanded(child: Text('선택3')),
         ],
       ),
@@ -511,5 +529,24 @@ class _SearchRanking extends StatelessWidget {
             );
           }),
     );
+  }
+}
+
+// 통신추가
+Future<void> searchName(url,pillName) async {
+  // 반환 타입을 'Future<void>'로 변경합니다
+  print("이름검색 요청");
+  var response = await http.get(Uri.parse('${url}?pillName=${pillName}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken' : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NzE1OTEsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.5q4m1xXSyEhyww84SVKNPTNfv7pyXGm4ehSJR9ab9ZdFph0npBNu-7aIrucg-U_U13hjdjktgD43W0D_ghHL1Q",
+      });
+
+  if (response.statusCode == 200) {
+    print('검색 통신성공');
+  } else {
+    print(response.body);
+    throw http.ClientException(
+        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
   }
 }

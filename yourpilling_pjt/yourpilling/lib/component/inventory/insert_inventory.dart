@@ -3,6 +3,8 @@ import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/component/inventory/inventory_screen.dart';
 import 'package:input_quantity/input_quantity.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 var insertInvenInfo = [
   {
@@ -54,7 +56,15 @@ const List<Widget> days = <Widget>[
   Text('일'),
 ];
 
-final List<bool> _selectedDays = <bool>[false, true, false, true, false, true, false];
+final List<bool> _selectedDays = <bool>[
+  false,
+  true,
+  false,
+  true,
+  false,
+  true,
+  false
+];
 
 bool _takeYnChecked = false;
 
@@ -68,6 +78,46 @@ class InsertInventory extends StatefulWidget {
 class _InsertInventoryState extends State<InsertInventory> {
   @override
   Widget build(BuildContext context) {
+    // 영양제 등록 때 보낼 데이터 변수명
+    var pillId;
+    var takeYn;
+    var remains;
+    var totalCount;
+    var takeCount;
+    var takeOnceAmount;
+
+    String accessToken =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NzE1OTEsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.5q4m1xXSyEhyww84SVKNPTNfv7pyXGm4ehSJR9ab9ZdFph0npBNu-7aIrucg-U_U13hjdjktgD43W0D_ghHL1Q";
+
+    registPill() async {
+      String url = 'http://10.0.2.2:8080/api/v1/pill/inventory';
+
+      try {
+        var response = await http.post(Uri.parse(url), headers: {
+          'Content-Type': 'application/json',
+          'acceessToken': accessToken,
+        }, body: {
+          json.encode({
+            pillId: pillId,
+            takeYn: takeYn,
+            remains: remains,
+            totalCount: totalCount,
+            takeCount: takeCount,
+            takeOnceAmount: takeOnceAmount,
+          })
+        });
+
+        if (response.statusCode == 200) {
+          print("재고 등록 요청 성공");
+          print(response.body);
+        }
+
+        // 재고 등록 로직 구현하면 됨 (setState 이용)
+      } catch (error) {
+        print(error);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: BACKGROUND_COLOR,
@@ -97,38 +147,47 @@ class _InsertInventoryState extends State<InsertInventory> {
       bottomNavigationBar: BottomAppBar(
         color: BACKGROUND_COLOR,
         child: ElevatedButton(
-          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
-          child: Text('등록', style: TextStyle(color: Colors.white),),
-          onPressed: (){
+          style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
+          child: Text(
+            '등록',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
             // Navigator.push(context,
             //    MaterialPageRoute(builder: (context)=>Inventory()) );
             showModalBottomSheet<void>(
                 context: context,
-                builder: (BuildContext context){
+                builder: (BuildContext context) {
                   return Container(
                     width: 450,
                     height: 200,
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                          // mainAxisSize: MainAxisSize.,
-                          children: [
-                            // const Text('modal bottomsheet'),
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(Colors.redAccent)),
-                                // onPressed: () => Navigator.pop(context),
-                                onPressed: () => Navigator.push(context,
-                                   MaterialPageRoute(builder: (context)=>Inventory()) ),
-                                child: const Text('등록완료!', style: TextStyle(color: Colors.white),)),
-                          ],
-                      ),
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // mainAxisSize: MainAxisSize.,
+                      children: [
+                        // const Text('modal bottomsheet'),
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.redAccent)),
+                            // onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Inventory())),
+                            child: const Text(
+                              '등록완료!',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ],
+                    ),
                   );
                 });
           },
         ),
       ),
-
     );
   }
 }
@@ -143,6 +202,7 @@ class _InsertInvenUpper extends StatefulWidget {
 class _InsertInvenUpperState extends State<_InsertInvenUpper> {
   @override
   Widget build(BuildContext context) {
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -152,10 +212,6 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
         ),
         Row(
           children: [
-            Text(
-              '섭취 중',
-              style: TextStyle(fontSize: 18),
-            ),
             // Switch(
             //     value: _takeYnChecked,
             //     activeColor: Color(0xFFFF6666),
@@ -199,6 +255,10 @@ class _InsertInvenContent extends StatefulWidget {
 class _InsertInvenContentState extends State<_InsertInvenContent> {
   @override
   Widget build(BuildContext context) {
+
+    int curPillCount;
+    int totalPillCount;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -226,26 +286,26 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('제품명 : ',style: TextStyle(fontSize: 20)),
+                      Text('제품명 : ', style: TextStyle(fontSize: 20)),
                       Flexible(
                           child: RichText(
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            strutStyle: StrutStyle(fontSize: 10),
-                            text: TextSpan(
-                              text: '${pillDetailInfo[0]['pillName']}',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          )),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        strutStyle: StrutStyle(fontSize: 10),
+                        text: TextSpan(
+                          text: '${pillDetailInfo[0]['pillName']}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      )),
                     ],
                   ),
                 ),
                 Container(
-                  height: 50,
+                    height: 50,
                     child: Row(
                       children: [
                         Text('총 알약 수 : '),
@@ -262,11 +322,16 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                               initVal: 1,
                               steps: 1,
                               minVal: 0,
-                              validator: (value){
-                                if(value == null) return "입력이 필요합니다.";
-                                if(value < 0){
+                              onQtyChanged: (value) {
+                                setState(() {
+                                  totalPillCount = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) return "입력이 필요합니다.";
+                                if (value < 0) {
                                   return "";
-                                }else if(value>500){
+                                } else if (value > 500) {
                                   return "입력값 초과";
                                 }
                                 return null;
@@ -275,19 +340,15 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                               decoration: QtyDecorationProps(
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
-                                minusBtn: Icon(
-                                  Icons.remove_circle_outline_rounded
-                                ),
-                                plusBtn: Icon(
-                                  Icons.add_circle_outline_rounded
-                                ),
+                                minusBtn:
+                                    Icon(Icons.remove_circle_outline_rounded),
+                                plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
                           ],
                         ),
                       ],
-                    )
-                ),
+                    )),
                 Container(
                     height: 50,
                     child: Row(
@@ -306,32 +367,33 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                               initVal: 1,
                               steps: 1,
                               minVal: 0,
-                              validator: (value){
-                                if(value == null) return "입력이 필요합니다.";
-                                if(value < 0){
+                              validator: (value) {
+                                if (value == null) return "입력이 필요합니다.";
+                                if (value < 0) {
                                   return "";
-                                }else if(value>500){
+                                } else if (value > 500) {
                                   return "입력값 초과";
                                 }
                                 return null;
+                              },
+                              onQtyChanged: (value) {
+                                setState(() {
+                                  curPillCount = value;
+                                });
                               },
                               // qtyFormProps: QtyFormProps(enableTyping: false),
                               decoration: QtyDecorationProps(
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
-                                minusBtn: Icon(
-                                    Icons.remove_circle_outline_rounded
-                                ),
-                                plusBtn: Icon(
-                                    Icons.add_circle_outline_rounded
-                                ),
+                                minusBtn:
+                                    Icon(Icons.remove_circle_outline_rounded),
+                                plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
                           ],
                         )
                       ],
-                    )
-                ),
+                    )),
                 // Container(
                 //     child: Row(
                 //       children: [
@@ -361,22 +423,20 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                 // ),
                 Container(
                     child: Row(
-                      children: [
-                        Text('일일 복용 횟수 : '),
-                        Text('${insertInvenInfo[0]['takeCount']}'),
-                        Text('회(변경 불가능)'),
-                      ],
-                    )
-                ),
+                  children: [
+                    Text('일일 복용 횟수 : '),
+                    Text('${insertInvenInfo[0]['takeCount']}'),
+                    Text('회(변경 불가능)'),
+                  ],
+                )),
                 Container(
                     child: Row(
-                      children: [
-                        Text('1회 복용량 : '),
-                        Text('${insertInvenInfo[0]['takeOnceAmount']}'),
-                        Text('정(변경 불가능)'),
-                      ],
-                    )
-                ),
+                  children: [
+                    Text('1회 복용량 : '),
+                    Text('${insertInvenInfo[0]['takeOnceAmount']}'),
+                    Text('정(변경 불가능)'),
+                  ],
+                )),
               ],
             ),
           ),

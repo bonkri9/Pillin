@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/const/colors.dart';
-
 import '../inventory/insert_inventory.dart';
-
 
 var pillDetailInfo = [
   {
@@ -82,6 +80,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
   @override
   Widget build(BuildContext context) {
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
+
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: RefreshIndicator(
