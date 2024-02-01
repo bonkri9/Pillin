@@ -77,6 +77,7 @@ class InsertInventory extends StatefulWidget {
 }
 
 class _InsertInventoryState extends State<InsertInventory> {
+
   var pillId;
   var takeYn;
   var remains;
@@ -123,6 +124,7 @@ class _InsertInventoryState extends State<InsertInventory> {
               'takeOnceAmount': 1,
               "takeWeekdays": ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
             }));
+
 
         print(response.statusCode);
         if (response.statusCode == 200) {
@@ -197,10 +199,12 @@ class _InsertInventoryState extends State<InsertInventory> {
                                 backgroundColor: MaterialStateProperty.all(
                                     Colors.redAccent)),
                             // onPressed: () => Navigator.pop(context),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Inventory())),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Inventory()));
+                            },
                             child: const Text(
                               '등록완료!',
                               style: TextStyle(color: Colors.white),
@@ -285,6 +289,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),

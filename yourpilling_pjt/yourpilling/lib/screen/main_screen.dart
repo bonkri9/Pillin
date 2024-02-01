@@ -40,12 +40,13 @@ List<Event> taken30 = [
       actualTakenCount: 1,
       needToTakeTotalCount: 1,
       takeYn: true),
+  Event(name: "홍삼", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
   Event(
-      name: "홍삼", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
-  Event(
-      name: "미에로 화이바", actualTakenCount: 4, needToTakeTotalCount: 4, takeYn: true),
+      name: "미에로 화이바",
+      actualTakenCount: 4,
+      needToTakeTotalCount: 4,
+      takeYn: true),
 ];
-
 
 // 1월 29일에 먹은 영양제 목록
 List<Event> taken29 = [
@@ -88,19 +89,19 @@ class Event {
 
   Event(
       {required this.name,
-        required this.actualTakenCount,
-        required this.needToTakeTotalCount,
-        required this.takeYn});
+      required this.actualTakenCount,
+      required this.needToTakeTotalCount,
+      required this.takeYn});
 }
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
+
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -109,7 +110,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // 일단 토큰 여기에 저장
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk2NzksIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.DT01XONbfPqBKctpgEIwUUvybT1MQp9zrkNkQXwJbPk9uEhWKnjJB-K44cg678Mhga5mBx19ExdekYS3GXuZHA";
+  String accessToken =
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
   // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
   getWeeklyData() async {
@@ -139,10 +141,13 @@ class _MainScreenState extends State<MainScreen> {
     String dailyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/daily'; // url
 
     try {
-      var response = await http.get(Uri.parse('$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}'), headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      });
+      var response = await http.get(
+          Uri.parse(
+              '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}'),
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': accessToken,
+          });
 
       if (response.statusCode == 200) {
         print("일간 복용 기록 수신 성공");
@@ -154,7 +159,6 @@ class _MainScreenState extends State<MainScreen> {
       print(error);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -266,6 +270,7 @@ class _WeekState extends State<_Week> {
   Color underFiftyColor = Colors.redAccent.withOpacity(0.65);
   Color fiftyColor = Colors.yellow;
   double dayGauge = 0;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -306,80 +311,86 @@ class _WeekState extends State<_Week> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: TableCalendar(
-                calendarFormat: CalendarFormat.week,
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                availableCalendarFormats: const {
-                  CalendarFormat.week: 'Week',
-                },
-                focusedDay: DateTime(2024, 1, 31),
-                firstDay: DateTime(2024, 1, 1),
-                lastDay: DateTime(2024, 12, 31),
-                headerVisible: false,
-                locale: 'ko-KR',
-                daysOfWeekStyle: DaysOfWeekStyle(
-                    weekendStyle: TextStyle(
-                      color: Color(0xFFD0D0D0),
-                      fontSize: 13,
+                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                child: TableCalendar(
+                  calendarFormat: CalendarFormat.week,
+                  startingDayOfWeek: StartingDayOfWeek.monday,
+                  availableCalendarFormats: const {
+                    CalendarFormat.week: 'Week',
+                  },
+                  focusedDay: DateTime(2024, 1, 31),
+                  firstDay: DateTime(2024, 1, 1),
+                  lastDay: DateTime(2024, 12, 31),
+                  headerVisible: false,
+                  locale: 'ko-KR',
+                  daysOfWeekStyle: DaysOfWeekStyle(
+                      weekendStyle: TextStyle(
+                        color: Color(0xFFD0D0D0),
+                        fontSize: 13,
+                      ),
+                      weekdayStyle: TextStyle(
+                        color: Color(0xFFD0D0D0),
+                        fontSize: 13,
+                      )),
+                  calendarStyle: CalendarStyle(
+                    outsideDaysVisible: false,
+                    todayTextStyle:
+                        TextStyle(color: Colors.red.withOpacity(0.8)),
+                    weekendTextStyle: TextStyle(color: Colors.grey),
+                    defaultTextStyle: TextStyle(color: Colors.grey),
+                    todayDecoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                      // color: Colors.red.withOpacity(0.1),
                     ),
-                    weekdayStyle: TextStyle(
-                      color: Color(0xFFD0D0D0),
-                      fontSize: 13,
-                    )),
-                calendarStyle: CalendarStyle(
-                  outsideDaysVisible: false,
-                  todayTextStyle: TextStyle(color: Colors.red.withOpacity(0.8)),
-                  weekendTextStyle: TextStyle(color: Colors.grey),
-                  defaultTextStyle: TextStyle(color: Colors.grey),
-                  todayDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                    // color: Colors.red.withOpacity(0.1),
+                    defaultDecoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                    ),
+                    weekendDecoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                    ),
+                    markersMaxCount: 1,
                   ),
-                  defaultDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                  ),
-                  weekendDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                  ),
-                  markersMaxCount: 1,
-                ),
+                  calendarBuilders:
+                      CalendarBuilders(markerBuilder: (context, date, events) {
+                    int tmpTakenCnt = 0;
+                    List<Event>? tmp =
+                        pillSource[DateTime(date.year, date.month, date.day)];
+                    if (tmp == null || tmp.isEmpty) {
+                      dayGauge = 0;
+                    } else {
+                      for (int i = 0; i < tmp.length; i++) {
+                        if (tmp[i].takeYn == true) tmpTakenCnt++;
+                      }
 
-                calendarBuilders:
-                CalendarBuilders(markerBuilder: (context, date, events) {
-                  int tmpTakenCnt = 0;
-                  List<Event>? tmp = pillSource[DateTime(date.year, date.month, date.day)];
-                  if (tmp == null || tmp.isEmpty) {
-                    dayGauge = 0;
-                  } else {
-                    for (int i = 0; i < tmp.length; i++) {
-                      if (tmp[i].takeYn == true) tmpTakenCnt++;
+                      dayGauge = (tmpTakenCnt / tmp.length);
                     }
 
-                    dayGauge = (tmpTakenCnt / tmp.length);
-                  }
-
-                  return Positioned(
-                    bottom: 5,
-                    child: SizedBox(
-                      width: 40,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 1),
-                        child: CircleProgressBar(
-                          strokeWidth: 2.6,
-                          foregroundColor: dayGauge == 1 ? fullColor : dayGauge > 0.5 ? overFiftyColor : dayGauge == 0.5 ? fiftyColor : underFiftyColor,
-                          backgroundColor: BASIC_GREY.withOpacity(0.2),
-                          value: dayGauge, // dayGauge
+                    return Positioned(
+                      bottom: 5,
+                      child: SizedBox(
+                        width: 40,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 1),
+                          child: CircleProgressBar(
+                            strokeWidth: 2.6,
+                            foregroundColor: dayGauge == 1
+                                ? fullColor
+                                : dayGauge > 0.5
+                                    ? overFiftyColor
+                                    : dayGauge == 0.5
+                                        ? fiftyColor
+                                        : underFiftyColor,
+                            backgroundColor: BASIC_GREY.withOpacity(0.2),
+                            value: dayGauge, // dayGauge
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
-              )
-            )
+                    );
+                  }),
+                ))
           ],
         ));
   }
@@ -427,31 +438,32 @@ class _TodayState extends State<_Today> {
   ];
 
   final String putPillTakeUrl = "http://10.0.2.2:8080/api/v1/pill/take";
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk2NzksIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.DT01XONbfPqBKctpgEIwUUvybT1MQp9zrkNkQXwJbPk9uEhWKnjJB-K44cg678Mhga5mBx19ExdekYS3GXuZHA";
+  String accessToken =
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
   putPillTake() async {
     print("영양제 복용 완료 요청");
 
-    var response = await http.put(
-      Uri.parse('$putPillTakeUrl?ownPillId=256'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      },
-    );
+    var response = await http.put(Uri.parse('$putPillTakeUrl'),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },
+        body: json.encode({
+          "ownPillId": 256,
+        }));
 
     if (response.statusCode == 200) {
       print("영양제 복용 완료 요청 수신 성공");
-      print(response);
+      print(response.body);
       var accessToken =
-      response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+          response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
       print(accessToken);
     } else {
       print(response.body);
       print("영양제 복용 완료 요청 수신 실패");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -32,7 +32,9 @@ class _InventoryState extends State<Inventory> {
   // var takeTrue;
   // var takeFalse;
 
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
+  String accessToken =
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
+
   /**
    * {
    *   "ownPillId": int,
@@ -44,22 +46,24 @@ class _InventoryState extends State<Inventory> {
    *   }
    */
 
-
   getInvenList() async {
     print("재고 목록 요청");
 
     DateTime now = DateTime.now();
     print('${now.year} 년 ${now.month}월');
 
-    const String invenListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+    const String invenListUrl =
+        "http://10.0.2.2:8080/api/v1/pill/inventory/list";
 
-    var response = await http.get(Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'), headers: {
-      'Content-Type' : 'application/json',
-      'accessToken': accessToken,
-    }, );
+    var response = await http.get(
+      Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      },
+    );
 
     String jsonData = response.body;
-
 
     if (response.statusCode == 200) {
       print("재고 목록 데이터 수신 성공");
@@ -69,8 +73,6 @@ class _InventoryState extends State<Inventory> {
       print("재고 목록 데이터 수신 실패");
     }
   }
-
-
 
   @override
   void initState() {
@@ -103,63 +105,63 @@ class _InventoryState extends State<Inventory> {
 //더미 데이터
 var takeTrue = [
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 3,
-    'predicateRunOutAt' : '2024-01-31',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 3,
+    'predicateRunOutAt': '2024-01-31',
   },
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 10,
-    'predicateRunOutAt' : '2024-01-12',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 10,
+    'predicateRunOutAt': '2024-01-12',
   },
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 50,
-    'predicateRunOutAt' : '2024-01-01',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 50,
+    'predicateRunOutAt': '2024-01-01',
   },
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 50,
-    'predicateRunOutAt' : '2024-01-01',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 50,
+    'predicateRunOutAt': '2024-01-01',
   },
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 50,
-    'predicateRunOutAt' : '2024-01-01',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 50,
+    'predicateRunOutAt': '2024-01-01',
   },
 ];
 
 var takeFalse = [
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 3,
-    'predicateRunOutAt' : '2024-01-31',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 3,
+    'predicateRunOutAt': '2024-01-31',
   },
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 10,
-    'predicateRunOutAt' : '2024-01-12',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 10,
+    'predicateRunOutAt': '2024-01-12',
   },
   {
-    'pillId' : '123',
-    'imageUrl' : '이미지 URL입니다',
-    'totalCount' : 60,
-    'remains' : 50,
-    'predicateRunOutAt' : '2024-01-01',
+    'pillId': '123',
+    'imageUrl': '이미지 URL입니다',
+    'totalCount': 60,
+    'remains': 50,
+    'predicateRunOutAt': '2024-01-01',
   },
 ];
 
@@ -234,19 +236,19 @@ class _InventoryContentState extends State<_InventoryContent> {
 
   @override
   Widget build(BuildContext context) {
-    String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDI3NjksIm1lbWJlcklkIjoyMTAzLCJ1c2VybmFtZSI6InEifQ.YN-wLSRWpj9AglYORSfRdBTl1hQCAojG_xPep6BULk2rsTgb3u0LPM7WWqL470362HfztFuwtg1WL6qR-dGNrA";
+    String accessToken =
+        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
-    getTotalNumber (number) {
+    getTotalNumber(number) {
       setState(() {
         totalCount = number.round();
       });
     }
 
-    getRestNumber (number) {
+    getRestNumber(number) {
       setState(() {
         remains = number.round();
       });
-
     }
 
     reviseInven() async {
@@ -255,30 +257,30 @@ class _InventoryContentState extends State<_InventoryContent> {
 
       const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
       print("재고 수정 요청");
-      var response = await http.put(Uri.parse(reviseUrl), headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      }, body: json.encode({
-          'ownPillId': 253,
-          'takeYn': true,
-          'remains': remains,
-          'totalCount': totalCount,
-          'takeCount': 1,
-          'takeOnceAmount': 1,
-          'takeWeekdays' : ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
-        })
-      );
+      var response = await http.put(Uri.parse(reviseUrl),
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': accessToken,
+          },
+          body: json.encode({
+            'ownPillId': 253,
+            'takeYn': true,
+            'remains': remains,
+            'totalCount': totalCount,
+            'takeCount': 1,
+            'takeOnceAmount': 1,
+            'takeWeekdays': ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+          }));
       // 바디 다시 보기
 
       if (response.statusCode == 200) {
-        print(response.body);
         print("재고 수정 성공!");
+        print(response.body);
       } else {
         print("재고 수정 요청 실패");
         print(response.body);
       }
     }
-
 
     return BaseContainer(
       width: 400,
@@ -302,7 +304,10 @@ class _InventoryContentState extends State<_InventoryContent> {
                 child: TabBarView(
               // TabBarView(
               children: [
-                _TakenTab(getTotalNumber: getTotalNumber, getRestNumber : getRestNumber, reviseInven: reviseInven),
+                _TakenTab(
+                    getTotalNumber: getTotalNumber,
+                    getRestNumber: getRestNumber,
+                    reviseInven: reviseInven),
                 _UntakenTab(),
               ],
             ))
@@ -324,7 +329,8 @@ class _InventoryContentState extends State<_InventoryContent> {
 
 //takeTrue
 class _TakenTab extends StatefulWidget {
-  _TakenTab({super.key, this.getTotalNumber, this.getRestNumber, this.reviseInven});
+  _TakenTab(
+      {super.key, this.getTotalNumber, this.getRestNumber, this.reviseInven});
 
   var getTotalNumber;
   var getRestNumber;
@@ -335,25 +341,30 @@ class _TakenTab extends StatefulWidget {
 }
 
 class _TakenTabState extends State<_TakenTab> {
-  final String invenTakeYnUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
+  final String invenTakeYnUrl =
+      "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+  String accessToken =
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
   putInvenTakeYn() async {
     print("재고 섭취/미섭취 요청");
 
     var response = await http.put(
-      Uri.parse('$invenTakeYnUrl?ownPillId=256'),
+      Uri.parse('$invenTakeYnUrl'),
       headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       },
+      body: json.encode({
+        "ownPillId": 256,
+      }),
     );
 
     if (response.statusCode == 200) {
       print("재고 섭취/미섭취 요청 수신 성공");
       print(response.body);
       var accessToken =
-      response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+          response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
       print(accessToken);
     } else {
       print(response.body);
@@ -475,8 +486,8 @@ class _TakenTabState extends State<_TakenTab> {
                               return null;
                             },
                             onQtyChanged: (value) {
-                                totalNumber = value.round();
-                                widget.getTotalNumber(totalNumber);
+                              totalNumber = value.round();
+                              widget.getTotalNumber(totalNumber);
                             },
                             // qtyFormProps: QtyFormProps(enableTyping: false),
                             decoration: QtyDecorationProps(
@@ -518,8 +529,8 @@ class _TakenTabState extends State<_TakenTab> {
                               return null;
                             },
                             onQtyChanged: (value) {
-                                restNumber = value.round();
-                                widget.getRestNumber(restNumber);
+                              restNumber = value.round();
+                              widget.getRestNumber(restNumber);
                             },
 
                             // qtyFormProps: QtyFormProps(enableTyping: false),
@@ -621,74 +632,70 @@ class _TakenTabState extends State<_TakenTab> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                          Row(
+                      Column(
+                        children: [
+                          Column(
                             children: [
                               // Text('복용중'),
                               TextButton(
-                                  onPressed: (){
+                                  onPressed: () {
                                     putInvenTakeYn();
                                   },
-                                  child: Text("복용중단", style: TextStyle(color: Colors.redAccent),)
+                                  child: Text(
+                                    "복용중단",
+                                    style: TextStyle(color: Colors.redAccent),
+                                  )),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${takeTrue[i]['remains']}/${takeTrue[i]['totalCount']}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      color: BASIC_BLACK,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  pillStatus(i, takeTrue),
+                                ],
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  textStyle: const TextStyle(fontSize: 10),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              InvenDetailScreen()));
+                                },
+                                child: const Text(
+                                  '상세 보기',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),
-
-                          GFToggle(
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _takeYnChecked = value ?? false;
-                              });
-                            },
-                            value: _takeYnChecked,
-                            enabledTrackColor: Colors.redAccent,
-                          ),
                         ],
-                      ),
-
-                      Row(
-                        children: [
-                          Text(
-                            "${takeTrue[i]['remains']}/${takeTrue[i]['totalCount']}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: BASIC_BLACK,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          pillStatus(i, takeTrue),
-                        ],
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          textStyle: const TextStyle(fontSize: 10),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => InvenDetailScreen()));
-                        },
-                        child: const Text(
-                          '상세 보기',
-                          style: TextStyle(color: Colors.grey),
-                        ),
                       ),
                     ],
                   ),
+                ],
               ),
             ),
-          );
+          ),
+        );
       },
     );
   }
 }
-
 
 class _UntakenTab extends StatefulWidget {
   const _UntakenTab({super.key});
@@ -698,25 +705,30 @@ class _UntakenTab extends StatefulWidget {
 }
 
 class _UntakenTabState extends State<_UntakenTab> {
-  final String invenTakeYnUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTk5ODQsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.Q91mswaPTILwOpfj2C1m-NZrL-qz0GwC7JbNWELLgCVkGJwiOZvy8uoCLwKbBEQSutJkqCnRbdobC0J42GH8Xg";
+  final String invenTakeYnUrl =
+      "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+  String accessToken =
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
   putInvenTakeYn() async {
     print("재고 섭취/미섭취 요청");
 
     var response = await http.put(
-      Uri.parse('$invenTakeYnUrl?ownPillId=256'),
+      Uri.parse('$invenTakeYnUrl'),
       headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       },
+      body: json.encode({
+        "ownPillId": 256,
+      }),
     );
 
     if (response.statusCode == 200) {
       print("재고 섭취/미섭취 요청 수신 성공");
       print(response.body);
       var accessToken =
-      response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+          response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
       print(accessToken);
     } else {
       print(response.body);
@@ -840,7 +852,7 @@ class _UntakenTabState extends State<_UntakenTab> {
                               isBordered: false,
                               // borderShape: BorderShapeBtn.circle,
                               minusBtn:
-                              Icon(Icons.remove_circle_outline_rounded),
+                                  Icon(Icons.remove_circle_outline_rounded),
                               plusBtn: Icon(Icons.add_circle_outline_rounded),
                             ),
                           )
@@ -879,7 +891,7 @@ class _UntakenTabState extends State<_UntakenTab> {
                               isBordered: false,
                               // borderShape: BorderShapeBtn.circle,
                               minusBtn:
-                              Icon(Icons.remove_circle_outline_rounded),
+                                  Icon(Icons.remove_circle_outline_rounded),
                               plusBtn: Icon(Icons.add_circle_outline_rounded),
                             ),
                           )
@@ -976,11 +988,13 @@ class _UntakenTabState extends State<_UntakenTab> {
                         children: [
                           // Text('복용여부'),
                           TextButton(
-                              onPressed: (){
+                              onPressed: () {
                                 putInvenTakeYn();
                               },
-                              child: Text("복용시작", style: TextStyle(color: Colors.redAccent),)
-                          ),
+                              child: Text(
+                                "복용시작",
+                                style: TextStyle(color: Colors.redAccent),
+                              )),
                         ],
                       ),
                       // GFToggle(
