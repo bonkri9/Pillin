@@ -12,7 +12,7 @@ import 'package:getwidget/getwidget.dart';
 import '../base_container.dart';
 import '../app_bar.dart';
 import '../login/login_main.dart';
-import '../login/login_screen.dart';
+import '../../screen/login_screen.dart';
 import '../login/member_register.dart';
 import '../login/regist_login_screen.dart';
 import '../sign_up/regist_signup_screen.dart';
