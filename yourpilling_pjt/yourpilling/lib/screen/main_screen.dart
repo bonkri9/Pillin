@@ -109,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // 일단 토큰 여기에 저장
-  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NjkxNzIsIm1lbWJlcklkIjo1MywidXNlcm5hbWUiOiJoYWhhaGEifQ.dP11FOa0f3l3fFF3TtuYXgOspQfEwPmvqrayoGq2kIEwl-fP4b09IP9u4sPrI4hsOzv-3o7FfpwHhSYfezSDig";
+  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3NzE1OTEsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.5q4m1xXSyEhyww84SVKNPTNfv7pyXGm4ehSJR9ab9ZdFph0npBNu-7aIrucg-U_U13hjdjktgD43W0D_ghHL1Q";
 
 
 
@@ -125,7 +125,7 @@ class _MainScreenState extends State<MainScreen> {
 
       if (response.statusCode == 200) {
         print("주간 복용 기록 수신 성공");
-        print(response);
+        print(response.body);
       } else {
         print(response.body);
         print("주간 복용 기록 조회 실패");
