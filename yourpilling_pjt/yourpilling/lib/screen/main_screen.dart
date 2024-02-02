@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/store/main_store.dart';
 import 'package:yourpilling/store/user_store.dart';
 import 'search_screen.dart';
 import 'record_screen.dart';
@@ -95,6 +96,11 @@ class Event {
       required this.takeYn});
 }
 
+void loadData(BuildContext context) {
+  context.read<MainStore>().getWeeklyData(context);
+  context.read<MainStore>().getDailyData(context);
+}
+
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
 
@@ -103,58 +109,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
-  // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
-  getWeeklyData(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
-    const String weeklyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/weekly';
-    try {
-      var response = await http.get(Uri.parse(weeklyUrl), headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      });
-
-      if (response.statusCode == 200) {
-        print("주간 복용 기록 수신 성공");
-        print(response.body);
-      } else {
-        print(response.body);
-        print("주간 복용 기록 조회 실패");
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  // 일간 복용 기록(status Bar) 부분 조회
-  getDailyData(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
-    DateTime now = DateTime.now();
-    String dailyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/daily'; // url
-    try {
-      var response = await http.get(
-          Uri.parse(
-              '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}'),
-          headers: {
-            'Content-Type': 'application/json',
-            'accessToken': accessToken,
-          });
-
-      if (response.statusCode == 200) {
-        print("일간 복용 기록 수신 성공");
-      } else {
-        print("일간 복용 기록 조회 실패");
-        print(response.body);
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    getWeeklyData(context);
-    getDailyData(context);
+    loadData(context);
     return Scaffold(
         appBar: MainAppBar(
           barColor: Color(0xFFF5F6F9),
@@ -348,18 +305,8 @@ class _WeekState extends State<_Week> {
                   ),
                   calendarBuilders:
                       CalendarBuilders(markerBuilder: (context, date, events) {
-                    int tmpTakenCnt = 0;
-                    List<Event>? tmp =
-                        pillSource[DateTime(date.year, date.month, date.day)];
-                    if (tmp == null || tmp.isEmpty) {
-                      dayGauge = 0;
-                    } else {
-                      for (int i = 0; i < tmp.length; i++) {
-                        if (tmp[i].takeYn == true) tmpTakenCnt++;
-                      }
-
-                      dayGauge = (tmpTakenCnt / tmp.length);
-                    }
+                      var weekData = context.watch<MainStore>().weekData;
+                      print('이게찐 ${weekData['data']}');
 
                     return Positioned(
                       bottom: 5,
@@ -405,38 +352,11 @@ class _TodayState extends State<_Today> {
 
   Color btnColor = Colors.redAccent; // 버튼 색상 state
 
-  // 오늘 먹어야 할 영양제 리스트 (dummy data)
-  var pillList = [
-    {
-      'pillName': '비타민 C', // 영양제 이름
-      'time': '09:00', // 복용 시간
-      'isTaken': false, // 복용 여부
-      'total': 50,
-      'rest': 49,
-    },
-    {
-      'pillName': '아연',
-      'time': '11:00',
-      'isTaken': false,
-      'total': 50,
-      'rest': 24,
-    },
-    {
-      'pillName': '마그네슘',
-      'time': '21:00',
-      'isTaken': false,
-      'total': 50,
-      'rest': 1,
-    },
-  ];
-
   final String putPillTakeUrl = "http://10.0.2.2:8080/api/v1/pill/take";
-  String accessToken =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
   putPillTake() async {
     print("영양제 복용 완료 요청");
-
+    String accessToken = context.watch<UserStore>().accessToken;
     var response = await http.put(Uri.parse('$putPillTakeUrl'),
         headers: {
           'Content-Type': 'application/json',
@@ -462,7 +382,7 @@ class _TodayState extends State<_Today> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
-
+    var dailyData = context.watch<MainStore>().dailyData;
     return BaseContainer(
         width: containerWidth,
         height: 300,
@@ -501,9 +421,9 @@ class _TodayState extends State<_Today> {
               padding: const EdgeInsets.only(right: 30),
               child: Align(
                 alignment: Alignment.centerRight,
-                child: takenNum != pillList.length
+                child: takenNum != dailyData.length
                     ? Text(
-                        '${(takenNum * 100 / pillList.length).round()} %',
+                        '${(takenNum * 100 / dailyData.length).round()} %',
                         style: TextStyle(
                             fontWeight: FontWeight.w600, color: BASIC_BLACK),
                       )
@@ -520,11 +440,11 @@ class _TodayState extends State<_Today> {
             // Progress Bar
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: pillList.length == takenNum
+              child: dailyData.length == takenNum
                   ? // 약 모두 다 먹었을 때 초록색 Progress Bar
                   AnimatedProgressBar(
                       width: 300,
-                      value: takenNum / pillList.length,
+                      value: takenNum / dailyData.length,
                       duration: const Duration(seconds: 1),
                       gradient: const LinearGradient(
                         colors: [
@@ -538,7 +458,7 @@ class _TodayState extends State<_Today> {
                   AnimatedProgressBar(
                       width: 320,
                       // height: 11,
-                      value: takenNum / pillList.length,
+                      value: takenNum / dailyData.length,
                       duration: const Duration(seconds: 1),
                       gradient: const LinearGradient(
                         colors: [
@@ -555,7 +475,7 @@ class _TodayState extends State<_Today> {
             ListView.builder(
                 physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
                 shrinkWrap: true,
-                itemCount: 3,
+                itemCount: dailyData.length,
                 itemBuilder: (context, i) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -576,19 +496,19 @@ class _TodayState extends State<_Today> {
                                 width: 17,
                                 height: 17,
                               ),
-                              Text("${pillList[i]['pillName']}",
+                              Text("${dailyData[i]['name']}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     color: BASIC_BLACK,
                                   )),
-                              Text("${pillList[i]['time']}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: BASIC_BLACK,
-                                  )),
-                              pillList[i]['isTaken'] == false
+                              // Text("${pillList[i]['time']}",
+                              //     style: TextStyle(
+                              //       fontWeight: FontWeight.w600,
+                              //       fontSize: 14,
+                              //       color: BASIC_BLACK,
+                              //     )),
+                              dailyData[i]['takeYn'] == false
                                   ? // 복용을 아직 안한 영양제라면
                                   AnimatedContainer(
                                       width: 50,
@@ -606,11 +526,11 @@ class _TodayState extends State<_Today> {
                                         onPressed: () {
                                           // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
                                           setState(() {
-                                            pillList[i]['isTaken'] = true;
+                                            dailyData[i]['takeYn'] = true;
                                             takenNum++;
 
                                             print(takenNum);
-                                            if (pillList.length == takenNum) {
+                                            if (dailyData.length == takenNum) {
                                               btnColor = Colors.greenAccent;
                                             }
                                             putPillTake();
@@ -628,7 +548,7 @@ class _TodayState extends State<_Today> {
                                             )),
                                       ),
                                     )
-                                  : pillList.length != takenNum
+                                  : dailyData.length != takenNum
                                       ? // 아직 다 먹진 않았고
                                       // 복용한 영양제라면
                                       Container(

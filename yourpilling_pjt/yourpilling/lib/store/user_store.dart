@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserStore extends ChangeNotifier {
-  var accessToken = 'Bearer ...';
+  String accessToken = 'Bearer ...';
 
   getToken(String token) {
     accessToken = token;
