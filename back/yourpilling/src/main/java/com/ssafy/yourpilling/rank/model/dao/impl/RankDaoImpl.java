@@ -1,10 +1,7 @@
 package com.ssafy.yourpilling.rank.model.dao.impl;
 
 import com.ssafy.yourpilling.rank.model.dao.RankDao;
-import com.ssafy.yourpilling.rank.model.dao.entity.EachCountPerPill;
-import com.ssafy.yourpilling.rank.model.dao.entity.Rank;
-import com.ssafy.yourpilling.rank.model.dao.entity.RankMidCategory;
-import com.ssafy.yourpilling.rank.model.dao.entity.RankPill;
+import com.ssafy.yourpilling.rank.model.dao.entity.*;
 import com.ssafy.yourpilling.rank.model.dao.jpa.RankMidCategoryRepository;
 import com.ssafy.yourpilling.rank.model.dao.jpa.RankPillMemberRepository;
 import com.ssafy.yourpilling.rank.model.dao.jpa.RankPillRepository;
@@ -29,15 +26,8 @@ public class RankDaoImpl implements RankDao {
     }
 
     @Override
-    public RankMidCategory searchMidCategoryByMidCategoryName(String midCategoryName) {
-        return rankMidCategoryRepository.findByCategoryNm(midCategoryName)
-                .orElseThrow(() -> new IllegalArgumentException("알맞은 중분류를 찾을 수 없습니다."));
-    }
-
-    @Override
-    public RankPill searchPillByPillId(Long pillId) {
-        return rankPillRepository.findByPillId(pillId)
-                .orElseThrow(() -> new IllegalArgumentException("알맞은 영양제를 찾을 수 없습니다."));
+    public List<AllCategories> allCategories() {
+        return rankMidCategoryRepository.allCategories();
     }
 
     @Override
@@ -48,5 +38,17 @@ public class RankDaoImpl implements RankDao {
     @Override
     public List<EachCountPerPill> rankNutrition(String nutrient) {
         return rankPillMemberRepository.countPillTotalMemberWithNutrient(nutrient);
+    }
+
+    @Override
+    public RankMidCategory searchMidCategoryByMidCategoryName(String midCategoryName) {
+        return rankMidCategoryRepository.findByCategoryNm(midCategoryName)
+                .orElseThrow(() -> new IllegalArgumentException("알맞은 중분류를 찾을 수 없습니다."));
+    }
+
+    @Override
+    public RankPill searchPillByPillId(Long pillId) {
+        return rankPillRepository.findByPillId(pillId)
+                .orElseThrow(() -> new IllegalArgumentException("알맞은 영양제를 찾을 수 없습니다."));
     }
 }

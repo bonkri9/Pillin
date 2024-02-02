@@ -5,12 +5,10 @@ import com.ssafy.yourpilling.common.Gender;
 import com.ssafy.yourpilling.common.HealthConcern;
 import com.ssafy.yourpilling.common.Nutrient;
 import com.ssafy.yourpilling.rank.model.dao.RankDao;
-import com.ssafy.yourpilling.rank.model.dao.entity.EachCountPerPill;
-import com.ssafy.yourpilling.rank.model.dao.entity.Rank;
-import com.ssafy.yourpilling.rank.model.dao.entity.RankMidCategory;
-import com.ssafy.yourpilling.rank.model.dao.entity.RankPill;
+import com.ssafy.yourpilling.rank.model.dao.entity.*;
 import com.ssafy.yourpilling.rank.model.service.RankService;
 import com.ssafy.yourpilling.rank.model.service.mapper.RankServiceMapper;
+import com.ssafy.yourpilling.rank.model.service.vo.wrap.CategoryCategoryVos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,8 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static java.time.LocalDateTime.*;
+import static java.time.LocalDateTime.now;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,7 +31,14 @@ public class RankServiceImpl implements RankService {
     private final RankDao rankDao;
     private final RankServiceMapper mapper;
 
-    //@Scheduled(cron = "0 30 10 * * SUN")
+    @Override
+    public CategoryCategoryVos categories() {
+        List<AllCategories> allCategories = rankDao.allCategories();
+
+        return mapper.mapToCategoryCategoryVos(allCategories);
+    }
+
+    @Scheduled(cron = "0 30 10 * * SUN")
     @Transactional
     @Override
     public void generateWeeklyRank() {
@@ -64,7 +70,7 @@ public class RankServiceImpl implements RankService {
         }
     }
 
-    private void nutrientAndHealthConcernRank(int weeks, int year, List<Rank> infos){
+    private void nutrientAndHealthConcernRank(int weeks, int year, List<Rank> infos) {
         HealthConcern[] values = HealthConcern.values();
         Map<Long, Long>[] pillAmountPerHealthConcern = new Map[values.length];
         Arrays.fill(pillAmountPerHealthConcern, new HashMap<>());
@@ -76,10 +82,10 @@ public class RankServiceImpl implements RankService {
 
             List<Integer> healthConcernsIndex = n.getHealthConcernIndex();
 
-            for(int i = 0; i<Math.min(LIMIT, each.size()); i++){
+            for (int i = 0; i < Math.min(LIMIT, each.size()); i++) {
                 Long pillId = each.get(i).getPillId();
                 Long count = each.get(i).getPillCount();
-                
+
                 RankPill rankPill = rankDao.searchPillByPillId(pillId);
 
                 Rank save = mapper.mapToRank(weeks, year, i, rankPill, midCategory, now());
@@ -98,14 +104,14 @@ public class RankServiceImpl implements RankService {
     }
 
     private void healthConcernRank(int weeks, int year, List<Rank> infos, Map<Long, Long>[] pillAmountPerHealthConcern, HealthConcern[] values) {
-        for(int k = 0; k< pillAmountPerHealthConcern.length; k++){
+        for (int k = 0; k < pillAmountPerHealthConcern.length; k++) {
             Map<Long, Long> h = pillAmountPerHealthConcern[k]; // key: 영양제 번호, value : 영양제 총 량
 
             // 가장 많은 영양제를 가지고 있는 순으로 정렬
             List<Long> desc = new ArrayList<>(h.keySet());
             desc.sort((o1, o2) -> h.get(o2).compareTo(h.get(o1)));
 
-            for(int i=0; i<Math.min(LIMIT, desc.size()); i++){
+            for (int i = 0; i < Math.min(LIMIT, desc.size()); i++) {
                 RankPill rankPill = rankDao.searchPillByPillId(desc.get(i));
 
                 Rank save = mapper.mapToRank(weeks, year, i, rankPill, getMidCategory(values[k].getEnglish()), now());
@@ -119,10 +125,10 @@ public class RankServiceImpl implements RankService {
     }
 
     private void limitSave(int weeks, int year, List<Rank> infos, List<EachCountPerPill> each, RankMidCategory midCategory) {
-        for(int i = 0; i<Math.min(LIMIT, each.size()); i++){
+        for (int i = 0; i < Math.min(LIMIT, each.size()); i++) {
             RankPill rankPill = rankDao.searchPillByPillId(each.get(i).getPillId());
 
-            Rank save = mapper.mapToRank(weeks, year, i+1, rankPill, midCategory, now());
+            Rank save = mapper.mapToRank(weeks, year, i + 1, rankPill, midCategory, now());
             infos.add(save);
         }
     }

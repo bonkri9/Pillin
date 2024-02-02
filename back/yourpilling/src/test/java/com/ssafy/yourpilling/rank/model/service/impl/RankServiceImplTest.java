@@ -8,6 +8,8 @@ import com.ssafy.yourpilling.pill.model.dao.jpa.NutritionJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
+import com.ssafy.yourpilling.rank.model.dao.RankDao;
+import com.ssafy.yourpilling.rank.model.dao.entity.AllCategories;
 import com.ssafy.yourpilling.rank.model.dao.entity.Rank;
 import com.ssafy.yourpilling.rank.model.dao.entity.RankMidCategory;
 import com.ssafy.yourpilling.rank.model.dao.jpa.RankMidCategoryRepository;
@@ -28,6 +30,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @Transactional
@@ -60,6 +64,30 @@ class RankServiceImplTest {
 
     @Autowired
     private RankMidCategoryRepository rankMidCategoryRepository;
+
+    @Autowired
+    private RankDao rankDao;
+
+    @Test
+    @DisplayName("모든 카테고리 검색")
+    public void allCategories(){
+
+
+        List<AllCategories> allCategories = rankDao.allCategories();
+
+        Map<Long, List<AllCategories>> collect = allCategories.stream()
+                .collect(Collectors.groupingBy(AllCategories::getBigCategoryId));
+
+        for (Long l : collect.keySet()) {
+            for (AllCategories allCategories1: collect.get(l)) {
+                System.out.println(allCategories1.getBigCategoryId());
+                System.out.println(allCategories1.getBigCategoryNm());
+                System.out.println(allCategories1.getMidCategoryId());
+                System.out.println(allCategories1.getMidCategoryNm());
+            }
+        }
+
+    }
 
     @Test
     @Disabled

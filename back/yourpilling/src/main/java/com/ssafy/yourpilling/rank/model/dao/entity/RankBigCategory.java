@@ -1,7 +1,5 @@
 package com.ssafy.yourpilling.rank.model.dao.entity;
 
-import com.ssafy.yourpilling.pill.model.dao.entity.BigCategory;
-import com.ssafy.yourpilling.pill.model.dao.entity.PillCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,23 +7,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "midcategory")
+@Table(name = "ranks")
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
-public class RankMidCategory {
+public class RankBigCategory {
 
     @Id
-    @Column(name = "mid_category_id")
+    @Column(name = "rank_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long midCategoryId;
+    private Long bigCategoryId;
 
     @Column(name = "category_nm")
     private String categoryNm;
 
-    @ManyToOne
-    @JoinColumn(name = "big_category_id")
-    private RankBigCategory bigCategory;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "bigCategory")
+    private List<RankMidCategory> midCategories;
 }

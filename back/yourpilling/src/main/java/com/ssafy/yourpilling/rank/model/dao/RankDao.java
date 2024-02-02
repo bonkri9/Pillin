@@ -1,9 +1,6 @@
 package com.ssafy.yourpilling.rank.model.dao;
 
-import com.ssafy.yourpilling.rank.model.dao.entity.EachCountPerPill;
-import com.ssafy.yourpilling.rank.model.dao.entity.Rank;
-import com.ssafy.yourpilling.rank.model.dao.entity.RankMidCategory;
-import com.ssafy.yourpilling.rank.model.dao.entity.RankPill;
+import com.ssafy.yourpilling.rank.model.dao.entity.*;
 
 import java.util.List;
 
@@ -18,4 +15,6 @@ public interface RankDao {
     RankMidCategory searchMidCategoryByMidCategoryName(String midCategoryName);
 
     RankPill searchPillByPillId(Long pillId);
+
+    List<AllCategories> allCategories();
 }
