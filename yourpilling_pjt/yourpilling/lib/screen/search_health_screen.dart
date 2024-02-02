@@ -5,8 +5,13 @@ import 'package:yourpilling/screen/search_list_screen.dart';
 import '../component/app_bar.dart';
 import '../component/base_container.dart';
 import 'package:http/http.dart' as http;
-
+import '../store/search_store.dart';
 import '../store/user_store.dart';
+
+void loadData(BuildContext context, String health) {
+  context.read<SearchStore>().getSearchHealthData(context, health);
+}
+
 
 class SearchHealthScreen extends StatefulWidget {
   const SearchHealthScreen({super.key});
@@ -84,6 +89,7 @@ class _SearchBar extends StatelessWidget {
                 size: 34,
               ),
               onPressed: () {
+                loadData(context,myController.text);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -165,8 +171,7 @@ class _MiddleTab extends StatelessWidget {
                   height: 100,
                   child: TextButton(
                     onPressed: () {
-                      searchHealth(context);
-
+                      loadData(context,health['health']!);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -177,10 +182,7 @@ class _MiddleTab extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                  top: 0,
-                  right: 0,
-                  child: TextButton(onPressed: () {}, child: Text('v'))),
+
             ]),
           );
         }).toList(),
@@ -189,23 +191,3 @@ class _MiddleTab extends StatelessWidget {
   }
 }
 
-// 통신추가
-Future<void> searchHealth(BuildContext context) async {
-  // 반환 타입을 'Future<void>'로 변경합니다
-  print("영양소 건강고민 검색 요청");
-  String accessToken = context.watch<UserStore>().accessToken;
-  var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=1'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken' : accessToken,
-      } );
-
-  if (response.statusCode == 200) {
-    print('영양소 건강고민 통신성공');
-    print(response.body);
-  } else {
-    print(response.body);
-    throw http.ClientException(
-        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
-  }
-}

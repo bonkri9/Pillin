@@ -9,8 +9,12 @@ import 'package:yourpilling/screen/search_nutrient_screen.dart';
 import 'package:yourpilling/component/base_container.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import '../store/search_store.dart';
 import '../store/user_store.dart';
+
+void loadData(BuildContext context, String name) {
+  context.read<SearchStore>().getSearchNameData(context, name);
+}
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -64,7 +68,6 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String accessToken = context.watch<UserStore>().accessToken;
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: 30,
@@ -86,13 +89,11 @@ class _SearchBar extends StatelessWidget {
                 color: Color(0xFFFF6666),
                 size: 34,
               ),
-              onPressed: () async {
+              onPressed: () {
                 // 통신추가 - 희태
-
-                String url = "http://10.0.2.2:8080/api/v1/pill/search";
                 try {
-                  await searchName(url, '비타민', accessToken);
-                  print('통신성공');
+                 loadData(context, myController.text);
+                  print('검색 통신성공');
                   // 절취선 이부분만 살리면 이전과 동일
                   Navigator.push(
                       context,
@@ -103,6 +104,7 @@ class _SearchBar extends StatelessWidget {
                               )));
                   // 절취선 종료
                 }catch(error){
+                  print('이름 검색 실패');
                   print(error);
                 }
 
@@ -537,23 +539,3 @@ class _SearchRanking extends StatelessWidget {
   }
 }
 
-// 통신추가
-Future<void> searchName(url,pillName, accessToken) async {
-  // 반환 타입을 'Future<void>'로 변경합니다
-  print("이름검색 요청");
-  var response = await http.get(Uri.parse('${url}?pillName=비타민'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken' : accessToken,
-      });
-
-  if (response.statusCode == 200) {
-    print('검색 통신성공');
-    print(response.body);
-    print('검색 통신성공');
-  } else {
-    print(response.body);
-    throw http.ClientException(
-        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
-  }
-}

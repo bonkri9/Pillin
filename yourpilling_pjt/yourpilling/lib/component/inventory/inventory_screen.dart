@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:yourpilling/component/angle_container.dart';
 import 'package:yourpilling/component/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/component/pilldetail/search_pill_detail.dart';
+import 'package:yourpilling/screen/search_pill_detail.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 import '../../store/user_store.dart';

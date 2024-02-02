@@ -7,8 +7,13 @@ import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import '../component/base_container.dart';
 import 'package:http/http.dart' as http;
-
+import '../store/search_store.dart';
 import '../store/user_store.dart';
+
+void loadData(BuildContext context, String nutrient) {
+  context.read<SearchStore>().getSearchNutrientData(context, nutrient);
+}
+
 
 class SearchNutrientScreen extends StatefulWidget {
   const SearchNutrientScreen({super.key});
@@ -83,6 +88,8 @@ class _SearchBar extends StatelessWidget {
                 size: 34,
               ),
               onPressed: () {
+                loadData(context, myController.text);
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -105,7 +112,7 @@ class _MiddleTab extends StatelessWidget {
     String accessToken = context.watch<UserStore>().accessToken;
     var nutrientList = [
       {
-        'nutrient': '비타민 C', // 영양제 이름
+        'nutrient': '비타민C', // 영양제 이름
       },
       {
         'nutrient': '비타민A', // 영양제 이름
@@ -162,7 +169,7 @@ class _MiddleTab extends StatelessWidget {
         'nutrient': '비오틴', // 영양제 이름
       },
       {
-        'nutrient': '철', // 영양제 이름
+        'nutrient': '철분', // 영양제 이름
       },
       {
         'nutrient': '오메가3',
@@ -183,7 +190,7 @@ class _MiddleTab extends StatelessWidget {
               height: 50,
               child: TextButton(
                 onPressed: () {
-                  searchNutrient(accessToken);
+                  loadData(context, nutrient['nutrient']!);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -200,24 +207,4 @@ class _MiddleTab extends StatelessWidget {
   }
 }
 
-// 통신추가
-Future<void> searchNutrient(String accessToken) async {
-  // 반환 타입을 'Future<void>'로 변경합니다
-  print("영양제 영양소 검색 요청");
-  var response = await http.get(
-      Uri.parse(
-          'http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=셀레늄'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken' : accessToken,
-      } );
 
-  if (response.statusCode == 200) {
-    print('영양제 영양소 통신성공');
-    print(response.body);
-  } else {
-    print(response.body);
-    throw http.ClientException(
-        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
-  }
-}
