@@ -102,59 +102,48 @@ class _MiddleTab extends StatelessWidget {
   Widget build(BuildContext context) {
     var healthList = [
       {
-        'health': '눈건강',
+        'health': '치아/뼈 건강',
       },
       {
-        'health': '장건강',
+        'health': '어린이',
       },
       {
-        'health': '노화 방지',
+        'health': '여성 건강',
       },
       {
-        'health': '속쓰림',
+        'health': '남성 건강',
       },
       {
-        'health': '눈건강',
+        'health': '위장/배뇨',
       },
       {
-        'health': '혈압 개선',
+        'health': '피로/간',
       },
       {
-        'health': '탈모 예방',
+        'health': '기억력 개선',
       },
       {
-        'health': '통풍',
+        'health': '눈 건강',
       },
       {
-        'health': '눈건강',
+        'health': '혈압,혈당,형행',
       },
       {
-        'health': '눈건강',
+        'health': '다이어트',
       },
       {
-        'health': '장건강',
+        'health': '임산부',
       },
       {
-        'health': '노화 방지',
+        'health': '스트레스/수면',
       },
       {
-        'health': '속쓰림',
+        'health': '면역/향산화',
       },
       {
-        'health': '눈건강',
+        'health': '탈모',
       },
-      {
-        'health': '혈압 개선',
-      },
-      {
-        'health': '탈모 예방',
-      },
-      {
-        'health': '통풍',
-      },
-      {
-        'health': '눈건강',
-      },
+     
     ];
 
     return Expanded(

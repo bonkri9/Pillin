@@ -288,10 +288,10 @@ Future<void> searchDetail() async {
 Future<void> searchName(url,pillName) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("이름검색 요청");
-  var response = await http.get(Uri.parse('http://3.38.251.199/api/v1/pill/search?pillName=비타민'),
+  var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search?pillName=비타민'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDU1MDIsIm1lbWJlcklkIjo1MDIsInVzZXJuYW1lIjoiMTExIn0.9uUJFeZrkY6k_jqKSa3VgVj_vfaWo80ZJ9HM4hsR4NzLP_UGupMMnr3eqV7Xb5-nawbOlocv4rFrxwRqsQtxxg",
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDY2MDMsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoicXFxIn0.hHSNeA2vAsNkAa9416GEbpmCM9EdRNIErRQ-AoHPzZo8ltB57BUCusiov5zKLCyKN5ZynNsZpDg7wXOpgLCUGA",
       });
 
   if (response.statusCode == 200) {

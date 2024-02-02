@@ -85,7 +85,7 @@ class _SearchBar extends StatelessWidget {
               onPressed: () async {
                 // 통신추가 - 희태
 
-                String url = "http://3.38.251.199/api/v1/pill/search";
+                String url = "http://10.0.2.2:8080/api/v1/pill/search";
                 try {
                   await searchName(url, '비타민');
                   print('통신성공');
@@ -540,7 +540,7 @@ Future<void> searchName(url,pillName) async {
   var response = await http.get(Uri.parse('${url}?pillName=비타민'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDQwODgsIm1lbWJlcklkIjo1NTIsInVzZXJuYW1lIjoic215YW5nMDIyMEBuYXZlci5jb20ifQ.SLeYeG6t8Vh_zLTJjewZafDEAjPN3DuJWb9tgXjEc7S-NpMkLm4AChnPJk06t1d24El1TplBBq6PvmWhhl9aew",
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDY2MDMsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoicXFxIn0.hHSNeA2vAsNkAa9416GEbpmCM9EdRNIErRQ-AoHPzZo8ltB57BUCusiov5zKLCyKN5ZynNsZpDg7wXOpgLCUGA",
       });
 
   if (response.statusCode == 200) {
