@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class KakaoLogin extends StatefulWidget {
   const KakaoLogin({super.key});
@@ -46,6 +47,8 @@ Future<void> signInWithKakao() async {
       print('출력완료');
       OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
       print('카카오톡으로 로그인 성공 ${token.accessToken}');
+      print('${token.accessToken}');
+      GiveKakaoToken(token.accessToken);
     } catch (error) {
       print('카카오톡으로 로그인 실패 $error');
       if (error is PlatformException && error.code == 'CANCELED') {
@@ -56,6 +59,8 @@ Future<void> signInWithKakao() async {
         print('출력완료');
         OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
         print('카카오계정으로 로그인 성공 ${token.accessToken}');
+        print('${token.accessToken}');
+        GiveKakaoToken(token.accessToken);
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');
       }
@@ -66,8 +71,33 @@ Future<void> signInWithKakao() async {
       print('출력완료');
       OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
       print('카카오계정으로 로그인 성공 ${token.accessToken}');
+      print('${token.accessToken}');
+      GiveKakaoToken(token.accessToken);
     } catch (error) {
       print('카카오계정으로 로그인 실패 $error');
     }
+  }
+}
+
+
+// 통신추가
+Future<void> GiveKakaoToken(token) async {
+  // 반환 타입을 'Future<void>'로 변경합니다
+  print("카카오엑세스토큰 전달");
+  print(token);
+  var response = await http.post(Uri.parse('http://3.38.251.199/login/oauth2/kakao'),
+      headers: {
+        'Content-Type': 'application/json',
+      },body: json.encode({
+        'token' : token,
+      }));
+
+  if (response.statusCode == 200) {
+    print('응답이 똑띠옴');
+    print('통신온거 ${response.headers['accesstoken']}');
+  } else {
+    print(response.body);
+    throw http.ClientException(
+        '카카오 안왔어요.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
   }
 }

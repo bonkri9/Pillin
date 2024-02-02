@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           obscureText: true,
         ),
-        KakaoLogin(),
+        KakaoLogin(), // 카카오로그인
          const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {

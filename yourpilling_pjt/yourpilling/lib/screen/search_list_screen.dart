@@ -96,7 +96,7 @@ class _SearchBar extends StatelessWidget {
                 size: 34,
               ),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
@@ -271,12 +271,33 @@ Future<void> searchDetail() async {
   var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/detail?pillId=1'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4Mzk5MTAsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoicXFxIn0.6oz3NJI3jU_tKHfMh9muIois9fpFZ8nA7SxHJuR5USV3UUDheOhy5epoeezHmqbVODlaYiip2T1bD04nkjsXLg",
       });
 
   if (response.statusCode == 200) {
     print('검색 리스트 통신성공');
+    print('통신온거'+response.body);
+  } else {
     print(response.body);
+    throw http.ClientException(
+        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
+  }
+}
+
+// 통신추가
+Future<void> searchName(url,pillName) async {
+  // 반환 타입을 'Future<void>'로 변경합니다
+  print("이름검색 요청");
+  var response = await http.get(Uri.parse('http://3.38.251.199/api/v1/pill/search?pillName=비타민'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDU1MDIsIm1lbWJlcklkIjo1MDIsInVzZXJuYW1lIjoiMTExIn0.9uUJFeZrkY6k_jqKSa3VgVj_vfaWo80ZJ9HM4hsR4NzLP_UGupMMnr3eqV7Xb5-nawbOlocv4rFrxwRqsQtxxg",
+      });
+
+  if (response.statusCode == 200) {
+    print('검색 통신성공');
+    print(response.body);
+    print('검색 통신성공');
   } else {
     print(response.body);
     throw http.ClientException(

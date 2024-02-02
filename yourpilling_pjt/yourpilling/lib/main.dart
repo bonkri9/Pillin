@@ -17,8 +17,8 @@ void main() async {
 
   // runApp() 충돌전 Flutter SDK 초기화
   KakaoSdk.init(
-    nativeAppKey: 'e1c9adc33e833845258363a8b6f9d393',
-    javaScriptAppKey: 'af8f3d2b420f022a8ab3b7f2c29cdd42',
+    nativeAppKey: '7c21f22cbe067e3f41623266b8dab1e5',
+    javaScriptAppKey: '0e507984778d791a08a9585a7a88ff5e',
   );
 
 

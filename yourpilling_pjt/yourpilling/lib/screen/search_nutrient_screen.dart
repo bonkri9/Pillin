@@ -184,7 +184,7 @@ Future<void> searchNutrient() async {
   var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=셀레늄'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDQwODgsIm1lbWJlcklkIjo1NTIsInVzZXJuYW1lIjoic215YW5nMDIyMEBuYXZlci5jb20ifQ.SLeYeG6t8Vh_zLTJjewZafDEAjPN3DuJWb9tgXjEc7S-NpMkLm4AChnPJk06t1d24El1TplBBq6PvmWhhl9aew",
       } );
 
   if (response.statusCode == 200) {
