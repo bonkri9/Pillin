@@ -9,7 +9,7 @@ import lombok.Value;
 @Builder
 public class PushNotificationVo {
 
-    Byte pushDay;
+    int pushDay;
     int hour;
     int minute;
 
