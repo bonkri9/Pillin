@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class InventoryStore extends ChangeNotifier {
-  var takeYnListData = [];
-  var takeTrueListData = [];
-  var takeFalseListData = [];
+  var takeYnListData;
+  var takeTrueListData;
+  var takeFalseListData;
 
   //복용하는 영양제 전체 리스트 데이터 가져오기
   getTakeYnListData(BuildContext context) async {
@@ -23,8 +23,8 @@ class InventoryStore extends ChangeNotifier {
         print("재고 복용 목록 수신 성공");
         print(response.body);
 
-        // MainStore에 응답 저장
-        Map<String, dynamic> takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
+        // InventoryStore에 응답 저장
+        takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
 
         print("takeYnListData: ${takeYnListData["data"]}");
       } else {
