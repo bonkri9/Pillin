@@ -10,6 +10,4 @@ public interface DeviceTokenJpaRepository extends JpaRepository<DeviceToken, Lon
 
     Optional<DeviceToken> findByMemberMemberIdAndDeviceToken(Long memberId, String deviceToken);
 
-
-
 }
