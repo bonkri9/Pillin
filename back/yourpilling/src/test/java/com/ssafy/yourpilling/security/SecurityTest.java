@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("dev")
 @Transactional
+@ActiveProfiles("dev")
 @DisplayName("시큐리티 로그인 테스트")
 public class SecurityTest {
 

@@ -10,6 +10,6 @@ import java.util.List;
 @Builder
 public class OutNotificationsVo {
 
-    private List<PushNotification> pushNotifications;
+    List<PushNotification> pushNotifications;
 
 }

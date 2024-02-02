@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface PillMemberJpaRepository extends JpaRepository<PillMember, Long> {
 
     Optional<PillMember> findByMemberId(Long memberId);
+
+    Optional<PillMember> findByUsername(String username);
 }

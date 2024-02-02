@@ -66,6 +66,14 @@ public class OwnPill {
     @OneToMany(mappedBy = "ownPill", fetch = FetchType.LAZY)
     private List<TakerHistory> takerHistories;
 
+    public void setMember(PillMember member) {
+        this.member = member;
+
+//        if(!member.getOwnPills().contains(this)){
+//            member.getOwnPills().add(this);
+//        }
+    }
+
     public boolean isTakeYN() {
         return this.takeYN;
     }

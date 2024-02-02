@@ -3,10 +3,10 @@ package com.ssafy.yourpilling.push.model.dao.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "takepushmessages")
+@Table(name = "notifications")
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,15 +21,23 @@ public class PushNotification {
     @Column(name = "message")
     private String message;
 
-    @Column(name = "push_day")
-    private Byte pushDay;
+    @Setter
+    @Column(name = "push_hour")
+    private int pushHour;
 
-    @Column(name = "push_time")
-    private LocalDateTime pushTime;
+    @Setter
+    @Column(name = "push_minute")
+    private int pushMinute;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private PushMember member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "own_pill_id")
+    private PushOwnPill pushOwnPill;
 
+    @OneToMany(mappedBy = "pushNotification", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PushMessageInfo> messageInfos;
+
+    public void addMessageInfo(PushMessageInfo pushMessageInfo) {
+        this.messageInfos.add(pushMessageInfo);
+    }
 
 }
