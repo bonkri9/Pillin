@@ -130,7 +130,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.only(top: 3, left: 3),
                     child: ElevatedButton(
                       onPressed: () {
-                        print("is click?");
                         signUp();
                       },
                       style: ElevatedButton.styleFrom(
@@ -143,55 +142,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     )),
-
-                //소셜 로그인 밑에 둘거면 주석 풀고 넣기
-                // const Center(child: Text("Or")),
-                //
-                // Container(
-                //   height: 45,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(25),
-                //     border: Border.all(
-                //       color: Colors.redAccent,
-                //     ),
-                //     boxShadow: [
-                //       BoxShadow(
-                //         color: Colors.white.withOpacity(0.5),
-                //         spreadRadius: 1,
-                //         blurRadius: 1,
-                //         offset: const Offset(0, 1), // changes position of shadow
-                //       ),
-                //     ],
-                //   ),
-                //   child: TextButton(
-                //     onPressed: () {},
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Container(
-                //           height: 30.0,
-                //           width: 30.0,
-                //           decoration: const BoxDecoration(
-                //             image: DecorationImage(
-                //                 image:   AssetImage('구글이미지 넣기'),
-                //                 fit: BoxFit.cover),
-                //             shape: BoxShape.circle,
-                //           ),
-                //         ),
-                //
-                //         const SizedBox(width: 18),
-                //
-                //         const Text("Google 로그인",
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.redAccent,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

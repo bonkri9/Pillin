@@ -10,13 +10,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TakerHistoryRepository  extends JpaRepository<TakerHistory, Long> {
+
     @Query(value = "SELECT th.take_at as date, SUM(th.need_to_take_count) AS needToTakenCountToday , SUM(th.current_take_count) AS actualTakenToday  " +
             "FROM TakerHistory th " +
             "JOIN ownPill op ON th.own_pill_id = op.own_pill_id " +
             "WHERE op.member_id = ?1 AND YEAR(th.take_at) = YEAR(NOW()) AND WEEK(th.take_at, 1) = WEEK(NOW(), 1) " +
+            "AND (th.current_take_count + th.need_to_take_count != 0) " +
             "GROUP BY th.take_at", nativeQuery = true)
     List<WeeklyHistoryInterface> findWeeklyTakerHistoriesByMemberId(@Param("memberId") Long memberId);
-
 
     @Query("SELECT " +
             "new com.ssafy.yourpilling.pill.model.dao.entity.MonthlyTakerHistory(th.takeAt, p.name, th.currentTakeCount , th.needToTakeCount) " +

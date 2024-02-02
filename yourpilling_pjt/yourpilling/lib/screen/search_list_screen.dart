@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/base_container.dart';
 
 import '../component/app_bar.dart';
@@ -7,11 +8,11 @@ import '../component/pilldetail/search_pill_detail.dart';
 import '../const/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../store/user_store.dart';
+
 class SearchListScreen extends StatefulWidget {
   final String myControllerValue;
-
   const SearchListScreen({super.key, required this.myControllerValue});
-
   @override
   State<SearchListScreen> createState() => _SearchListScreenState();
 }
@@ -96,7 +97,7 @@ class _SearchBar extends StatelessWidget {
                 size: 34,
               ),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
@@ -112,6 +113,7 @@ class _SearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String accessToken = context.watch<UserStore>().accessToken;
     var pillList = [
       {
         'pillName': '비타민 C', // 영양제 이름
@@ -221,7 +223,7 @@ class _SearchResult extends StatelessWidget {
                                 textStyle: const TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
-                                searchDetail();
+                                searchDetail(accessToken);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -265,18 +267,39 @@ class _SearchResult extends StatelessWidget {
 
 
 // 통신추가
-Future<void> searchDetail() async {
+Future<void> searchDetail(String accessToken) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("상세정보 요청");
   var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/detail?pillId=1'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",
+        'accessToken' : accessToken,
       });
 
   if (response.statusCode == 200) {
     print('검색 리스트 통신성공');
+    print('통신온거'+response.body);
+  } else {
     print(response.body);
+    throw http.ClientException(
+        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
+  }
+}
+
+// 통신추가
+Future<void> searchName(url,pillName) async {
+  // 반환 타입을 'Future<void>'로 변경합니다
+  print("이름검색 요청");
+  var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search?pillName=비타민'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDY2MDMsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoicXFxIn0.hHSNeA2vAsNkAa9416GEbpmCM9EdRNIErRQ-AoHPzZo8ltB57BUCusiov5zKLCyKN5ZynNsZpDg7wXOpgLCUGA",
+      });
+
+  if (response.statusCode == 200) {
+    print('검색 통신성공');
+    print(response.body);
+    print('검색 통신성공');
   } else {
     print(response.body);
     throw http.ClientException(

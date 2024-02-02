@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import '../component/app_bar.dart';
 import '../component/base_container.dart';
 import 'package:http/http.dart' as http;
+
+import '../store/user_store.dart';
 
 class SearchHealthScreen extends StatefulWidget {
   const SearchHealthScreen({super.key});
@@ -96,65 +99,55 @@ class _SearchBar extends StatelessWidget {
 
 // 중간탭
 class _MiddleTab extends StatelessWidget {
-  const _MiddleTab({super.key});
+  _MiddleTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String accessToken = context.watch<UserStore>().accessToken;
     var healthList = [
       {
-        'health': '눈건강',
+        'health': '치아/뼈 건강',
       },
       {
-        'health': '장건강',
+        'health': '어린이',
       },
       {
-        'health': '노화 방지',
+        'health': '여성 건강',
       },
       {
-        'health': '속쓰림',
+        'health': '남성 건강',
       },
       {
-        'health': '눈건강',
+        'health': '위장/배뇨',
       },
       {
-        'health': '혈압 개선',
+        'health': '피로/간',
       },
       {
-        'health': '탈모 예방',
+        'health': '기억력 개선',
       },
       {
-        'health': '통풍',
+        'health': '눈 건강',
       },
       {
-        'health': '눈건강',
+        'health': '혈압,혈당,형행',
       },
       {
-        'health': '눈건강',
+        'health': '다이어트',
       },
       {
-        'health': '장건강',
+        'health': '임산부',
       },
       {
-        'health': '노화 방지',
+        'health': '스트레스/수면',
       },
       {
-        'health': '속쓰림',
+        'health': '면역/향산화',
       },
       {
-        'health': '눈건강',
+        'health': '탈모',
       },
-      {
-        'health': '혈압 개선',
-      },
-      {
-        'health': '탈모 예방',
-      },
-      {
-        'health': '통풍',
-      },
-      {
-        'health': '눈건강',
-      },
+     
     ];
 
     return Expanded(
@@ -172,7 +165,7 @@ class _MiddleTab extends StatelessWidget {
                   height: 100,
                   child: TextButton(
                     onPressed: () {
-                      searchHealth();
+                      searchHealth(context);
 
                       Navigator.push(
                           context,
@@ -197,13 +190,14 @@ class _MiddleTab extends StatelessWidget {
 }
 
 // 통신추가
-Future<void> searchHealth() async {
+Future<void> searchHealth(BuildContext context) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("영양소 건강고민 검색 요청");
+  String accessToken = context.watch<UserStore>().accessToken;
   var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=1'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDE2MjUsIm1lbWJlcklkIjoyMTA3LCJ1c2VybmFtZSI6InE0In0.SXxlEkCTVu2QiCVEpnc6MSLG_hhEVYMc5bVafGqsVexAJtny90OJZ1ywgcAEgXOXHv7Bn06jnMWnz3QDH_o35Q",
+        'accessToken' : accessToken,
       } );
 
   if (response.statusCode == 200) {

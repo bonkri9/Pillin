@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:http/http.dart' as http;
+import '../../store/user_store.dart';
 import '../inventory/insert_inventory.dart';
 
 var pillDetailInfo = [
@@ -54,7 +56,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
   double scrollOpacity = 0;
 
   var ownPillId;
-  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY3OTg5ODksIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoiZmZmIn0.1wAs3Wg6In4Lpj0YRcxyV1HjR5c7BiKeYF_11Rg5KpukhSkQtUJfLriX-yG1txKNf3vW30um5Tgqx4U_WNqOkQ";
+  late String accessToken;
   final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
 
   getInvenDetail() async {
@@ -115,6 +117,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    accessToken = context.watch<UserStore>().accessToken;
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,

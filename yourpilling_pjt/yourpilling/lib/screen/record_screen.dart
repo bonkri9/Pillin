@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_bottom_sheet/drag_zone_position.dart';
 import 'package:just_bottom_sheet/just_bottom_sheet_configuration.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
@@ -11,6 +12,8 @@ import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:just_bottom_sheet/just_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import '../store/user_store.dart';
 
 // dummy data
 // 1월 29일에 먹은 영양제 목록
@@ -91,6 +94,31 @@ class Event {
       required this.takeYn});
 }
 
+// 데이터 서버에서 받자
+getData(BuildContext context) async {
+  const String url = "http://10.0.2.2:8080/api/v1/pill/history/monthly";
+  DateTime now = DateTime.now();
+  print('${now.year} 년 ${now.month}월');
+  String accessToken = context.watch<UserStore>().accessToken;
+  try {
+    var response = await http.get(
+      Uri.parse('$url?year=${now.year}&month=${now.month}'), headers: {
+      'Content-Type': 'application/json',
+      'accessToken': accessToken,
+    },);
+
+    if (response.statusCode == 200) {
+      print("response 월간 기록 데이터 수신 성공 : ${response.body}");
+      print(response.body);
+    } else {
+      print(response.body);
+      print("월간 기록 데이터 수신 실패");
+    }
+  } catch (error) {
+    print(error);
+  }
+}
+
 class RecordScreen extends StatefulWidget {
   const RecordScreen({super.key});
 
@@ -103,35 +131,6 @@ class _RecordScreenState extends State<RecordScreen> {
   List<Event> pillListOfTheDay = [];
   int curMonth = DateTime.now().month; // 현재 월 state
   final scrollController = ScrollController();
-
-  final String url = "http://10.0.2.2:8080/api/v1/pill/history/monthly";
-
-  // 일단 토큰 여기에 저장
-  String accessToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
-
-  // 데이터 서버에서 받자
-  getData() async {
-    DateTime now = DateTime.now();
-    print('${now.year} 년 ${now.month}월');
-
-    try {
-      var response = await http.get(
-        Uri.parse('$url?year=${now.year}&month=${now.month}'), headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      },);
-
-      if (response.statusCode == 200) {
-        print("response 월간 기록 데이터 수신 성공 : ${response.body}");
-        print(response.body);
-      } else {
-        print(response.body);
-        print("월간 기록 데이터 수신 실패");
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
 
   getPillListOfTheDay(List<Event>? list) {
     setState(() {
@@ -153,18 +152,12 @@ class _RecordScreenState extends State<RecordScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Color theDayCompleteBoxColor = Colors.greenAccent.withOpacity(0.1);
     Color theDayCompleteContentColor = Color(0xFF4CAF50);
     Color theDayUnCompleteBoxColor = Colors.redAccent.withOpacity(0.1);
     Color theDayUnCompleteContentColor = Colors.deepOrange;
-
+    getData(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

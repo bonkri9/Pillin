@@ -1,8 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/store/user_store.dart';
 import 'search_screen.dart';
 import 'record_screen.dart';
 import 'alarm_screen.dart';
@@ -13,6 +13,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 // dummy data
 // 1월 29일에 먹은 영양제 목록
@@ -102,21 +103,11 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  @override
-  void initState() {
-    super.initState();
-    getWeeklyData();
-    getDailyData();
-  }
-
-  // 일단 토큰 여기에 저장
-  String accessToken =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
 
   // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
-  getWeeklyData() async {
+  getWeeklyData(BuildContext context) async {
+    String accessToken = context.watch<UserStore>().accessToken;
     const String weeklyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/weekly';
-
     try {
       var response = await http.get(Uri.parse(weeklyUrl), headers: {
         'Content-Type': 'application/json',
@@ -136,10 +127,10 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // 일간 복용 기록(status Bar) 부분 조회
-  getDailyData() async {
+  getDailyData(BuildContext context) async {
+    String accessToken = context.watch<UserStore>().accessToken;
     DateTime now = DateTime.now();
     String dailyUrl = 'http://10.0.2.2:8080/api/v1/pill/history/daily'; // url
-
     try {
       var response = await http.get(
           Uri.parse(
@@ -162,6 +153,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getWeeklyData(context);
+    getDailyData(context);
     return Scaffold(
         appBar: MainAppBar(
           barColor: Color(0xFFF5F6F9),

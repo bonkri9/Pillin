@@ -37,4 +37,8 @@ public class TakerHistoryTakerHistory {
     @ManyToOne
     @JoinColumn(name="own_pill_id")
     private TakerHistoryOwnPill ownPill;
+
+    public boolean isInvalid() {
+        return needToTakeCount == 0 && currentTakeCount == 0;
+    }
 }
