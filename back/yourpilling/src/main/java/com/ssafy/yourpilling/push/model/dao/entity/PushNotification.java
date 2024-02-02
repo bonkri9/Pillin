@@ -21,9 +21,11 @@ public class PushNotification {
     @Column(name = "message")
     private String message;
 
+    @Setter
     @Column(name = "push_hour")
     private int pushHour;
 
+    @Setter
     @Column(name = "push_minute")
     private int pushMinute;
 

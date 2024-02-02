@@ -44,14 +44,17 @@ public class PushServiceImpl implements PushService {
         pushDao.registPushNotification(vo);
     }
 
+    @Transactional
     @Override
     public void updatePushNotification(UpdatePushNotificationVo vo) {
-        Boolean[] days = vo.getDay();
-        for(int day=0; day<days.length; day++) {
-            if(days[day]) {
-//                pushDao.registPushNotification(mapper.mapToPushNotification(day+1, vo, pushDao.findByMemberId(vo.getMemberId())));
-            }
-        }
+
+        if(timeInvalid(vo)) throw new IllegalArgumentException("잘못된 시간 정보입니다.");
+        pushDao.updatePushNotification(vo);
+
+    }
+
+    private boolean timeInvalid(UpdatePushNotificationVo vo) {
+        return vo.getHour() > 24 || vo.getHour() < 0 || vo.getMinute() > 60 || vo.getMinute() < 0;
     }
 
     @Transactional
