@@ -119,10 +119,10 @@ public class PushController {
                                 .builder()
                                 .setTitle("Pillin")
                                 .setBody("안녕하세요? 여러분의 건강을 책임지는 Pillin 입니다! Pillin은 영양제 재고 관리 및 푸시 알림을 활용하여 여러분의 무병장수를 기원하며 시작되었습니다.")
-                                .setImage("https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fko%2Fimages%2Fsearch%2F%25EC%2598%2581%25EC%2596%2591%25EC%25A0%259C%2F&psig=AOvVaw2J4FYwok9I3UwNP5WIPR-_&ust=1706684262130000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiij7vEhIQDFQAAAAAdAAAAABAE")
+                                .setImage("https://ifh.cc/g/pWq9AB.png")
                                 .build()
                 )
-                .setToken("c5yarpmyQlS8-jnxhpUWQR:APA91bEznsOEGs0D28iSdJqA_CRytIizfp1YfAnmr-c-tiWK_ET7Geuecww7B57XF3JHfa6raXcZUjBIXWD_LM2c-RpIzCzHK8_-KGgKIu0n_Ua1koK8cQAIS1ih7FlJE8mx11lPiIhm")
+                .setToken("cM1S9vPATQad-3ankU0GYr:APA91bF-zg_kuFfbqviT1PN6sqxPnwdwe_cX1wMI3Y1LeIt0TuNf7d082HwrHnW131_m7AcnxNk_Fd_9HqC2y0oCZ1lLTD3gwOeEbGZtbqOlb2uEz1Sg_EtemIZiLh2792ZiJ_jUAOi9")
                 .build();
         try {
             firebaseMessaging.send(fcmMessage);
