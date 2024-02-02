@@ -5,10 +5,12 @@ import com.ssafy.yourpilling.security.auth.controller.mapper.OAuthControllerMapp
 import com.ssafy.yourpilling.security.auth.jwt.JwtProperties;
 import com.ssafy.yourpilling.security.auth.model.service.OAuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/login/oauth2")
 public class OAuthController {
@@ -34,6 +36,7 @@ public class OAuthController {
 
     @PostMapping("/kakao")
     ResponseEntity<Void> kakaoAccessToken(@RequestBody RequestKakaoTokenDto dto){
+        log.info("[요청 : 카카오 로그인 요청] kakao_token : {}", dto);
         String serverAccessToken =
                 oAuthService.serverAccessToken(mapper.mapToOAuthKakaoAccessTokenVo(dto)).getAccessToken();
         return ResponseEntity
