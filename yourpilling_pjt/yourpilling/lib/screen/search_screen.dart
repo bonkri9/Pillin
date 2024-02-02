@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/const/colors.dart';
@@ -8,6 +9,8 @@ import 'package:yourpilling/screen/search_nutrient_screen.dart';
 import 'package:yourpilling/component/base_container.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import '../store/user_store.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -61,6 +64,7 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String accessToken = context.watch<UserStore>().accessToken;
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: 30,
@@ -87,7 +91,7 @@ class _SearchBar extends StatelessWidget {
 
                 String url = "http://10.0.2.2:8080/api/v1/pill/search";
                 try {
-                  await searchName(url, '비타민');
+                  await searchName(url, '비타민', accessToken);
                   print('통신성공');
                   // 절취선 이부분만 살리면 이전과 동일
                   Navigator.push(
@@ -534,13 +538,13 @@ class _SearchRanking extends StatelessWidget {
 }
 
 // 통신추가
-Future<void> searchName(url,pillName) async {
+Future<void> searchName(url,pillName, accessToken) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("이름검색 요청");
   var response = await http.get(Uri.parse('${url}?pillName=비타민'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDY2MDMsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoicXFxIn0.hHSNeA2vAsNkAa9416GEbpmCM9EdRNIErRQ-AoHPzZo8ltB57BUCusiov5zKLCyKN5ZynNsZpDg7wXOpgLCUGA",
+        'accessToken' : accessToken,
       });
 
   if (response.statusCode == 200) {

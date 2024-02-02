@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/base_container.dart';
 
 import '../component/app_bar.dart';
@@ -7,11 +8,11 @@ import '../component/pilldetail/search_pill_detail.dart';
 import '../const/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../store/user_store.dart';
+
 class SearchListScreen extends StatefulWidget {
   final String myControllerValue;
-
   const SearchListScreen({super.key, required this.myControllerValue});
-
   @override
   State<SearchListScreen> createState() => _SearchListScreenState();
 }
@@ -112,6 +113,7 @@ class _SearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String accessToken = context.watch<UserStore>().accessToken;
     var pillList = [
       {
         'pillName': '비타민 C', // 영양제 이름
@@ -221,7 +223,7 @@ class _SearchResult extends StatelessWidget {
                                 textStyle: const TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
-                                searchDetail();
+                                searchDetail(accessToken);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -265,13 +267,13 @@ class _SearchResult extends StatelessWidget {
 
 
 // 통신추가
-Future<void> searchDetail() async {
+Future<void> searchDetail(String accessToken) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("상세정보 요청");
   var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/detail?pillId=1'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4Mzk5MTAsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoicXFxIn0.6oz3NJI3jU_tKHfMh9muIois9fpFZ8nA7SxHJuR5USV3UUDheOhy5epoeezHmqbVODlaYiip2T1bD04nkjsXLg",
+        'accessToken' : accessToken,
       });
 
   if (response.statusCode == 200) {

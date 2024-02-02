@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/component/sign_up/sign_up_screen.dart';
 import 'package:yourpilling/screen/main_screen.dart';
+import 'package:yourpilling/store/user_store.dart';
 import 'main_page_child_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -14,14 +16,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  var email;
+  var password;
+  var accessToken; // 일단 이렇게 설정해놓음
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-
-    var email;
-    var password;
-    var accessToken; // 일단 이렇게 설정해놓음
     String url = "http://10.0.2.2:8080/api/v1/login";
 
     login() async {
@@ -41,6 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
           var accessToken = response
               .headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
           print(accessToken);
+          context.read<UserStore>().getToken(accessToken!); // provider에 받은 토큰 저장
+
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => MainPageChild()));
         }

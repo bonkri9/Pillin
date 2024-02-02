@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import '../component/base_container.dart';
 import 'package:http/http.dart' as http;
+
+import '../store/user_store.dart';
 
 class SearchNutrientScreen extends StatefulWidget {
   const SearchNutrientScreen({super.key});
@@ -99,6 +102,7 @@ class _MiddleTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String accessToken = context.watch<UserStore>().accessToken;
     var nutrientList = [
       {
         'nutrient': '비타민 C', // 영양제 이름
@@ -179,7 +183,7 @@ class _MiddleTab extends StatelessWidget {
               height: 50,
               child: TextButton(
                 onPressed: () {
-                  searchNutrient();
+                  searchNutrient(accessToken);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -197,7 +201,7 @@ class _MiddleTab extends StatelessWidget {
 }
 
 // 통신추가
-Future<void> searchNutrient() async {
+Future<void> searchNutrient(String accessToken) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("영양제 영양소 검색 요청");
   var response = await http.get(
@@ -205,9 +209,8 @@ Future<void> searchNutrient() async {
           'http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=셀레늄'),
       headers: {
         'Content-Type': 'application/json',
-        'accessToken':
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDQwODgsIm1lbWJlcklkIjo1NTIsInVzZXJuYW1lIjoic215YW5nMDIyMEBuYXZlci5jb20ifQ.SLeYeG6t8Vh_zLTJjewZafDEAjPN3DuJWb9tgXjEc7S-NpMkLm4AChnPJk06t1d24El1TplBBq6PvmWhhl9aew",
-      });
+        'accessToken' : accessToken,
+      } );
 
   if (response.statusCode == 200) {
     print('영양제 영양소 통신성공');

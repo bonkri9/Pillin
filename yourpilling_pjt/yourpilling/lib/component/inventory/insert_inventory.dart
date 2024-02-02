@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/component/inventory/inventory_screen.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:convert';
+
+import '../../store/user_store.dart';
 
 var insertInvenInfo = [
   {
@@ -88,9 +91,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   @override
   Widget build(BuildContext context) {
     // 영양제 등록 때 보낼 데이터 변수명
-    String accessToken =
-        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDgwOTAsIm1lbWJlcklkIjoyMTE1LCJ1c2VybmFtZSI6InExMiJ9.wtnmMso3FLShqnGJnIik9ODZLYXRxMBpD--_yM2XV8pjnouHRPrz4WNaDjaSmpT75sj0r-t6dlMgjdu6z6HgSQ";
-
+    String accessToken = context.watch<UserStore>().accessToken;
     getCurPillCount(count) {
       setState(() {
         remains = count;

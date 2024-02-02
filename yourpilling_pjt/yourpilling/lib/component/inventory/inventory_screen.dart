@@ -4,22 +4,46 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:input_quantity/input_quantity.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/angle_container.dart';
 import 'package:yourpilling/component/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/component/pilldetail/search_pill_detail.dart';
 import 'package:getwidget/getwidget.dart';
+import '../../store/user_store.dart';
 import '../base_container.dart';
 import '../app_bar.dart';
-import '../login/login_main.dart';
 import '../../screen/login_screen.dart';
-import '../login/member_register.dart';
 import '../login/regist_login_screen.dart';
-import '../sign_up/regist_signup_screen.dart';
 import '../sign_up/sign_up_screen.dart';
 import 'detail_inventory.dart';
 
-bool _takeYnChecked = false;
+getInvenList(BuildContext context) async {
+  print("재고 목록 요청");
+  String accessToken = context.watch<UserStore>().accessToken; // 토큰 받아오기
+  DateTime now = DateTime.now();
+  print('${now.year} 년 ${now.month}월');
+
+  const String invenListUrl =
+      "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+
+  var response = await http.get(
+    Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'),
+    headers: {
+      'Content-Type': 'application/json',
+      'accessToken': accessToken,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    print("재고 목록 데이터 수신 성공");
+    print(response.body);
+  } else {
+    print(response.body);
+    print("재고 목록 데이터 수신 실패");
+  }
+}
+
 
 class Inventory extends StatefulWidget {
   const Inventory({super.key});
@@ -29,59 +53,9 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
-  // var takeTrue;
-  // var takeFalse;
-
-  String accessToken =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4MDYwMTQsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.KaJM5_it_HLIz33IOspMOfRGFBHm8MCNAVvqOnWMF-tiyQJ7WlO6T0fjOMslhyAaNXgI4ZNpbsJVyiVR5WQ62g";
-
-  /**
-   * {
-   *   "ownPillId": int,
-   *   "remains": int,
-   *   "totalCount": int,
-   *   "takeCount": int,
-   *   "takeOnceAmount": int,
-   *   "takeYn": boolean
-   *   }
-   */
-
-  getInvenList() async {
-    print("재고 목록 요청");
-
-    DateTime now = DateTime.now();
-    print('${now.year} 년 ${now.month}월');
-
-    const String invenListUrl =
-        "http://10.0.2.2:8080/api/v1/pill/inventory/list";
-
-    var response = await http.get(
-      Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      },
-    );
-
-    String jsonData = response.body;
-
-    if (response.statusCode == 200) {
-      print("재고 목록 데이터 수신 성공");
-      print(response.body);
-    } else {
-      print(response.body);
-      print("재고 목록 데이터 수신 실패");
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getInvenList();
-  }
-
   @override
   Widget build(BuildContext context) {
+    getInvenList(context);
     return Scaffold(
       appBar: MainAppBar(
         barColor: Color(0xFFF5F6F9),
