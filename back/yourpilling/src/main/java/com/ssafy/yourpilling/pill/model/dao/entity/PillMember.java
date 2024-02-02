@@ -18,6 +18,18 @@ public class PillMember {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long memberId;
 
+    @Column
+    private String username;
+
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OwnPill> ownPills;
+
+    public void addOwnPill(OwnPill ownPill){
+        this.ownPills.add(ownPill);
+
+        if(ownPill.getMember() == null){
+            ownPill.setMember(this);
+        }
+    }
 }

@@ -27,7 +27,7 @@ public class OutOwnPillDetailVo {
         Long pillId;
         String name;
         String manufacturer;
-        LocalDate expirationAt;
+        String expirationAt;
         String usageInstructions;
         String primaryFunctionality;
         String precautions;

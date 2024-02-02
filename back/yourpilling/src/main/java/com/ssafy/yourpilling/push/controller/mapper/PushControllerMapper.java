@@ -1,13 +1,12 @@
 package com.ssafy.yourpilling.push.controller.mapper;
 
-import com.ssafy.yourpilling.push.controller.dto.request.RequestDeviceTokenDto;
-import com.ssafy.yourpilling.push.controller.dto.request.RequestPushMessageDto;
-import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
-import com.ssafy.yourpilling.push.model.service.vo.in.PushNotificationsVo;
+import com.ssafy.yourpilling.push.controller.dto.request.*;
+import com.ssafy.yourpilling.push.model.service.vo.in.*;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PushControllerMapper {
+    private final String SUFFIX = " 섭취하실 시간입니다.";
     public DeviceTokenVo mapToDeviceTokenVo(Long memberId, RequestDeviceTokenDto dto) {
 
         return DeviceTokenVo
@@ -18,12 +17,44 @@ public class PushControllerMapper {
 
     }
 
-    public PushNotificationsVo mapToPushNotificationsVo(RequestPushMessageDto dto) {
+    public PushNotificationVo mapToPushNotificationsVo(RequestPushFcmDto dto) {
 
-        return PushNotificationsVo
+        return PushNotificationVo
                 .builder()
                 .pushDay(dto.getPushDay())
-                .pushTime(dto.getPushTime())
+                .build();
+    }
+
+    public RegistPushNotificationVo mapToRegistPushNotificationVo(RequestPushNotificationsDto dto) {
+
+        return RegistPushNotificationVo
+                .builder()
+                .ownPillId(dto.getOwnPillId())
+                .day(dto.getDay())
+                .hour(dto.getHour())
+                .minute(dto.getMinute())
+                .message(dto.getOwnPillName() + SUFFIX)
+                .build();
+
+    }
+
+    public UpdatePushNotificationVo mapToUpdatePushNotificationVo(Long memberId, RequestUpdatePushNotificationDto dto) {
+
+        return UpdatePushNotificationVo
+                .builder()
+                .memberId(memberId)
+                .pushId(dto.getPushId())
+                .day(dto.getDay())
+                .hour(dto.getHour())
+                .minute(dto.getMinute())
+                .build();
+    }
+
+    public DeletePushNotificationsVo mapToDeletePushNotificationVo(Long memberId, RequestDeletePushNotificationsDto dto) {
+
+        return DeletePushNotificationsVo
+                .builder()
+                .pushId(dto.getPushId())
                 .build();
     }
 }
