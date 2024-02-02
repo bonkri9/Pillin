@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Value
 @Builder
 public class OwnPillRegisterValue {
-    OwnPillRegisterVo vo;
     int adjustRemain;
     boolean adjustIsTaken;
     PillMember member;
@@ -19,5 +18,7 @@ public class OwnPillRegisterValue {
     boolean isAlarm;
     LocalDateTime createAt;
     Integer takeWeekDaysValue;
+    Integer totalCount;
+    Integer takeCount;
     Integer takeOnceAmount;
 }

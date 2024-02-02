@@ -23,6 +23,7 @@ public class OutOwnPillInventorListVo {
     @Builder
     public static class ResponsePillInventoryItem {
         Long ownPillId;
+        String pillName;
         String imageUrl;
         Integer totalCount;
         Integer remains;

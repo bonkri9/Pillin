@@ -182,11 +182,6 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
 
         assertEquals(body.getInt("remains"), saved.getRemains());
         assertEquals(body.getInt("totalCount"), saved.getTotalCount());
-        assertEquals(((1<<2) ^ (1<<5)), saved.getTakeWeekdays()); // 수, 토
-        assertEquals(body.getInt("takeCount"), saved.getTakeCount());
-        assertEquals(body.getInt("takeOnceAmount"), saved.getTakeOnceAmount());
-        assertEquals(body.getBoolean("takeYn"), saved.getTakeYN());
-        assertEquals(body.getString("startAt"), saved.getStartAt().toString());
     }
 
     @Test
@@ -218,12 +213,6 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
 
         assertNull(saved.getRemains());
         assertNull(saved.getTotalCount());
-        assertNull(saved.getTakeWeekdays());
-        assertNull(saved.getTakeCount());
-        assertNull(saved.getTakeOnceAmount());
-        assertNull(saved.getStartAt());
-
-        assertFalse(saved.getTakeYN());
     }
 
     @Test

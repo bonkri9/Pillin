@@ -2,10 +2,7 @@ package com.ssafy.yourpilling.pill.model.service.impl;
 
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
-import com.ssafy.yourpilling.pill.model.dao.entity.MonthlyTakerHistory;
-import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
-import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
-import com.ssafy.yourpilling.pill.model.dao.entity.TakerHistory;
+import com.ssafy.yourpilling.pill.model.dao.entity.*;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
 import com.ssafy.yourpilling.pill.model.service.dto.TakerHistorySummary;
 import com.ssafy.yourpilling.pill.model.service.mapper.OwnPillServiceMapper;
@@ -190,17 +187,20 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     }
 
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo, int adjustRemain, boolean adjustIsTaken) {
+        Pill pill = ownPillDao.findByPillId(vo.getPillId());
+
         return OwnPillRegisterValue
                 .builder()
-                .vo(vo)
                 .adjustRemain(adjustRemain)
                 .adjustIsTaken(adjustIsTaken)
                 .member(ownPillDao.findByMemberId(vo.getMemberId()))
-                .pill(ownPillDao.findByPillId(vo.getPillId()))
+                .pill(pill)
                 .isAlarm(false)
                 .createAt(now())
                 .takeWeekDaysValue(TakeWeekday.toValue(vo.getTakeWeekdays()))
-                .takeOnceAmount(vo.getTakeOnceAmount())
+                .totalCount(vo.getTotalCount())
+                .takeCount(pill.getTakeCount())
+                .takeOnceAmount(pill.getTakeOnceAmount())
                 .build();
     }
 
