@@ -16,4 +16,9 @@ public class MonthlyTakerHistory {
     private Integer currentTakeCount;
     private Integer needToTakeCount;
 
+
+    public boolean isInvalid() {
+        return currentTakeCount == 0 && needToTakeCount == 0;
+    }
+
 }

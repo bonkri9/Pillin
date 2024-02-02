@@ -128,6 +128,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
         HashMap<LocalDate, TakerHistorySummary> response = new HashMap<>();
 
         for(MonthlyTakerHistory mth : list) {
+            if(mth.isInvalid()) continue;
             response.putIfAbsent(mth.getTakeAt(), new TakerHistorySummary(0, 0, new ArrayList<MonthlyTakerHistory>()));
             TakerHistorySummary ths = response.get(mth.getTakeAt());
             ths.increaseActualTakenCount(mth.getCurrentTakeCount());
