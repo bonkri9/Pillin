@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +10,7 @@ import 'package:yourpilling/component/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/component/pilldetail/search_pill_detail.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:yourpilling/store/inventory_store.dart';
 import '../../store/user_store.dart';
 import '../base_container.dart';
 import '../app_bar.dart';
@@ -18,33 +19,7 @@ import '../login/regist_login_screen.dart';
 import '../sign_up/sign_up_screen.dart';
 import 'detail_inventory.dart';
 
-getInvenList(BuildContext context) async {
-  print("재고 목록 요청");
-  String accessToken = context.watch<UserStore>().accessToken; // 토큰 받아오기
-  DateTime now = DateTime.now();
-  print('${now.year} 년 ${now.month}월');
-
-  const String invenListUrl =
-      "http://10.0.2.2:8080/api/v1/pill/inventory/list";
-
-  var response = await http.get(
-    Uri.parse('$invenListUrl?year=${now.year}&month=${now.month}'),
-    headers: {
-      'Content-Type': 'application/json',
-      'accessToken': accessToken,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    print("재고 목록 데이터 수신 성공");
-    print(response.body);
-  } else {
-    print(response.body);
-    print("재고 목록 데이터 수신 실패");
-  }
-}
-
-class takeYnData {
+class takeYnData{
   final int pillId;
   final String pillName;
   final String imageUrl;
@@ -52,26 +27,83 @@ class takeYnData {
   final int remains;
   final DateTime predicateRunOutAt;
 
-  takeYnData({
-    required this.pillId,
-    required this.pillName,
-    required this.imageUrl,
-    required this.totalCount,
-    required this.remains,
-    required this.predicateRunOutAt,
-  });
+  takeYnData(this.pillId, this.pillName, this.imageUrl, this.totalCount, this.remains, this.predicateRunOutAt);
 
-  factory takeYnData.fromJson(Map<String, dynamic> json) {
+  factory takeYnData.fromJson(dynamic json){
     return takeYnData(
-      pillId: json["pillId"],
-      pillName: json["pillName"],
-      imageUrl: json["imageUrl"],
-      totalCount: json["totalCount"],
-      remains: json["remains"],
-      predicateRunOutAt: json["predicateRunOutAt"],
+      json['pillId'] as int,
+      json['pillName'] as String,
+      json['imageUrl'] as String,
+      json['totalCount'] as int,
+      json['remains'] as int,
+      json['predicateRunOutAt'] as DateTime,
     );
   }
+
+  @override
+  String toString(){
+    return '{${this.pillId},${this.pillName},${this.imageUrl},${this.totalCount},${this.remains},${this.predicateRunOutAt},}';
+  }
+
 }
+
+// getInvenList(BuildContext context) async {
+//   print("재고 목록 요청");
+//   String accessToken = context.watch<UserStore>().accessToken; // 토큰 받아오기
+//
+//   const String invenListUrl =
+//       "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+//
+//   var response = await http.get(
+//     Uri.parse('$invenListUrl'),
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'accessToken': accessToken,
+//     },
+//   );
+//
+//   var invenList = jsonDecode(utf8.decode(response.bodyBytes));
+//   print(invenList);
+//   if (response.statusCode == 200) {
+//     print("재고 목록 데이터 수신 성공");
+//     // print(response.body);
+//
+//
+//   } else {
+//     print(response.body);
+//     print("재고 목록 데이터 수신 실패");
+//   }
+// }
+
+//
+// class takeYnData {
+//   final int pillId;
+//   final String pillName;
+//   final String imageUrl;
+//   final int totalCount;
+//   final int remains;
+//   final DateTime predicateRunOutAt;
+//
+//   takeYnData({
+//     required this.pillId,
+//     required this.pillName,
+//     required this.imageUrl,
+//     required this.totalCount,
+//     required this.remains,
+//     required this.predicateRunOutAt,
+//   });
+//
+//   factory takeYnData.fromJson(Map<String, dynamic> json) {
+//     return takeYnData(
+//       pillId: json["pillId"],
+//       pillName: json["pillName"],
+//       imageUrl: json["imageUrl"],
+//       totalCount: json["totalCount"],
+//       remains: json["remains"],
+//       predicateRunOutAt: json["predicateRunOutAt"],
+//     );
+//   }
+// }
 
 
 class Inventory extends StatefulWidget {
@@ -85,7 +117,7 @@ class _InventoryState extends State<Inventory> {
 
   @override
   Widget build(BuildContext context) {
-    getInvenList(context);
+    // getInvenList(context);
     return Scaffold(
       appBar: MainAppBar(
         barColor: Color(0xFFF5F6F9),
@@ -104,6 +136,8 @@ class _InventoryState extends State<Inventory> {
           )),
     );
   }
+
+
 }
 //더미 데이터
 var takeTrue = [
@@ -239,9 +273,7 @@ class _InventoryContentState extends State<_InventoryContent> {
 
   @override
   Widget build(BuildContext context) {
-    String accessToken =
-        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NTM0NTgsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.V3jSavWY_5iZaH7B_OyINM8dRPYIJeW16dtpHa8bA67yPnLFeve2fq3KxHitlXU0CyzPf5TfBS5lxmf1Ba6d7A";
-
+    String accessToken = context.watch<UserStore>().accessToken;
     getTotalNumber(number) {
       setState(() {
         totalCount = number.round();
@@ -345,12 +377,11 @@ class _TakenTab extends StatefulWidget {
 }
 
 class _TakenTabState extends State<_TakenTab> {
-  final String invenTakeYnUrl =
-      "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
-  String accessToken =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NTM0NTgsIm1lbWJlcklkIjoyMTA1LCJ1c2VybmFtZSI6InEyIn0.V3jSavWY_5iZaH7B_OyINM8dRPYIJeW16dtpHa8bA67yPnLFeve2fq3KxHitlXU0CyzPf5TfBS5lxmf1Ba6d7A";
 
-  putInvenTakeYn() async {
+  putInvenTakeYn(BuildContext context) async {
+    const String invenTakeYnUrl =
+        "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+    String accessToken = context.watch<UserStore>().accessToken;
     print("재고 섭취/미섭취 요청");
 
     var response = await http.put(
@@ -376,60 +407,33 @@ class _TakenTabState extends State<_TakenTab> {
     }
   }
 
-  Future<List<takeYnData>> getTakeTrue() async {
+  var _takeTrueData = "복용하는 영양제";
+  List<takeYnData> _datas = [];
+
+  void getTakeTrue(BuildContext context) async{
     print("재고 복용 목록 요청");
+    String accessToken = context.watch<UserStore>().accessToken;
+    String invenListUrl =
+          "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+      var response = await http.get(
+        Uri.parse('$invenListUrl'),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },
+      );
 
-    const String invenListUrl =
-        "http://10.0.2.2:8080/api/v1/pill/inventory/list";
-
-    var response = await http.get(
-      Uri.parse('$invenListUrl'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      },
-    );
-
-    // String jsonInvenListData = utf8.decode(response.bodyBytes);
-
-    // JSON 응답을 Map으로 디코딩
-    Map<String, dynamic> jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-    print(jsonData);
-
-
-    // Map에서 필요한 정보를 추출하여 사용
-    var takeTrue = jsonData['takeTrue']['data'];
-
-    // var invenListAll = jsonDecode(jsonInvenListData);
-    // var takeTrue = jsonDecode(jsonInvenListData)['takeTrue'];
-    // var takeFalse = jsonDecode(jsonInvenListData)['takeFalse'];
-
-    if (response.statusCode == 200) {
-      print("재고 복용 목록 데이터 수신 성공 이거야이거!!!");
-      // print(response.body);
-      print(utf8.decode(response.bodyBytes)); // 한글이 깨지는 문제를 해결
-      var jsonInvenListData = utf8.decode(response.bodyBytes);
-      // var invenListAll = jsonDecode(jsonInvenListData);
-      // var takeTrue = jsonDecode(jsonInvenListData)['takeTrue'];
-      List<takeYnData> takeTrueList = [];
-      // return takeTrue;
-      for (var data in takeTrue) {
-        takeTrueList.add(takeYnData.fromJson(data));
-      }
-
-      return takeTrueList;
-    } else {
-      print(response.body);
-      print("재고 복용 목록 데이터 수신 실패");
-      throw Exception("takeTrue 데이터 불러오기 실패");
-    }
+    _takeTrueData = utf8.decode(response.bodyBytes);
+    var dataObjsJson = jsonDecode(_takeTrueData)['data'] as List;
+    final List<takeYnData> parsedResponse = dataObjsJson.map((dataJson)=>takeYnData.fromJson(dataJson)).toList();
+    setState(() {
+      _datas.clear();
+      _datas.addAll(parsedResponse);
+    });
+    print(parsedResponse);
+    print("이건 뭐야야야야야야");
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getTakeTrue();
-  }
 
   //영양제 상태에 따른 조건문
   Container pillStatus(int i, var takeTrue) {
@@ -504,6 +508,18 @@ class _TakenTabState extends State<_TakenTab> {
       );
     }
   }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      getTakeTrue(context);
+    });
+  }
+
 
   final TextEditingController _textFieldController = TextEditingController();
 
@@ -642,12 +658,15 @@ class _TakenTabState extends State<_TakenTab> {
   @override
   Widget build(BuildContext context) {
 
-
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: takeTrue.length,
+      // itemCount: takeTrue.length,
+      itemCount: this._datas.length,
       itemBuilder: (context, i) {
+        final data = this._datas[i];
+        print(data.pillName.toString());
+        print("이거어어어어어엉");
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
@@ -665,7 +684,8 @@ class _TakenTabState extends State<_TakenTab> {
                   Column(
                     children: [
                       Text(
-                        "${takeTrue[i]['pillId']}",
+                        // "${takeTrue[i]['pillId']}",
+                        data.pillName,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 20,
@@ -691,7 +711,7 @@ class _TakenTabState extends State<_TakenTab> {
                               // Text('복용중'),
                               TextButton(
                                   onPressed: () {
-                                    putInvenTakeYn();
+                                    putInvenTakeYn(context);
                                   },
                                   child: Text(
                                     "복용중단",
