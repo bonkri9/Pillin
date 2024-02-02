@@ -502,7 +502,7 @@ class _TodayState extends State<_Today> {
                                     fontSize: 14,
                                     color: BASIC_BLACK,
                                   )),
-                              // Text("${pillList[i]['time']}",
+                              // Text("${dailyData[i]['time']}",
                               //     style: TextStyle(
                               //       fontWeight: FontWeight.w600,
                               //       fontSize: 14,

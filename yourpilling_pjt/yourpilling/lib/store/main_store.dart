@@ -32,6 +32,7 @@ class MainStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
+    notifyListeners();
   }
 
   // 일간 복용 기록(status Bar) 부분 조회
@@ -60,7 +61,6 @@ class MainStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
+    notifyListeners();
   }
-
-
 }
