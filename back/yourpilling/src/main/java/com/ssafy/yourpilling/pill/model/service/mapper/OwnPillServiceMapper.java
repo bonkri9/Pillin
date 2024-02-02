@@ -100,6 +100,7 @@ public class OwnPillServiceMapper {
                 .totalCount(ownPill.getTotalCount())
                 .remains(ownPill.getRemains())
                 .predicateRunOutAt(at)
+                .warningMessage(ownPill.runOutMessage())
                 .build();
     }
 }

@@ -8,7 +8,7 @@ import java.util.Arrays;
 public enum RunOutWarning {
 
     DANGER("danger", -1, 20),
-    WARING("warning", 20, 40),
+    WARNING("warning", 20, 40),
     ENOUGH("enough", 40, 100);
 
     private final String message;

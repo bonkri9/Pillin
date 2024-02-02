@@ -28,5 +28,6 @@ public class OutOwnPillInventorListVo {
         Integer totalCount;
         Integer remains;
         LocalDate predicateRunOutAt;
+        String warningMessage;
     }
 }

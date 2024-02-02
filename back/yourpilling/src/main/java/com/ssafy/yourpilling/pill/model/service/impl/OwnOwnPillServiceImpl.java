@@ -44,14 +44,14 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
         Map<Boolean, List<OwnPill>> partition = OwnPill.ownPillsYN(member.getOwnPills());
 
-        sorByRemains(partition.get(true));
+        sortByRemains(partition.get(true));
 
         return mapper.mapToResponsePillInventorListVo(
                 calculationPredicateRunOut(partition.get(true)),
                 calculationPredicateRunOut(partition.get(false)));
     }
 
-    private static void sorByRemains(List<OwnPill> partition) {
+    private static void sortByRemains(List<OwnPill> partition) {
         partition.sort(Comparator.comparing(OwnPill::getRemains));
     }
 

@@ -87,7 +87,7 @@ public class OwnPill {
     public String runOutMessage() {
         if (!this.isTakeYN()) return null;
 
-        return RunOutWarning.getMessage((double) this.getRemains() / this.getTotalCount());
+        return RunOutWarning.getMessage(((double) this.getRemains() / this.getTotalCount()) * 100);
     }
 
     public static List<String> imageUrls(List<OwnPill> ownPills) {
