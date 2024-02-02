@@ -90,6 +90,4 @@ public class OwnPillController {
         // OutOwnPillTakeYnVo vo = ownPillService.updateTakeYn(mapper.mapToOwnPillTakeYnVo(dto));
         return ResponseEntity.ok().build();
     }
-
-
 }

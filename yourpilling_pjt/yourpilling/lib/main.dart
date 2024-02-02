@@ -7,6 +7,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:yourpilling/firebase_options.dart';
 import 'package:yourpilling/splash.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:yourpilling/store/inventory_store.dart';
 import 'package:yourpilling/store/main_store.dart';
 import 'package:yourpilling/store/search_store.dart';
 import 'package:yourpilling/store/user_store.dart';
@@ -36,6 +37,7 @@ void main() async {
           ChangeNotifierProvider(create: (c) => UserStore()),
           ChangeNotifierProvider(create: (c) => MainStore()), // AnotherStore 추가
           ChangeNotifierProvider(create: (c) => SearchStore()),
+          ChangeNotifierProvider(create: (c) => InventoryStore()),// AnotherStore 추가
           // 필요한 만큼 ChangeNotifierProvider를 추가하시면 됩니다.
         ],
         child: SafeArea(
