@@ -27,7 +27,4 @@ public class HBigCategory {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "bigCategory", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<HMidCategory> midCategorys;
 }

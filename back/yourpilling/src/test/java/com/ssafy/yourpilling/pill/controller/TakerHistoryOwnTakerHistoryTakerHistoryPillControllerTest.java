@@ -336,7 +336,7 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
                 .builder()
                 .name("name")
                 .manufacturer("manufacturer")
-                .expirationAt(now())
+                .expirationAt("24month")
                 .usageInstructions("usageInstructions")
                 .primaryFunctionality("primaryFunctionality")
                 .precautions("precautions")
