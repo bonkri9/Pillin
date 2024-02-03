@@ -76,7 +76,6 @@ class _InventoryState extends State<Inventory> {
             child: Column(children: [
               _InventoryUpper(),
               _InventoryContent(),
-              _EtcZone(),
             ]),
           )),
     );
@@ -1028,79 +1027,6 @@ class _UntakenTabState extends State<_UntakenTab> {
           ),
         );
       },
-    );
-  }
-}
-
-class _EtcZone extends StatelessWidget {
-  const _EtcZone({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          BaseContainer(
-            width: 200,
-            height: 35,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("로그인",
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ],
-              ),
-            ),
-          ),
-          BaseContainer(
-            width: 200,
-            height: 35,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignupScreen()));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("회원가입",
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ],
-              ),
-            ),
-          ),
-          BaseContainer(
-            width: 200,
-            height: 35,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreenView()));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("로그인2",
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

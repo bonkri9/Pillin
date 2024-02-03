@@ -52,7 +52,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     }
 
     private static void sortByRemains(List<OwnPill> partition) {
-        partition.sort(Comparator.comparing(OwnPill::getRemains));
+            partition.sort(Comparator.comparing(OwnPill::getRemains));
     }
 
     @Transactional
