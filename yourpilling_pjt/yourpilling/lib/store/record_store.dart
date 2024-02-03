@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class RecordStore extends ChangeNotifier {
-  var monthlyData;
-  var transformedData;
+  var monthlyData; // 월간 기록 데이터
+  var pillListOfTheDay = []; // 해당 날짜에 먹은 영양제 기록들
 
 // 월간 기록 데이터 조회
   getMonthlyData(BuildContext context) async {

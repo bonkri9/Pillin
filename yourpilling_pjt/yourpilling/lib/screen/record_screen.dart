@@ -15,8 +15,6 @@ import 'package:yourpilling/store/record_store.dart';
 import 'dart:convert';
 import '../store/user_store.dart';
 
-
-
 class RecordScreen extends StatefulWidget {
   const RecordScreen({super.key});
 
@@ -26,21 +24,20 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen> {
   DateTime selectedDay = DateTime.now();
-  var pillListOfTheDay = []; // 해당 날짜의 영양제 기록 리스트
   int curMonth = DateTime.now().month; // 현재 월 state
   final scrollController = ScrollController();
 
-  getPillListOfTheDay(list) {
-    setState(() {
-      if (list != null) {
-        pillListOfTheDay = list;
-      } else {
-        pillListOfTheDay = [];
-      }
-
-      print(pillListOfTheDay);
-    });
-  }
+  // getPillListOfTheDay(list) {
+  //   setState(() {
+  //     if (list != null) {
+  //       pillListOfTheDay = list;
+  //     } else {
+  //       pillListOfTheDay = [];
+  //     }
+  //
+  //     print(pillListOfTheDay);
+  //   });
+  // }
 
   getSelectedDay(DateTime date) {
     setState(() {
@@ -55,7 +52,9 @@ class _RecordScreenState extends State<RecordScreen> {
     Color theDayCompleteContentColor = Color(0xFF4CAF50);
     Color theDayUnCompleteBoxColor = Colors.redAccent.withOpacity(0.1);
     Color theDayUnCompleteContentColor = Colors.deepOrange;
-    context.read<RecordStore>().getMonthlyData(context); // 월간 데이터 조회 요청
+    context.read<RecordStore>().getMonthlyData(context); // 페이지 들어올 때 월간 데이터 조회 요청
+    var pillListOfTheDay = context.read<RecordStore>().monthlyData;
+    print("필리스트 : ${pillListOfTheDay}");
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -86,13 +85,14 @@ class _RecordScreenState extends State<RecordScreen> {
                       ),
                     ),
                   ),
-                  configuration: JustBottomSheetPageConfiguration(
+                  configuration: JustBottomSheetPageConfiguration( // 이건 월 선택 창
                     height: MediaQuery.of(context).size.height * 0.55,
                     builder: (context) {
                       return ListView.builder(
                         padding: EdgeInsets.all(20),
                         // controller: scrollController,
                         itemBuilder: (context, i) {
+
                           return Material(
                             color: Colors.transparent,
                             child: Container(
@@ -104,9 +104,9 @@ class _RecordScreenState extends State<RecordScreen> {
                                   setState(() {
                                     curMonth = i + 1; // 현재 월
                                     selectedDay = (curMonth != DateTime.now().month) ? DateTime(DateTime.now().year, i+1, 1) : DateTime(DateTime.now().year, curMonth, DateTime.now().day); // 현재 일
-                                    pillListOfTheDay = []; // 초기화
                                   });
-                                  Navigator.pop(context);
+                                  context.watch<RecordStore>().pillListOfTheDay = []; // 초기화
+                                  Navigator.pop(context); // 선택창 닫기
                                 },
                                 splashColor: BASIC_GREY.withOpacity(0.1),
                                 child: ListTile(
@@ -174,9 +174,8 @@ class _RecordScreenState extends State<RecordScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(25),
-                  child: Calender(
+                  child: Calendar( // 캘린더
                       curMonth: curMonth,
-                      getPillListOfTheDay: getPillListOfTheDay,
                       getSelectedDay: getSelectedDay),
                 ),
               ),
@@ -184,10 +183,8 @@ class _RecordScreenState extends State<RecordScreen> {
                 height: 10,
               ),
               // 오늘 아직 먹지 않은 영양제
-              // TodayRestPill(),
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 600,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
                   color: Colors.white,
@@ -210,13 +207,20 @@ class _RecordScreenState extends State<RecordScreen> {
                       ListView.builder(
                           physics: NeverScrollableScrollPhysics(), // 스크롤 막기
                           shrinkWrap: true,
-                          itemCount: pillListOfTheDay.isNotEmpty
-                              ? pillListOfTheDay.length
+                          itemCount: pillListOfTheDay != null &&
+                              pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}'] != null &&
+                              pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}']['taken'] != null &&
+                              pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}']['taken'].isNotEmpty
+                              ? pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}']['taken'].length
                               : 0,
                           itemBuilder: (context, i) {
+                            String tmpYear = selectedDay.year.toString();
+                            String tmpMonth = selectedDay.month.toString().padLeft(2, '0');
+                            String tmpDay = selectedDay.day.toString().padLeft(2, '0');
+                            print('여기까진 받음 : ${pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']}');
                             bool isComplete =
-                                pillListOfTheDay[i].actualTakenCount ==
-                                    pillListOfTheDay[i].needToTakeTotalCount;
+                                pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['actualTakenCountTheDay'] ==
+                                    pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['needToTakenCountTheDay'];
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 8),
                               child: Container(
@@ -235,20 +239,25 @@ class _RecordScreenState extends State<RecordScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        pillListOfTheDay[i].name,
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          color: isComplete
-                                              ? theDayCompleteContentColor
-                                              : theDayUnCompleteContentColor,
+                                      Container(
+                                        width: 280,
+                                        child: Text(
+                                          pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['name'],
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                            color: isComplete
+                                                ? theDayCompleteContentColor
+                                                : theDayUnCompleteContentColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
                                       ),
                                       Row(
                                         children: [
                                           Text(
-                                            "${pillListOfTheDay[i].actualTakenCount}",
+                                            "${pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['currentTakeCount']}",
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w400,
@@ -258,7 +267,7 @@ class _RecordScreenState extends State<RecordScreen> {
                                             ),
                                           ),
                                           Text(
-                                            " / ${pillListOfTheDay[i].needToTakeTotalCount}",
+                                            " / ${pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['needToTakeCount']}",
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
@@ -288,79 +297,72 @@ class _RecordScreenState extends State<RecordScreen> {
 }
 
 // Calendar
-class Calender extends StatefulWidget {
-  Calender(
+class Calendar extends StatefulWidget {
+  Calendar(
       {Key? key,
       required this.curMonth,
-      required this.getPillListOfTheDay,
       required this.getSelectedDay})
       : super(key: key);
-  var getPillListOfTheDay;
   var getSelectedDay;
   var curMonth;
-  var _focusedDay;
 
   @override
-  State<Calender> createState() => _CalenderState();
+  State<Calendar> createState() => _CalenderState();
 }
 
 // 캘린더 class -> selectedDay, pillListOfTheDay
-class _CalenderState extends State<Calender> {
+class _CalenderState extends State<Calendar> {
   // 페이지 컨트롤러 선언
   DateTime selectedDay = DateTime.now();
-  var pillListOfTheDay = [];
 
-  @override
-  void initState() {
-    super.initState();
-    // 외부 변수를 DateTime 객체로 변환
-    widget._focusedDay = DateTime(DateTime.now().year, widget.curMonth);
-    DateTime now = DateTime.now();
-    // 현재 월의 마지막 날짜 계산
-    // int lastDayOfMonth = DateTime(now.year, widget.curMonth + 1, 0).day; // 1월 기준 31 잘 나옴
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // 외부 변수를 DateTime 객체로 변환
+  //   widget._focusedDay = DateTime(DateTime.now().year, widget.curMonth);
+  //   DateTime now = DateTime.now();
+  //   // 현재 월의 마지막 날짜 계산
+  //   // int lastDayOfMonth = DateTime(now.year, widget.curMonth + 1, 0).day; // 1월 기준 31 잘 나옴
+  //
+  //   // 맨 첫 화면에서 그날의 영양제 복용 목록 띄워주기 // 날짜 형식 정리
+  //   Future.microtask(() {
+  //     String tmpYear = now.year.toString();
+  //     String tmpMonth = '';
+  //     String tmpDay = '';
+  //     tmpMonth = (now.month.toString().length == 1) ? '0${now.month}' : now.month.toString();
+  //     tmpDay = (now.day.toString().length == 1) ? '0${now.day}' : now.day.toString();
+  //     setState(() {
+  //       widget.getPillListOfTheDay(context.read<RecordStore>().monthlyData['${tmpYear}-${tmpMonth}-${tmpDay}']['taken']);
+  //     });
+  //
+  //   });
+  // }
 
-    // 맨 첫 화면에서 그날의 영양제 복용 목록 띄워주기 // 날짜 형식 정리
-    Future.microtask(() {
-      String tmpYear = now.year.toString();
-      String tmpMonth = '';
-      String tmpDay = '';
-      tmpMonth = (now.month.toString().length == 1) ? '0${now.month}' : now.month.toString();
-      tmpDay = (now.day.toString().length == 1) ? '0${now.day}' : now.day.toString();
-      setState(() {
-        widget.getPillListOfTheDay(context.read<RecordStore>().monthlyData['${tmpYear}-${tmpMonth}-${tmpDay}']['taken']);
-      });
-
-    });
-  }
 
   // day : 유저가 선택한 날짜
   // focusedDay : 현재 포커스 된 날짜
-  void _onDaySelected(DateTime day, DateTime focusedDay) {
-    String tmpYear = day.year.toString();
-    String tmpMonth = '';
-    String tmpDay = '';
-    tmpMonth = (day.month.toString().length == 1) ? '0${day.month}' : day.month.toString();
-    tmpDay = (day.day.toString().length == 1) ? '0${day.day}' : day.day.toString();
+  _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       print("달력에서 선택한 날짜 ${day.day}"); // 여기까지 선택한 날짜 잘 받아짐
-
-      // 부모 상태 함수로 업데이트
-      widget.getSelectedDay(DateTime(day.year, day.month, day.day));
-      widget.getPillListOfTheDay(
-          context.watch<RecordStore>().monthlyData['${day.year}-$tmpMonth-$tmpDay']['taken']);
+      widget.getSelectedDay(DateTime(day.year, day.month, day.day)); // 현재 날짜 설정
     });
   }
 
-  getEventsForDay(year, month, day) {
+  getEventsForDay(pillListOfTheDay, year, month, day) {
     String tmpYear = year.toString();
-    String tmpMonth = '';
-    String tmpDay = '';
-    tmpMonth = (month.toString().length == 1) ? '0$month' : month.toString();
-    tmpDay = (day.toString().length == 1) ? '0$day' : day.toString();
-    var testObject =  context.watch<RecordStore>().monthlyData['$year-$tmpMonth-$tmpDay'];
+    String tmpMonth = month.toString().padLeft(2, '0');
+    String tmpDay = day.toString().padLeft(2, '0');
 
-    print('이게 데이터 ${testObject}');
-    return context.watch<RecordStore>().monthlyData['$year-$tmpMonth-$tmpDay'] ?? [];
+    print('필리스트 들어옴 getEventsForDay 함수안에 $pillListOfTheDay');
+
+    if (pillListOfTheDay == null ||
+        pillListOfTheDay['$year-$tmpMonth-$tmpDay'] == null ||
+        pillListOfTheDay['$year-$tmpMonth-$tmpDay']['taken'] == null) {
+      return [];
+    } else {
+      print("와 들어왔다 ㅅㅂ ${pillListOfTheDay['$year-$tmpMonth-$tmpDay']['taken']}");
+      return pillListOfTheDay['$year-$tmpMonth-$tmpDay']['taken'] ?? [];
+    }
   }
 
   // 캘린더
@@ -371,14 +373,17 @@ class _CalenderState extends State<Calender> {
     Color underFiftyColor = Colors.redAccent.withOpacity(0.65);
     Color fiftyColor = Colors.yellow;
     double dayGauge = 0;
-    var monthlyData = context.watch<RecordStore>().monthlyData;
-    print("이거 monthly임 : ${monthlyData['2024-02-02']}");
+    context.read<RecordStore>().getMonthlyData(context);
+    var list = context.read<RecordStore>().monthlyData;
+
+    var monthlyData = context.read<RecordStore>().monthlyData;
+    print("이거 monthly임 : ${monthlyData}");
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: TableCalendar(
         eventLoader: (date) {
-          return getEventsForDay(date.year, date.month, date.day);
+          return getEventsForDay(list, date.year, date.month, date.day);
         },
         calendarFormat: CalendarFormat.month,
         locale: 'ko-KR',
