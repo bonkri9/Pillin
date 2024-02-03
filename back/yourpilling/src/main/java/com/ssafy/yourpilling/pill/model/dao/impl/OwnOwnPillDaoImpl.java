@@ -65,7 +65,6 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     @Override
     public void update(OwnPillUpdateVo vo) {
         OwnPill ownPill = findByOwnPillId(vo.getOwnPillId());
-
         updateValues(vo, ownPill);
     }
 
