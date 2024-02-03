@@ -170,11 +170,12 @@ class _SearchResult extends StatelessWidget {
                                 textStyle: const TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
-                                context.read<SearchStore>().getSearchDetailData(context, pillList[i]['pillId']);
+                                var pillId = pillList[i]['pillId'] ?? 0;
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PillDetailScreen()));
+                                        builder: (context) =>
+                                            PillDetailScreen(pillId: pillId,)));
                               },
                               child: const Text(
                                 '상세 보기',

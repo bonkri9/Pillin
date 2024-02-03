@@ -5,8 +5,6 @@ import 'package:yourpilling/const/colors.dart';
 import '../component/inventory/insert_inventory.dart';
 import '../store/search_store.dart';
 
-
-
 var nutients = [
   {
     'nutrition': '오메가3',
@@ -17,7 +15,9 @@ var nutients = [
 ];
 
 class PillDetailScreen extends StatefulWidget {
-  const PillDetailScreen({super.key});
+  var pillId;
+
+  PillDetailScreen({super.key, this.pillId});
 
   @override
   State<PillDetailScreen> createState() => _pillDetailScreenState();
@@ -57,9 +57,16 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var pillDetailInfo = context.read<SearchStore>().PillDetail;
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
 
+    var pillId = widget.pillId;
+    void loadData(BuildContext context) {
+      context.read<SearchStore>().getSearchDetailData(context, pillId);
+    }
+
+    loadData(context);
+    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
+    print(pillDetailInfo);
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: RefreshIndicator(
@@ -81,6 +88,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                 pinned: true,
                 elevation: 0,
                 bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(0),
                   child: Opacity(
                     opacity: scrollOpacity,
                     child: Container(
@@ -88,33 +96,26 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                       height: 1,
                     ),
                   ),
-                  preferredSize: Size.fromHeight(0),
                 ),
                 backgroundColor: Colors.white.withOpacity(scrollOpacity),
                 title: Opacity(
                   opacity: scrollOpacity,
                   child: Container(
-                    width: 350,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                            child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          strutStyle: StrutStyle(fontSize: 16),
-                          text: TextSpan(
-                            text: '${pillDetailInfo['pillName']}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300,
-                            ),
+                      width: 300,
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        strutStyle: StrutStyle(fontSize: 16),
+                        text: TextSpan(
+                          text: '${pillDetailInfo['pillName']}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                        )),
-                      ],
-                    ),
-                  ),
+                        ),
+                      )),
                 ),
               ),
               SliverList(
@@ -132,7 +133,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('검색 상세 페이지'),
+                                // Text('검색 상세 페이지'),
                                 SizedBox(
                                   width: 30,
                                 ),
@@ -177,27 +178,21 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                               ),
                             ),
                             Container(
-                              width: 300,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                      child: RichText(
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    strutStyle: StrutStyle(fontSize: 16),
-                                    text: TextSpan(
-                                      text: '${pillDetailInfo['pillName']}',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                width: 300,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  strutStyle: StrutStyle(fontSize: 16),
+                                  text: TextSpan(
+                                    text: '${pillDetailInfo['pillName']}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  )),
-                                ],
-                              ),
-                            ),
+                                  ),
+                                )),
                             Divider(
                               height: 50,
                               indent: 50,
@@ -206,7 +201,14 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                             Center(
                               child: Column(
                                 children: [
+                                  Text('영양제 정보'),
                                   PillDetailInfo(),
+                                  Divider(
+                                    height: 50,
+                                    indent: 50,
+                                    endIndent: 50,
+                                  ),
+                                  Text('영양소 정보'),
                                   PillNutrientInfo(),
                                 ],
                               ),
@@ -214,7 +216,6 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                           ],
                         ),
                       ),
-
                     ),
                   ],
                 ),
@@ -232,9 +233,12 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
             icon: ElevatedButton(
               child: Text('등록하기'),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => InsertInventory()));
-                //   builder:(context) => InsertInventory()));
+                var pillId = pillDetailInfo['pillId'];
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            InsertInventory(pillId: pillId,)));
               },
             ),
           ),
@@ -267,9 +271,10 @@ class NoBehavior extends ScrollBehavior {
   }
 }
 
-
 class PillDetailInfo extends StatefulWidget {
-  const PillDetailInfo({super.key});
+  var pillId;
+
+  PillDetailInfo({super.key, this.pillId});
 
   @override
   State<PillDetailInfo> createState() => _PillDetailInfoState();
@@ -278,8 +283,8 @@ class PillDetailInfo extends StatefulWidget {
 class _PillDetailInfoState extends State<PillDetailInfo> {
   @override
   Widget build(BuildContext context) {
-    var pillDetailInfo = context.read<SearchStore>().PillDetail;
-
+    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
+    print(pillDetailInfo);
     return Column(
       children: [
         //유효 복용 기간
@@ -290,11 +295,12 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('유효복용기간 : '),
               Text(
-                '${pillDetailInfo['expirationAt']}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                '${pillDetailInfo['expirationAt'] ?? '미정'}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  // fontSize: 15,
+                  // fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -307,7 +313,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('주요기능 : '),
               Text(
-                '${pillDetailInfo['primaryFunctionality']}',
+                '${pillDetailInfo['primaryFunctionality'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -324,7 +330,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('주의사항 : '),
               Text(
-                '${pillDetailInfo['precautions']}',
+                '${pillDetailInfo['precautions'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -341,7 +347,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('복용방법 : '),
               Text(
-                '${pillDetailInfo['usageInstructions']}',
+                '${pillDetailInfo['usageInstructions'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -358,7 +364,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('보관방법 : '),
               Text(
-                '${pillDetailInfo['storageInstructions']}',
+                '${pillDetailInfo['storageInstructions'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -375,7 +381,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('기준 규격 : '),
               Text(
-                '${pillDetailInfo['standardSpecification']}',
+                '${pillDetailInfo['standardSpecification'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -392,7 +398,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('영양제형 : '),
               Text(
-                '${pillDetailInfo['productForm']}',
+                '${pillDetailInfo['productForm'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -401,21 +407,51 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             ],
           ),
         ),
-        //일일복용량
         Container(
           padding: EdgeInsets.only(left: 30),
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Text('일일복용량 : '),
+              Text('복용 주기 : '),
               Text(
-                '${pillDetailInfo['takeCount']}',
+                '${pillDetailInfo['takeCycle']} 일',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
-              Text(' 정'),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('일일 복용 횟수 : '),
+              Text(
+                '${pillDetailInfo['takeCount']} 회',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('1회 복용량 : '),
+              Text(
+                '${pillDetailInfo['takeOnceAmount']} 정',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
             ],
           ),
         ),
@@ -423,9 +459,12 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
     );
   }
 }
+
 //영양소 정보
 class PillNutrientInfo extends StatefulWidget {
-  const PillNutrientInfo({super.key});
+  var pillId;
+
+  PillNutrientInfo({super.key, this.pillId});
 
   @override
   State<PillNutrientInfo> createState() => _PillNutrientInfoState();
@@ -434,56 +473,74 @@ class PillNutrientInfo extends StatefulWidget {
 class _PillNutrientInfoState extends State<PillNutrientInfo> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 30),
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              Text('함유분석 : '),
-              Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['nutrition']:null} ',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
-              ),
-              Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['amount']:null}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
-              ),
-              Text(
-                '${pillDetailInfo[0]['nutrients'] != null?nutients[0]['unit']:null}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
-              ),
+    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
+    print(pillDetailInfo);
+    var nutrientsList = pillDetailInfo['nutrients']['nutrientsItems'];
+    var listLength = nutrientsList.length ?? 0;
+    print(listLength);
 
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 30),
-          alignment: Alignment.centerLeft,
-          child: Row(
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: listLength ?? 0,
+        itemBuilder: (context, i) {
+          return Column(
             children: [
-              Text(
-                '함유비율 ${pillDetailInfo[0]['nutrients'] != null?nutients[0]['includePercent']:null} %',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+              Container(
+                padding: EdgeInsets.only(left: 30),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text('영양소명 : '),
+                    Text(
+                      '${nutrientsList[i]['nutrition']}',
+                      // style: const TextStyle(
+                      //   fontSize: 15,
+                      //   fontWeight: FontWeight.w300,
+                      // ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 30),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text('함량 : '),
+                    Text(
+                      '${nutrientsList[i]['amount']} ${nutrientsList[i]['unit']}',
+                      // style: const TextStyle(
+                      //   fontSize: 15,
+                      //   fontWeight: FontWeight.w300,
+                      // ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 30),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text('함유율(%) : '),
+                    Text(
+                      '${nutrientsList[i]['includePercent'] ?? '미표기'} ',
+                      // style: const TextStyle(
+                      //   fontSize: 15,
+                      //   fontWeight: FontWeight.w300,
+                      // ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 50,
+                indent: 50,
+                endIndent: 50,
               ),
             ],
-          ),
-        ),
-      ],
-    );
+          );
+        });
   }
 }
-

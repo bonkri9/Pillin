@@ -6,7 +6,7 @@ import 'dart:convert';
 
 class SearchStore extends ChangeNotifier {
   var SearchData;
-  var PillDetail;
+  var PillDetailData;
 
   // 이름 검색 리스트 받아오기
   Future<void> getSearchNameData(BuildContext context, name) async {
@@ -108,32 +108,61 @@ class SearchStore extends ChangeNotifier {
 // 건강고민 검색 종료
 
 // 상세정보 검색
-  Future<void> getSearchDetailData(BuildContext context, id) async {
-    print('체크1');
-    print('들어온id는 ${id}');
-    String accessToken = context.read<UserStore>().accessToken;
-    print('체크2');
-    String url = 'http://10.0.2.2:8080/api/v1/pill/detail?pillId=${id}';
-    print('url은 ${url}');
-    print('토큰은 ${accessToken}');
-    print("상세정보 요청");
-    var response = await http.get(Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken' : accessToken,
-        });
-
-    if (response.statusCode == 200) {
-      print('상세정보 통신성공');
-      PillDetail = jsonDecode(utf8.decode(response.bodyBytes));
-      print("DetailhData: ${PillDetail}");
-      print('체크3');
-    } else {
-      print(response.body);
-      throw http.ClientException(
-          '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
-    }
-  }
+//   Future<void> getSearchDetailData(BuildContext context, id) async {
+//     print('체크1');
+//     print('들어온id는 ${id}');
+//     String accessToken = context.read<UserStore>().accessToken;
+//     print('체크2');
+//     String url = 'http://10.0.2.2:8080/api/v1/pill/detail?pillId=${id}';
+//     print('url은 ${url}');
+//     print('토큰은 ${accessToken}');
+//     print("상세정보 요청");
+//     var response = await http.get(Uri.parse(url),
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'accessToken' : accessToken,
+//         });
+//
+//     if (response.statusCode == 200) {
+//       print('상세정보 통신성공');
+//       PillDetail = jsonDecode(utf8.decode(response.bodyBytes));
+//       print("DetailhData: ${PillDetail}");
+//       print('체크3');
+//     } else {
+//       print(response.body);
+//       throw http.ClientException(
+//           '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
+//     }
+//   }
   // 상세정보 종료
+
+  //재고 상세 조회
+  getSearchDetailData(BuildContext context, var pillId) async {
+    String accessToken = context.watch<UserStore>().accessToken;
+    const String pillDetailUrl = "http://10.0.2.2:8080/api/v1/pill/detail";
+    try {
+      var response = await http.get(Uri.parse('$pillDetailUrl?pillId=$pillId'),
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': accessToken,
+          });
+
+      if (response.statusCode == 200) {
+        print("검색 상세 get 수신 성공");
+        print(response.body);
+
+        // InventoryStore에 응답 저장
+        PillDetailData = jsonDecode(utf8.decode(response.bodyBytes));
+
+        print(PillDetailData);
+      } else {
+        print(response.body);
+        print("검색 상세 get 수신 실패");
+      }
+    } catch (error) {
+      print(error);
+    }
+    notifyListeners();
+  }
 
 }
