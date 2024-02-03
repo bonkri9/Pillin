@@ -10,4 +10,6 @@ public interface MemberDao {
     MemberProfile findByMemberId(Long memberId);
 
     void deleteByMemberId(Long memberId);
+
+    MemberProfile findByUsername(String username);
 }

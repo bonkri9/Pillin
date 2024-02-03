@@ -6,5 +6,5 @@ import lombok.Value;
 @Value
 @Builder
 public class MemberPasswordReIssueVo {
-    Long memberId;
+    String username;
 }

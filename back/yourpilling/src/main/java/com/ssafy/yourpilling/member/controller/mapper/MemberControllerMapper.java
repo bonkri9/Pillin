@@ -43,10 +43,10 @@ public class MemberControllerMapper {
                 .build();
     }
 
-    public MemberPasswordReIssueVo mapToMemberPasswordReIssueVo(Long memberId) {
+    public MemberPasswordReIssueVo mapToMemberPasswordReIssueVo(String email) {
         return MemberPasswordReIssueVo
                 .builder()
-                .memberId(memberId)
+                .username(email)
                 .build();
     }
 }

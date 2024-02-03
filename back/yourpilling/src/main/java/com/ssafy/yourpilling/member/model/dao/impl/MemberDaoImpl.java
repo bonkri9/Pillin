@@ -29,6 +29,12 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
+    public MemberProfile findByUsername(String username) {
+        return memberJpaRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("이메일이 존재하지 않습니다."));
+    }
+
+    @Override
     public void deleteByMemberId(Long memberId) {
         memberJpaRepository.deleteByMemberId(memberId);
     }

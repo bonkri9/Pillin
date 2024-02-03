@@ -67,9 +67,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void passwordReIssue(MemberPasswordReIssueVo vo) {
         try{
-            MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+            MemberProfile member = memberDao.findByUsername(vo.getUsername());
 
-            String to = member.getUsername();
+            String to = vo.getUsername();
             String rawTmpPassword = temporaryPasswordGenerator.generatePassword();
 
             sendTemporaryPassword(to, rawTmpPassword);

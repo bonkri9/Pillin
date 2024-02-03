@@ -183,16 +183,18 @@ class MemberControllerTest {
 
 
     @Test
-    @DisplayName("임시 비밀번호 발급 후 메일로 전송")
     @Disabled
+    @DisplayName("임시 비밀번호 발급 후 메일로 전송")
     public void passwordReIssue() throws Exception {
         // when
         Member member = registerMember("zhfldk35@naver.com");
-        String accessToken = getAccessToken(member);
+
+        JSONObject body = new JSONObject();
+        body.put("email", member.getUsername());
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .put("/api/v1/member/password-reissue")
-                .header("accessToken", accessToken)
+                .put("/api/v1/password-reissue")
+                .content(body.toString())
                 .contentType(MediaType.APPLICATION_JSON);
 
         // when

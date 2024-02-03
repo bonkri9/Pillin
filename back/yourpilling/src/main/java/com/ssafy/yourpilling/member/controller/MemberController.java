@@ -1,5 +1,6 @@
 package com.ssafy.yourpilling.member.controller;
 
+import com.ssafy.yourpilling.member.controller.dto.ReIssuePasswordDto;
 import com.ssafy.yourpilling.member.controller.dto.request.RequestRegisterDto;
 import com.ssafy.yourpilling.member.controller.dto.request.RequestUpdateDto;
 import com.ssafy.yourpilling.member.controller.mapper.MemberControllerMapper;
@@ -51,10 +52,10 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/member/password-reissue")
-    ResponseEntity<Void> passwordReIssue(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        log.info("[요청 : 비밀번호 초기화] member_id : {}", principalDetails.getMember().getMemberId());
-        memberService.passwordReIssue(mapper.mapToMemberPasswordReIssueVo(principalDetails.getMember().getMemberId()));
+    @PutMapping("/password-reissue")
+    ResponseEntity<Void> passwordReIssue(@RequestBody ReIssuePasswordDto dto){
+        log.info("[요청 : 비밀번호 초기화] username : {}", dto.getEmail());
+        memberService.passwordReIssue(mapper.mapToMemberPasswordReIssueVo(dto.getEmail()));
         return ResponseEntity.ok().build();
     }
 }
