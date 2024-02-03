@@ -22,6 +22,9 @@ class _FindPasswordScreenState extends State<FindPasswordScreen> {
         FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
       },
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("비밀번호찾기"),
+        ),
         backgroundColor: BACKGROUND_COLOR,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,10 +66,8 @@ class _SearchBar extends StatelessWidget {
             onPressed: () {
               // 통신추가 - 희태
               try {
-                findPassword(context,myController.text);
+                findPassword(context, myController.text);
                 // 절취선 이부분만 살리면 이전과 동일
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
                 // 절취선 종료
               } catch (error) {
                 print('체크2 실패');
@@ -89,22 +90,75 @@ Future<void> findPassword(BuildContext context, email) async {
   String url = 'http://10.0.2.2:8080/api/v1/password-reissue';
   print('email은 ${email}');
   try {
-    var response = await http.put(Uri.parse(url), headers: {
-      'Content-Type': 'application/json',
-    },body: json.encode({
-    'email' : email,
-    }));
+    var response = await http.put(Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'email': email,
+        }));
 
     print('체크2');
-print(response.body);
+    print(response.body);
     if (response.statusCode == 200) {
       print("임시 비밀번호 발급 성공");
+      corretDialog(context);
     } else {
-      print("임시 비밀번호 발급 실패");
+      throw Exception('이메일 발송 실패 실패');
     }
   } catch (error) {
     print("잘못된 이메일을 넣으셨네요.");
+    falseDialog(context);
     print(error);
   }
 }
 // 비밀번호 찾기 종료
+
+
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("올바르지 못한 이메일"),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void corretDialog(context) {
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return WillPopScope(
+        onWillPop: () async {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LoginScreen()));
+          return true;
+        },
+        child: Dialog(
+          child: Container(
+            width: 200,
+            height: 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("임시비밀번호 발급 성공"),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
