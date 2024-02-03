@@ -54,6 +54,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     var pillDetailInfo = context.read<SearchStore>().PillDetail;

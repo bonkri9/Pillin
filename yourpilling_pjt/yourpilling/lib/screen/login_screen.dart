@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/component/sign_up/sign_up_screen.dart';
+import 'package:yourpilling/screen/find_password_screen.dart';
 import 'package:yourpilling/screen/main_screen.dart';
 import 'package:yourpilling/store/user_store.dart';
 import 'main_page_child_screen.dart';
@@ -156,7 +157,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _forgotPassword(context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => FindPasswordScreen()));
+      },
       child: const Text("비밀번호 찾기",
         style: TextStyle(color: Colors.redAccent),
       ),

@@ -7,7 +7,6 @@ import 'package:yourpilling/screen/search_health_screen.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import 'package:yourpilling/screen/search_nutrient_screen.dart';
 import 'package:yourpilling/component/base_container.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../store/search_store.dart';
 import '../store/user_store.dart';
@@ -57,6 +56,13 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // 컨트롤러를 정리해주는 작업입니다.
+    myController.dispose();
+    super.dispose();
   }
 }
 
