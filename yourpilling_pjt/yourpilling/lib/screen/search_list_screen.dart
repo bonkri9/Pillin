@@ -4,11 +4,16 @@ import 'package:yourpilling/component/base_container.dart';
 
 import '../component/app_bar.dart';
 import '../component/inventory/detail_inventory.dart';
-import '../component/pilldetail/search_pill_detail.dart';
+import 'search_pill_detail.dart';
 import '../const/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../store/search_store.dart';
 import '../store/user_store.dart';
+
+void loadData(BuildContext context, String name) {
+  context.read<SearchStore>().getSearchNameData(context, name);
+}
 
 class SearchListScreen extends StatefulWidget {
   final String myControllerValue;
@@ -97,6 +102,8 @@ class _SearchBar extends StatelessWidget {
                 size: 34,
               ),
               onPressed: () {
+                loadData(context, myController.text);
+                print('검색 통신성공');
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -114,68 +121,8 @@ class _SearchResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String accessToken = context.watch<UserStore>().accessToken;
-    var pillList = [
-      {
-        'pillName': '비타민 C', // 영양제 이름
-        'img': 'pill1', // 사진정보
-        'company': '동양제당',
-        'detail': '비타민 800mg \n EPA 700'
-      },
-      {
-        'pillName': '아연', // 영양제 이름
-        'img': 'pill2', // 사진정보
-        'company': '서양제당',
-        'detail': '아연 700mg \n EPA 700'
-      },
-      {
-        'pillName': '마그네슘', // 영양제 이름
-        'img': 'pill3', // 사진정보
-        'company': '중동제당',
-        'detail': '마그네슘 10mg \n EPA 700'
-      },
-      {
-        'pillName': '루테인', // 영양제 이름
-        'img': 'pill4', // 사진정보
-        'company': '일본제당',
-        'detail': '루테인 90mg'
-      },
-      {
-        'pillName': '오메가3', // 영양제 이름
-        'img': 'pill5', // 사진정보
-        'company': '중국제당',
-        'detail': '오메가3 150mg'
-      },
-      {
-        'pillName': '순환엔', // 영양제 이름
-        'img': 'pill6', // 사진정보
-        'company': '한국제당',
-        'detail': '간 20mg'
-      },
-      {
-        'pillName': '센파워민', // 영양제 이름
-        'img': 'pill7', // 사진정보
-        'company': '농협제당',
-        'detail': 'EPA 800mg'
-      },
-      {
-        'pillName': '비타민 D', // 영양제 이름
-        'img': 'pill8', // 사진정보
-        'company': '국민제당',
-        'detail': 'DHA 800mg'
-      },
-      {
-        'pillName': '마그네슘', // 영양제 이름
-        'img': 'pill9', // 사진정보
-        'company': '신협제당',
-        'detail': 'EPA 800mg \n EPA 700'
-      },
-      {
-        'pillName': 'To-per-Day', // 영양제 이름
-        'img': 'pill10', // 사진정보
-        'company': '경주제당',
-        'detail': '비타민 800mg \n EPA 700'
-      },
-    ];
+    var pillList = context.read<SearchStore>().SearchData['data'];
+
 
     return Container(
       height: 650,
@@ -184,7 +131,7 @@ class _SearchResult extends StatelessWidget {
         child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: pillList.length,
             itemBuilder: (context, i) {
               return BaseContainer(
                 width: 500,
@@ -202,7 +149,7 @@ class _SearchResult extends StatelessWidget {
                             Column(
                               children: [
                                 Text(
-                                  '${pillList[i]['company']}',
+                                  '${pillList[i]['manufacturer']}',
                                   style: TextStyle(
                                       color: BASIC_GREY,
                                       fontSize: 10,
@@ -223,7 +170,7 @@ class _SearchResult extends StatelessWidget {
                                 textStyle: const TextStyle(fontSize: 10),
                               ),
                               onPressed: () {
-                                searchDetail(accessToken);
+                                context.read<SearchStore>().getSearchDetailData(context, pillList[i]['pillId']);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -239,14 +186,14 @@ class _SearchResult extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Image.asset(
-                            "assets/image/${pillList[i]['img']}.jpg",
+                          Image.network(
+                            "${pillList[i]['imageUrl']}",
                             width: 100,
                             height: 130,
                           ),
                           SizedBox(width: 10,),
                           Text(
-                            "${pillList[i]['detail']}",
+                            "상세정보",
                             style: TextStyle(
                               fontSize: 10,
                               color: BASIC_BLACK,
@@ -266,43 +213,4 @@ class _SearchResult extends StatelessWidget {
 }
 
 
-// 통신추가
-Future<void> searchDetail(String accessToken) async {
-  // 반환 타입을 'Future<void>'로 변경합니다
-  print("상세정보 요청");
-  var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/detail?pillId=1'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken' : accessToken,
-      });
 
-  if (response.statusCode == 200) {
-    print('검색 리스트 통신성공');
-    print('통신온거'+response.body);
-  } else {
-    print(response.body);
-    throw http.ClientException(
-        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
-  }
-}
-
-// 통신추가
-Future<void> searchName(url,pillName) async {
-  // 반환 타입을 'Future<void>'로 변경합니다
-  print("이름검색 요청");
-  var response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/pill/search?pillName=비타민'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accessToken' : "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsInJvbGUiOiJNRU1CRVIiLCJleHAiOjE3MDY4NDY2MDMsIm1lbWJlcklkIjo0NTIsInVzZXJuYW1lIjoicXFxIn0.hHSNeA2vAsNkAa9416GEbpmCM9EdRNIErRQ-AoHPzZo8ltB57BUCusiov5zKLCyKN5ZynNsZpDg7wXOpgLCUGA",
-      });
-
-  if (response.statusCode == 200) {
-    print('검색 통신성공');
-    print(response.body);
-    print('검색 통신성공');
-  } else {
-    print(response.body);
-    throw http.ClientException(
-        '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
-  }
-}

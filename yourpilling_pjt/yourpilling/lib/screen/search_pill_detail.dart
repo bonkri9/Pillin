@@ -1,34 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/const/colors.dart';
-import '../inventory/insert_inventory.dart';
+import '../component/inventory/insert_inventory.dart';
+import '../store/search_store.dart';
 
-var pillDetailInfo = [
-  {
-    'pillName': '트리플 스트렝스 오메가3 피쉬오일 (오메가3 1040mg)', // 영양제 이름
-    'manufacturer': '나우푸드', // 제조사
-    'expirationAt': '2년', //유효복용기간
-    'usageInstructions': '물과 함께 잘 드세요', //복약지도
-    'primaryFunctionality': '기력 증진', //주요기능
-    'precautions': '약이 상당히 크니 삼킬 때 조심하세요', //주의사항
-    'storageInstructions': '상온 보관', //보관방법
-    'standardSpecification': '붕해시험 : 적합', //기준규격
-    'productForm': '고체형', // 제형
-    'takecycle': '1', //1일
-    'takeCount': '1', //1회
-    'takeOnceAmount' : '2', //2정
-    'createdAt' : '',
-    'updatedAt' : '2024-01-29', //제품 정보 수정날짜
-    'nutrients': [
-      {
-        'nutrition': '오메가3',
-        'amount': '40',
-        'unit': 'mg',
-        'includePercent': '3.33',
-      } //사람마다 등록한 날이 다를텐데 userId없어도 되는지? createAt, updateAt 관련.
-    ]
-  },
-];
+
 
 var nutients = [
   {
@@ -79,6 +56,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var pillDetailInfo = context.read<SearchStore>().PillDetail;
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
 
     return Scaffold(
@@ -125,7 +103,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                           maxLines: 1,
                           strutStyle: StrutStyle(fontSize: 16),
                           text: TextSpan(
-                            text: '${pillDetailInfo[0]['pillName']}',
+                            text: '${pillDetailInfo['pillName']}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 20,
@@ -137,20 +115,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                     ),
                   ),
                 ),
-                // actions: <Widget>[
-                //   Center(
-                //     child: Text(
-                //       "QR 체크인",
-                //     ),
-                //   ),
-                //   SizedBox(
-                //     width: 12,
-                //   ),
-                // ],
               ),
-              // SliverToBoxAdapter(
-              //   child: "",
-              // ),
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
@@ -194,16 +159,15 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(15),
                               width: MediaQuery.of(context).size.width,
-                              child: Image.asset(
+                              child: Image.network(
                                 fit: BoxFit.cover,
-                                'assets/image/비타민B.jpg',
+                                '${pillDetailInfo['imageUrl']}',
                               ),
                             ),
                             Container(
                               alignment: Alignment.center,
                               child: Text(
-                                // widget.manufacturer,
-                                '${pillDetailInfo[0]['manufacturer']}',
+                                '${pillDetailInfo['manufacturer']}',
                                 textScaleFactor: 1.3,
                                 style: const TextStyle(
                                   fontSize: 15,
@@ -223,7 +187,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                                     maxLines: 2,
                                     strutStyle: StrutStyle(fontSize: 16),
                                     text: TextSpan(
-                                      text: '${pillDetailInfo[0]['pillName']}',
+                                      text: '${pillDetailInfo['pillName']}',
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -313,6 +277,8 @@ class PillDetailInfo extends StatefulWidget {
 class _PillDetailInfoState extends State<PillDetailInfo> {
   @override
   Widget build(BuildContext context) {
+    var pillDetailInfo = context.read<SearchStore>().PillDetail;
+
     return Column(
       children: [
         //유효 복용 기간
@@ -323,7 +289,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('유효복용기간 : '),
               Text(
-                '${pillDetailInfo[0]['expirationAt']}',
+                '${pillDetailInfo['expirationAt']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -340,7 +306,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('주요기능 : '),
               Text(
-                '${pillDetailInfo[0]['primaryFunctionality']}',
+                '${pillDetailInfo['primaryFunctionality']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -357,7 +323,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('주의사항 : '),
               Text(
-                '${pillDetailInfo[0]['precautions']}',
+                '${pillDetailInfo['precautions']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -374,7 +340,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('복용방법 : '),
               Text(
-                '${pillDetailInfo[0]['usageInstructions']}',
+                '${pillDetailInfo['usageInstructions']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -391,7 +357,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('보관방법 : '),
               Text(
-                '${pillDetailInfo[0]['storageInstructions']}',
+                '${pillDetailInfo['storageInstructions']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -408,7 +374,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('기준 규격 : '),
               Text(
-                '${pillDetailInfo[0]['standardSpecification']}',
+                '${pillDetailInfo['standardSpecification']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -425,7 +391,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('영양제형 : '),
               Text(
-                '${pillDetailInfo[0]['productForm']}',
+                '${pillDetailInfo['productForm']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -442,7 +408,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('일일복용량 : '),
               Text(
-                '${pillDetailInfo[0]['takeCount']}',
+                '${pillDetailInfo['takeCount']}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,

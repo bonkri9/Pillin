@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yourpilling/component/app_bar.dart';
+import 'package:yourpilling/component/base_container_noheight.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/store/main_store.dart';
 import 'package:yourpilling/store/user_store.dart';
@@ -99,6 +100,7 @@ class Event {
 void loadData(BuildContext context) {
   context.read<MainStore>().getWeeklyData(context);
   context.read<MainStore>().getDailyData(context);
+  context.read<MainStore>().getUserInventory(context);
 }
 
 class MainScreen extends StatefulWidget {
@@ -132,36 +134,36 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class _SearchBar extends StatelessWidget {
-  const _SearchBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double containerWidth = screenWidth * 0.9; // 화면의 90%
-
-    return BaseContainer(
-      width: containerWidth,
-      height: 50,
-      child: TextButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SearchScreen()));
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("어떤 영양제를 찾으세요?",
-                style: TextStyle(
-                  color: Colors.grey,
-                )),
-            Icon(Icons.search, color: Color(0xFFFF6666)),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// class _SearchBar extends StatelessWidget {
+//   const _SearchBar({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     double screenWidth = MediaQuery.of(context).size.width;
+//     double containerWidth = screenWidth * 0.9; // 화면의 90%
+//
+//     return BaseContainer(
+//       width: containerWidth,
+//       height: 50,
+//       child: TextButton(
+//         onPressed: () {
+//           Navigator.push(
+//               context, MaterialPageRoute(builder: (context) => SearchScreen()));
+//         },
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Text("어떤 영양제를 찾으세요?",
+//                 style: TextStyle(
+//                   color: Colors.grey,
+//                 )),
+//             Icon(Icons.search, color: Color(0xFFFF6666)),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class _Welcome extends StatelessWidget {
   const _Welcome({super.key});
@@ -214,7 +216,6 @@ class _Week extends StatefulWidget {
 }
 
 class _WeekState extends State<_Week> {
-  DateTime _selectedDay = DateTime.now();
   Color fullColor = Colors.greenAccent;
   Color overFiftyColor = Colors.lightGreenAccent;
   Color underFiftyColor = Colors.redAccent.withOpacity(0.65);
@@ -306,7 +307,8 @@ class _WeekState extends State<_Week> {
                   calendarBuilders:
                       CalendarBuilders(markerBuilder: (context, date, events) {
                       var weekData = context.watch<MainStore>().weekData;
-                      print('이게찐 ${weekData['data']}');
+                      print('weekData: ${weekData['data']}');
+                      print('events $date');
 
                     return Positioned(
                       bottom: 5,
@@ -344,273 +346,251 @@ class _Today extends StatefulWidget {
 }
 
 class _TodayState extends State<_Today> {
-  // 현재까지 먹은 영양제의 개수
-  int takenNum = 0;
 
   // Progress Bar 진행도
   int gauge = 0;
 
   Color btnColor = Colors.redAccent; // 버튼 색상 state
 
-  final String putPillTakeUrl = "http://10.0.2.2:8080/api/v1/pill/take";
-
-  putPillTake() async {
-    print("영양제 복용 완료 요청");
-    String accessToken = context.watch<UserStore>().accessToken;
-    var response = await http.put(Uri.parse('$putPillTakeUrl'),
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': accessToken,
-        },
-        body: json.encode({
-          "ownPillId": 256,
-        }));
-
-    if (response.statusCode == 200) {
-      print("영양제 복용 완료 요청 수신 성공");
-      print(response.body);
-      var accessToken =
-          response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
-      print(accessToken);
-    } else {
-      print(response.body);
-      print("영양제 복용 완료 요청 수신 실패");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
     var dailyData = context.watch<MainStore>().dailyData;
-    return BaseContainer(
-        width: containerWidth,
-        height: 300,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "오늘 섭취할 영양제",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "Pretendard",
-                      fontSize: 17.5,
-                      color: BASIC_BLACK,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AlarmScreen()));
-                    },
-                    icon: Icon(
-                      Icons.add,
-                      size: 25,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 30),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: takenNum != dailyData.length
-                    ? Text(
-                        '${(takenNum * 100 / dailyData.length).round()} %',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: BASIC_BLACK),
-                      )
-                    : Text(
-                        "오늘의 영양 충전 완료 :)",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
-                      ),
-              ),
-            ),
-            // Progress Bar
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: dailyData.length == takenNum
-                  ? // 약 모두 다 먹었을 때 초록색 Progress Bar
-                  AnimatedProgressBar(
-                      width: 300,
-                      value: takenNum / dailyData.length,
-                      duration: const Duration(seconds: 1),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.lightGreenAccent,
-                          Colors.greenAccent,
-                        ],
-                      ),
-                      backgroundColor: Colors.grey.withOpacity(0.2),
-                    )
-                  : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
-                  AnimatedProgressBar(
-                      width: 320,
-                      // height: 11,
-                      value: takenNum / dailyData.length,
-                      duration: const Duration(seconds: 1),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.orangeAccent,
-                          Colors.redAccent,
-                        ],
-                      ),
-                      backgroundColor: Colors.grey.withOpacity(0.2),
-                    ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
-                shrinkWrap: true,
-                itemCount: dailyData.length,
-                itemBuilder: (context, i) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: Container(
-                        width: 300,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                'assets/image/${i + 1}.png',
-                                width: 17,
-                                height: 17,
-                              ),
-                              Text("${dailyData[i]['name']}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: BASIC_BLACK,
-                                  )),
-                              // Text("${dailyData[i]['time']}",
-                              //     style: TextStyle(
-                              //       fontWeight: FontWeight.w600,
-                              //       fontSize: 14,
-                              //       color: BASIC_BLACK,
-                              //     )),
-                              dailyData[i]['takeYn'] == false
-                                  ? // 복용을 아직 안한 영양제라면
-                                  AnimatedContainer(
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.redAccent,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                      child: TextButton(
-                                        onPressed: () {
-                                          // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
-                                          setState(() {
-                                            dailyData[i]['takeYn'] = true;
-                                            takenNum++;
+    var curDailyCompleteCount = context.watch<MainStore>().curCompleteCount;
 
-                                            print(takenNum);
-                                            if (dailyData.length == takenNum) {
-                                              btnColor = Colors.greenAccent;
-                                            }
-                                            putPillTake();
-                                          });
-                                        },
-                                        style: ButtonStyle(
-                                          padding: MaterialStateProperty.all(
-                                              EdgeInsets.zero), // 패딩 없애줘야 함
-                                        ),
-                                        child: Text("복용",
-                                            style: TextStyle(
-                                              color: Colors.redAccent,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                      ),
-                                    )
-                                  : dailyData.length != takenNum
-                                      ? // 아직 다 먹진 않았고
-                                      // 복용한 영양제라면
-                                      Container(
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.redAccent,
-                                            border: Border.all(
-                                              color: Colors.redAccent,
-                                              width: 1,
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: TextButton(
-                                            onPressed: () {},
-                                            style: ButtonStyle(
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      EdgeInsets
-                                                          .zero), // 패딩 없애줘야 함
-                                            ),
-                                            child: Text("완료",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                          ),
-                                        )
-                                      : Container(
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                            color: btnColor,
-                                            border: Border.all(
-                                              color: btnColor,
-                                              width: 1,
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: TextButton(
-                                            onPressed: () {},
-                                            style: ButtonStyle(
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      EdgeInsets
-                                                          .zero), // 패딩 없애줘야 함
-                                            ),
-                                            child: Text("완료",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                          ),
-                                        )
-                            ],
+    return BaseContainerOnlyWidth(
+        width: containerWidth,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "오늘 섭취할 영양제",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Pretendard",
+                        fontSize: 17.5,
+                        color: BASIC_BLACK,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AlarmScreen()));
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        size: 25,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: curDailyCompleteCount != dailyData.length
+                      ? Text(
+                          '${(curDailyCompleteCount * 100 / dailyData.length).round()} %',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, color: BASIC_BLACK),
+                        )
+                      : Text(
+                          "오늘의 영양 충전 완료 :)",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 13,
                           ),
-                        )),
-                  );
-                })
-          ],
+                        ),
+                ),
+              ),
+              // Progress Bar
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: dailyData.length == curDailyCompleteCount
+                    ? // 약 모두 다 먹었을 때 초록색 Progress Bar
+                    AnimatedProgressBar(
+                        width: 300,
+                        value: curDailyCompleteCount / dailyData.length,
+                        duration: const Duration(seconds: 1),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Colors.lightGreenAccent,
+                            Colors.greenAccent,
+                          ],
+                        ),
+                        backgroundColor: Colors.grey.withOpacity(0.2),
+                      )
+                    : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
+                    AnimatedProgressBar(
+                        width: 320,
+                        // height: 11,
+                        value: curDailyCompleteCount / dailyData.length,
+                        duration: const Duration(seconds: 1),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Colors.orangeAccent,
+                            Colors.redAccent,
+                          ],
+                        ),
+                        backgroundColor: Colors.grey.withOpacity(0.2),
+                      ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ListView.builder(
+                  physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
+                  shrinkWrap: true,
+                  itemCount: dailyData.length,
+                  itemBuilder: (context, i) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child: Container(
+                          width: 300,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Image.asset(
+                                  'assets/image/${i + 1}.png',
+                                  width: 17,
+                                  height: 17,
+                                ),
+                                Container(
+                                  width: 200,
+                                  child: Text("${dailyData[i]['name']}",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        color: BASIC_BLACK,
+                                      )),
+                                ),
+                                // Text("${dailyData[i]['time']}",
+                                //     style: TextStyle(
+                                //       fontWeight: FontWeight.w600,
+                                //       fontSize: 14,
+                                //       color: BASIC_BLACK,
+                                //     )),
+                                dailyData[i]['takeYn'] == false
+                                    ? // 복용을 아직 안한 영양제라면
+                                    AnimatedContainer(
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.redAccent,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                        ),
+                                        duration: Duration(seconds: 2),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
+                                              dailyData[i]['takeYn'] = true;
+                                              context.read<MainStore>().putPillTake(context);
+                                              print(curDailyCompleteCount);
+                                              if (dailyData.length == curDailyCompleteCount) {
+                                                btnColor = Colors.greenAccent;
+                                              }
+                                          },
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                EdgeInsets.zero), // 패딩 없애줘야 함
+                                          ),
+                                          child: Text("복용",
+                                              style: TextStyle(
+                                                color: Colors.redAccent,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w600,
+                                              )),
+                                        ),
+                                      )
+                                    : dailyData.length != curDailyCompleteCount
+                                        ? // 아직 다 먹진 않았고
+                                        // 복용한 영양제라면
+                                        Container(
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.redAccent,
+                                              border: Border.all(
+                                                color: Colors.redAccent,
+                                                width: 1,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            child: TextButton(
+                                              onPressed: () {},
+                                              style: ButtonStyle(
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        EdgeInsets
+                                                            .zero), // 패딩 없애줘야 함
+                                              ),
+                                              child: Text("완료",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                            ),
+                                          )
+                                        : Container(
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color: btnColor,
+                                              border: Border.all(
+                                                color: btnColor,
+                                                width: 1,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            child: TextButton(
+                                              onPressed: () {},
+                                              style: ButtonStyle(
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        EdgeInsets
+                                                            .zero), // 패딩 없애줘야 함
+                                              ),
+                                              child: Text("완료",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                            ),
+                                          )
+                              ],
+                            ),
+                          )),
+                    );
+                  })
+            ],
+          ),
         ));
   }
 }
@@ -674,11 +654,14 @@ class _StockState extends State<_Stock> {
     return restDegreeColor;
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
-
+    var userInventoryData = context.watch<MainStore>().userInventoryData;
     return BaseContainer(
         width: containerWidth,
         height: 250,
@@ -718,33 +701,41 @@ class _StockState extends State<_Stock> {
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: 3, // 홈 화면에는 3개까지만 보여주자
+                  itemCount: userInventoryData.length, // 홈 화면에는 3개까지만 보여주자
                   itemBuilder: (context, i) {
-                    return Column(
-                      children: [
-                        Image.asset(
-                          "assets/image/비타민B.jpeg",
-                          width: 110,
-                          height: 80,
-                        ),
-                        SizedBox(height: 6),
-                        Text(
-                          "${pillList[i]['pillName']}",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: BASIC_BLACK,
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Column(
+                        children: [
+                          Image.network(
+                            "${userInventoryData[i]['imageUrl']}",
+                            width: 110,
+                            height: 80,
                           ),
-                        ),
-                        Text(
-                          "${pillList[i]['rest']}/${pillList[i]['total']}",
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: setColor(pillList[i]['rest'] as int,
-                                pillList[i]['total'] as int),
+                          SizedBox(height: 6),
+                          Container(
+                            width: 120,
+                            child: Text(
+                              "${userInventoryData[i]['pillName']}",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: BASIC_BLACK,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                          Text(
+                            "${userInventoryData[i]['remains']}/${userInventoryData[i]['totalCount']}",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: setColor(userInventoryData[i]['remains'] as int,
+                                  userInventoryData[i]['totalCount'] as int),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }),
             )

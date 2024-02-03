@@ -52,7 +52,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     }
 
     private static void sortByRemains(List<OwnPill> partition) {
-        partition.sort(Comparator.comparing(OwnPill::getRemains));
+            partition.sort(Comparator.comparing(OwnPill::getRemains));
     }
 
     @Transactional
@@ -71,7 +71,12 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     @Transactional
     @Override
     public void update(OwnPillUpdateVo vo) {
+        if(isUpdateVoInvalid(vo)) throw new IllegalArgumentException("잘못된 재고 수정 요청입니다.");
         ownPillDao.update(vo);
+    }
+
+    private boolean isUpdateVoInvalid(OwnPillUpdateVo vo) {
+        return vo.getRemains() == null || vo.getTotalCount() == null|| vo.getTotalCount() < vo.getRemains();
     }
 
     @Transactional
@@ -187,6 +192,9 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     }
 
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo, int adjustRemain, boolean adjustIsTaken) {
+
+        if(isOwnPillRegisterVoInvalid(vo)) throw new IllegalArgumentException("잘못된 재고 등록 요청입니다.");
+
         Pill pill = ownPillDao.findByPillId(vo.getPillId());
 
         return OwnPillRegisterValue
@@ -202,6 +210,10 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 .takeCount(pill.getTakeCount())
                 .takeOnceAmount(pill.getTakeOnceAmount())
                 .build();
+    }
+
+    private boolean isOwnPillRegisterVoInvalid(OwnPillRegisterVo vo) {
+        return vo.getTotalCount() == null || vo.getTakeYn() == null || vo.getTakeWeekdays() == null || vo.getRemains() == null;
     }
 
     private ResponsePillInventorListData calculationPredicateRunOut(List<OwnPill> ownPills) {
