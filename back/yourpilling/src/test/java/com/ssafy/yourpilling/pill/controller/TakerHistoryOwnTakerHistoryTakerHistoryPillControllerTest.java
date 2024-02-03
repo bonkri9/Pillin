@@ -198,6 +198,8 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         JSONObject body = new JSONObject();
         body.put("ownPillId", ownPill.getOwnPillId());
         body.put("takeYn", false);
+        body.put("remains", 60);
+        body.put("totalCount", 60);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .put("/api/v1/pill/inventory")
@@ -212,8 +214,8 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         perform.andExpect(status().isOk());
         OwnPill saved = ownPillJpaRepository.findByOwnPillId(ownPill.getOwnPillId()).get();
 
-        assertNull(saved.getRemains());
-        assertNull(saved.getTotalCount());
+        assertEquals(60, saved.getRemains());
+        assertEquals(60, saved.getTotalCount());
     }
 
     @Test
