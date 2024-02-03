@@ -31,6 +31,11 @@ public class RankDaoImpl implements RankDao {
     }
 
     @Override
+    public List<Rank> findAll() {
+        return rankRepository.findAll();
+    }
+
+    @Override
     public List<EachCountPerPill> rankAgeAndGender(int startAgeGroup, int endAgeGroup, String gender) {
         return rankPillMemberRepository.countPillTotalMemberWithAgeAndGender(startAgeGroup, endAgeGroup, gender);
     }
@@ -38,6 +43,22 @@ public class RankDaoImpl implements RankDao {
     @Override
     public List<EachCountPerPill> rankNutrition(String nutrient) {
         return rankPillMemberRepository.countPillTotalMemberWithNutrient(nutrient);
+    }
+
+    @Override
+    public RankPillMember findByMemberId(Long memberId) {
+        return rankPillMemberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
+    @Override
+    public List<Rank> allRankExceptMemberAgeAndGender(Integer weeks) {
+        return rankRepository.allRankExceptStringAgeGroupAndGenderCategoryName(weeks);
+    }
+
+    @Override
+    public List<Rank> findByWeeks(Integer weeks) {
+        return rankRepository.findByWeeks(weeks);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ssafy.yourpilling.rank.model.dao.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.checkerframework.checker.units.qual.C;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +28,9 @@ public class Rank {
 
     @Column
     private Integer rank;
+
+    @Column(name = "category_nm")
+    private String categoryNm;
 
     @Column(name = "create_at")
     private LocalDateTime createAt;

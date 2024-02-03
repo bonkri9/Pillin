@@ -28,7 +28,7 @@ public enum AgeGroup {
         this.range = range;
     }
 
-    public static AgeGroup whatAgeGroup(LocalDateTime birthday){
+    public static AgeGroup whatAgeGroup(LocalDate birthday){
         int birthYear = Math.abs(LocalDate.now().getYear() - birthday.getYear());
 
         return Arrays.stream(AgeGroup.values())

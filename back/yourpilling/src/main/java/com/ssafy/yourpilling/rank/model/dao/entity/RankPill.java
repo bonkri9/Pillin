@@ -16,4 +16,13 @@ public class RankPill {
     @Column(name = "pill_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long pillId;
+
+    @Column
+    private String name;
+
+    @Column
+    private String manufacturer;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 }

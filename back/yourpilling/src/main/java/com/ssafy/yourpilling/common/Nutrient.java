@@ -26,7 +26,7 @@ public enum Nutrient {
     PANTOTHENIC_ACID("PantothenicAcid", "판토텐산", List.of(4, 5, 6, 10, 12)),
     BIOTIN("Biotin", "비오틴", List.of(5, 6, 12, 13)),
     IRON("Iron", "철분", List.of(2, 7, 11)),
-    OMEGA3("Omega3", "오메가3", List.of(2, 8, 9)),
+    OMEGA3("Omega3", "오메가3(EPA+DHA)", List.of(2, 8, 9)),
     CHROMIUM("Chromium", "크롬", List.of(9));
 
     private final String english;
