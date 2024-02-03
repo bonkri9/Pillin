@@ -213,7 +213,8 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     }
 
     private boolean isOwnPillRegisterVoInvalid(OwnPillRegisterVo vo) {
-        return vo.getTotalCount() == null || vo.getTakeYn() == null || vo.getTakeWeekdays() == null || vo.getRemains() == null;
+        return vo.getTotalCount() == null || vo.getTakeYn() == null || vo.getTakeWeekdays() == null
+                || vo.getRemains() == null || vo.getRemains() > vo.getTotalCount();
     }
 
     private ResponsePillInventorListData calculationPredicateRunOut(List<OwnPill> ownPills) {

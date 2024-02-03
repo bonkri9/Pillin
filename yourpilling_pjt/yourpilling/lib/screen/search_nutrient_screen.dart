@@ -56,6 +56,14 @@ class _SearchNutrientScreenState extends State<SearchNutrientScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    // 컨트롤러를 정리해주는 작업입니다.
+    myController.dispose();
+    super.dispose();
+  }
+
 }
 
 // 검색바

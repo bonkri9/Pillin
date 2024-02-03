@@ -35,10 +35,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
         if (response.statusCode == 200) {
           print("회원가입 성공");
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+          corretDialog(context);
+        }else{
+          throw Exception('회원가입 실패');
         }
       } catch (error) {
+        falseDialog(context);
+        print('올바르지않은이메일');
         print(error);
       }
     }
@@ -148,10 +151,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     const Text("이미 Pillin 회원이시군요?"),
                     TextButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                          Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()),);
                         },
                         child: const Text(
                           "Login",
@@ -166,4 +167,54 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+}
+
+
+
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("올바르지 않은 입력입니다."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void corretDialog(context) {
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return WillPopScope(
+        onWillPop: () async {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LoginScreen()));
+          return true;
+        },
+        child: Dialog(
+          child: Container(
+            width: 200,
+            height: 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("회원가입 성공"),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

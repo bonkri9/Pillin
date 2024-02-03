@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/component/sign_up/sign_up_screen.dart';
+import 'package:yourpilling/screen/find_password_screen.dart';
 import 'package:yourpilling/screen/main_screen.dart';
 import 'package:yourpilling/store/user_store.dart';
 import 'main_page_child_screen.dart';
@@ -38,15 +39,17 @@ class _LoginScreenState extends State<LoginScreen> {
             }));
 
 
+        print(response.body);
         if (response.statusCode == 200) {
           print("로그인 성공");
           var accessToken = response
               .headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
           print(accessToken);
           context.read<UserStore>().getToken(accessToken!); // provider에 받은 토큰 저장
-
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => MainPageChild()));
+        }else{
+          falseDialog(context);
         }
       } catch(error) {
         print(error);
@@ -137,8 +140,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ElevatedButton(
           onPressed: () {
             login();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MainPageChild()));
           },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
@@ -156,7 +157,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _forgotPassword(context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => FindPasswordScreen()));
+      },
       child: const Text("비밀번호 찾기",
         style: TextStyle(color: Colors.redAccent),
       ),
@@ -178,4 +182,26 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
+}
+
+
+// 틀린 로그인일때 출력되는 팝업
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("회원정보가 존재하지 않습니다."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

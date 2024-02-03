@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:http/http.dart' as http;
+import '../../store/inventory_store.dart';
 import '../../store/user_store.dart';
 import '../inventory/insert_inventory.dart';
 
@@ -44,8 +45,14 @@ var nutients = [
   }
 ];
 
+// void loadData(BuildContext context) {
+//   context.read<InventoryStore>().getPillDetailData(context, ownPillId);
+// }
+
 class InvenDetailScreen extends StatefulWidget {
-  const InvenDetailScreen({super.key});
+  var ownPillId;
+
+  InvenDetailScreen({super.key, this.ownPillId});
 
   @override
   State<InvenDetailScreen> createState() => _invenDetailScreenState();
@@ -55,33 +62,33 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
   final _scrollController = ScrollController();
   double scrollOpacity = 0;
 
-  var ownPillId;
-  late String accessToken;
-  final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
-
-  getInvenDetail() async {
-    print("재고 상세 요청");
-
-    // int pillId = 256;
-    var response = await http.get(
-        Uri.parse('$invenDetailUrl?ownPillId=256'),
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': accessToken,
-        },
-    );
-
-    if (response.statusCode == 200) {
-      print("재고 상세 요청 수신 성공");
-      print(response.body);
-      var accessToken =
-          response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
-      print(accessToken);
-    } else {
-      print(response.body);
-      print("재고 상세 요청 수신 실패");
-    }
-  }
+  // var ownPillId;
+  // late String accessToken;
+  // final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+  //
+  // getInvenDetail() async {
+  //   print("재고 상세 요청");
+  //
+  //   // int pillId = 256;
+  //   var response = await http.get(
+  //       Uri.parse('$invenDetailUrl?ownPillId=256'),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'accessToken': accessToken,
+  //       },
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     print("재고 상세 요청 수신 성공");
+  //     print(response.body);
+  //     var accessToken =
+  //         response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+  //     print(accessToken);
+  //   } else {
+  //     print(response.body);
+  //     print("재고 상세 요청 수신 실패");
+  //   }
+  // }
 
   // setownPillId(ownPillIdInput) {
   //   ownPillId = ownPillIdInput;
@@ -105,7 +112,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
   void initState() {
     _scrollController.addListener(onScroll);
     super.initState();
-    getInvenDetail();
+    // context.read<InventoryStore>().getPillDetailData(context, ownPillId);
   }
 
   //사라지는 과정
@@ -117,8 +124,16 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    accessToken = context.watch<UserStore>().accessToken;
+    // accessToken = context.watch<UserStore>().accessToken;
+    var ownPillId = widget.ownPillId;
+    void loadData(BuildContext context) {
+      context.read<InventoryStore>().getPillDetailData(context, ownPillId);
+    }
+
+    loadData(context);
+    var invenDetailData = context.read<InventoryStore>().invenDetailData;
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
+    print(invenDetailData);
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: RefreshIndicator(
@@ -157,20 +172,22 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Flexible(
+                        Container(
+                            width: 300,
                             child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          strutStyle: StrutStyle(fontSize: 16),
-                          text: TextSpan(
-                            text: '${pillDetailInfo[0]['pillName']}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        )),
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              strutStyle: StrutStyle(fontSize: 16),
+                              text: TextSpan(
+                                text: '${invenDetailData['pill']['name']}',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -232,9 +249,9 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(15),
                               width: MediaQuery.of(context).size.width,
-                              child: Image.asset(
+                              child: Image.network(
                                 fit: BoxFit.cover,
-                                'assets/image/비타민B.jpg',
+                                '${invenDetailData['pill']['imageUrl']}',
                               ),
                             ),
                             Container(
@@ -250,27 +267,21 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                               ),
                             ),
                             Container(
-                              width: 300,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                      child: RichText(
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    strutStyle: StrutStyle(fontSize: 16),
-                                    text: TextSpan(
-                                      text: '${pillDetailInfo[0]['pillName']}',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                width: 270,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  strutStyle: StrutStyle(fontSize: 16),
+                                  text: TextSpan(
+                                    text: '${invenDetailData['pill']['name']}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  )),
-                                ],
-                              ),
-                            ),
+                                  ),
+                                )),
                             Divider(
                               height: 50,
                               indent: 50,
@@ -279,8 +290,15 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                             Center(
                               child: Column(
                                 children: [
+                                  Text('복용 루틴 정보'),
+                                  PillRoutineInfo(),
+                                  Divider(
+                                    height: 50,
+                                    indent: 50,
+                                    endIndent: 50,
+                                  ),
+                                  Text('영양제 상세 정보'),
                                   PillDetailInfo(),
-                                  PillNutrientInfo(),
                                 ],
                               ),
                             ),
@@ -299,8 +317,8 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-        child: const Text('구매하기'),
-                onPressed: () async {
+              child: const Text('구매하기'),
+              onPressed: () async {
                 final url = Uri.parse(
                     'https://www.coupang.com/vp/products/7559679373?itemId=20998974266&vendorItemId=70393847077&q=%EB%82%98%EC%9A%B0%ED%91%B8%EB%93%9C+%EC%98%A4%EB%A9%94%EA%B0%803&itemsCount=36&searchId=042c491feb4b4cc699aea94c1b27be04&rank=1&isAddedCart=');
                 if (await canLaunchUrl(url)) {
@@ -326,7 +344,9 @@ class NoBehavior extends ScrollBehavior {
 }
 
 class PillDetailInfo extends StatefulWidget {
-  const PillDetailInfo({super.key});
+  var ownPillId;
+
+  PillDetailInfo({super.key, this.ownPillId});
 
   @override
   State<PillDetailInfo> createState() => _PillDetailInfoState();
@@ -335,6 +355,13 @@ class PillDetailInfo extends StatefulWidget {
 class _PillDetailInfoState extends State<PillDetailInfo> {
   @override
   Widget build(BuildContext context) {
+    var ownPillId = widget.ownPillId;
+    void loadData(BuildContext context) {
+      context.read<InventoryStore>().getPillDetailData(context, ownPillId);
+    }
+
+    loadData(context);
+    var invenDetailData = context.read<InventoryStore>().invenDetailData;
     return Column(
       children: [
         //유효 복용 기간
@@ -345,11 +372,12 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('유효복용기간 : '),
               Text(
-                '${pillDetailInfo[0]['expirationAt']}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                '${invenDetailData['pill']['expirationAt'] ?? '미정'}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  // fontSize: 15,
+                  // fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -362,7 +390,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('주요기능 : '),
               Text(
-                '${pillDetailInfo[0]['primaryFunctionality']}',
+                '${invenDetailData['pill']['primaryFunctionality'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -379,7 +407,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('주의사항 : '),
               Text(
-                '${pillDetailInfo[0]['precautions']}',
+                '${invenDetailData['pill']['precautions'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -396,7 +424,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('복용방법 : '),
               Text(
-                '${pillDetailInfo[0]['usageInstructions']}',
+                '${invenDetailData['pill']['usageInstructions'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -413,7 +441,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('보관방법 : '),
               Text(
-                '${pillDetailInfo[0]['storageInstructions']}',
+                '${invenDetailData['pill']['storageInstructions'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -430,7 +458,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('기준 규격 : '),
               Text(
-                '${pillDetailInfo[0]['standardSpecification']}',
+                '${invenDetailData['pill']['standardSpecification'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -447,30 +475,12 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('영양제형 : '),
               Text(
-                '${pillDetailInfo[0]['productForm']}',
+                '${invenDetailData['pill']['productForm'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
                 // ),
               ),
-            ],
-          ),
-        ),
-        //일일복용량
-        Container(
-          padding: EdgeInsets.only(left: 30),
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              Text('일일복용량 : '),
-              Text(
-                '${pillDetailInfo[0]['takeCount']}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
-              ),
-              Text(' 정'),
             ],
           ),
         ),
@@ -480,16 +490,25 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
 }
 
 //영양소 정보
-class PillNutrientInfo extends StatefulWidget {
-  const PillNutrientInfo({super.key});
+class PillRoutineInfo extends StatefulWidget {
+  var ownPillId;
+
+  PillRoutineInfo({super.key, this.ownPillId});
 
   @override
-  State<PillNutrientInfo> createState() => _PillNutrientInfoState();
+  State<PillRoutineInfo> createState() => _PillRoutineInfoState();
 }
 
-class _PillNutrientInfoState extends State<PillNutrientInfo> {
+class _PillRoutineInfoState extends State<PillRoutineInfo> {
   @override
   Widget build(BuildContext context) {
+    var ownPillId = widget.ownPillId;
+    void loadData(BuildContext context) {
+      context.read<InventoryStore>().getPillDetailData(context, ownPillId);
+    }
+
+    loadData(context);
+    var invenDetailData = context.read<InventoryStore>().invenDetailData;
     return Column(
       children: [
         Container(
@@ -497,23 +516,9 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Text('함유분석 : '),
+              Text('재고량 : '),
               Text(
-                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['nutrition'] : null} ',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
-              ),
-              Text(
-                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['amount'] : null}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
-              ),
-              Text(
-                '${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['unit'] : null}',
+                '${invenDetailData['remains']} 정 / ${invenDetailData['totalCount']} 정',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -527,8 +532,41 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
+              Text('일일 복용 횟수 : '),
               Text(
-                '함유비율 ${pillDetailInfo[0]['nutrients'] != null ? nutients[0]['includePercent'] : null} %',
+                '${invenDetailData['takeCount']} 회',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('1회 복용량 : '),
+              Text(
+                '${invenDetailData['takeOnceAmount']} 정',
+                // style: const TextStyle(
+                //   fontSize: 15,
+                //   fontWeight: FontWeight.w300,
+                // ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 30),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Text('복용시작일 : '),
+              Text(
+                '${invenDetailData['startAt'] ?? '미정'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,

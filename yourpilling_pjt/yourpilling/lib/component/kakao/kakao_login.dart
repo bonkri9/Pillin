@@ -85,13 +85,16 @@ Future<void> GiveKakaoToken(token) async {
   // 반환 타입을 'Future<void>'로 변경합니다
   print("카카오엑세스토큰 전달");
   print(token);
-  var response = await http.post(Uri.parse('http://3.38.251.199/login/oauth2/kakao'),
+  var response = await http.post(Uri.parse('https://i10b101.p.ssafy.io/api/v1/login/oauth2/kakao'),
       headers: {
         'Content-Type': 'application/json',
       },body: json.encode({
         'token' : token,
       }));
-
+print('카카오 토큰 ${token}');
+  print('체크1');
+  print(response.body);
+  print('응답온거');
   if (response.statusCode == 200) {
     print('응답이 똑띠옴');
     print('통신온거 ${response.headers['accesstoken']}');

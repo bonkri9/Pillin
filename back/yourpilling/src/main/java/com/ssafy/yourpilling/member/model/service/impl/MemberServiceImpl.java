@@ -64,6 +64,7 @@ public class MemberServiceImpl implements MemberService {
         memberDao.deleteByMemberId(vo.getMemberId());
     }
 
+    @Transactional
     @Override
     public void passwordReIssue(MemberPasswordReIssueVo vo) {
         try{

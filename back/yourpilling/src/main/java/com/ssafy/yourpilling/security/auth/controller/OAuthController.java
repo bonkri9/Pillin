@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/login/oauth2")
+@RequestMapping("/api/v1/login/oauth2")
 public class OAuthController {
 
     private final OAuthControllerMapper mapper;
