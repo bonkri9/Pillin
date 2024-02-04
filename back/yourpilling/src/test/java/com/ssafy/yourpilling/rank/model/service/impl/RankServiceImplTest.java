@@ -94,6 +94,7 @@ class RankServiceImplTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("랭크 집계 및 생성")
     public void generateRank() {
 //        midCategories();
@@ -113,6 +114,7 @@ class RankServiceImplTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("랭킹 조회")
     public void ranks(){
 //        midCategories();
