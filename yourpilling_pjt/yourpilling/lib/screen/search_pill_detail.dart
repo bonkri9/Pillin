@@ -5,14 +5,14 @@ import 'package:yourpilling/const/colors.dart';
 import '../component/inventory/insert_inventory.dart';
 import '../store/search_store.dart';
 
-var nutients = [
-  {
-    'nutrition': '오메가3',
-    'amount': '40',
-    'unit': 'mg',
-    'includePercent': '3.33',
-  }
-];
+// var nutients = [
+//   {
+//     'nutrition': '오메가3',
+//     'amount': '40',
+//     'unit': 'mg',
+//     'includePercent': '3.33',
+//   }
+// ];
 
 class PillDetailScreen extends StatefulWidget {
   var pillId;
@@ -65,8 +65,8 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
     }
 
     loadData(context);
-    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
-    print(pillDetailInfo);
+    var pillDetailInfo = context.watch<SearchStore>().PillDetailData;
+    // print(pillDetailInfo);
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: RefreshIndicator(
@@ -139,17 +139,17 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    IconButton(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 10, 10, 10),
-                                      onPressed: () {
-                                        //String content = 'kakao 로 공유!!';
-                                      },
-                                      icon: Icon(
-                                        Icons.share_outlined,
-                                        size: 30,
-                                      ),
-                                    ),
+                                    // IconButton(
+                                    //   padding: const EdgeInsets.fromLTRB(
+                                    //       10, 10, 10, 10),
+                                    //   onPressed: () {
+                                    //     //String content = 'kakao 로 공유!!';
+                                    //   },
+                                    //   icon: Icon(
+                                    //     Icons.share_outlined,
+                                    //     size: 30,
+                                    //   ),
+                                    // ),
                                     SizedBox(
                                       width: 30,
                                     ),
@@ -283,8 +283,8 @@ class PillDetailInfo extends StatefulWidget {
 class _PillDetailInfoState extends State<PillDetailInfo> {
   @override
   Widget build(BuildContext context) {
-    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
-    print(pillDetailInfo);
+    var pillDetailInfo = context.watch<SearchStore>().PillDetailData;
+    // print(pillDetailInfo);
     return Column(
       children: [
         //유효 복용 기간
@@ -474,10 +474,10 @@ class _PillNutrientInfoState extends State<PillNutrientInfo> {
   @override
   Widget build(BuildContext context) {
     var pillDetailInfo = context.read<SearchStore>().PillDetailData;
-    print(pillDetailInfo);
+    // print(pillDetailInfo);
     var nutrientsList = pillDetailInfo['nutrients']['nutrientsItems'];
     var listLength = nutrientsList.length ?? 0;
-    print(listLength);
+    // print(listLength);
 
     return ListView.builder(
         scrollDirection: Axis.vertical,

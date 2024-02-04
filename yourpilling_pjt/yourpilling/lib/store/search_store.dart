@@ -149,14 +149,14 @@ class SearchStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("검색 상세 get 수신 성공");
-        print(response.body);
+        // print(response.body);
 
         // InventoryStore에 응답 저장
         PillDetailData = jsonDecode(utf8.decode(response.bodyBytes));
 
-        print(PillDetailData);
+        // print(PillDetailData);
       } else {
-        print(response.body);
+        // print(response.body);
         print("검색 상세 get 수신 실패");
       }
     } catch (error) {

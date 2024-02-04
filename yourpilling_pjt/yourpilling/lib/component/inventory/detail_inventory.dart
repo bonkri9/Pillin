@@ -9,45 +9,46 @@ import '../../store/inventory_store.dart';
 import '../../store/user_store.dart';
 import '../inventory/insert_inventory.dart';
 
-var pillDetailInfo = [
-  {
-    'pillName': '트리플 스트렝스 오메가3 피쉬오일 (오메가3 1040mg)', // 영양제 이름
-    'manufacturer': '나우푸드', // 제조사
-    'expirationAt': '2년', //유효복용기간
-    'usageInstructions': '물과 함께 잘 드세요', //복약지도
-    'primaryFunctionality': '기력 증진', //주요기능
-    'precautions': '약이 상당히 크니 삼킬 때 조심하세요', //주의사항
-    'storageInstructions': '상온 보관', //보관방법
-    'standardSpecification': '붕해시험 : 적합', //기준규격
-    'productForm': '고체형', // 제형
-    'takecycle': '1', //1일
-    'takeCount': '1', //1회
-    'takeOnceAmount': '2', //2정
-    'createdAt': '',
-    'updatedAt': '2024-01-29', //제품 정보 수정날짜
-    'nutrients': [
-      {
-        'nutrition': '오메가3',
-        'amount': '40',
-        'unit': 'mg',
-        'includePercent': '3.33',
-      } //사람마다 등록한 날이 다를텐데 userId없어도 되는지? createAt, updateAt 관련.
-    ]
-  },
-];
+// var pillDetailInfo = [
+//   {
+//     'pillName': '트리플 스트렝스 오메가3 피쉬오일 (오메가3 1040mg)', // 영양제 이름
+//     'manufacturer': '나우푸드', // 제조사
+//     'expirationAt': '2년', //유효복용기간
+//     'usageInstructions': '물과 함께 잘 드세요', //복약지도
+//     'primaryFunctionality': '기력 증진', //주요기능
+//     'precautions': '약이 상당히 크니 삼킬 때 조심하세요', //주의사항
+//     'storageInstructions': '상온 보관', //보관방법
+//     'standardSpecification': '붕해시험 : 적합', //기준규격
+//     'productForm': '고체형', // 제형
+//     'takecycle': '1', //1일
+//     'takeCount': '1', //1회
+//     'takeOnceAmount': '2', //2정
+//     'createdAt': '',
+//     'updatedAt': '2024-01-29', //제품 정보 수정날짜
+//     'nutrients': [
+//       {
+//         'nutrition': '오메가3',
+//         'amount': '40',
+//         'unit': 'mg',
+//         'includePercent': '3.33',
+//       } //사람마다 등록한 날이 다를텐데 userId없어도 되는지? createAt, updateAt 관련.
+//     ]
+//   },
+// ];
+//
+// var nutients = [
+//   {
+//     'nutrition': '오메가3',
+//     'amount': '40',
+//     'unit': 'mg',
+//     'includePercent': '3.33',
+//   }
+// ];
 
-var nutients = [
-  {
-    'nutrition': '오메가3',
-    'amount': '40',
-    'unit': 'mg',
-    'includePercent': '3.33',
-  }
-];
-
-// void loadData(BuildContext context) {
-//   context.read<InventoryStore>().getPillDetailData(context, ownPillId);
-// }
+void loadData(BuildContext context, ownPillId) {
+  context.watch<InventoryStore>().getPillDetailData(context, ownPillId);
+  context.watch<InventoryStore>().invenDetailData;
+}
 
 class InvenDetailScreen extends StatefulWidget {
   var ownPillId;
@@ -59,40 +60,11 @@ class InvenDetailScreen extends StatefulWidget {
 }
 
 class _invenDetailScreenState extends State<InvenDetailScreen> {
+
+
   final _scrollController = ScrollController();
   double scrollOpacity = 0;
 
-  // var ownPillId;
-  // late String accessToken;
-  // final String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
-  //
-  // getInvenDetail() async {
-  //   print("재고 상세 요청");
-  //
-  //   // int pillId = 256;
-  //   var response = await http.get(
-  //       Uri.parse('$invenDetailUrl?ownPillId=256'),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'accessToken': accessToken,
-  //       },
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     print("재고 상세 요청 수신 성공");
-  //     print(response.body);
-  //     var accessToken =
-  //         response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
-  //     print(accessToken);
-  //   } else {
-  //     print(response.body);
-  //     print("재고 상세 요청 수신 실패");
-  //   }
-  // }
-
-  // setownPillId(ownPillIdInput) {
-  //   ownPillId = ownPillIdInput;
-  // }
 
   //스크롤에 따른 투명도 계산
   onScroll() {
@@ -127,13 +99,15 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
     // accessToken = context.watch<UserStore>().accessToken;
     var ownPillId = widget.ownPillId;
     void loadData(BuildContext context) {
-      context.read<InventoryStore>().getPillDetailData(context, ownPillId);
+      context.watch<InventoryStore>().getPillDetailData(context, ownPillId);
+      // context.watch<InventoryStore>().invenDetailData;
     }
+
 
     loadData(context);
     var invenDetailData = context.read<InventoryStore>().invenDetailData;
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
-    print(invenDetailData);
+    // print(invenDetailData);
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: RefreshIndicator(
@@ -180,7 +154,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                               maxLines: 1,
                               strutStyle: StrutStyle(fontSize: 16),
                               text: TextSpan(
-                                text: '${invenDetailData['pill']['name']}',
+                                text: '${invenDetailData?['pill']?['name'] ?? 0}',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,
@@ -227,17 +201,17 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    IconButton(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 10, 10, 10),
-                                      onPressed: () {
-                                        //String content = 'kakao 로 공유!!';
-                                      },
-                                      icon: Icon(
-                                        Icons.share_outlined,
-                                        size: 30,
-                                      ),
-                                    ),
+                                    // IconButton(
+                                    //   padding: const EdgeInsets.fromLTRB(
+                                    //       10, 10, 10, 10),
+                                    //   onPressed: () {
+                                    //     //String content = 'kakao 로 공유!!';
+                                    //   },
+                                    //   icon: Icon(
+                                    //     Icons.share_outlined,
+                                    //     size: 30,
+                                    //   ),
+                                    // ),
                                     SizedBox(
                                       width: 30,
                                     ),
@@ -251,14 +225,13 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                               width: MediaQuery.of(context).size.width,
                               child: Image.network(
                                 fit: BoxFit.cover,
-                                '${invenDetailData['pill']['imageUrl']}',
+                                '${invenDetailData?['pill']?['imageUrl'] ?? 0}',
                               ),
                             ),
                             Container(
                               alignment: Alignment.center,
                               child: Text(
-                                // widget.manufacturer,
-                                '${pillDetailInfo[0]['manufacturer']}',
+                                '${invenDetailData?['pill']?['manufacturer'] ?? 0}',
                                 textScaleFactor: 1.3,
                                 style: const TextStyle(
                                   fontSize: 15,
@@ -274,7 +247,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
                                   maxLines: 2,
                                   strutStyle: StrutStyle(fontSize: 16),
                                   text: TextSpan(
-                                    text: '${invenDetailData['pill']['name']}',
+                                    text: '${invenDetailData?['pill']?['name'] ?? 0}',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 20,
@@ -355,12 +328,12 @@ class PillDetailInfo extends StatefulWidget {
 class _PillDetailInfoState extends State<PillDetailInfo> {
   @override
   Widget build(BuildContext context) {
-    var ownPillId = widget.ownPillId;
-    void loadData(BuildContext context) {
-      context.read<InventoryStore>().getPillDetailData(context, ownPillId);
-    }
-
-    loadData(context);
+    // var ownPillId = widget.ownPillId;
+    // void loadData(BuildContext context) {
+    //   context.read<InventoryStore>().getPillDetailData(context, ownPillId);
+    // }
+    //
+    // loadData(context);
     var invenDetailData = context.read<InventoryStore>().invenDetailData;
     return Column(
       children: [
@@ -372,7 +345,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('유효복용기간 : '),
               Text(
-                '${invenDetailData['pill']['expirationAt'] ?? '미정'}',
+                '${invenDetailData?['pill']?['expirationAt'] ?? '미표기'}',
                 style: const TextStyle(
                   color: Colors.black,
                   // fontSize: 15,
@@ -390,7 +363,7 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
             children: [
               Text('주요기능 : '),
               Text(
-                '${invenDetailData['pill']['primaryFunctionality'] ?? '미표기'}',
+                '${invenDetailData?['pill']?['primaryFunctionality'] ?? '미표기'}',
                 // style: const TextStyle(
                 //   fontSize: 15,
                 //   fontWeight: FontWeight.w300,
@@ -502,12 +475,12 @@ class PillRoutineInfo extends StatefulWidget {
 class _PillRoutineInfoState extends State<PillRoutineInfo> {
   @override
   Widget build(BuildContext context) {
-    var ownPillId = widget.ownPillId;
-    void loadData(BuildContext context) {
-      context.read<InventoryStore>().getPillDetailData(context, ownPillId);
-    }
-
-    loadData(context);
+    // var ownPillId = widget.ownPillId;
+    // void loadData(BuildContext context) {
+    //   context.read<InventoryStore>().getPillDetailData(context, ownPillId);
+    // }
+    //
+    // loadData(context);
     var invenDetailData = context.read<InventoryStore>().invenDetailData;
     return Column(
       children: [

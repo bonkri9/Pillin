@@ -13,7 +13,7 @@ import 'dart:convert';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 
-bool takeYn = false;
+// bool takeYn = false;
 
 class InsertInventory extends StatefulWidget {
   var pillId;
@@ -159,7 +159,7 @@ class _InsertInvenUpper extends StatefulWidget {
 }
 
 class _InsertInvenUpperState extends State<_InsertInvenUpper> {
-  var takeYn = false;
+  var takeYn;
 
   @override
   Widget build(BuildContext context) {
@@ -172,31 +172,34 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
         ),
         Row(
           children: [
-            LiteRollingSwitch(
-                width: 100,
-                // onTap: (bool? value) {
-                //   setState(() {
-                //     takeYn = !(value ?? false);
-                //     widget.getTakeYn(takeYn);
-                //   });
-                // },
-                onTap: () {},
-                onDoubleTap: () {},
-                onSwipe: () {},
-                value: takeYn ?? false,
-                textOn: '복용중',
-                textOff: '미복용',
-                colorOn: Colors.greenAccent,
-                colorOff: Colors.redAccent,
-                iconOn: Icons.done,
-                iconOff: Icons.do_not_disturb_on_outlined,
-                textSize: 13,
-                onChanged: (bool? value) {
-                  setState(() {
-                    takeYn = !(value ?? false);
-                    widget.getTakeYn(takeYn);
-                  });
-                }),
+            // LiteRollingSwitch(
+            //     width: 100,
+            //     // onTap: (bool? value) {
+            //     //   setState(() {
+            //     //     takeYn = !(value ?? false);
+            //     //     widget.getTakeYn(takeYn);
+            //     //   });
+            //     // },
+            //     onTap: () {},
+            //     onDoubleTap: () {},
+            //     onSwipe: () {},
+            //     value: takeYn ?? false,
+            //     textOn: '복용중',
+            //     textOff: '미복용',
+            //     colorOn: Colors.greenAccent,
+            //     colorOff: Colors.redAccent,
+            //     iconOn: Icons.done,
+            //     iconOff: Icons.do_not_disturb_on_outlined,
+            //     textSize: 13,
+            //     onChanged: (bool? value) {
+            //       setState(() {
+            //         print(takeYn);
+            //         print('아래가 value');
+            //         print(value);
+            //         takeYn = !(value ?? false);
+            //         widget.getTakeYn(takeYn);
+            //       });
+            //     }),
           ],
         )
       ],

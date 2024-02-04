@@ -8,9 +8,8 @@ import 'dart:convert';
 
 class InventoryStore extends ChangeNotifier {
   var takeYnListData;
-  List _takeTrueListData = [];
   List get takeTrueListData => takeYnListData['takeTrue']['data'];
-  var takeFalseListData;
+  List get takeFalseListData => takeYnListData['takeFalse']['data'];
   var remains;
   var totalCount;
   var ownPillId;
@@ -37,11 +36,7 @@ class InventoryStore extends ChangeNotifier {
 
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
-        // takeTrueListData = takeYnListData['takeTrue']['data'];
         length = takeTrueListData.length;
-        _takeTrueListData = takeYnListData['takeTrue']['data'];
-        // return takeTrueListData;
-        // print(takeYnListData);
       } else {
         // print(response.body);
         print("재고 복용 목록 get 수신 실패");
@@ -71,14 +66,14 @@ class InventoryStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("재고 수정 put 수신 성공");
-        print(response.body);
-        print('스토어에 있는 재고 수정api');
+        // print(response.body);
+        // print('스토어에 있는 재고 수정api');
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
 
-        print("takeYnListData: ${takeYnListData["data"]}");
+        // print("takeYnListData: ${takeYnListData["data"]}");
       } else {
-        print(response.body);
+        // print(response.body);
         print("재고 수정 put 수신 실패");
       }
     } catch (error) {
@@ -100,14 +95,14 @@ class InventoryStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("재고 상세 get 수신 성공");
-        print(response.body);
+        // print(response.body);
 
         // InventoryStore에 응답 저장
         invenDetailData = jsonDecode(utf8.decode(response.bodyBytes));
 
-        print(invenDetailData);
+        // print(invenDetailData);
       } else {
-        print(response.body);
+        // print(response.body);
         print("재고 상세 get 수신 실패");
       }
     } catch (error) {
@@ -133,7 +128,7 @@ class InventoryStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("재고 복용 전환 put 수신 성공");
-        print(response.body);
+        // print(response.body);
 
         // InventoryStore에 응답 저장
         takeYnData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -174,9 +169,9 @@ class InventoryStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("재고 등록 post 수신 성공");
-        print(response.body);
+        // print(response.body);
       } else {
-        print(response.body);
+        // print(response.body);
         print("재고 등록 post 수신 실패");
       }
     } catch (error) {

@@ -85,7 +85,7 @@ class _InventoryUpper extends StatefulWidget {
 class _InventoryUpperState extends State<_InventoryUpper> {
   @override
   Widget build(BuildContext context) {
-    var takeListData = context.watch<InventoryStore>().takeYnListData;
+    var takeListData = context.read<InventoryStore>().takeYnListData;
     var listAllLength = ((takeListData?['takeTrue']?['data']?.length ?? 0) +
         (takeListData?['takeFalse']?['data']?.length ?? 0));
     return Padding(
@@ -388,8 +388,8 @@ class _TakenTabState extends State<_TakenTab> {
                             maxVal: 500,
                             initVal: totalCount,
                             steps: 1,
-                            // minVal: 0,
-                            minVal: curPillCount.round(),
+                            // minVal: curPillCount.round(),
+                            minVal: 0,
                             onQtyChanged: (value) {
                               setState(() {
                                 totalPillCount = value.round();
@@ -431,10 +431,10 @@ class _TakenTabState extends State<_TakenTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           InputQty(
-                            maxVal: totalPillCount.round(),
+                            // maxVal: totalPillCount.round(),
+                            maxVal: 500,
                             initVal: remains,
                             steps: 1,
-                            // minVal: 0,
                             minVal: 0,
                             onQtyChanged: (value) {
                               setState(() {
@@ -507,10 +507,8 @@ class _TakenTabState extends State<_TakenTab> {
 
   @override
   Widget build(BuildContext context) {
-    // context.watch<InventoryStore>().takeTrueListData;
-    // context.watch<InventoryStore>().getTakeYnListData;
-    var takeTrueList = context.watch<InventoryStore>().takeTrueListData;
-    var listLength = context.watch<InventoryStore>().length;
+    var takeTrueList = context.read<InventoryStore>().takeTrueListData;
+    var listLength = context.read<InventoryStore>().length;
     // print(takeTrueListData);
     // loadData(context);
     // var takeTrueListData = context.select((InventoryStore store) => store.takeTrueListData);
@@ -524,32 +522,16 @@ class _TakenTabState extends State<_TakenTab> {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       itemCount: listLength ?? 0,
-      // itemCount: takeYnListDataSample['takeTrue']?['data']?.length,
       itemBuilder: (context, i) {
-        dynamic takeTrueData = takeTrueList[i];
-        var ownPillId = takeTrueData['ownPillId'];
-        var pillName = takeTrueData['pillName'];
-        var imageUrl = takeTrueData['imageUrl'];
-        var totalCount = takeTrueData['totalCount'];
-        var remains = takeTrueData['remains'];
-        var predicateRunOutAt = takeTrueData['predicateRunOutAt'];
-        var warningMessage = takeTrueData['warningMessage'];
+        dynamic takeTrueData = takeTrueList[i] ?? 0;
+        var ownPillId = takeTrueData?['ownPillId'] ?? 0;
+        var pillName = takeTrueData?['pillName'] ?? 0;
+        var imageUrl = takeTrueData?['imageUrl'] ?? 0;
+        var totalCount = takeTrueData?['totalCount'] ?? 0;
+        var remains = takeTrueData?['remains'] ?? 0;
+        var predicateRunOutAt = takeTrueData?['predicateRunOutAt'] ?? 0;
+        var warningMessage = takeTrueData?['warningMessage'] ?? 0;
 
-        // takeTrueListData = context.watch<InventoryStore>().takeTrueListData;
-        // pillName =
-        //     context.watch<InventoryStore>().takeTrueListData[i]['pillName'];
-        // imageUrl =
-        //     context.watch<InventoryStore>().takeTrueListData[i]['imageUrl'];
-        // totalCount =
-        //     context.watch<InventoryStore>().takeTrueListData[i]['totalCount'];
-        // remains =
-        //     context.watch<InventoryStore>().takeTrueListData[i]['remains'];
-        // predicateRunOutAt = context.watch<InventoryStore>().takeTrueListData[i]
-        //     ['predicateRunOutAt'];
-        // warningMessage = context.watch<InventoryStore>().takeTrueListData[i]
-        //     ['warningMessage'];
-        // // var takeTrueListData = context.read<InventoryStore>().takeYnListData;
-        // var ownPillId = takeTrueListData?[i]?['ownPillId'] ?? 0;
         print(ownPillId);
         return Padding(
           padding: const EdgeInsets.all(8.0),
