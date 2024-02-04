@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/store/user_store.dart';
@@ -6,7 +8,8 @@ import 'dart:convert';
 
 class InventoryStore extends ChangeNotifier {
   var takeYnListData;
-  var takeTrueListData;
+  List _takeTrueListData = [];
+  List get takeTrueListData => takeYnListData['takeTrue']['data'];
   var takeFalseListData;
   var remains;
   var totalCount;
@@ -14,9 +17,10 @@ class InventoryStore extends ChangeNotifier {
   var invenDetailData;
   var takeYnData;
   var takeYn;
+  var length;
 
   //복용하는 영양제 전체 리스트 데이터 가져오기
-  getTakeYnListData(BuildContext context) async {
+  Future<void> getTakeYnListData(BuildContext context) async {
     String accessToken = context.watch<UserStore>().accessToken;
     const String takeYnListUrl =
         'http://10.0.2.2:8080/api/v1/pill/inventory/list';
@@ -29,14 +33,17 @@ class InventoryStore extends ChangeNotifier {
       print('response 이거임 $response');
       if (response.statusCode == 200) {
         print("재고 복용 목록 get 수신 성공");
-        print(response.body);
+        // print(response.body);
 
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        print(takeYnListData);
+        // takeTrueListData = takeYnListData['takeTrue']['data'];
+        length = takeTrueListData.length;
+        _takeTrueListData = takeYnListData['takeTrue']['data'];
+        // return takeTrueListData;
+        // print(takeYnListData);
       } else {
-        print(response.body);
+        // print(response.body);
         print("재고 복용 목록 get 수신 실패");
       }
     } catch (error) {
@@ -46,7 +53,8 @@ class InventoryStore extends ChangeNotifier {
   }
 
   //재고 수정
-  reviseInven(BuildContext context, var ownPillId, var remains, var totalCount) async {
+  Future<void> reviseInven(
+      BuildContext context, var ownPillId, var remains, var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
     try {
@@ -64,7 +72,7 @@ class InventoryStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("재고 수정 put 수신 성공");
         print(response.body);
-
+        print('스토어에 있는 재고 수정api');
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -80,15 +88,15 @@ class InventoryStore extends ChangeNotifier {
   }
 
   //재고 상세 조회
-  getPillDetailData(BuildContext context, var ownPillId) async {
+  Future<void> getPillDetailData(BuildContext context, var ownPillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
     const String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
     try {
-      var response = await http.get(Uri.parse('$invenDetailUrl?ownPillId=$ownPillId'),
-          headers: {
-            'Content-Type': 'application/json',
-            'accessToken': accessToken,
-          });
+      var response = await http
+          .get(Uri.parse('$invenDetailUrl?ownPillId=$ownPillId'), headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      });
 
       if (response.statusCode == 200) {
         print("재고 상세 get 수신 성공");
@@ -109,15 +117,17 @@ class InventoryStore extends ChangeNotifier {
   }
 
   //섭취&미섭취 전환
-  putTakeYnChange(BuildContext context, var ownPillId) async {
+  Future<void> putTakeYnChange(BuildContext context, var ownPillId) async {
     String accessToken = context.read<UserStore>().accessToken;
-    const String takeYnChangeUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+    const String takeYnChangeUrl =
+        "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
     try {
       var response = await http.put(Uri.parse(takeYnChangeUrl),
           headers: {
             'Content-Type': 'application/json',
             'accessToken': accessToken,
-          }, body: json.encode({
+          },
+          body: json.encode({
             'ownPillId': ownPillId,
           }));
 
@@ -127,20 +137,23 @@ class InventoryStore extends ChangeNotifier {
 
         // InventoryStore에 응답 저장
         takeYnData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        print(takeYnData);
+        // takeTrueListData = takeYnListData['takeTrue']['data'];
+        length = takeTrueListData.length;
+        // return takeTrueListData;
+        // print(takeYnData);
       } else {
-        print(response.body);
+        // print(response.body);
         print("재고 복용 전환 put 수신 실패");
       }
     } catch (error) {
       print(error);
     }
-    // notifyListeners();
+    notifyListeners();
   }
 
   //재고 등록
-  registInven(BuildContext context, var pillId, var takeYn, var remains, var totalCount) async {
+  Future<void> registInven(BuildContext context, var pillId, var takeYn, var remains,
+      var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String registInvenUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
     try {
@@ -150,7 +163,8 @@ class InventoryStore extends ChangeNotifier {
           headers: {
             'Content-Type': 'application/json',
             'accessToken': accessToken,
-          }, body: json.encode({
+          },
+          body: json.encode({
             'pillId': pillId,
             'takeYn': takeYnValue,
             'remains': remains,
@@ -161,7 +175,6 @@ class InventoryStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("재고 등록 post 수신 성공");
         print(response.body);
-
       } else {
         print(response.body);
         print("재고 등록 post 수신 실패");

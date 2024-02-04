@@ -13,25 +13,12 @@ import 'dart:convert';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 
-var insertInvenInfo = [
-  {
-    'pillId': 2, //영양제 번호
-    'startAt': 2024 - 01 - 29, //복용 시작일
-    'takeYn': false, //바로 복용할건지 여부
-    'remains': 50, //잔여량
-    'totalCount': 60, //총 보유 갯수
-    'takeWeekdays': ['MON', 'WED', 'FRI'], //복용 요일
-    'takeCount': 1, //일일 복용 횟수 [회], 변경 불가능
-    'takeOnceAmount': 2, //1회 섭취량 [정], 변경 불가능
-  }
-];
-
-
 bool takeYn = false;
 
 class InsertInventory extends StatefulWidget {
   var pillId;
-   InsertInventory({super.key, this.pillId});
+
+  InsertInventory({super.key, this.pillId});
 
   @override
   State<InsertInventory> createState() => _InsertInventoryState();
@@ -54,11 +41,10 @@ class _InsertInventoryState extends State<InsertInventory> {
     void loadData(BuildContext context) {
       context.read<SearchStore>().getSearchDetailData(context, pillId);
     }
+
     loadData(context);
-    var PillDetailData = context.read<SearchStore>().PillDetailData;
 
     // 영양제 등록 때 보낼 데이터 변수명
-    String accessToken = context.watch<UserStore>().accessToken;
     getCurPillCount(count) {
       setState(() {
         remains = count;
@@ -66,8 +52,7 @@ class _InsertInventoryState extends State<InsertInventory> {
       print(remains);
     }
 
-
-    getTakeYn(bool){
+    getTakeYn(bool) {
       setState(() {
         takeYn = bool;
       });
@@ -80,39 +65,6 @@ class _InsertInventoryState extends State<InsertInventory> {
       });
       print(totalCount);
     }
-    //
-    // registPill() async {
-    //   String url = 'http://10.0.2.2:8080/api/v1/pill/inventory';
-    //   print(remains);
-    //   try {
-    //     var response = await http.post(Uri.parse(url),
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //           'accessToken': accessToken,
-    //         },
-    //         body: json.encode({
-    //           'pillId': widget.pillId,
-    //           'takeYn': true,
-    //           'remains': remains,
-    //           'totalCount': totalCount,
-    //           "takeWeekdays": ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
-    //         }));
-    //
-    //
-    //     print(response.statusCode);
-    //     if (response.statusCode == 200) {
-    //       print("재고 등록 요청 성공");
-    //       print(response.body);
-    //     } else {
-    //       print("재고 등록 요청 실패");
-    //       print(response.body);
-    //     }
-    //
-    //     // 재고 등록 로직 구현하면 됨 (setState 이용)
-    //   } catch (error) {
-    //     print(error);
-    //   }
-    // }
 
     loadData(context);
     var pillDetailData = context.read<SearchStore>().PillDetailData;
@@ -138,14 +90,13 @@ class _InsertInventoryState extends State<InsertInventory> {
           children: [
             _InsertInvenUpper(
               getTakeYn: getTakeYn,
-
             ),
             SizedBox(
               height: 30,
             ),
             _InsertInvenContent(
-                getCurPillCount: getCurPillCount,
-                getTotalPillCount: getTotalPillCount,
+              getCurPillCount: getCurPillCount,
+              getTotalPillCount: getTotalPillCount,
             ),
           ],
         ),
@@ -160,12 +111,9 @@ class _InsertInventoryState extends State<InsertInventory> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            context.read<InventoryStore>().registInven(context, pillId, takeYn, remains, totalCount);
-            // registInven();
-            // onAdd();
-            // registPill();
-            // Navigator.push(context,
-            //    MaterialPageRoute(builder: (context)=>Inventory()) );
+            context
+                .read<InventoryStore>()
+                .registInven(context, pillId, takeYn, remains, totalCount);
             showModalBottomSheet<void>(
                 context: context,
                 builder: (BuildContext context) {
@@ -175,14 +123,11 @@ class _InsertInventoryState extends State<InsertInventory> {
                     color: Colors.transparent,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      // mainAxisSize: MainAxisSize.,
                       children: [
-                        // const Text('modal bottomsheet'),
                         ElevatedButton(
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     Colors.redAccent)),
-                            // onPressed: () => Navigator.pop(context),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -206,6 +151,7 @@ class _InsertInventoryState extends State<InsertInventory> {
 
 class _InsertInvenUpper extends StatefulWidget {
   _InsertInvenUpper({super.key, this.getTakeYn});
+
   var getTakeYn;
 
   @override
@@ -215,17 +161,8 @@ class _InsertInvenUpper extends StatefulWidget {
 class _InsertInvenUpperState extends State<_InsertInvenUpper> {
   var takeYn = false;
 
-
   @override
   Widget build(BuildContext context) {
-    // getTakeYn(bool){
-    //   setState(() {
-    //     takeYn = bool;
-    //   });
-    //   print(takeYn);
-    // }
-
-    // bool takeYn = false;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -237,12 +174,13 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
           children: [
             LiteRollingSwitch(
                 width: 100,
-                onTap: (bool? value) {
-                  setState(() {
-                    takeYn = !(value ?? false);
-                    widget.getTakeYn(takeYn);
-                  });
-                },
+                // onTap: (bool? value) {
+                //   setState(() {
+                //     takeYn = !(value ?? false);
+                //     widget.getTakeYn(takeYn);
+                //   });
+                // },
+                onTap: () {},
                 onDoubleTap: () {},
                 onSwipe: () {},
                 value: takeYn ?? false,
@@ -267,14 +205,12 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
 }
 
 class _InsertInvenContent extends StatefulWidget {
-
   _InsertInvenContent(
       {super.key, this.getCurPillCount, this.getTotalPillCount, this.pillId});
 
   var getCurPillCount;
   var getTotalPillCount;
   var pillId;
-
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
@@ -286,11 +222,11 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
 
   @override
   Widget build(BuildContext context) {
-
     var pillId = widget.pillId;
     void loadData(BuildContext context) {
       context.read<SearchStore>().getSearchDetailData(context, pillId);
     }
+
     loadData(context);
     var pillDetailData = context.read<SearchStore>().PillDetailData;
 
@@ -332,8 +268,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                   color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
-                                )
-                            )),
+                                ))),
                       ),
                     ],
                   ),
@@ -343,8 +278,6 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     child: Row(
                       children: [
                         Text('총 알약 수 : '),
-                        // Text('${insertInvenInfo[0]['totalCount']}'),
-                        // Text('정'),
                         SizedBox(
                           width: 30,
                         ),
@@ -355,7 +288,8 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                               maxVal: 500,
                               initVal: 1,
                               steps: 1,
-                              minVal: 0,
+                              // minVal: 0,
+                              minVal: curPillCount ?? 0,
                               onQtyChanged: (value) {
                                 setState(() {
                                   totalPillCount = value.round();
@@ -398,7 +332,8 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InputQty(
-                              maxVal: 500,
+                              // maxVal: 500,
+                              maxVal: totalPillCount ?? 0,
                               initVal: 1,
                               steps: 1,
                               minVal: 0,

@@ -58,6 +58,7 @@ dependencies:
   animated_dropdown_button: ^1.1.5
   dropdown_button2: ^2.3.9
   just_bottom_sheet: ^1.3.0
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
