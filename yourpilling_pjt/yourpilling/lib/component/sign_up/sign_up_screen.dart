@@ -49,22 +49,21 @@ class _SignupScreenState extends State<SignupScreen> {
               'birthday': birthday,
               'gender': gender,
             }));
-        userInfo = jsonDecode(utf8.decode(response.bodyBytes));
+
         print(response.body);
-        print(userInfo);
 
         if (response.statusCode == 200) {
-          print("회원가입 성공");
-          corretDialog(context);
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        } else {
-          throw Exception('회원가입 실패');
+            print("회원가입 성공");
+            corretDialog(context);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+          } else {
+            throw Exception('회원가입 실패');
+          }
+        } catch (error) {
+          print(error);
         }
-      } catch (error) {
-        print(error);
       }
-    }
 
     setName(nameInput) {
       name = nameInput;

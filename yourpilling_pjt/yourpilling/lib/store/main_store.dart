@@ -50,7 +50,7 @@ class MainStore extends ChangeNotifier {
     DateTime koreaTime = DateTime.now().add(Duration(hours: 9));
     // String dailyUrl = 'https://i10b101.p.ssafy.io/api/v1/pill/history/daily'; // url
     // String dailyUrl = "http://localhost:8080/api/v1/pill/history/daily";
-    String dailyUrl = "http://192.168.31.21:8080/api/v1/pill/history/daily";
+    String dailyUrl = "http://localhost:8080/api/v1/pill/history/daily";
 
     try {
       var response = await http.get(
@@ -82,7 +82,7 @@ class MainStore extends ChangeNotifier {
     // String inventoryListUrl =
     //     "https://i10b101.p.ssafy.io/api/v1/pill/inventory/list";
     // String inventoryListUrl = "http://localhost:8080/api/v1/pill/inventory/list";
-    String inventoryListUrl = "http://192.168.31.21:8080/api/v1/pill/inventory/list";
+    String inventoryListUrl = "http://localhost:8080/api/v1/pill/inventory/list";
     try {
       var response = await http.get(
         Uri.parse(inventoryListUrl),
@@ -109,7 +109,7 @@ class MainStore extends ChangeNotifier {
   putPillTake(BuildContext context) async {
     // const String putPillTakeUrl = "https://i10b101.p.ssafy.io/api/v1/pill/take";
     // const String putPillTakeUrl = "http://localhost:8080/api/v1/pill/take";
-    const String putPillTakeUrl = "http://192.168.31.21:8080/api/v1/pill/take";
+    const String putPillTakeUrl = "http://localhost:8080/api/v1/pill/take";
     print("영양제 복용 완료 요청");
     String accessToken = context.read<UserStore>().accessToken;
     var response = await http.put(Uri.parse(putPillTakeUrl),
