@@ -90,6 +90,45 @@ class _SignupScreenState extends State<SignupScreen> {
       gender = genderInput;
     }
 
+    bool isValidate() {
+      if (nameController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("이름을 입력해주세요"))
+        );
+        // showScaffoldd(context, '이름을 입력해주세요');
+        return false;
+      }
+      if (emailController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("이메일을 입력해주세요"))
+        );
+        // showScaffoldd(context, '이메일을 입력해주세요');
+        return false;
+      }
+      if (passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("비밀번호를 입력해주세요"))
+        );
+        // showScaffoldd(context, '비밀번호를 입력해주세요');
+        return false;
+      }
+      if (birthdayController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("생년월일을 입력해주세요"))
+        );
+        // showScaffoldd(context, '생년월일을 입력해주세요');
+        return false;
+      }
+      if (nicknameController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("닉네임을 입력해주세요"))
+        );
+        // showScaffoldd(context, '닉네임을 입력해주세요');
+        return false;
+      }
+      return true;
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -138,6 +177,27 @@ class _SignupScreenState extends State<SignupScreen> {
                   setBirthday,
                   setName,
                   signUp),
+              ElevatedButton(
+                onPressed: () {
+                  if (isValidate()) {
+                    signUp();
+                    print('유효 데이터');
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => LoginScreen()));
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.redAccent,
+                ),
+                child: const Text(
+                  "완료",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -162,7 +222,9 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       ),
+
     );
+
   }
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -335,7 +397,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         ElevatedButton(
               onPressed: () {
-                if (isValidate(context)) {
+                if (isValidate()) {
                   signUp();
                   print('유효 데이터');
                   // Navigator.push(
@@ -358,38 +420,38 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  bool isValidate(BuildContext context) {
+  bool isValidate() {
     if (nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("이름을 입력해주세요"))
+          const SnackBar(content: Text("이름을 입력해주세요"))
       );
       // showScaffoldd(context, '이름을 입력해주세요');
       return false;
     }
     if (emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("이메일을 입력해주세요"))
+          const SnackBar(content: Text("이메일을 입력해주세요"))
       );
       // showScaffoldd(context, '이메일을 입력해주세요');
       return false;
     }
     if (passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("비밀번호를 입력해주세요"))
+          const SnackBar(content: Text("비밀번호를 입력해주세요"))
       );
       // showScaffoldd(context, '비밀번호를 입력해주세요');
       return false;
     }
     if (birthdayController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("생년월일을 입력해주세요"))
+          const SnackBar(content: Text("생년월일을 입력해주세요"))
       );
       // showScaffoldd(context, '생년월일을 입력해주세요');
       return false;
     }
     if (nicknameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("닉네임을 입력해주세요"))
+          const SnackBar(content: Text("닉네임을 입력해주세요"))
       );
       // showScaffoldd(context, '닉네임을 입력해주세요');
       return false;
@@ -397,13 +459,13 @@ class _SignupScreenState extends State<SignupScreen> {
     return true;
   }
 
-  showScaffoldd(BuildContext context, String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
-      ),
-    );
-  }
+  // showScaffoldd(BuildContext context, String text) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(text),
+  //     ),
+  //   );
+  // }
 }
 
 
