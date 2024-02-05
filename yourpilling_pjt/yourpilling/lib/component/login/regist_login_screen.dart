@@ -125,14 +125,14 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
   bool isValidate(){
 
-    if(emailController.text.isEmpty){
-      showScaffold(context, '이메일을 입력해주세요');
-      return false;
-    }
-    if(passwordController.text.isEmpty){
-      showScaffold(context, '비밀번호를 입력해주세요');
-      return false;
-    }
+    // if(emailController.text.isEmpty){
+    //   showScaffold(context, '이메일을 입력해주세요');
+    //   return false;
+    // }
+    // if(passwordController.text.isEmpty){
+    //   showScaffold(context, '비밀번호를 입력해주세요');
+    //   return false;
+    // }
     return true;
   }
 }
