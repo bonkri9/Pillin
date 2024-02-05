@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/component/sign_up/sign_up_screen.dart';
-import 'package:yourpilling/screen/main_screen.dart';
 import 'package:yourpilling/store/user_store.dart';
 import 'main_page_child_screen.dart';
 import 'package:http/http.dart' as http;
@@ -20,38 +19,38 @@ class _LoginScreenState extends State<LoginScreen> {
   var password;
   var accessToken; // 일단 이렇게 설정해놓음
 
+  login(BuildContext context) async {
+    String url = "http://10.0.2.2:8080/api/v1/login";
+    try {
+      print("로그인 요청");
+      var response = await http.post(Uri.parse(url), headers: {
+        'Content-Type': 'application/json',
+      }
+          , body: json.encode({
+            'email': email,
+            'password': password,
+          }));
+
+
+      if (response.statusCode == 200) {
+        print("로그인 성공");
+        var accessToken = response
+            .headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+        print(accessToken);
+        context.read<UserStore>().getToken(accessToken!); // provider에 받은 토큰 저장
+
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MainPageChild()));
+      }
+    } catch(error) {
+      print(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    String url = "http://10.0.2.2:8080/api/v1/login";
-
-    login() async {
-      try {
-        print("로그인 요청");
-        var response = await http.post(Uri.parse(url), headers: {
-          'Content-Type': 'application/json',
-        }
-            , body: json.encode({
-              'email': email,
-              'password': password,
-            }));
-
-
-        if (response.statusCode == 200) {
-          print("로그인 성공");
-          var accessToken = response
-              .headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
-          print(accessToken);
-          context.read<UserStore>().getToken(accessToken!); // provider에 받은 토큰 저장
-
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => MainPageChild()));
-        }
-      } catch(error) {
-        print(error);
-      }
-    }
 
     setEmail(emailInput) {
       email = emailInput;
@@ -62,24 +61,23 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Color(0xFFF5F6F9),
+    return Scaffold(
+        backgroundColor: Color(0xFFFFFFFF), // 0xFFF5F6F9
         body: Container(
           margin: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _header(context),
-              _inputField(context, emailController, passwordController, setEmail, setPassword, login),
-              _forgotPassword(context),
-              _signup(context),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _header(context),
+                _inputField(context, emailController, passwordController, setEmail, setPassword, login),
+                _forgotPassword(context),
+                _signup(context),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   _header(context) {
@@ -132,11 +130,11 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           obscureText: true,
         ),
-        KakaoLogin(), // 카카오로그인
+        KakaoLogin(), // 카카오 로그인
          const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
-            login();
+            login(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => MainPageChild()));
           },

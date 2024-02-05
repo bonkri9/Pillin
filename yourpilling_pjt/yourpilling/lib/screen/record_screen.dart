@@ -8,12 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:just_bottom_sheet/just_bottom_sheet.dart';
-import 'package:http/http.dart' as http;
 import 'package:yourpilling/store/record_store.dart';
 import 'dart:convert';
 import '../store/user_store.dart';
+
+getMonthlyData(BuildContext context) {
+  context.read<RecordStore>().getMonthlyData(context); // 페이지 들어올 때 월간 데이터 조회 요청
+}
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({super.key});
@@ -27,17 +29,11 @@ class _RecordScreenState extends State<RecordScreen> {
   int curMonth = DateTime.now().month; // 현재 월 state
   final scrollController = ScrollController();
 
-  // getPillListOfTheDay(list) {
-  //   setState(() {
-  //     if (list != null) {
-  //       pillListOfTheDay = list;
-  //     } else {
-  //       pillListOfTheDay = [];
-  //     }
-  //
-  //     print(pillListOfTheDay);
-  //   });
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getMonthlyData(context);
+  }
 
   getSelectedDay(DateTime date) {
     setState(() {
@@ -219,8 +215,8 @@ class _RecordScreenState extends State<RecordScreen> {
                             String tmpDay = selectedDay.day.toString().padLeft(2, '0');
                             print('여기까진 받음 : ${pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']}');
                             bool isComplete =
-                                pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['actualTakenCountTheDay'] ==
-                                    pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['needToTakenCountTheDay'];
+                                pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['currentTakeCount'] ==
+                                    pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['needToTakeCount'];
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 8),
                               child: Container(
@@ -349,7 +345,6 @@ class _CalenderState extends State<Calendar> {
   }
 
   getEventsForDay(pillListOfTheDay, year, month, day) {
-    String tmpYear = year.toString();
     String tmpMonth = month.toString().padLeft(2, '0');
     String tmpDay = day.toString().padLeft(2, '0');
 
@@ -438,16 +433,15 @@ class _CalenderState extends State<Calendar> {
         ),
         calendarBuilders:
             CalendarBuilders(markerBuilder: (context, date, events) {
-              int tmpTakenCnt = 0;
-              var tmp = context.watch<RecordStore>().monthlyData[DateTime(date.year, date.month, date.day)];
+              String tmpMonth = date.month.toString().padLeft(2, '0');
+              String tmpDay = date.day.toString().padLeft(2, '0');
+              var tmp = context.watch<RecordStore>().monthlyData['${date.year}-${tmpMonth}-${tmpDay}'];
               if (tmp == null || tmp.isEmpty) {
+                print('tmp : $tmp');
                 dayGauge = 0;
               } else {
-                for (int i = 0; i < tmp.length; i++) {
-                  if (tmp[i].takeYn == true) tmpTakenCnt++;
-                }
-
-                dayGauge = (tmpTakenCnt / tmp.length);
+                print('tmp : $tmp');
+                dayGauge = (tmp['actualTakenCountTheDay'] / tmp['needToTakenCountTheDay']);
               }
 
             return Positioned(
