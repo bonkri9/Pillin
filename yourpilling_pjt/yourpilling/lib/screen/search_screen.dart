@@ -11,9 +11,6 @@ import 'dart:convert';
 import '../store/search_store.dart';
 import '../store/user_store.dart';
 
-void loadData(BuildContext context, String name) {
-  context.read<SearchStore>().getSearchNameData(context, name);
-}
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -95,22 +92,23 @@ class _SearchBar extends StatelessWidget {
                 color: Color(0xFFFF6666),
                 size: 34,
               ),
-              onPressed: () {
+              onPressed: () async {
                 // 통신추가 - 희태
                 try {
-                 loadData(context, myController.text);
+                  await context.read<SearchStore>().getSearchNameData(context, myController.text);
                   print('검색 통신성공');
-                  // 절취선 이부분만 살리면 이전과 동일
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              SearchListScreen(
-                                myControllerValue: myController.text,
-                              )));
-                  // 절취선 종료
-                }catch(error){
+                          builder: (context) => SearchListScreen(
+                            myControllerValue: myController.text,
+                          )
+                      )
+                  );
+                }
+                catch(error) {
                   print('이름 검색 실패');
+                  falseDialog(context);
                   print(error);
                 }
 
@@ -545,3 +543,23 @@ class _SearchRanking extends StatelessWidget {
   }
 }
 
+// 통신 오류
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("검색결과가 없습니다."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}

@@ -10,10 +10,6 @@ import 'package:http/http.dart' as http;
 import '../store/search_store.dart';
 import '../store/user_store.dart';
 
-void loadData(BuildContext context, String nutrient) {
-  context.read<SearchStore>().getSearchNutrientData(context, nutrient);
-}
-
 
 class SearchNutrientScreen extends StatefulWidget {
   const SearchNutrientScreen({super.key});
@@ -95,15 +91,19 @@ class _SearchBar extends StatelessWidget {
                 color: Color(0xFFFF6666),
                 size: 34,
               ),
-              onPressed: () {
-                loadData(context, myController.text);
+              onPressed: () async {
+                try{
+                  await context.read<SearchStore>().getSearchNutrientData(context, myController.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchListScreen(
+                            myControllerValue: myController.text,
+                          )));
+                }catch(error){
+                  falseDialog(context);
+                }
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchListScreen(
-                              myControllerValue: myController.text,
-                            )));
               }),
         ],
       ),
@@ -197,8 +197,9 @@ class _MiddleTab extends StatelessWidget {
               width: 50,
               height: 50,
               child: TextButton(
-                onPressed: () {
-                  loadData(context, nutrient['nutrient']!);
+                onPressed: () async {
+                  print(nutrient['nutrient']!);
+                  await context.read<SearchStore>().getSearchNutrientData(context, nutrient['nutrient']!);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -216,3 +217,23 @@ class _MiddleTab extends StatelessWidget {
 }
 
 
+// 통신 오류
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("성분 검색결과가 없습니다."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}

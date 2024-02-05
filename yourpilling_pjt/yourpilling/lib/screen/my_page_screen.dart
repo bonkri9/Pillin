@@ -85,8 +85,8 @@ class MyPage extends StatelessWidget {
                             padding: MaterialStateProperty.all(
                                 EdgeInsets.zero), // 버튼의 기본 패딩 없애기
                           ),
-                          onPressed: () { // 회원정보 수정 페이지로 넘어가기
-                            context.read<UserStore>().getUserDetailData(context);
+                          onPressed: () async { // 회원정보 수정 페이지로 넘어가기
+                            await context.read<UserStore>().getUserDetailData(context);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -11,9 +11,6 @@ import 'dart:convert';
 import '../store/search_store.dart';
 import '../store/user_store.dart';
 
-void loadData(BuildContext context, String name) {
-  context.read<SearchStore>().getSearchNameData(context, name);
-}
 
 class SearchListScreen extends StatefulWidget {
   final String myControllerValue;
@@ -101,13 +98,18 @@ class _SearchBar extends StatelessWidget {
                 color: Color(0xFFFF6666),
                 size: 34,
               ),
-              onPressed: () {
-                loadData(context, myController.text);
-                print('검색 통신성공');
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
+              onPressed: () async {
+                try{
+                  await context.read<SearchStore>().getSearchNameData(context, myController.text);
+                  print('검색 통신성공');
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
+                }catch(error){
+                  falseDialog(context);
+                }
+
               }),
         ],
       ),
@@ -215,3 +217,23 @@ class _SearchResult extends StatelessWidget {
 
 
 
+// 통신 오류
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("검색결과가 없습니다."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}

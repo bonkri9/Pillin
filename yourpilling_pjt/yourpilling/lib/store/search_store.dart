@@ -16,27 +16,23 @@ class SearchStore extends ChangeNotifier {
     String url = 'http://10.0.2.2:8080/api/v1/pill/search?pillName=${name}';
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
-    try {
-      var response = await http.get(Uri.parse(url), headers: {
-        'Content-Type': 'application/json',
-        'accessToken': accessToken,
-      });
 
-      if (response.statusCode == 200) {
-        print("이름 검색 수신 성공");
+    var response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+      'accessToken': accessToken,
+    });
 
-        // MainStore에 응답 저장
-        SearchData = jsonDecode(utf8.decode(response.bodyBytes));
-        print("체크3");
-        print("SearchData: ${SearchData["data"]}");
-      } else {
-        print(response.body);
-        print("검색기록 불러오기 실패");
-      }
-    } catch (error) {
-      print("에러발생");
-      print(error);
+    if (response.statusCode == 200) {
+      print("이름 검색 수신 성공");
+      // MainStore에 응답 저장
+      SearchData = jsonDecode(utf8.decode(response.bodyBytes));
+      print("체크3");
+      print("SearchData: ${SearchData["data"]}");
+    } else {
+      print(response.body);
+      throw Exception('검색 결과가 없습니다');
     }
+
     notifyListeners();
   }
   // 이름 검색 종료
@@ -49,7 +45,7 @@ class SearchStore extends ChangeNotifier {
     String url = 'http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=${nutrient}';
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
-    try {
+
       var response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
@@ -65,11 +61,9 @@ class SearchStore extends ChangeNotifier {
       } else {
         print(response.body);
         print("성분 검색기록 불러오기 실패");
+        throw Exception('성분 검색 결과가 없습니다');
       }
-    } catch (error) {
-      print("에러발생");
-      print(error);
-    }
+
     notifyListeners();
   }
 // 이름 검색 종료ㅕ
@@ -82,7 +76,7 @@ class SearchStore extends ChangeNotifier {
     String url = 'http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=${health}';
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
-    try {
+
       var response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
@@ -98,11 +92,9 @@ class SearchStore extends ChangeNotifier {
       } else {
         print(response.body);
         print("건강 검색기록 불러오기 실패");
+        throw Exception('건강 검색 결과가 없습니다');
       }
-    } catch (error) {
-      print("에러발생");
-      print(error);
-    }
+
     notifyListeners();
   }
 // 건강고민 검색 종료
