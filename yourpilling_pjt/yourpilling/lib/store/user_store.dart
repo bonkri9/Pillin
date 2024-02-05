@@ -26,7 +26,8 @@ class UserStore extends ChangeNotifier {
     String accessToken = this.accessToken;
     print('체크2');
     // String url = 'https://i10b101.p.ssafy.io/api/v1/member';
-    String url = "http://localhost:8080/api/v1/member";
+    //String url = "http://localhost:8080/api/v1/member";
+    String url = "http://192.168.31.21:8080/api/v1/login";
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
     try {
@@ -56,7 +57,8 @@ class UserStore extends ChangeNotifier {
     String accessToken = this.accessToken;
     print('체크2');
     // String url = 'https://i10b101.p.ssafy.io/api/v1/member';
-    String url = "http://localhost:8080/api/v1/member";
+    //String url = "http://localhost:8080/api/v1/member";
+    String url = "http://192.168.31.21:8080/api/v1/login";
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
     print("상세정보 요청");

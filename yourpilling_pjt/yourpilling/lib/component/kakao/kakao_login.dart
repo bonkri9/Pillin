@@ -73,6 +73,7 @@ class _KakaoLoginState extends State<KakaoLogin> {
       }
     } else {
       try {
+        print('체크3');
         print(await KakaoSdk.origin);
         print('출력완료');
         OAuthToken token = await UserApi.instance.loginWithKakaoAccount();

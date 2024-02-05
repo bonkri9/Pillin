@@ -22,6 +22,7 @@ class LoginMainScreen extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginMainScreen> {
+
   // 자동 로그인 여부
   bool switchValue = false;
 

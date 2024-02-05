@@ -87,7 +87,8 @@ class _SearchBar extends StatelessWidget {
 // 비밀번호찾기
 Future<void> findPassword(BuildContext context, email) async {
   print('체크1');
-  String url = 'http://10.0.2.2:8080/api/v1/password-reissue';
+  // String url = 'http://10.0.2.2:8080/api/v1/password-reissue';
+  String url = "http://192.168.31.21:8080/api/password-reissue";
   print('email은 ${email}');
   try {
     var response = await http.put(Uri.parse(url),

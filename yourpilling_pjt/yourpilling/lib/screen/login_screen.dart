@@ -24,34 +24,37 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+
     // String url = "https://i10b101.p.ssafy.io/api/v1/login";
-    String url = "http://localhost:8080/api/v1/login";
+    String url = "http://192.168.31.21:8080/api/v1/login";
 
     login() async {
       try {
         print("로그인 요청");
-        var response = await http.post(Uri.parse(url), headers: {
-          'Content-Type': 'application/json',
-        }
-            , body: json.encode({
+        var response = await http.post(Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: json.encode({
               'email': email,
               'password': password,
             }));
 
-
         print(response.body);
         if (response.statusCode == 200) {
           print("로그인 성공");
-          var accessToken = response
-              .headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+          var accessToken =
+              response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
           print(accessToken);
-          context.read<UserStore>().getToken(accessToken!); // provider에 받은 토큰 저장
+          context
+              .read<UserStore>()
+              .getToken(accessToken!); // provider에 받은 토큰 저장
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => MainPageChild()));
-        }else{
+        } else {
           falseDialog(context);
         }
-      } catch(error) {
+      } catch (error) {
         print(error);
       }
     }
@@ -64,18 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
       password = passwordInput;
     }
 
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Color(0xFFF5F6F9),
-        body: Container(
-          margin: const EdgeInsets.all(24),
+    return Scaffold(
+      backgroundColor: Color(0xFFFFFFFF), // 0xFFF5F6F9
+      body: Container(
+        margin: const EdgeInsets.all(24),
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _header(context),
-              _inputField(context, emailController, passwordController, setEmail, setPassword, login),
+              _inputField(context, emailController, passwordController,
+                  setEmail, setPassword, login),
               _forgotPassword(context),
               _signup(context),
             ],
@@ -88,7 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
   _header(context) {
     return const Column(
       children: [
-        Image(image: AssetImage('assets/logo/pillin_logo.png'), width: 400,),
+        Image(
+          image: AssetImage('assets/logo/pillin_logo.png'),
+          width: 400,
+        ),
         // Text(
         //   "환영합니다",
         //   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -98,8 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _inputField(context, emailController, passwordController, setEmail, setPassword, login) {
-
+  _inputField(context, emailController, passwordController, setEmail,
+      setPassword, login) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -135,8 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           obscureText: true,
         ),
-        KakaoLogin(), // 카카오로그인
-         const SizedBox(height: 20),
+        KakaoLogin(), // 카카오 로그인
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             login();
@@ -163,7 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => FindPasswordScreen()));
       },
-      child: const Text("비밀번호 찾기",
+      child: const Text(
+        "비밀번호 찾기",
         style: TextStyle(color: Colors.redAccent),
       ),
     );
@@ -179,13 +185,14 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => SignupScreen()));
             },
-            child: const Text("회원가입", style: TextStyle(color: Colors.redAccent),)
-        )
+            child: const Text(
+              "회원가입",
+              style: TextStyle(color: Colors.redAccent),
+            ))
       ],
     );
   }
 }
-
 
 // 틀린 로그인일때 출력되는 팝업
 void falseDialog(context) {
