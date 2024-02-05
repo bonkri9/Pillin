@@ -11,7 +11,8 @@ class RecordStore extends ChangeNotifier {
 // 월간 기록 데이터 조회
   getMonthlyData(BuildContext context) async {
     print("월간 기록 데이터 조회 요청");
-    const String url = "http://10.0.2.2:8080/api/v1/pill/history/monthly";
+    // const String url = "http://10.0.2.2:8080/api/v1/pill/history/monthly";
+    const String url = "http://localhost:8080/api/v1/pill/history/monthly";
     DateTime now = DateTime.now();
     String accessToken = context.watch<UserStore>().accessToken;
     try {

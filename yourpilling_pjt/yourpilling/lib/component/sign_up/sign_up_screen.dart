@@ -33,8 +33,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
     signUp() async {
       // const String signupUrl = "https://i10b101.p.ssafy.io/api/v1/register";
-      const String signupUrl = "http://10.0.2.2:8080/api/v1/register";
-      // const String signupUrl = "http://localhost:8080/api/v1/register";
+      // const String signupUrl = "http://10.0.2.2:8080/api/v1/register";
+      const String signupUrl = "http://localhost:8080/api/v1/register";
       try {
         print('회원가입 등록');
         var response = await http.post(Uri.parse(signupUrl),
@@ -335,7 +335,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         ElevatedButton(
               onPressed: () {
-                if (isValidate()) {
+                if (isValidate(context)) {
                   signUp();
                   print('유효 데이터');
                   // Navigator.push(
@@ -358,30 +358,56 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  bool isValidate() {
+  bool isValidate(BuildContext context) {
     if (nameController.text.isEmpty) {
-      showScaffold(context, '이름을 입력해주세요');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("이름을 입력해주세요"))
+      );
+      // showScaffoldd(context, '이름을 입력해주세요');
       return false;
     }
     if (emailController.text.isEmpty) {
-      showScaffold(context, '이메일을 입력해주세요');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("이메일을 입력해주세요"))
+      );
+      // showScaffoldd(context, '이메일을 입력해주세요');
       return false;
     }
     if (passwordController.text.isEmpty) {
-      showScaffold(context, '비밀번호를 입력해주세요');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("비밀번호를 입력해주세요"))
+      );
+      // showScaffoldd(context, '비밀번호를 입력해주세요');
       return false;
     }
     if (birthdayController.text.isEmpty) {
-      showScaffold(context, '생년월일을 입력해주세요');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("생년월일을 입력해주세요"))
+      );
+      // showScaffoldd(context, '생년월일을 입력해주세요');
       return false;
     }
     if (nicknameController.text.isEmpty) {
-      showScaffold(context, '닉네임을 입력해주세요');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("닉네임을 입력해주세요"))
+      );
+      // showScaffoldd(context, '닉네임을 입력해주세요');
       return false;
     }
     return true;
   }
+
+  showScaffoldd(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+      ),
+    );
+  }
 }
+
+
+
 
 void falseDialog(context) {
   showDialog(
