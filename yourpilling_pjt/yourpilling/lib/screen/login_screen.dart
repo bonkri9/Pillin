@@ -24,7 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    String url = "http://10.0.2.2:8080/api/v1/login";
+    // String url = "https://i10b101.p.ssafy.io/api/v1/login";
+    String url = "http://localhost:8080/api/v1/login";
 
     login() async {
       try {

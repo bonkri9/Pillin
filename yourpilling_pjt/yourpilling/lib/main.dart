@@ -42,6 +42,7 @@ void main() async {
           ChangeNotifierProvider(create: (c) => SearchStore()),
           ChangeNotifierProvider(create: (c) => InventoryStore()),// AnotherStore 추가
           ChangeNotifierProvider(create: (c) => RecordStore()),// AnotherStore 추가
+          ChangeNotifierProvider(create: (c) => SearchRepository()),
           // 필요한 만큼 ChangeNotifierProvider를 추가하시면 됩니다.
         ],
         child: SafeArea(

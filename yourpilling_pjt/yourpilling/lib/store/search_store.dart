@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/store/user_store.dart';
 import 'dart:convert';
 
@@ -8,12 +9,13 @@ class SearchStore extends ChangeNotifier {
   var SearchData;
   var PillDetailData;
 
+
   // 이름 검색 리스트 받아오기
   Future<void> getSearchNameData(BuildContext context, name) async {
     print('체크1');
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
-    String url = 'http://10.0.2.2:8080/api/v1/pill/search?pillName=${name}';
+    String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search?pillName=${name}';
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
 
@@ -42,7 +44,7 @@ class SearchStore extends ChangeNotifier {
     print('체크1');
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
-    String url = 'http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=${nutrient}';
+    String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search/nutrition?nutritionName=${nutrient}';
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
 
@@ -73,7 +75,7 @@ class SearchStore extends ChangeNotifier {
     print('체크1');
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
-    String url = 'http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=${health}';
+    String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search/category?healthConcerns=${health}';
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
 
@@ -131,7 +133,7 @@ class SearchStore extends ChangeNotifier {
   //재고 상세 조회
   getSearchDetailData(BuildContext context, var pillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
-    const String pillDetailUrl = "http://10.0.2.2:8080/api/v1/pill/detail";
+    const String pillDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/detail";
     try {
       var response = await http.get(Uri.parse('$pillDetailUrl?pillId=$pillId'),
           headers: {
@@ -157,4 +159,43 @@ class SearchStore extends ChangeNotifier {
     notifyListeners();
   }
 
+}
+
+class SearchRepository extends ChangeNotifier {
+  var BuyLink;
+  var BuyList;
+  static final SearchRepository instance = SearchRepository._internal();
+  factory SearchRepository() => instance;
+  SearchRepository._internal();
+
+  Future<void> getNaverBlogSearch(var pillName) async {
+    const String naverBuyLink = "https://openapi.naver.com/v1/search/shop";
+    try {
+      var response = await http.get(Uri.parse('$naverBuyLink.json?query=$pillName&sort=asc&display=5'),
+      // http.Response response = await http.get(
+      //     Uri.parse("https://openapi.naver.com/v1/search/blog.json?query=$pillName&sort=asc&display=5"),
+          headers: {
+            "X-Naver-Client-Id": 'aTVc3C2YUaL3MXMWjDpx',
+            "X-Naver-Client-Secret": '6nXh1nAdTj',
+          });
+      if (response.statusCode == 200) {
+        print('네이버 연결 성공');
+        BuyList = jsonDecode(utf8.decode(response.bodyBytes));
+        BuyLink = BuyList?['items']?[0]?['link'] ?? 0;
+        print(BuyLink);
+        print(BuyList);
+        final url = Uri.parse(BuyLink);
+        if (await canLaunchUrl(url)) {
+          launchUrl(url, mode: LaunchMode.externalApplication);
+        }
+        // logger.e(_response.body);
+      }else {
+        // print(response.body);
+        print('네이버 연결 실패');
+      }
+    } catch (error) {
+      print(error);
+    }
+    notifyListeners();
+  }
 }

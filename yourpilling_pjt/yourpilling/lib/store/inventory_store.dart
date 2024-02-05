@@ -22,7 +22,7 @@ class InventoryStore extends ChangeNotifier {
   Future<void> getTakeYnListData(BuildContext context) async {
     String accessToken = context.watch<UserStore>().accessToken;
     const String takeYnListUrl =
-        'http://10.0.2.2:8080/api/v1/pill/inventory/list';
+        'https://i10b101.p.ssafy.io/api/v1/pill/inventory/list';
     try {
       var response = await http.get(Uri.parse(takeYnListUrl), headers: {
         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ class InventoryStore extends ChangeNotifier {
   Future<void> reviseInven(
       BuildContext context, var ownPillId, var remains, var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
-    const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+    const String reviseUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
     try {
       var response = await http.put(Uri.parse(reviseUrl),
           headers: {
@@ -85,7 +85,7 @@ class InventoryStore extends ChangeNotifier {
   //재고 상세 조회
   Future<void> getPillDetailData(BuildContext context, var ownPillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
-    const String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+    const String invenDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
     try {
       var response = await http
           .get(Uri.parse('$invenDetailUrl?ownPillId=$ownPillId'), headers: {
@@ -115,7 +115,7 @@ class InventoryStore extends ChangeNotifier {
   Future<void> putTakeYnChange(BuildContext context, var ownPillId) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String takeYnChangeUrl =
-        "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+        "https://i10b101.p.ssafy.io/api/v1/pill/inventory/take-yn";
     try {
       var response = await http.put(Uri.parse(takeYnChangeUrl),
           headers: {
@@ -150,7 +150,7 @@ class InventoryStore extends ChangeNotifier {
   Future<void> registInven(BuildContext context, var pillId, var takeYn, var remains,
       var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
-    const String registInvenUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+    const String registInvenUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
     try {
       bool takeYnValue = takeYn ?? false;
 

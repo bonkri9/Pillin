@@ -247,11 +247,23 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
             icon: ElevatedButton(
               child: const Text('구매하기'),
               onPressed: () async {
-                final url = Uri.parse(
-                    'https://www.coupang.com/vp/products/7559679373?itemId=20998974266&vendorItemId=70393847077&q=%EB%82%98%EC%9A%B0%ED%91%B8%EB%93%9C+%EC%98%A4%EB%A9%94%EA%B0%803&itemsCount=36&searchId=042c491feb4b4cc699aea94c1b27be04&rank=1&isAddedCart=');
-                if (await canLaunchUrl(url)) {
-                  launchUrl(url, mode: LaunchMode.externalApplication);
-                }
+                var pillName = pillDetailInfo['pillName'];
+                // final url = Uri.parse(
+                //     'https://www.coupang.com/vp/products/7559679373?itemId=20998974266&vendorItemId=70393847077&q=%EB%82%98%EC%9A%B0%ED%91%B8%EB%93%9C+%EC%98%A4%EB%A9%94%EA%B0%803&itemsCount=36&searchId=042c491feb4b4cc699aea94c1b27be04&rank=1&isAddedCart=');
+                // if (await canLaunchUrl(url)) {
+                //   launchUrl(url, mode: LaunchMode.externalApplication);
+                // }
+
+                context.read<SearchRepository>().getNaverBlogSearch(pillName);
+                var buyLink = context.read<SearchRepository>().BuyLink;
+                print(buyLink);
+                print('위에가 네이버 구매링크');
+                // final url = Uri.parse(buyLink);
+                //     if (await canLaunchUrl(url)) {
+                //       launchUrl(url, mode: LaunchMode.externalApplication);
+                //     }
+
+                // getNaverBlogSearch(var pillName);
               },
             ),
           ),
