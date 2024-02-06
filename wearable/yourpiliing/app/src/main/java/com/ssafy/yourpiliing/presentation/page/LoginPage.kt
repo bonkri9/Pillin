@@ -5,9 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +36,7 @@ import com.ssafy.yourpilling.presentation.retrofit.login.LoginRequest
 fun LoginPage(navController: NavController) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val loginViewModel : LoginViewModel = viewModel()
+    val loginViewModel: LoginViewModel = viewModel()
 
     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
     val accessToken = sharedPreferences.getString("accessToken", null)
@@ -50,12 +53,14 @@ fun LoginPage(navController: NavController) {
         modifier = Modifier
             .background(Color.Black.copy(alpha = 0.5f))
             .padding(16.dp)
-            .shadow(elevation = 4.dp),
-
+            .shadow(elevation = 4.dp)
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Pillin")
@@ -86,10 +91,12 @@ fun LoginPage(navController: NavController) {
                 is LoginState.Loading -> {
                     // TODO: 로딩중 메시지 띄우기
                 }
+
                 is LoginState.Success -> {
                     // Pill 화면으로 이동
                     navController.navigate("history")
                 }
+
                 is LoginState.Failure -> {
                     // TODO: 실패 메시지 띄우기
                 }

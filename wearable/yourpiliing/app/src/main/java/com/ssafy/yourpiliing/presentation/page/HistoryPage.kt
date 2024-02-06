@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -61,7 +62,10 @@ fun HistoryPage() {
                 is DailyHistoryState.Success -> {
                     val datas = (dailyHistoryState as DailyHistoryState.Success).response.taken
 
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Column(
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                            .padding(top = 40.dp, bottom = 40.dp)
+                    ) {
                         for (data in datas) {
                             TitleCard(
                                 title = data.name,
