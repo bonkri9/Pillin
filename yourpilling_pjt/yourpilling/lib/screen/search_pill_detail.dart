@@ -178,18 +178,25 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
                               ),
                             ),
                             Container(
-                                width: 300,
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  strutStyle: StrutStyle(fontSize: 16),
-                                  text: TextSpan(
-                                    text: '${pillDetailInfo['pillName']}',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+
+                              width: 300,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                      child: RichText(
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    strutStyle: StrutStyle(fontSize: 16),
+                                    text: TextSpan(
+                                      text: '${pillDetailInfo[0]['pillName']}',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+
                                     ),
                                   ),
                                 )),

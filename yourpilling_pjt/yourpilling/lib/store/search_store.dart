@@ -16,8 +16,11 @@ class SearchStore extends ChangeNotifier {
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
     // String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search?pillName=${name}';
-    // String url = "https://i10b101.p.ssafy.io/api/v1/pill/search?pillName=${name}";
-    String url = "https://i10b101.p.ssafy.io/api/v1/pill/search?pillName=${name}";
+
+
+    // String url = "http://10.0.2.2:8080/api/v1/pill/search?pillName=${name}";
+    String url = "http://10.0.2.2:8080/api/v1/pill/search?pillName=${name}";
+
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
 
@@ -47,8 +50,11 @@ class SearchStore extends ChangeNotifier {
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
     // String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search/nutrition?nutritionName=${nutrient}';
-    // String url = "https://i10b101.p.ssafy.io/api/v1/pill/search/nutrition?nutritionName=${nutrient}";
-    String url = "https://i10b101.p.ssafy.io/api/v1/pill/search/nutrition?nutritionName=${nutrient}";
+
+
+    // String url = "http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=${nutrient}";
+    String url = "http://10.0.2.2:8080/api/v1/pill/search/nutrition?nutritionName=${nutrient}";
+
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
 
@@ -80,8 +86,11 @@ class SearchStore extends ChangeNotifier {
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
     // String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search/category?healthConcerns=${health}';
-    // String url = "https://i10b101.p.ssafy.io/api/v1/pill/search/category?healthConcerns=${health}";
-    String url = "https://i10b101.p.ssafy.io/api/v1/pill/search/category?healthConcerns=${health}";
+
+
+    // String url = "http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=${health}";
+    String url = "http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=${health}";
+
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
 
@@ -106,7 +115,7 @@ class SearchStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  //localhost:8080
+
 // 건강고민 검색 종료
 
 // 상세정보 검색
@@ -142,8 +151,10 @@ class SearchStore extends ChangeNotifier {
   getSearchDetailData(BuildContext context, var pillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
     // const String pillDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/detail";
-    // const String pillDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/detail";
-    const String pillDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/detail";
+
+
+    // const String pillDetailUrl = "http://10.0.2.2:8080/api/v1/pill/detail";
+    const String pillDetailUrl = "http://10.0.2.2:8080/api/v1/pill/detail";
     try {
       var response = await http.get(Uri.parse('$pillDetailUrl?pillId=$pillId'),
           headers: {

@@ -52,15 +52,16 @@ void main() async {
               fontFamily: "Pretendard",
             ),
             debugShowCheckedModeBanner: false,
-            home: Consumer<UserStore>(
-              builder: (context, userStore, child) {
-                if (userStore.isLoggedIn) {
-                  return MainPageChild();
-                } else {
-                  return LoginScreen();
-                }
-              },
-            ),
+            home: TokenCheck(),
+            // home: Consumer<UserStore>(
+            //   builder: (context, userStore, child) {
+            //     if (userStore.isLoggedIn) {
+            //       return MainPageChild();
+            //     } else {
+            //       return LoginScreen();
+            //     }
+            //   },
+            // ),
             navigatorKey: navigatorKey,
             routes: {
               '/alarm_screen':(context) => AlarmScreen(), //AlarmScreen 앞에 const 있었음

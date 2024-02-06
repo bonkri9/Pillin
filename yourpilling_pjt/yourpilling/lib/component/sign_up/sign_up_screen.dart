@@ -23,6 +23,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
   // String genderSelected = 'male';
 
+  //유효성 검사
+  FocusNode _nameFocus = new FocusNode();
+  FocusNode _nicknameFocus = new FocusNode();
+  FocusNode _emailFocus = new FocusNode();
+  FocusNode _passwordFocus = new FocusNode();
+  FocusNode _birthdayFocus = new FocusNode();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     // final TextEditingController nameController = TextEditingController();
@@ -33,8 +41,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
     signUp() async {
       // const String signupUrl = "https://i10b101.p.ssafy.io/api/v1/register";
-      // const String signupUrl = "http://10.0.2.2:8080/api/v1/register";
-      const String signupUrl = "http://localhost:8080/api/v1/register";
+      const String signupUrl = "http://10.0.2.2:8080/api/v1/register";
+
+//       const String signupUrl = "http://localhost:8080/api/v1/register";
+
       try {
         print('회원가입 등록');
         var response = await http.post(Uri.parse(signupUrl),
@@ -50,7 +60,10 @@ class _SignupScreenState extends State<SignupScreen> {
               'gender': gender,
             }));
 
+        // userInfo = jsonDecode(utf8.decode(response.bodyBytes));
         print(response.body);
+        // print(userInfo);
+
 
         if (response.statusCode == 200) {
             print("회원가입 성공");
@@ -128,96 +141,101 @@ class _SignupScreenState extends State<SignupScreen> {
       return true;
     }
 
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color(0xFFF5F6F9),
         body: SingleChildScrollView(
-          child: Column(
-            // padding: const EdgeInsets.symmetric(horizontal: 40),
-            // height: MediaQuery.of(context).size.height - 50,
-            // width: double.infinity,
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            // child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  const SizedBox(height: 60.0),
-                  const Text(
-                    "회원가입",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+          child: Form(
+            key: formKey,
+            child: Column(
+              // padding: const EdgeInsets.symmetric(horizontal: 40),
+              // height: MediaQuery.of(context).size.height - 50,
+              // width: double.infinity,
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    const SizedBox(height: 60.0),
+                    const Text(
+                      "회원가입",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "개인정보를 입력해주세요",
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-                  )
-                ],
-              ),
-              _inputField(
-                  context,
-                  birthdayController,
-                  nameController,
-                  nicknameController,
-                  gender,
-                  emailController,
-                  passwordController,
-                  setEmail,
-                  setPassword,
-                  setGender,
-                  setNickname,
-                  setBirthday,
-                  setName,
-                  signUp),
-              ElevatedButton(
-                onPressed: () {
-                  if (isValidate()) {
-                    signUp();
-                    print('유효 데이터');
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => LoginScreen()));
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.redAccent,
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "개인정보를 입력해주세요",
+                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    )
+                  ],
                 ),
-                child: const Text(
-                  "완료",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                _inputField(
+                    context,
+                    birthdayController,
+                    nameController,
+                    nicknameController,
+                    gender,
+                    emailController,
+                    passwordController,
+                    setEmail,
+                    setPassword,
+                    setGender,
+                    setNickname,
+                    setBirthday,
+                    setName,
+                    signUp),
+                ElevatedButton(
+                  onPressed: () {
+                    if (isValidate()) {
+                      signUp();
+                      print('유효 데이터184');
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => LoginScreen()));
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const StadiumBorder(),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                  child: const Text(
+                    "완료",
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text("이미 Pillin 회원이시군요?"),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/', (_) => false);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
-                        );
-                      },
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(color: Colors.redAccent),
-                      ))
-                ],
-              )
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text("이미 Pillin 회원이시군요?"),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (_) => false);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(color: Colors.redAccent),
+                        ))
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -248,7 +266,9 @@ class _SignupScreenState extends State<SignupScreen> {
       signUp) {
     return Column(
       children: [
-        TextField(
+        TextFormField(
+          keyboardType: TextInputType.name,
+          focusNode: _nameFocus,
           controller: nameController,
           onChanged: (value) {
             setName(value);
@@ -263,7 +283,7 @@ class _SignupScreenState extends State<SignupScreen> {
               prefixIcon: const Icon(Icons.person)),
         ),
         const SizedBox(height: 20),
-        TextField(
+        TextFormField(
           controller: emailController,
           onChanged: (value) {
             setEmail(value); // 이 부분에서 이름을 state에 저장합니다.
@@ -278,7 +298,7 @@ class _SignupScreenState extends State<SignupScreen> {
               prefixIcon: const Icon(Icons.email)),
         ),
         const SizedBox(height: 20),
-        TextField(
+        TextFormField(
           controller: passwordController,
           onChanged: (value) {
             setPassword(value); // 이 부분에서 이름을 state에 저장합니다.
@@ -295,7 +315,7 @@ class _SignupScreenState extends State<SignupScreen> {
           obscureText: true,
         ),
         const SizedBox(height: 20),
-        TextField(
+        TextFormField(
           controller: nicknameController,
           onChanged: (value) {
             setNickname(value);
@@ -398,7 +418,9 @@ class _SignupScreenState extends State<SignupScreen> {
         //       onPressed: () {
         //         if (isValidate()) {
         //           signUp();
+
         //           print('유효 데이터');
+
         //           // Navigator.push(
         //           //     context,
         //           //     MaterialPageRoute(

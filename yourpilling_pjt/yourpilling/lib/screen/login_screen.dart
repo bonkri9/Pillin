@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/component/sign_up/sign_up_screen.dart';
 import 'package:yourpilling/screen/find_password_screen.dart';
@@ -7,6 +9,49 @@ import 'package:yourpilling/store/user_store.dart';
 import 'main_page_child_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+class TokenCheck extends StatefulWidget {
+  const TokenCheck({super.key});
+
+  @override
+  State<TokenCheck> createState() => _TokenCheckState();
+}
+
+class _TokenCheckState extends State<TokenCheck> {
+  bool isToken = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _autoLoginCheck();
+  }
+
+  void _autoLoginCheck() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+    print('토큰 여부 : ');
+    print(isToken);
+    if (token != null) {
+      setState(() {
+        isToken = true;
+        context.read<UserStore>().accessToken = token;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('위젯 안 토큰 여부');
+    print(isToken);
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: isToken ? MainPageChild() : LoginScreen(),
+    );
+  }
+}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,16 +65,44 @@ class _LoginScreenState extends State<LoginScreen> {
   var password;
   var accessToken; // 일단 이렇게 설정해놓음
 
+  // 자동 로그인 여부
+  bool switchValue = false;
+
+  //이메일과 비밀번호 정보
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  // 자동 로그인 설정
+  void _setAutoLogin(String token) async {
+    // 공유저장소에 유저 DB의 인덱스 저장
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  // 자동 로그인 해제
+  void _delAutoLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+    // final TextEditingController emailController = TextEditingController();
+    // final TextEditingController passwordController = TextEditingController();
 
     // String url = "https://i10b101.p.ssafy.io/api/v1/login";
-    String url = "https://i10b101.p.ssafy.io/api/v1/login";
 
-    login() async {
+
+
+    String url = "http://10.0.2.2:8080/api/v1/login";
+
+
+    login(String email, String password) async {
       try {
+        print(email);
+        print('이메일');
+        print(password);
+        print('비밀번호');
         print("로그인 요청");
         var response = await http.post(Uri.parse(url),
             headers: {
@@ -46,17 +119,20 @@ class _LoginScreenState extends State<LoginScreen> {
           var accessToken =
               response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
           print(accessToken);
+          print('액세스토큰');
           context
               .read<UserStore>()
               .getToken(accessToken!); // provider에 받은 토큰 저장
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => MainPageChild()));
-        } else {
-          falseDialog(context);
+
+          return accessToken;
         }
       } catch (error) {
         print(error);
       }
+      // 예외처리용 에러코드 '-1' 반환
+      return '-1';
     }
 
     setEmail(emailInput) {
@@ -142,11 +218,53 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         KakaoLogin(), // 카카오 로그인
         const SizedBox(height: 20),
+        //로그인 버튼
         ElevatedButton(
-          onPressed: () {
-            login();
+          onPressed: () async {
+            final loginCheck = await login(emailController.text, passwordController.text);
+            print('로그인 버튼 눌림');
+            print(loginCheck);
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => MainPageChild()));
+
+            // 로그인 확인
+            if (loginCheck == '-1') {
+              print('로그인 실패');
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('알림'),
+                    content: Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
+                    actions: [
+                      TextButton(
+                        child: Text('닫기'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              print('로그인 성공');
+              print(switchValue);
+              // 자동 로그인 확인
+              if (switchValue == true) {
+                _setAutoLogin(loginCheck!);
+              } else {
+                _delAutoLogin();
+              }
+
+              // 메인 페이지로 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPageChild(),
+                ),
+              );
+            }
           },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
@@ -157,7 +275,28 @@ class _LoginScreenState extends State<LoginScreen> {
             "로그인",
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
-        )
+        ),
+        Row(
+          children: [
+            Text(
+              '자동로그인 ',
+              style:
+                  TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+            ),
+            CupertinoSwitch(
+              // boolean 값으로 스위치 토글 (value)
+              value: switchValue,
+              activeColor: Colors.redAccent,
+              onChanged: (bool? value) {
+                // 스위치가 토글될 때 실행될 코드
+                setState(() {
+                  switchValue = value ?? false;
+                });
+              },
+            ),
+          ],
+        ),
+
       ],
     );
   }
@@ -192,25 +331,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
-}
-
-// 틀린 로그인일때 출력되는 팝업
-void falseDialog(context) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return Dialog(
-        child: Container(
-          width: 200,
-          height: 100,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("회원정보가 존재하지 않습니다."),
-            ],
-          ),
-        ),
-      );
-    },
-  );
 }
