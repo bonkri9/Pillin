@@ -23,8 +23,8 @@ class InventoryStore extends ChangeNotifier {
     String accessToken = context.watch<UserStore>().accessToken;
     // const String takeYnListUrl =
     //     'https://i10b101.p.ssafy.io/api/v1/pill/inventory/list';
-    // const String takeYnListUrl = "http://localhost:8080/api/v1/pill/inventory/list";
-    // const String takeYnListUrl = "http://192.168.31.21:8080/api/v1/pill/inventory/list";
+
+    // const String takeYnListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
     const String takeYnListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
 
     try {
@@ -56,8 +56,8 @@ class InventoryStore extends ChangeNotifier {
       BuildContext context, var ownPillId, var remains, var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
     // const String reviseUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
-    // const String reviseUrl = "http://localhost:8080/api/v1/pill/inventory";
-    // const String reviseUrl = "http://192.168.31.21:8080/api/v1/pill/inventory";
+
+    // const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
     const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
 
     try {
@@ -94,8 +94,8 @@ class InventoryStore extends ChangeNotifier {
   Future<void> getPillDetailData(BuildContext context, var ownPillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
     // const String invenDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
-    // const String invenDetailUrl = "http://localhost:8080/api/v1/pill/inventory";
-    // const String invenDetailUrl = "http://192.168.31.21:8080/api/v1/pill/inventory";
+
+    // const String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
     const String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
 
     try {
@@ -128,10 +128,9 @@ class InventoryStore extends ChangeNotifier {
     String accessToken = context.read<UserStore>().accessToken;
     // const String takeYnChangeUrl =
     //     "https://i10b101.p.ssafy.io/api/v1/pill/inventory/take-yn";
-    // const String takeYnChangeUrl = "http://localhost:8080/api/v1/pill/inventory/take-yn";
-    // const String takeYnChangeUrl = "http://192.168.31.21:8080/api/v1/pill/inventory/take-yn";
-    const String takeYnChangeUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
 
+    // const String takeYnChangeUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+    const String takeYnChangeUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
     try {
       var response = await http.put(Uri.parse(takeYnChangeUrl),
           headers: {
@@ -167,8 +166,7 @@ class InventoryStore extends ChangeNotifier {
       var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
     // const String registInvenUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
-    // const String registInvenUrl = "http://localhost:8080/api/v1/pill/inventory";
-    // const String registInvenUrl = "http://192.168.31.21:8080/api/v1/pill/inventory";
+
     const String registInvenUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
     try {
       bool takeYnValue = takeYn ?? false;
@@ -188,9 +186,9 @@ class InventoryStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("재고 등록 post 수신 성공");
-        // print(response.body);
+        print(response.body);
       } else {
-        // print(response.body);
+        print(response.body);
         print("재고 등록 post 수신 실패");
       }
     } catch (error) {
