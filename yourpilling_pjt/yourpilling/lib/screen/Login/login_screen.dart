@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
+import 'package:yourpilling/const/url.dart';
 import 'package:yourpilling/screen/Login/sign_up_screen.dart';
 import 'package:yourpilling/screen/Login/find_password_screen.dart';
 import 'package:yourpilling/store/user_store.dart';
@@ -94,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
 
-    String url = "http://10.0.2.2:8080/api/v1/login";
+    String url = "${CONVERT_URL}/api/v1/login";
 
 
     login(String email, String password) async {
