@@ -5,7 +5,7 @@ import 'package:yourpilling/const/colors.dart';
 
 import '../../widgets/input_field_widget.dart';
 import '../../widgets/primary_button.dart';
-import '../login/login_screen.dart';
+import '../../screen/login_screen.dart';
 
 class SignupScreenView extends StatefulWidget {
   const SignupScreenView({super.key});
@@ -225,11 +225,11 @@ class _SignupScreenViewState extends State<SignupScreenView> {
             PrimaryButton(
               text: '완료',
               onPressed: (){
-                if(isValidate()){
-                  print('유효한 데이터');
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
-                }
+                // if(isValidate()){
+                //   print('유효한 데이터');
+                //   Navigator.push(context,
+                //       MaterialPageRoute(builder: (context) => LoginScreen()));
+                // }
               },
             ),
             const SizedBox(
@@ -268,25 +268,25 @@ class _SignupScreenViewState extends State<SignupScreenView> {
     );
   }
 
-  bool isValidate(){
-
-    if(nameController.text.isEmpty){
-      showScaffold(context, '이름을 입력해주세요');
-      return false;
-    }
-    if(emailController.text.isEmpty){
-      showScaffold(context, '이메일을 입력해주세요');
-      return false;
-    }
-    if(passwordController.text.isEmpty){
-      showScaffold(context, '비밀번호를 입력해주세요');
-      return false;
-    }
-    if(birthDateController.text.isEmpty){
-      showScaffold(context, '생년월일을 입력해주세요');
-      return false;
-    }
-    return true;
-  }
+  // bool isValidate(){
+  //
+  //   if(nameController.text.isEmpty){
+  //     showScaffold(context, '이름을 입력해주세요');
+  //     return false;
+  //   }
+  //   if(emailController.text.isEmpty){
+  //     showScaffold(context, '이메일을 입력해주세요');
+  //     return false;
+  //   }
+  //   if(passwordController.text.isEmpty){
+  //     showScaffold(context, '비밀번호를 입력해주세요');
+  //     return false;
+  //   }
+  //   if(birthDateController.text.isEmpty){
+  //     showScaffold(context, '생년월일을 입력해주세요');
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
 }

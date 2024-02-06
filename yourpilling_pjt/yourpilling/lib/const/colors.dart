@@ -15,10 +15,10 @@ const CONTENT_FONT_SIZE = 13; // 내용 글씨 크기
 const String fontFamily = 'Montserrat';
 
 //경고창
-showScaffold(BuildContext context, String text) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(text),
-    ),
-  );
-}
+// showScaffold(BuildContext context, String text) {
+//   ScaffoldMessenger.of(context).showSnackBar(
+//     SnackBar(
+//       content: Text(text),
+//     ),
+//   );
+// }

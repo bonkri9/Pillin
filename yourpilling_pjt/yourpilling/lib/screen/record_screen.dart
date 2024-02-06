@@ -4,89 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_bottom_sheet/drag_zone_position.dart';
 import 'package:just_bottom_sheet/just_bottom_sheet_configuration.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:just_bottom_sheet/just_bottom_sheet.dart';
+import 'package:yourpilling/store/record_store.dart';
+import 'dart:convert';
+import '../store/user_store.dart';
 
-// dummy data
-// 1월 29일에 먹은 영양제 목록
-List<Event> taken31 = [
-  Event(
-      name: "비타민 D",
-      actualTakenCount: 1,
-      needToTakeTotalCount: 1,
-      takeYn: true),
-  Event(
-      name: "비타민 A",
-      actualTakenCount: 1,
-      needToTakeTotalCount: 1,
-      takeYn: true),
-  Event(
-      name: "루테인", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
-  Event(
-      name: "아연", actualTakenCount: 2, needToTakeTotalCount: 4, takeYn: false),
-];
-
-// 1월 30일에 먹은 영양제 목록
-List<Event> taken30 = [
-  Event(
-      name: "비타 500",
-      actualTakenCount: 1,
-      needToTakeTotalCount: 1,
-      takeYn: true),
-  Event(
-      name: "홍삼", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
-  Event(
-      name: "미에로 화이바", actualTakenCount: 4, needToTakeTotalCount: 4, takeYn: true),
-];
-
-
-// 1월 29일에 먹은 영양제 목록
-List<Event> taken29 = [
-  Event(
-      name: "비타민 C",
-      actualTakenCount: 1,
-      needToTakeTotalCount: 1,
-      takeYn: true),
-  Event(
-      name: "루테인", actualTakenCount: 1, needToTakeTotalCount: 2, takeYn: false),
-  Event(
-      name: "아연", actualTakenCount: 2, needToTakeTotalCount: 4, takeYn: false),
-];
-
-// 1월 28일에 먹은 영양제 목록
-List<Event> taken28 = [
-  Event(
-      name: "비토닌", actualTakenCount: 2, needToTakeTotalCount: 2, takeYn: true),
-  Event(
-      name: "오메가3",
-      actualTakenCount: 2,
-      needToTakeTotalCount: 4,
-      takeYn: false),
-];
-
-// 날짜와 해당일에 섭취한 영양제 매핑
-Map<DateTime, dynamic> pillSource = {
-  DateTime(2024, 1, 29): taken29,
-  DateTime(2024, 1, 28): taken28,
-  DateTime(2024, 1, 30): taken30,
-  DateTime(2024, 1, 31): taken31,
-};
-
-// dummy data (해당일 영양제 섭취도 데이터)
-class Event {
-  String name;
-  int actualTakenCount;
-  bool takeYn;
-  int needToTakeTotalCount;
-
-  Event(
-      {required this.name,
-      required this.actualTakenCount,
-      required this.needToTakeTotalCount,
-      required this.takeYn});
+getMonthlyData(BuildContext context) {
+  context.read<RecordStore>().getMonthlyData(context); // 페이지 들어올 때 월간 데이터 조회 요청
 }
 
 class RecordScreen extends StatefulWidget {
@@ -98,20 +26,13 @@ class RecordScreen extends StatefulWidget {
 
 class _RecordScreenState extends State<RecordScreen> {
   DateTime selectedDay = DateTime.now();
-  List<Event> pillListOfTheDay = [];
   int curMonth = DateTime.now().month; // 현재 월 state
   final scrollController = ScrollController();
 
-  getPillListOfTheDay(List<Event>? list) {
-    setState(() {
-      if (list != null) {
-        pillListOfTheDay = list;
-      } else {
-        pillListOfTheDay = [];
-      }
-
-      print(pillListOfTheDay);
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getMonthlyData(context);
   }
 
   getSelectedDay(DateTime date) {
@@ -127,7 +48,9 @@ class _RecordScreenState extends State<RecordScreen> {
     Color theDayCompleteContentColor = Color(0xFF4CAF50);
     Color theDayUnCompleteBoxColor = Colors.redAccent.withOpacity(0.1);
     Color theDayUnCompleteContentColor = Colors.deepOrange;
-
+    context.read<RecordStore>().getMonthlyData(context); // 페이지 들어올 때 월간 데이터 조회 요청
+    var pillListOfTheDay = context.read<RecordStore>().monthlyData;
+    print("필리스트 : ${pillListOfTheDay}");
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -158,13 +81,14 @@ class _RecordScreenState extends State<RecordScreen> {
                       ),
                     ),
                   ),
-                  configuration: JustBottomSheetPageConfiguration(
+                  configuration: JustBottomSheetPageConfiguration( // 이건 월 선택 창
                     height: MediaQuery.of(context).size.height * 0.55,
                     builder: (context) {
                       return ListView.builder(
                         padding: EdgeInsets.all(20),
                         // controller: scrollController,
                         itemBuilder: (context, i) {
+
                           return Material(
                             color: Colors.transparent,
                             child: Container(
@@ -174,11 +98,11 @@ class _RecordScreenState extends State<RecordScreen> {
                                 onTap: () {
                                   // 월 선택하면 해당 월로 이동
                                   setState(() {
-                                    curMonth = i + 1;
-                                    selectedDay = (curMonth != DateTime.now().month) ? DateTime(DateTime.now().year, i+1, 1) : DateTime(DateTime.now().year, curMonth, DateTime.now().day);
-                                    pillListOfTheDay = []; // 초기화
+                                    curMonth = i + 1; // 현재 월
+                                    selectedDay = (curMonth != DateTime.now().month) ? DateTime(DateTime.now().year, i+1, 1) : DateTime(DateTime.now().year, curMonth, DateTime.now().day); // 현재 일
                                   });
-                                  Navigator.pop(context);
+                                  context.watch<RecordStore>().pillListOfTheDay = []; // 초기화
+                                  Navigator.pop(context); // 선택창 닫기
                                 },
                                 splashColor: BASIC_GREY.withOpacity(0.1),
                                 child: ListTile(
@@ -246,9 +170,8 @@ class _RecordScreenState extends State<RecordScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(25),
-                  child: Calender(
+                  child: Calendar( // 캘린더
                       curMonth: curMonth,
-                      getPillListOfTheDay: getPillListOfTheDay,
                       getSelectedDay: getSelectedDay),
                 ),
               ),
@@ -256,10 +179,8 @@ class _RecordScreenState extends State<RecordScreen> {
                 height: 10,
               ),
               // 오늘 아직 먹지 않은 영양제
-              // TodayRestPill(),
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 600,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
                   color: Colors.white,
@@ -282,13 +203,20 @@ class _RecordScreenState extends State<RecordScreen> {
                       ListView.builder(
                           physics: NeverScrollableScrollPhysics(), // 스크롤 막기
                           shrinkWrap: true,
-                          itemCount: pillListOfTheDay.isNotEmpty
-                              ? pillListOfTheDay.length
+                          itemCount: pillListOfTheDay != null &&
+                              pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}'] != null &&
+                              pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}']['taken'] != null &&
+                              pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}']['taken'].isNotEmpty
+                              ? pillListOfTheDay['${selectedDay.year}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}']['taken'].length
                               : 0,
                           itemBuilder: (context, i) {
+                            String tmpYear = selectedDay.year.toString();
+                            String tmpMonth = selectedDay.month.toString().padLeft(2, '0');
+                            String tmpDay = selectedDay.day.toString().padLeft(2, '0');
+                            print('여기까진 받음 : ${pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']}');
                             bool isComplete =
-                                pillListOfTheDay[i].actualTakenCount ==
-                                    pillListOfTheDay[i].needToTakeTotalCount;
+                                pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['currentTakeCount'] ==
+                                    pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['needToTakeCount'];
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 8),
                               child: Container(
@@ -307,20 +235,25 @@ class _RecordScreenState extends State<RecordScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        pillListOfTheDay[i].name,
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                          color: isComplete
-                                              ? theDayCompleteContentColor
-                                              : theDayUnCompleteContentColor,
+                                      Container(
+                                        width: 280,
+                                        child: Text(
+                                          pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['name'],
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500,
+                                            color: isComplete
+                                                ? theDayCompleteContentColor
+                                                : theDayUnCompleteContentColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
                                       ),
                                       Row(
                                         children: [
                                           Text(
-                                            "${pillListOfTheDay[i].actualTakenCount}",
+                                            "${pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['currentTakeCount']}",
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w400,
@@ -330,7 +263,7 @@ class _RecordScreenState extends State<RecordScreen> {
                                             ),
                                           ),
                                           Text(
-                                            " / ${pillListOfTheDay[i].needToTakeTotalCount}",
+                                            " / ${pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['needToTakeCount']}",
                                             style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w400,
@@ -360,61 +293,71 @@ class _RecordScreenState extends State<RecordScreen> {
 }
 
 // Calendar
-class Calender extends StatefulWidget {
-  Calender(
+class Calendar extends StatefulWidget {
+  Calendar(
       {Key? key,
       required this.curMonth,
-      required this.getPillListOfTheDay,
       required this.getSelectedDay})
       : super(key: key);
-  var getPillListOfTheDay;
   var getSelectedDay;
   var curMonth;
-  var _focusedDay;
 
   @override
-  State<Calender> createState() => _CalenderState();
+  State<Calendar> createState() => _CalenderState();
 }
 
 // 캘린더 class -> selectedDay, pillListOfTheDay
-class _CalenderState extends State<Calender> {
+class _CalenderState extends State<Calendar> {
   // 페이지 컨트롤러 선언
   DateTime selectedDay = DateTime.now();
-  List<Event> pillListOfTheDay = [];
 
-  @override
-  void initState() {
-    super.initState();
-    // 외부 변수를 DateTime 객체로 변환
-    widget._focusedDay = DateTime(DateTime.now().year, widget.curMonth);
-    DateTime now = DateTime.now();
-    // 현재 월의 마지막 날짜 계산
-    int lastDayOfMonth = DateTime(now.year, widget.curMonth + 1, 0).day; // 1월 기준 31 잘 나옴
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // 외부 변수를 DateTime 객체로 변환
+  //   widget._focusedDay = DateTime(DateTime.now().year, widget.curMonth);
+  //   DateTime now = DateTime.now();
+  //   // 현재 월의 마지막 날짜 계산
+  //   // int lastDayOfMonth = DateTime(now.year, widget.curMonth + 1, 0).day; // 1월 기준 31 잘 나옴
+  //
+  //   // 맨 첫 화면에서 그날의 영양제 복용 목록 띄워주기 // 날짜 형식 정리
+  //   Future.microtask(() {
+  //     String tmpYear = now.year.toString();
+  //     String tmpMonth = '';
+  //     String tmpDay = '';
+  //     tmpMonth = (now.month.toString().length == 1) ? '0${now.month}' : now.month.toString();
+  //     tmpDay = (now.day.toString().length == 1) ? '0${now.day}' : now.day.toString();
+  //     setState(() {
+  //       widget.getPillListOfTheDay(context.read<RecordStore>().monthlyData['${tmpYear}-${tmpMonth}-${tmpDay}']['taken']);
+  //     });
+  //
+  //   });
+  // }
 
-    // 맨 첫 화면에서 그날의 영양제 복용 목록 띄워주기
-    Future.microtask(() {
-      setState(() {
-        widget.getPillListOfTheDay(pillSource[DateTime(selectedDay.year, selectedDay.month, selectedDay.day)]);
-      });
-    });
-  }
 
   // day : 유저가 선택한 날짜
   // focusedDay : 현재 포커스 된 날짜
-  void _onDaySelected(DateTime day, DateTime focusedDay) {
+  _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
-      print("달력에서 선택한 날짜 $day"); // 여기까지 선택한 날짜 잘 받아짐
-
-      // 부모 상태 함수로 업데이트
-      widget.getSelectedDay(DateTime(day.year, day.month, day.day));
-      widget.getPillListOfTheDay(
-          pillSource[DateTime(day.year, day.month, day.day)]);
+      print("달력에서 선택한 날짜 ${day.day}"); // 여기까지 선택한 날짜 잘 받아짐
+      widget.getSelectedDay(DateTime(day.year, day.month, day.day)); // 현재 날짜 설정
     });
   }
 
-  List<Event> getEventsForDay(DateTime day) {
-    print('$day ${pillSource[day]}');
-    return pillSource[day] ?? [];
+  getEventsForDay(pillListOfTheDay, year, month, day) {
+    String tmpMonth = month.toString().padLeft(2, '0');
+    String tmpDay = day.toString().padLeft(2, '0');
+
+    print('필리스트 들어옴 getEventsForDay 함수안에 $pillListOfTheDay');
+
+    if (pillListOfTheDay == null ||
+        pillListOfTheDay['$year-$tmpMonth-$tmpDay'] == null ||
+        pillListOfTheDay['$year-$tmpMonth-$tmpDay']['taken'] == null) {
+      return [];
+    } else {
+      print("와 들어왔다 ㅅㅂ ${pillListOfTheDay['$year-$tmpMonth-$tmpDay']['taken']}");
+      return pillListOfTheDay['$year-$tmpMonth-$tmpDay']['taken'] ?? [];
+    }
   }
 
   // 캘린더
@@ -425,12 +368,17 @@ class _CalenderState extends State<Calender> {
     Color underFiftyColor = Colors.redAccent.withOpacity(0.65);
     Color fiftyColor = Colors.yellow;
     double dayGauge = 0;
+    context.read<RecordStore>().getMonthlyData(context);
+    var list = context.read<RecordStore>().monthlyData;
+
+    var monthlyData = context.read<RecordStore>().monthlyData;
+    print("이거 monthly임 : ${monthlyData}");
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: TableCalendar(
-        eventLoader: (day) {
-          DateTime selectedDate = DateTime(day.year, day.month, day.day);
-          return getEventsForDay(selectedDate);
+        eventLoader: (date) {
+          return getEventsForDay(list, date.year, date.month, date.day);
         },
         calendarFormat: CalendarFormat.month,
         locale: 'ko-KR',
@@ -485,16 +433,15 @@ class _CalenderState extends State<Calender> {
         ),
         calendarBuilders:
             CalendarBuilders(markerBuilder: (context, date, events) {
-              int tmpTakenCnt = 0;
-              List<Event>? tmp = pillSource[DateTime(date.year, date.month, date.day)];
+              String tmpMonth = date.month.toString().padLeft(2, '0');
+              String tmpDay = date.day.toString().padLeft(2, '0');
+              var tmp = context.watch<RecordStore>().monthlyData['${date.year}-${tmpMonth}-${tmpDay}'];
               if (tmp == null || tmp.isEmpty) {
+                print('tmp : $tmp');
                 dayGauge = 0;
               } else {
-                for (int i = 0; i < tmp.length; i++) {
-                  if (tmp[i].takeYn == true) tmpTakenCnt++;
-                }
-
-                dayGauge = (tmpTakenCnt / tmp.length);
+                print('tmp : $tmp');
+                dayGauge = (tmp['actualTakenCountTheDay'] / tmp['needToTakenCountTheDay']);
               }
 
             return Positioned(
@@ -515,294 +462,5 @@ class _CalenderState extends State<Calender> {
         }),
       ),
     );
-  }
-}
-
-class TodayRestPill extends StatelessWidget {
-  const TodayRestPill({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [_Today()],
-    );
-  }
-}
-
-// progress Bar 가져오기 위해 적용
-class _Today extends StatefulWidget {
-  const _Today({super.key});
-
-  @override
-  State<_Today> createState() => _TodayState();
-}
-
-class _TodayState extends State<_Today> {
-  // 현재까지 먹은 영양제의 개수
-  int takenNum = 0;
-
-  // Progress Bar 진행도
-  int gauge = 0;
-
-  Color btnColor = Colors.redAccent; // 버튼 색상 state
-
-  // 오늘 먹어야 할 영양제 리스트 (dummy data)
-  var pillList = [
-    {
-      'pillName': '비타민 C', // 영양제 이름
-      'time': '09:00', // 복용 시간
-      'isTaken': false, // 복용 여부
-      'total': 50,
-      'rest': 49,
-    },
-    {
-      'pillName': '아연',
-      'time': '11:00',
-      'isTaken': false,
-      'total': 50,
-      'rest': 24,
-    },
-    {
-      'pillName': '마그네슘',
-      'time': '21:00',
-      'isTaken': false,
-      'total': 50,
-      'rest': 1,
-    },
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double containerWidth = screenWidth; // 화면의 90%
-    double progressBarWidth = screenWidth * 0.85;
-
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
-          color: Colors.white,
-        ),
-        width: containerWidth,
-        height: 500,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      child: Text(
-                        "영양 섭취하는 당신이 챔피언",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Pretendard",
-                          fontSize: 20,
-                          color: BASIC_BLACK,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 30),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: takenNum != pillList.length
-                      ? Text(
-                          '${(takenNum * 100 / pillList.length).round()} %',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, color: BASIC_BLACK),
-                        )
-                      : Text(
-                          "오늘의 영양 충전 완료 :)",
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
-                          ),
-                        ),
-                ),
-              ),
-
-              // Progress Bar
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: pillList.length == takenNum
-                    ? // 약 모두 다 먹었을 때 초록색 Progress Bar
-                    AnimatedProgressBar(
-                        width: 300,
-                        value: takenNum / pillList.length,
-                        duration: const Duration(seconds: 1),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Colors.lightGreenAccent,
-                            Colors.greenAccent,
-                          ],
-                        ),
-                        backgroundColor: Colors.grey.withOpacity(0.2),
-                      )
-                    : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
-                    AnimatedProgressBar(
-                        width: progressBarWidth,
-                        // height: 11,
-                        value: takenNum / pillList.length,
-                        duration: const Duration(seconds: 1),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Colors.orangeAccent,
-                            Colors.redAccent,
-                          ],
-                        ),
-                        backgroundColor: Colors.grey.withOpacity(0.2),
-                      ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              ListView.builder(
-                  physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
-                  shrinkWrap: true,
-                  itemCount: 3,
-                  itemBuilder: (context, i) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                      child: Container(
-                          width: 300,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.08),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Image.asset(
-                                  'assets/image/${i + 1}.png',
-                                  width: 17,
-                                  height: 17,
-                                ),
-                                Text("${pillList[i]['pillName']}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      color: BASIC_BLACK,
-                                    )),
-                                Text("${pillList[i]['time']}",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      color: BASIC_BLACK,
-                                    )),
-                                pillList[i]['isTaken'] == false
-                                    ? // 복용을 아직 안한 영양제라면
-                                    AnimatedContainer(
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Colors.redAccent,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                        ),
-                                        duration: Duration(seconds: 2),
-                                        child: TextButton(
-                                          onPressed: () {
-                                            // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
-                                            setState(() {
-                                              pillList[i]['isTaken'] = true;
-                                              takenNum++;
-
-                                              print(takenNum);
-                                              if (pillList.length == takenNum) {
-                                                btnColor = Colors.greenAccent;
-                                              }
-                                            });
-                                          },
-                                          style: ButtonStyle(
-                                            padding: MaterialStateProperty.all(
-                                                EdgeInsets.zero), // 패딩 없애줘야 함
-                                          ),
-                                          child: Text("복용",
-                                              style: TextStyle(
-                                                color: Colors.redAccent,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                        ),
-                                      )
-                                    : pillList.length != takenNum
-                                        ? // 아직 다 먹진 않았고
-                                        // 복용한 영양제라면
-                                        Container(
-                                            width: 50,
-                                            decoration: BoxDecoration(
-                                              color: Colors.redAccent,
-                                              border: Border.all(
-                                                color: Colors.redAccent,
-                                                width: 1,
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                            ),
-                                            child: TextButton(
-                                              onPressed: () {},
-                                              style: ButtonStyle(
-                                                padding:
-                                                    MaterialStateProperty.all(
-                                                        EdgeInsets
-                                                            .zero), // 패딩 없애줘야 함
-                                              ),
-                                              child: Text("완료",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
-                                            ),
-                                          )
-                                        : Container(
-                                            width: 50,
-                                            decoration: BoxDecoration(
-                                              color: btnColor,
-                                              border: Border.all(
-                                                color: btnColor,
-                                                width: 1,
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                            ),
-                                            child: TextButton(
-                                              onPressed: () {},
-                                              style: ButtonStyle(
-                                                padding:
-                                                    MaterialStateProperty.all(
-                                                        EdgeInsets
-                                                            .zero), // 패딩 없애줘야 함
-                                              ),
-                                              child: Text("완료",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
-                                            ),
-                                          )
-                              ],
-                            ),
-                          )),
-                    );
-                  })
-            ],
-          ),
-        ));
   }
 }

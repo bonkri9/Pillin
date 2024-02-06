@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/app_bar.dart';
+import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_health_screen.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import 'package:yourpilling/screen/search_nutrient_screen.dart';
 import 'package:yourpilling/component/base_container.dart';
+import 'dart:convert';
+import '../store/search_store.dart';
+import '../store/user_store.dart';
+
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -48,6 +54,13 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    // 컨트롤러를 정리해주는 작업입니다.
+    myController.dispose();
+    super.dispose();
+  }
 }
 
 // 검색바
@@ -59,17 +72,11 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30, ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 30,
+      ),
       child: Row(
         children: [
-          // IconButton(
-          //   icon: Icon(Icons.arrow_back_ios_new_rounded,
-          //       color: Colors.black),
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          // ),
-          // TextField 위젯을 추가합니다.
           Expanded(
             child: TextField(
               controller: myController,
@@ -80,12 +87,32 @@ class _SearchBar extends StatelessWidget {
             ),
           ),
           IconButton(
-              icon: Icon(Icons.search, color: Color(0xFFFF6666),size: 34,),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
+              icon: Icon(
+                Icons.search,
+                color: Color(0xFFFF6666),
+                size: 34,
+              ),
+              onPressed: () async {
+                // 통신추가 - 희태
+                try {
+                  await context.read<SearchStore>().getSearchNameData(context, myController.text);
+                  print('검색 통신성공');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchListScreen(
+                            myControllerValue: myController.text,
+                          )
+                      )
+                  );
+                }
+                catch(error) {
+                  print('이름 검색 실패');
+                  falseDialog(context);
+                  print(error);
+                }
+
+                // 통신끝 - 희태
               }),
         ],
       ),
@@ -100,7 +127,7 @@ class _MiddleTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 15, 8,0),
+      padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
       child: Container(
         child: Row(
           children: [
@@ -122,7 +149,8 @@ class _MiddleTap extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("영양소 검색",
-                        style: TextStyle(color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
+                        style: TextStyle(
+                            color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
                   ],
                 ),
               ),
@@ -144,7 +172,8 @@ class _MiddleTap extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("건강 검색",
-                        style: TextStyle(color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
+                        style: TextStyle(
+                            color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
                   ],
                 ),
               ),
@@ -270,9 +299,9 @@ class _AgeTabState extends State<_AgeTab> {
           ),
           _showText
               ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
+              child: _SearchRanking(
+                title: '${_index}',
+              ))
               : Expanded(child: Text('선택')),
         ],
       ),
@@ -344,9 +373,9 @@ class _NutrientTabState extends State<_NutrientTab> {
           ),
           _showText
               ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
+              child: _SearchRanking(
+                title: '${_index}',
+              ))
               : Expanded(child: Text('선택2')),
         ],
       ),
@@ -415,9 +444,9 @@ class _HealthTabState extends State<_HealthTab> {
           ),
           _showText
               ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
+              child: _SearchRanking(
+                title: '${_index}',
+              ))
               : Expanded(child: Text('선택3')),
         ],
       ),
@@ -512,4 +541,25 @@ class _SearchRanking extends StatelessWidget {
           }),
     );
   }
+}
+
+// 통신 오류
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("검색결과가 없습니다."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

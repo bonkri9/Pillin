@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/search_list_screen.dart';
 import '../component/base_container.dart';
+import 'package:http/http.dart' as http;
+import '../store/search_store.dart';
+import '../store/user_store.dart';
+
 
 class SearchNutrientScreen extends StatefulWidget {
-
   const SearchNutrientScreen({super.key});
 
   @override
@@ -46,6 +52,14 @@ class _SearchNutrientScreenState extends State<SearchNutrientScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    // 컨트롤러를 정리해주는 작업입니다.
+    myController.dispose();
+    super.dispose();
+  }
+
 }
 
 // 검색바
@@ -57,7 +71,9 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30, ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 30,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -70,12 +86,24 @@ class _SearchBar extends StatelessWidget {
             ),
           ),
           IconButton(
-              icon: Icon(Icons.search, color: Color(0xFFFF6666),size: 34,),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
+              icon: Icon(
+                Icons.search,
+                color: Color(0xFFFF6666),
+                size: 34,
+              ),
+              onPressed: () async {
+                try{
+                  await context.read<SearchStore>().getSearchNutrientData(context, myController.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchListScreen(
+                            myControllerValue: myController.text,
+                          )));
+                }catch(error){
+                  falseDialog(context);
+                }
+
               }),
         ],
       ),
@@ -83,66 +111,79 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-
 // 중간탭
 class _MiddleTab extends StatelessWidget {
   const _MiddleTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String accessToken = context.watch<UserStore>().accessToken;
     var nutrientList = [
       {
-        'nutrient': '비타민 C', // 영양제 이름
+        'nutrient': '비타민C', // 영양제 이름
       },
       {
-        'nutrient': '오메가3', // 영양제 이름
+        'nutrient': '비타민A', // 영양제 이름
       },
       {
-        'nutrient': '루테인', // 영양제 이름
+        'nutrient': '비타민B1', // 영양제 이름
       },
       {
-        'nutrient': '혈당', // 영양제 이름
+        'nutrient': '비타민B2', // 영양제 이름
+      },
+      {
+        'nutrient': '비타민B3', // 영양제 이름
+      },
+      {
+        'nutrient': '비타민B6', // 영양제 이름
+      },
+      {
+        'nutrient': '비타민B12', // 영양제 이름
+      },
+      {
+        'nutrient': '비타민D', // 영양제 이름
+      },
+      {
+        'nutrient': '비타민E', // 영양제 이름
+      },
+      {
+        'nutrient': '비타민K', // 영양제 이름
+      },
+      {
+        'nutrient': '칼슐', // 영양제 이름
+      },
+      {
+        'nutrient': '칼륨', // 영양제 이름
       },
       {
         'nutrient': '마그네슘', // 영양제 이름
       },
       {
-        'nutrient': '아연', // 영양제 이름
+        'nutrient': '망간', // 영양제 이름
       },
       {
-        'nutrient': '녹차추출잎', // 영양제 이름
+        'nutrient': '셀레늄', // 영양제 이름
       },
       {
-        'nutrient': '순환제', // 영양제 이름
+        'nutrient': '엽산', // 영양제 이름
       },
       {
-        'nutrient': '탈모약', // 영양제 이름
-      },{
-        'nutrient': '비타민 C', // 영양제 이름
+        'nutrient': '아미노산', // 영양제 이름
       },
       {
-        'nutrient': '오메가3', // 영양제 이름
+        'nutrient': '판토텐산', // 영양제 이름
       },
       {
-        'nutrient': '루테인', // 영양제 이름
+        'nutrient': '비오틴', // 영양제 이름
       },
       {
-        'nutrient': '혈당', // 영양제 이름
+        'nutrient': '철분', // 영양제 이름
       },
       {
-        'nutrient': '마그네슘', // 영양제 이름
+        'nutrient': '오메가3',
       },
       {
-        'nutrient': '아연', // 영양제 이름
-      },
-      {
-        'nutrient': '녹차추출잎', // 영양제 이름
-      },
-      {
-        'nutrient': '순환제', // 영양제 이름
-      },
-      {
-        'nutrient': '탈모약', // 영양제 이름
+        'nutrient': '크롬', // 영양제 이름
       },
     ];
 
@@ -156,11 +197,14 @@ class _MiddleTab extends StatelessWidget {
               width: 50,
               height: 50,
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  print(nutrient['nutrient']!);
+                  await context.read<SearchStore>().getSearchNutrientData(context, nutrient['nutrient']!);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SearchListScreen(myControllerValue: nutrient['nutrient']!)));
+                          builder: (context) => SearchListScreen(
+                              myControllerValue: nutrient['nutrient']!)));
                 },
                 child: Text(nutrient['nutrient']!),
               ),
@@ -170,4 +214,26 @@ class _MiddleTab extends StatelessWidget {
       ),
     );
   }
+}
+
+
+// 통신 오류
+void falseDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        child: Container(
+          width: 200,
+          height: 100,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("성분 검색결과가 없습니다."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
