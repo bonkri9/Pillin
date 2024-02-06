@@ -1,5 +1,4 @@
 // import 'package:flutter/material.dart';
-// import 'package:flutter/core.dart';
 //
 // class CheckValidate{
 //   String validateEmail(FocusNode focusNode, String value){
