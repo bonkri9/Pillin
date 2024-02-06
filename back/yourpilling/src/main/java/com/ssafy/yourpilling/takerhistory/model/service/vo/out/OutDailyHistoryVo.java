@@ -10,5 +10,6 @@ public class OutDailyHistoryVo {
     String name;
     int actualTakeCount;
     int needToTakeTotalCount;
+    int takeCount;
     boolean takeYn;
 }
