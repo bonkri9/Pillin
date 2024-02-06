@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../const/colors.dart';
-import '../../screen/login_screen.dart';
+import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

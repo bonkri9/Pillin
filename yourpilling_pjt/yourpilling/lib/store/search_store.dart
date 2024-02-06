@@ -5,6 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/store/user_store.dart';
 import 'dart:convert';
 
+import '../const/url.dart';
+
 class SearchStore extends ChangeNotifier {
   var SearchData;
   var PillDetailData;
@@ -15,11 +17,7 @@ class SearchStore extends ChangeNotifier {
     print('체크1');
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
-    // String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search?pillName=${name}';
-
-
-    // String url = "http://10.0.2.2:8080/api/v1/pill/search?pillName=${name}";
-    String url = "http://10.0.2.2:8080/api/v1/pill/search?pillName=${name}";
+    String url = "${CONVERT_URL}/api/v1/pill/search?pillName=${name}";
 
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
@@ -85,11 +83,7 @@ class SearchStore extends ChangeNotifier {
     print('체크1');
     String accessToken = context.read<UserStore>().accessToken;
     print('체크2');
-    // String url = 'https://i10b101.p.ssafy.io/api/v1/pill/search/category?healthConcerns=${health}';
-
-
-    // String url = "http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=${health}";
-    String url = "http://10.0.2.2:8080/api/v1/pill/search/category?healthConcerns=${health}";
+    String url = "${CONVERT_URL}/api/v1/pill/search/category?healthConcerns=${health}";
 
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
@@ -116,45 +110,11 @@ class SearchStore extends ChangeNotifier {
   }
 
 
-// 건강고민 검색 종료
-
-// 상세정보 검색
-//   Future<void> getSearchDetailData(BuildContext context, id) async {
-//     print('체크1');
-//     print('들어온id는 ${id}');
-//     String accessToken = context.read<UserStore>().accessToken;
-//     print('체크2');
-//     String url = 'http://10.0.2.2:8080/api/v1/pill/detail?pillId=${id}';
-//     print('url은 ${url}');
-//     print('토큰은 ${accessToken}');
-//     print("상세정보 요청");
-//     var response = await http.get(Uri.parse(url),
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'accessToken' : accessToken,
-//         });
-//
-//     if (response.statusCode == 200) {
-//       print('상세정보 통신성공');
-//       PillDetail = jsonDecode(utf8.decode(response.bodyBytes));
-//       print("DetailhData: ${PillDetail}");
-//       print('체크3');
-//     } else {
-//       print(response.body);
-//       throw http.ClientException(
-//           '서버에서 성공 코드가 반환되지 않았습니다.'); // HTTP 응답 코드가 200이 아닐 경우 에러를 던집니다
-//     }
-//   }
-  // 상세정보 종료
 
   //재고 상세 조회
   getSearchDetailData(BuildContext context, var pillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
-    // const String pillDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/detail";
-
-
-    // const String pillDetailUrl = "http://10.0.2.2:8080/api/v1/pill/detail";
-    const String pillDetailUrl = "http://10.0.2.2:8080/api/v1/pill/detail";
+    const String pillDetailUrl = "${CONVERT_URL}/api/v1/pill/detail";
     try {
       var response = await http.get(Uri.parse('$pillDetailUrl?pillId=$pillId'),
           headers: {

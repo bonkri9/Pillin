@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yourpilling/component/base_container.dart';
+import 'package:yourpilling/component/common/base_container.dart';
 
-import '../component/app_bar.dart';
-import '../component/inventory/detail_inventory.dart';
+import '../../component/common/app_bar.dart';
+import '../Inventory/detail_inventory.dart';
 import 'search_pill_detail.dart';
-import '../const/colors.dart';
+import '../../const/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../store/search_store.dart';
-import '../store/user_store.dart';
+import '../../store/search_store.dart';
+import '../../store/user_store.dart';
 
 
 class SearchListScreen extends StatefulWidget {

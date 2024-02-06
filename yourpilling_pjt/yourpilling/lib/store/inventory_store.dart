@@ -6,6 +6,8 @@ import 'package:yourpilling/store/user_store.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../const/url.dart';
+
 class InventoryStore extends ChangeNotifier {
   var takeYnListData;
   List get takeTrueListData => takeYnListData['takeTrue']['data'];
@@ -57,11 +59,7 @@ class InventoryStore extends ChangeNotifier {
   Future<void> reviseInven(
       BuildContext context, var ownPillId, var remains, var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
-    // const String reviseUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
-
-
-    // const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
-    const String reviseUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+    const String reviseUrl = "${CONVERT_URL}/api/v1/pill/inventory";
 
 
     try {
@@ -78,12 +76,7 @@ class InventoryStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("재고 수정 put 수신 성공");
-        // print(response.body);
-        // print('스토어에 있는 재고 수정api');
-        // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        // print("takeYnListData: ${takeYnListData["data"]}");
       } else {
         // print(response.body);
         print("재고 수정 put 수신 실패");
@@ -97,11 +90,7 @@ class InventoryStore extends ChangeNotifier {
   //재고 상세 조회
   Future<void> getPillDetailData(BuildContext context, var ownPillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
-    // const String invenDetailUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
-
-
-    // const String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
-    const String invenDetailUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+    const String invenDetailUrl = "${CONVERT_URL}/api/v1/pill/inventory";
 
 
     try {
@@ -132,11 +121,7 @@ class InventoryStore extends ChangeNotifier {
   //섭취&미섭취 전환
   Future<void> putTakeYnChange(BuildContext context, var ownPillId) async {
     String accessToken = context.read<UserStore>().accessToken;
-    // const String takeYnChangeUrl =
-    //     "https://i10b101.p.ssafy.io/api/v1/pill/inventory/take-yn";
-
-    // const String takeYnChangeUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
-    const String takeYnChangeUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/take-yn";
+   const String takeYnChangeUrl = "${CONVERT_URL}/api/v1/pill/inventory/take-yn";
 
     try {
       var response = await http.put(Uri.parse(takeYnChangeUrl),
@@ -172,9 +157,7 @@ class InventoryStore extends ChangeNotifier {
   Future<void> registInven(BuildContext context, var pillId, var takeYn, var remains,
       var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
-    // const String registInvenUrl = "https://i10b101.p.ssafy.io/api/v1/pill/inventory";
-
-    const String registInvenUrl = "http://10.0.2.2:8080/api/v1/pill/inventory";
+    const String registInvenUrl = "${CONVERT_URL}/api/v1/pill/inventory";
 
     try {
       bool takeYnValue = takeYn ?? false;

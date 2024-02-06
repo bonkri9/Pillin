@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:yourpilling/component/login/regist_login_screen.dart';
+import 'package:yourpilling/screen/Login/regist_login_screen.dart';
 import 'package:yourpilling/const/colors.dart';
 
 import '../../widgets/input_field_widget.dart';
 import '../../widgets/primary_button.dart';
-import '../../screen/login_screen.dart';
+import 'login_screen.dart';
 
 class SignupScreenView extends StatefulWidget {
   const SignupScreenView({super.key});

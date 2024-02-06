@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/main_page_child_screen.dart';
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/widgets/input_field_widget.dart';
 import 'package:yourpilling/widgets/primary_button.dart';
 
-import '../sign_up/regist_signup_screen.dart';
+import 'regist_signup_screen.dart';
 
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({super.key});

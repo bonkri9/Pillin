@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+
+import '../const/url.dart';
 class UserStore extends ChangeNotifier {
 
   String get loginToken => accessToken;
@@ -25,11 +27,7 @@ class UserStore extends ChangeNotifier {
     print('체크1');
     String accessToken = this.accessToken;
     print('체크2');
-    // String url = 'https://i10b101.p.ssafy.io/api/v1/member';
-
-
-    //String url = "http://10.0.2.2:8080/api/v1/member";
-    String url = "http://10.0.2.2:8080/api/v1/login";
+    String url = "${CONVERT_URL}/api/v1/login";
 
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
@@ -59,11 +57,7 @@ class UserStore extends ChangeNotifier {
     print('체크1');
     String accessToken = this.accessToken;
     print('체크2');
-    // String url = 'https://i10b101.p.ssafy.io/api/v1/member';
-
-
-    //String url = "http://10.0.2.2:8080/api/v1/member";
-    String url = "http://10.0.2.2:8080/api/v1/login";
+    String url = "${CONVERT_URL}/api/v1/login";
 
     print('url은 ${url}');
     print('토큰은 ${accessToken}');

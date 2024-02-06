@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:yourpilling/screen/login_screen.dart';
-import 'package:yourpilling/screen/my_page_screen.dart';
+import 'package:yourpilling/screen/Login/login_screen.dart';
+import 'package:yourpilling/screen/Mypage/my_page_screen.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   MainAppBar({Key? key, this.barColor}) : super(key: key);

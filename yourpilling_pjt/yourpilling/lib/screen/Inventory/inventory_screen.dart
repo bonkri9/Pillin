@@ -6,18 +6,18 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:provider/provider.dart';
-import 'package:yourpilling/component/angle_container.dart';
-import 'package:yourpilling/component/app_bar_search.dart';
+import 'package:yourpilling/component/common/angle_container.dart';
+import 'package:yourpilling/component/common/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/search_pill_detail.dart';
+import 'package:yourpilling/screen/Search/search_pill_detail.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 import '../../store/user_store.dart';
-import '../base_container.dart';
-import '../app_bar.dart';
-import '../../screen/login_screen.dart';
-import '../login/regist_login_screen.dart';
-import '../sign_up/sign_up_screen.dart';
+import '../../component/common/base_container.dart';
+import '../../component/common/app_bar.dart';
+import '../Login/login_screen.dart';
+import '../Login/regist_login_screen.dart';
+import '../Login/sign_up_screen.dart';
 import 'detail_inventory.dart';
 
 void loadData(BuildContext context) {

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:yourpilling/screen/login_screen.dart';
+import 'package:yourpilling/screen/Login/login_screen.dart';
 import 'package:http/http.dart' as http;
-import '../const/colors.dart';
+import '../../const/colors.dart';
 
 class FindPasswordScreen extends StatefulWidget {
   const FindPasswordScreen({super.key});

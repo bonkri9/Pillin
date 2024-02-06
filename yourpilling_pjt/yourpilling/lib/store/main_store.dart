@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yourpilling/const/url.dart';
 import 'package:yourpilling/store/user_store.dart';
-import 'package:yourpilling/screen/main_screen.dart';
+import 'package:yourpilling/screen/Main/main_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -18,10 +19,7 @@ class MainStore extends ChangeNotifier {
   // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
   getWeeklyData(BuildContext context) async {
     String accessToken = context.watch<UserStore>().accessToken;
-    // const String weeklyUrl = 'https://i10b101.p.ssafy.io/api/v1/pill/history/weekly';
-
-
-    const String weeklyUrl ="http://10.0.2.2:8080/api/v1/pill/history/weekly";
+    const String weeklyUrl ="${CONVERT_URL}/api/v1/pill/history/weekly";
 
 
     try {
@@ -51,11 +49,7 @@ class MainStore extends ChangeNotifier {
   getDailyData(BuildContext context) async {
     String accessToken = context.watch<UserStore>().accessToken;
     DateTime koreaTime = DateTime.now().add(Duration(hours: 9));
-    // String dailyUrl = 'https://i10b101.p.ssafy.io/api/v1/pill/history/daily'; // url
-
-
-
-    String dailyUrl = "http://10.0.2.2:8080/api/v1/pill/history/daily";
+    String dailyUrl = "${CONVERT_URL}/api/v1/pill/history/daily";
 
 
     try {
@@ -85,12 +79,7 @@ class MainStore extends ChangeNotifier {
   // 내 영양제 재고
   getUserInventory(BuildContext context) async{
     String accessToken = context.watch<UserStore>().accessToken;
-    // String inventoryListUrl =
-    //     "https://i10b101.p.ssafy.io/api/v1/pill/inventory/list";
-
-
-    // String inventoryListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
-    String inventoryListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+    String inventoryListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
 
 
     try {
@@ -117,14 +106,11 @@ class MainStore extends ChangeNotifier {
   }
 
   takePill(BuildContext context) async {
-    // const String putPillTakeUrl = "https://i10b101.p.ssafy.io/api/v1/pill/take";
-
-    // const String putPillTakeUrl = "http://10.0.2.2:8080/api/v1/pill/take";
-    const String takePillUrl = "http://10.0.2.2:8080/api/v1/pill/take";
+    const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
 
     print("영양제 복용 완료 요청");
     String accessToken = context.read<UserStore>().accessToken;
-    var response = await http.put(Uri.parse(putPillTakeUrl),
+    var response = await http.put(Uri.parse(takePillUrl),
         headers: {
           'Content-Type': 'application/json',
           'accessToken': accessToken,

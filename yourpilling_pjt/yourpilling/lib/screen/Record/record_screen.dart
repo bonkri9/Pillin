@@ -11,7 +11,7 @@ import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:just_bottom_sheet/just_bottom_sheet.dart';
 import 'package:yourpilling/store/record_store.dart';
 import 'dart:convert';
-import '../store/user_store.dart';
+import '../../store/user_store.dart';
 
 getMonthlyData(BuildContext context) {
   context.read<RecordStore>().getMonthlyData(context); // 페이지 들어올 때 월간 데이터 조회 요청

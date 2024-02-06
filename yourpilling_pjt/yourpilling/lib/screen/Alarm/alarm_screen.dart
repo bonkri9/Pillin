@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import '../component/app_bar.dart';
-import '../component/base_container.dart';
-import '../const/colors.dart';
+import '../../component/common/app_bar.dart';
+import '../../component/common/base_container.dart';
+import '../../const/colors.dart';
 
 class AlarmScreen extends StatefulWidget {
   @override

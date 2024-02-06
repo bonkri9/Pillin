@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:provider/provider.dart';
-import 'package:yourpilling/component/inventory/pill_model.dart';
+import 'package:yourpilling/screen/Inventory/pill_model.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/component/inventory/inventory_screen.dart';
+import 'package:yourpilling/screen/Inventory/inventory_screen.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:http/http.dart' as http;
 import 'package:yourpilling/store/inventory_store.dart';

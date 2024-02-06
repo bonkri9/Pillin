@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yourpilling/component/base_container.dart';
+import 'package:yourpilling/component/common/base_container.dart';
 
-import '../const/colors.dart';
-import '../store/user_store.dart';
-import 'login_screen.dart';
+import '../../const/colors.dart';
+import '../../store/user_store.dart';
+import '../Login/login_screen.dart';
 
 class UserInfoUpdateScreen extends StatefulWidget {
   const UserInfoUpdateScreen({super.key});

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yourpilling/component/app_bar.dart';
+import 'package:yourpilling/component/common/app_bar.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/search_health_screen.dart';
-import 'package:yourpilling/screen/search_list_screen.dart';
-import 'package:yourpilling/screen/search_nutrient_screen.dart';
-import 'package:yourpilling/component/base_container.dart';
+import 'package:yourpilling/screen/Search/search_health_screen.dart';
+import 'package:yourpilling/screen/Search/search_list_screen.dart';
+import 'package:yourpilling/screen/Search/search_nutrient_screen.dart';
+import 'package:yourpilling/component/common/base_container.dart';
 import 'dart:convert';
-import '../store/search_store.dart';
-import '../store/user_store.dart';
+import '../../store/search_store.dart';
+import '../../store/user_store.dart';
 
 
 class SearchScreen extends StatefulWidget {

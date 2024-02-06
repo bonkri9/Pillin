@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:yourpilling/screen/main_page_child_screen.dart';
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});

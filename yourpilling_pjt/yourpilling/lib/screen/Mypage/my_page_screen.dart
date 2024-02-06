@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yourpilling/component/angle_container.dart';
-import 'package:yourpilling/component/app_bar_search.dart';
+import 'package:yourpilling/component/common/angle_container.dart';
+import 'package:yourpilling/component/common/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/login_screen.dart';
-import 'package:yourpilling/screen/main_page_child_screen.dart';
-import 'package:yourpilling/screen/main_screen.dart';
-import 'package:yourpilling/screen/userinfo_update_screen.dart';
+import 'package:yourpilling/screen/Login/login_screen.dart';
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
+import 'package:yourpilling/screen/Main/main_screen.dart';
+import 'package:yourpilling/screen/Mypage/userinfo_update_screen.dart';
 
-import '../component/base_container.dart';
-import '../store/user_store.dart';
+import '../../component/common/base_container.dart';
+import '../../store/user_store.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
