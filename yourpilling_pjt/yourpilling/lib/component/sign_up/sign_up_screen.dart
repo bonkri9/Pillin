@@ -34,7 +34,7 @@ class _SignupScreenState extends State<SignupScreen> {
     signUp() async {
       // const String signupUrl = "https://i10b101.p.ssafy.io/api/v1/register";
       // const String signupUrl = "http://10.0.2.2:8080/api/v1/register";
-      const String signupUrl = "https://i10b101.p.ssafy.io/api/v1/register";
+      const String signupUrl = "http://localhost:8080/api/v1/register";
       try {
         print('회원가입 등록');
         var response = await http.post(Uri.parse(signupUrl),
@@ -394,27 +394,27 @@ class _SignupScreenState extends State<SignupScreen> {
                 )),
           ],
         ),
-        // ElevatedButton(
-        //       onPressed: () {
-        //         if (isValidate()) {
-        //           signUp();
-        //           print('유효 데이터');
-        //           // Navigator.push(
-        //           //     context,
-        //           //     MaterialPageRoute(
-        //           //         builder: (context) => LoginScreen()));
-        //         }
-        //       },
-        //       style: ElevatedButton.styleFrom(
-        //         shape: const StadiumBorder(),
-        //         padding: const EdgeInsets.symmetric(vertical: 16),
-        //         backgroundColor: Colors.redAccent,
-        //       ),
-        //       child: const Text(
-        //         "완료",
-        //         style: TextStyle(fontSize: 20, color: Colors.white),
-        //       ),
-        //     ),
+        ElevatedButton(
+              onPressed: () {
+                if (isValidate()) {
+                  signUp();
+                  print('유효 데이터');
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => LoginScreen()));
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: Colors.redAccent,
+              ),
+              child: const Text(
+                "완료",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
       ],
     );
   }

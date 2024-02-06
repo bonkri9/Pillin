@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:yourpilling/component/app_bar.dart';
 import 'package:yourpilling/component/base_container_noheight.dart';
 import 'package:yourpilling/const/colors.dart';
@@ -24,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<MainStore>().getWeeklyData(context);
+    context.watch<MainStore>().getWeeklyData(context);
     context.read<MainStore>().getUserInventory(context);
 
     return Scaffold(
@@ -55,7 +54,6 @@ class _Welcome extends StatelessWidget {
     DateTime now = DateTime.now();
     Duration koreaOffset = Duration(hours: 9);
     DateTime koreaTime = now.add(koreaOffset);
-    print("현재 한국 시간 $koreaTime");
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
       child: Row(
@@ -190,7 +188,7 @@ class _WeekState extends State<_Week> {
                   ),
                   calendarBuilders:
                       CalendarBuilders(markerBuilder: (context, date, events) {
-                      var weekData = context.read<MainStore>().weekData;
+                      var weekData = context.watch<MainStore>().weekData;
                       DateTime koreaTime = date.add(Duration(hours: 9));
                       String month = koreaTime.month.toString().padLeft(2, '0');
                       String day = koreaTime.day.toString().padLeft(2, '0');
@@ -265,7 +263,6 @@ class _Today extends StatefulWidget {
 
 class _TodayState extends State<_Today> {
   // Progress Bar 진행도
-  int gauge = 0;
   Color btnColor = Colors.redAccent; // 버튼 색상 state
 
 
@@ -273,14 +270,9 @@ class _TodayState extends State<_Today> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
-    print("debug");
     context.read<MainStore>().getDailyData(context); // 오늘 먹을 영양제 목록 [{name, actualTakeCount, needToTakeTotalCount}]
-    var dailyData = context.read<MainStore>().dailyData;
-    print('오늘 먹어야 할 영양제 목록: $dailyData');
-    // var curCompleteCount = 0; // 오늘 현재까지 복용한 영양제 개수
-    var curCompleteCount = context.read<MainStore>().curCompleteCount; // 오늘 현재까지 복용한 영양제 개수
-    print('오늘 현재까지 복용한 영양제 개수: $curCompleteCount');
-    var userInventoryData = context.read<MainStore>().userInventoryData;
+    var dailyData = context.watch<MainStore>().dailyData;
+    var curCompleteCount = context.watch<MainStore>().curCompleteCount; // 오늘 현재까지 복용한 영양제 개수
 
     return BaseContainerOnlyWidth(
         width: containerWidth,
@@ -413,14 +405,44 @@ class _TodayState extends State<_Today> {
                                         color: BASIC_BLACK,
                                       )),
                                 ),
-                                // Text("${dailyData[i]['time']}",
-                                //     style: TextStyle(
-                                //       fontWeight: FontWeight.w600,
-                                //       color: BASIC_BLACK,
-                                //       fontSize: 14,
-                                //     )),
-                                dailyData[i]['actualTakeCount'] == dailyData[i]['needToTakeTotalCount']// 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
+                                dailyData[i]['actualTakeCount'] != dailyData[i]['needToTakeTotalCount']// 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
                                     ?
+
+                                Container(
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.redAccent,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20)),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
+                                      context.read<MainStore>().ownPillId = dailyData[i]['ownPillId'];
+                                      context.read<MainStore>().takePill(context); // 복용 요청하기
+
+                                      if (dailyData.length == curCompleteCount) {
+                                        btnColor = Colors.greenAccent;
+                                      }
+                                    },
+                                    style: ButtonStyle(
+                                      padding: MaterialStateProperty.all(
+                                          EdgeInsets.zero), // 패딩 없애줘야 함
+                                    ),
+                                    child: Text("복용",
+                                        style: TextStyle(
+                                          color: Colors.redAccent,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                  ),
+                                )
+
+                                        : dailyData.length != curCompleteCount ?
                                 Container(
                                   width: 50,
                                   decoration: BoxDecoration(
@@ -448,85 +470,34 @@ class _TodayState extends State<_Today> {
                                         )),
                                   ),
                                 )
-
-                                // : takenOrUntaken
-                                    //     ? //
-                                    //     // 복용한 영양제라면
-                                    //     Container(
-                                    //         width: 50,
-                                    //         decoration: BoxDecoration(
-                                    //           color: Colors.redAccent,
-                                    //           border: Border.all(
-                                    //             color: Colors.redAccent,
-                                    //             width: 1,
-                                    //           ),
-                                    //           borderRadius: BorderRadius.all(
-                                    //               Radius.circular(20)),
-                                    //         ),
-                                    //         child: TextButton(
-                                    //           onPressed: () {
-                                    //             print("복용 버튼을 누릅니다");
-                                    //             // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
-                                    //             context.read<MainStore>().ownPillId = userInventoryData[i]['ownPillId']; // 복용할 영양제 누를 떄 해당 영양제 ID 보내기 위해 설정
-                                    //
-                                    //             context.read<MainStore>().putPillTake(context); // 복용 요청하기
-                                    //
-                                    //             if (dailyData.length == curCompleteCount) {
-                                    //               btnColor = Colors.greenAccent;
-                                    //             }
-                                    //           },
-                                    //           style: ButtonStyle(
-                                    //             padding:
-                                    //                 MaterialStateProperty.all(
-                                    //                     EdgeInsets
-                                    //                         .zero), // 패딩 없애줘야 함
-                                    //           ),
-                                    //           child: Text("완료",
-                                    //               style: TextStyle(
-                                    //                 color: Colors.white,
-                                    //                 fontSize: 13,
-                                    //                 fontWeight: FontWeight.w600,
-                                    //               )),
-                                    //         ),
-                                    //       )
-                                        :
-                                AnimatedContainer(
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.redAccent,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20)),
-                                  ),
-                                  duration: Duration(seconds: 2),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      print("복용 버튼을 누릅니다");
-                                      // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
-                                      context.read<MainStore>().ownPillId = userInventoryData[i]['ownPillId']; // 복용할 영양제 누를 떄 해당 영양제 ID 보내기 위해 설정
-
-                                      context.read<MainStore>().putPillTake(context); // 복용 요청하기
-
-                                      if (dailyData.length == curCompleteCount) {
-                                        btnColor = Colors.greenAccent;
-                                      }
-                                    },
-                                    style: ButtonStyle(
-                                      padding: MaterialStateProperty.all(
-                                          EdgeInsets.zero), // 패딩 없애줘야 함
-                                    ),
-                                    child: Text("복용",
-                                        style: TextStyle(
-                                          color: Colors.redAccent,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
-                                )
-
+                                    :
+                                Container(
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                            color: Colors.greenAccent,
+                                            border: Border.all(
+                                              color: Colors.greenAccent,
+                                              width: 1,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                          ),
+                                          child: TextButton(
+                                            onPressed: () {},
+                                            style: ButtonStyle(
+                                              padding:
+                                                  MaterialStateProperty.all(
+                                                      EdgeInsets
+                                                          .zero), // 패딩 없애줘야 함
+                                            ),
+                                            child: Text("완료",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                          ),
+                                        )
                               ],
                             ),
                           )),
@@ -549,9 +520,6 @@ class _Stock extends StatefulWidget {
 class _StockState extends State<_Stock> {
   // 현재까지 먹은 영양제의 개수
   int takenNum = 0;
-
-  // Progress Bar 진행도
-  int gauge = 0;
 
 // 색상 천천히 변경시켜보자 (미완)
   Color btnColor = Colors.redAccent; // 버튼 색상 state

@@ -65,7 +65,7 @@ class UserStore extends ChangeNotifier {
     var response = await http.get(Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'accessToken' : accessToken,
+          'accessToken' : accessToken
         });
 
     if (response.statusCode == 200) {

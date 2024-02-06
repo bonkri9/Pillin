@@ -106,7 +106,7 @@ class MainStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  putPillTake(BuildContext context) async {
+  takePill(BuildContext context) async {
     // const String putPillTakeUrl = "https://i10b101.p.ssafy.io/api/v1/pill/take";
     // const String putPillTakeUrl = "https://i10b101.p.ssafy.io/api/v1/pill/take";
     const String putPillTakeUrl = "https://i10b101.p.ssafy.io/api/v1/pill/take";

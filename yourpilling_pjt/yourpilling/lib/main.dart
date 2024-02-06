@@ -7,7 +7,6 @@ import 'package:yourpilling/screen/login_screen.dart';
 import 'package:yourpilling/screen/main_page_child_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:yourpilling/firebase_options.dart';
-import 'package:yourpilling/splash.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 import 'package:yourpilling/store/main_store.dart';

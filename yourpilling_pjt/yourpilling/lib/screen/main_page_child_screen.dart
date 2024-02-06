@@ -16,7 +16,7 @@ class _MyAppState extends State<MainPageChild> {
   var curTabIdx = 0;
 
   final mainTabs = [
-    // MainScreen(),
+    MainScreen(),
     SearchScreen(),
     Inventory(),
     AlarmScreen(),
@@ -39,11 +39,11 @@ class _MyAppState extends State<MainPageChild> {
           });
         },
         items: [
-          // BottomNavigationBarItem(
-          //     label: '홈',
-          //     icon: Icon(Icons.home_outlined, color: Color(0xFFD3D3D3)),
-          //     activeIcon: Icon(Icons.home_filled, color: Color(0xFFFF6666))
-          // ),
+          BottomNavigationBarItem(
+              label: '홈',
+              icon: Icon(Icons.home_outlined, color: Color(0xFFD3D3D3)),
+              activeIcon: Icon(Icons.home_filled, color: Color(0xFFFF6666))
+          ),
           BottomNavigationBarItem(
               label: '검색',
               icon: Icon(Icons.search_outlined, color: Color(0xFFD3D3D3)),
