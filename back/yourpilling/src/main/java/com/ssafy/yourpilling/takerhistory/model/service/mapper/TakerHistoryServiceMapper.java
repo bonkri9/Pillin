@@ -26,6 +26,7 @@ public class TakerHistoryServiceMapper {
                 .takeYn(isTake)
                 .actualTakeCount(takerHistory.getCurrentTakeCount())
                 .needToTakeTotalCount(takerHistory.getNeedToTakeCount())
+                .takeCount(takerHistory.getOwnPill().getTakeCount())
                 .build();
     }
 }

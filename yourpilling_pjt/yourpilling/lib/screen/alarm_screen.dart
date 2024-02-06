@@ -96,7 +96,6 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
     // await _selectCount(context, index);
     await _weekRoutine(context, index);
-
   }
 
 
