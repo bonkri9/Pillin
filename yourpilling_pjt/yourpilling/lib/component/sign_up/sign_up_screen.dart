@@ -394,27 +394,27 @@ class _SignupScreenState extends State<SignupScreen> {
                 )),
           ],
         ),
-        ElevatedButton(
-              onPressed: () {
-                if (isValidate()) {
-                  signUp();
-                  print('유효 데이터');
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => LoginScreen()));
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: const StadiumBorder(),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.redAccent,
-              ),
-              child: const Text(
-                "완료",
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
-            ),
+        // ElevatedButton(
+        //       onPressed: () {
+        //         if (isValidate()) {
+        //           signUp();
+        //           print('유효 데이터');
+        //           // Navigator.push(
+        //           //     context,
+        //           //     MaterialPageRoute(
+        //           //         builder: (context) => LoginScreen()));
+        //         }
+        //       },
+        //       style: ElevatedButton.styleFrom(
+        //         shape: const StadiumBorder(),
+        //         padding: const EdgeInsets.symmetric(vertical: 16),
+        //         backgroundColor: Colors.redAccent,
+        //       ),
+        //       child: const Text(
+        //         "완료",
+        //         style: TextStyle(fontSize: 20, color: Colors.white),
+        //       ),
+        //     ),
       ],
     );
   }
