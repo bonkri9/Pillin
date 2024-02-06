@@ -11,53 +11,71 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ssafy.yourpiliing.presentation.component.TitleCard
 import com.ssafy.yourpiliing.presentation.retrofit.dailyhistory.DailyHistoryState
+import com.ssafy.yourpiliing.presentation.retrofit.take.TakeOwnPillState
 import com.ssafy.yourpiliing.presentation.viewmodel.HistoryViewModel
+import com.ssafy.yourpiliing.presentation.viewmodel.TakeOwnPillViewModel
+
 
 @Composable
-fun HistoryPage(){
-     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
-
+fun HistoryPage() {
+    val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
     val historyViewModel = HistoryViewModel()
-    LaunchedEffect(Unit){
+    val takeOwnPillViewModel = TakeOwnPillViewModel()
+
+    val dailyHistoryState by historyViewModel.dailyHistoryState.observeAsState(DailyHistoryState.Loading)
+    val takeOwnPillState by takeOwnPillViewModel.takeOwnPillState.collectAsState(TakeOwnPillState.Loading) // 영양제 복용 클릭
+
+    // 화면 접근시 첫 출력을 위해 사용
+    LaunchedEffect(Unit) {
         historyViewModel.dailyHistory(sharedPreferences)
     }
 
-    val dailyHistoryState by historyViewModel.dailyHistoryResponse.observeAsState(DailyHistoryState.Loading)
+    LaunchedEffect(takeOwnPillState is TakeOwnPillState.Success) {
+        historyViewModel.dailyHistory(sharedPreferences)
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            when(dailyHistoryState){
+        ) {
+            when (dailyHistoryState) {
                 is DailyHistoryState.Loading -> {
                     // TODO: 로딩중 메시지 띄우기
                 }
+
                 is DailyHistoryState.Success -> {
                     val datas = (dailyHistoryState as DailyHistoryState.Success).response.taken
 
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        for (data in datas){
+                        for (data in datas) {
                             TitleCard(
                                 title = data.name,
+                                ownPillId = data.ownPillId,
                                 needToTakeTotalCount = data.needToTakeTotalCount,
                                 actualTakeCount = data.actualTakeCount,
+                                takeOwnPillViewModel = takeOwnPillViewModel,
+                                sharedPreferences = sharedPreferences
                             )
                             Spacer(modifier = Modifier.height(8.dp)) // 간격 추가
                         }
                     }
                 }
+
                 is DailyHistoryState.Failure -> {
                     // TODO: 실패 메시지 띄우기
                 }

@@ -19,7 +19,7 @@ import java.util.Calendar
 class HistoryViewModel : ViewModel() {
 
     private val _dailyHistoryState = MutableLiveData<DailyHistoryState>()
-    val dailyHistoryResponse: LiveData<DailyHistoryState> = _dailyHistoryState
+    val dailyHistoryState: LiveData<DailyHistoryState> = _dailyHistoryState
 
     fun dailyHistory(sharedPreferences: SharedPreferences){
         val accessToken = sharedPreferences.getString("accessToken", null);
@@ -30,7 +30,7 @@ class HistoryViewModel : ViewModel() {
 
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1 // 0부터 시작하기 때문에 1 더합니다
+        val month = calendar.get(Calendar.MONTH) + 1 // 0부터 시작하기 때문에 1 더함
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         historyService.daily(year = year, month = month, day = day).enqueue(object : Callback<DailyHistoryResponse>{
@@ -46,7 +46,7 @@ class HistoryViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<DailyHistoryResponse>, t: Throwable) {
-                _dailyHistoryState.value = DailyHistoryState.Failure("데이터를 가져오는데 실패했습니다.")
+                _dailyHistoryState.value = DailyHistoryState.Failure("네트워크 혹은 시스템에 문제가 발생해 데이터를 가져올 수 없습니다.")
             }
         })
     }
