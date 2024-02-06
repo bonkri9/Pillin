@@ -28,7 +28,7 @@ class InventoryStore extends ChangeNotifier {
 
 
     // const String takeYnListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
-    const String takeYnListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+    const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
 
 
     try {

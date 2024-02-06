@@ -11,7 +11,6 @@ class MainStore extends ChangeNotifier {
   var dailyData;
   var userInventoryData;
   var curCompleteCount = 0;
-  var ownPillId = 0;
   var dailyGauge = 0;
   var takenPillIdxList = [];
   var takenOrUnTaken = false;
@@ -20,14 +19,13 @@ class MainStore extends ChangeNotifier {
   getWeeklyData(BuildContext context) async {
     String accessToken = context.watch<UserStore>().accessToken;
     const String weeklyUrl ="${CONVERT_URL}/api/v1/pill/history/weekly";
-
-
     try {
       var response = await http.get(Uri.parse(weeklyUrl), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       });
 
+      print("주간동작");
       if (response.statusCode == 200) {
         print("주간 복용 기록 수신 성공");
         print(response.body);
@@ -50,8 +48,6 @@ class MainStore extends ChangeNotifier {
     String accessToken = context.watch<UserStore>().accessToken;
     DateTime koreaTime = DateTime.now().add(Duration(hours: 9));
     String dailyUrl = "${CONVERT_URL}/api/v1/pill/history/daily";
-
-
     try {
       var response = await http.get(
           Uri.parse(
@@ -60,10 +56,8 @@ class MainStore extends ChangeNotifier {
             'Content-Type': 'application/json',
             'accessToken': accessToken,
           });
-
       if (response.statusCode == 200) {
         print("일간 복용 기록 수신 성공");
-
         dailyData = jsonDecode(utf8.decode(response.bodyBytes))['taken'];
         print("dailyData: $dailyData");
       } else {
@@ -80,8 +74,6 @@ class MainStore extends ChangeNotifier {
   getUserInventory(BuildContext context) async{
     String accessToken = context.watch<UserStore>().accessToken;
     String inventoryListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
-
-
     try {
       var response = await http.get(
         Uri.parse(inventoryListUrl),
@@ -90,7 +82,6 @@ class MainStore extends ChangeNotifier {
           'accessToken': accessToken,
         },
       );
-
       if (response.statusCode == 200) {
         print("내 영양제 재고 요청 성공");
         userInventoryData = json.decode(utf8.decode(response.bodyBytes))['takeTrue']['data'];
@@ -105,11 +96,13 @@ class MainStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  takePill(BuildContext context) async {
+  Future<void> takePill(BuildContext context,int ownPillId) async {
+    print("영양제 복용 완료 요청");
+    print("오운필아이디는? ${ownPillId}");
     const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
-
     print("영양제 복용 완료 요청");
     String accessToken = context.read<UserStore>().accessToken;
+    print("엑세스토큰은? ${accessToken}");
     var response = await http.put(Uri.parse(takePillUrl),
         headers: {
           'Content-Type': 'application/json',
@@ -118,21 +111,15 @@ class MainStore extends ChangeNotifier {
         body: json.encode({
           "ownPillId": ownPillId,
         }));
+    print('테이크필');
     if (response.statusCode == 200) {
       print("영양제 복용 완료 요청 수신 성공");
-
-      print("복용버튼 DailyData $dailyData");
       curCompleteCount++;
-      notifyListeners();
-
-
-
       print(response.body);
     } else {
       print(response.body);
       print("영양제 복용 완료 요청 수신 실패");
     }
-    // MainScreen().today.createState();
     notifyListeners();
   }
 }
