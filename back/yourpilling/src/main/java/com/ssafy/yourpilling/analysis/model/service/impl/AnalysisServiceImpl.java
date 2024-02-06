@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     public OutAnalysisVo analysis(Long id) { //params : 사용자 아이디
         //사용자 id로 나이대와 gender 추출
         AnalysisMember member = analysisDao.findByMemberId(id);
-        LocalDateTime birthday = member.getBirth().atStartOfDay();
+        LocalDate birthday = member.getBirth();
         AgeGroup ageGroup = AgeGroup.whatAgeGroup(birthday);
 
         //사용자가 먹고 있는 영양제 조회 -> 영양제 번호랑 주의사항 추출???
