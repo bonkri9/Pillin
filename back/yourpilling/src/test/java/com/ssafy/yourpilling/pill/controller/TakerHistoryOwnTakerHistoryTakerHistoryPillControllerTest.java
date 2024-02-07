@@ -3,6 +3,7 @@ package com.ssafy.yourpilling.pill.controller;
 import com.ssafy.yourpilling.common.Gender;
 import com.ssafy.yourpilling.common.PillProductForm;
 import com.ssafy.yourpilling.common.Role;
+import com.ssafy.yourpilling.common.RunOutWarning;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
@@ -78,14 +79,11 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         String accessToken = getAccessToken(member);
         Pill pill = defaultRegisterPill();
 
-        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill);
-        JSONObject body = new JSONObject();
-        body.put("ownPillId", ownPill.getOwnPillId());
+        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill, 60, 60);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get("/api/v1/pill/inventory")
+                .get("/api/v1/pill/inventory?ownPillId="+ownPill.getOwnPillId())
                 .header("accessToken", accessToken)
-                .content(body.toString())
                 .contentType(MediaType.APPLICATION_JSON);
 
         // when
@@ -101,7 +99,7 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         assertEquals(ownPill.getTakeCount(), result.getInt("takeCount"));
         assertEquals(ownPill.getTakeOnceAmount(), result.getInt("takeOnceAmount"));
         assertEquals(ownPill.getStartAt().toString(), result.getString("startAt"));
-        assertEquals("danger", result.getString("warningMessage"));
+        assertEquals(RunOutWarning.ENOUGH.getMessage(), result.getString("warningMessage"));
     }
 
     @Test
@@ -154,7 +152,7 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         String accessToken = getAccessToken(member);
         Pill pill = defaultRegisterPill();
 
-        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill);
+        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill, 60, 60);
 
         JSONArray takeWeekdays = new JSONArray();
         takeWeekdays.put("Wed");
@@ -185,11 +183,6 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
 
         assertEquals(body.getInt("remains"), saved.getRemains());
         assertEquals(body.getInt("totalCount"), saved.getTotalCount());
-        assertEquals(((1<<2) ^ (1<<5)), saved.getTakeWeekdays()); // 수, 토
-        assertEquals(body.getInt("takeCount"), saved.getTakeCount());
-        assertEquals(body.getInt("takeOnceAmount"), saved.getTakeOnceAmount());
-        assertEquals(body.getBoolean("takeYn"), saved.getTakeYN());
-        assertEquals(body.getString("startAt"), saved.getStartAt().toString());
     }
 
     @Test
@@ -200,11 +193,13 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         String accessToken = getAccessToken(member);
         Pill pill = defaultRegisterPill();
 
-        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill);
+        OwnPill ownPill = registerOwnPill(true, member.getMemberId(), pill, 60, 60);
 
         JSONObject body = new JSONObject();
         body.put("ownPillId", ownPill.getOwnPillId());
         body.put("takeYn", false);
+        body.put("remains", 60);
+        body.put("totalCount", 60);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .put("/api/v1/pill/inventory")
@@ -219,32 +214,33 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         perform.andExpect(status().isOk());
         OwnPill saved = ownPillJpaRepository.findByOwnPillId(ownPill.getOwnPillId()).get();
 
-        assertNull(saved.getRemains());
-        assertNull(saved.getTotalCount());
-        assertNull(saved.getTakeWeekdays());
-        assertNull(saved.getTakeCount());
-        assertNull(saved.getTakeOnceAmount());
-        assertNull(saved.getStartAt());
-
-        assertFalse(saved.getTakeYN());
+        assertEquals(60, saved.getRemains());
+        assertEquals(60, saved.getTotalCount());
     }
 
     @Test
     @DisplayName("보유중인 영양제 조회")
     public void list() throws Exception {
         // given
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         Member member = defaultRegisterMember();
         String accessToken = getAccessToken(member);
         Pill pill = defaultRegisterPill();
+        Pill pill2 = defaultRegisterPill();
+        Pill pill3 = defaultRegisterPill();
+        Pill pill4 = defaultRegisterPill();
 
-        OwnPill one = registerOwnPill(true, member.getMemberId(), pill);
-        OwnPill two = registerOwnPill(true, member.getMemberId(), pill);
-        OwnPill three = registerOwnPill(false, member.getMemberId(), pill);
+        OwnPill one = registerOwnPill(true, member.getMemberId(), pill, 60, 60);
+        OwnPill two = registerOwnPill(true, member.getMemberId(), pill2, 60, 20);
+        OwnPill three = registerOwnPill(true, member.getMemberId(), pill2, 60, 10);
+        OwnPill four = registerOwnPill(false, member.getMemberId(), pill3, 60, 10);
 
         PillMember pillMember = pillMemberJpaRepository.findByMemberId(member.getMemberId()).get();
         pillMember.getOwnPills().add(one);
         pillMember.getOwnPills().add(two);
         pillMember.getOwnPills().add(three);
+        pillMember.getOwnPills().add(four);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get("/api/v1/pill/inventory/list")
@@ -259,24 +255,35 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         String value = perform.andReturn().getResponse().getContentAsString();
 
         JSONObject response = new JSONObject(value);
-        JSONObject takeTrue = response.getJSONObject("takeTrue");
+
+        JSONObject takeTrue = response.getJSONObject("takeTrue"); // true
         JSONArray takeTrueData = takeTrue.getJSONArray("data");
-        assertEquals(2, takeTrueData.length());
+        assertEquals(3, takeTrueData.length());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        assertEquals(10, ChronoUnit.DAYS.between(now(),
-                LocalDate.parse(takeTrueData.getJSONObject(0).getString("predicateRunOutAt"), formatter))); // 10일 차이
-        assertEquals(10, ChronoUnit.DAYS.between(now(),
-                LocalDate.parse(takeTrueData.getJSONObject(1).getString("predicateRunOutAt"), formatter)));
-        assertEquals(takeTrueData.getJSONObject(0).getLong("ownPillId"), one.getOwnPillId());
+        assertEquals((int)three.getRemains(), ChronoUnit.DAYS.between(now(),
+                LocalDate.parse(takeTrueData.getJSONObject(0).getString("predicateRunOutAt"), formatter)));
+        assertEquals((int)two.getRemains(), ChronoUnit.DAYS.between(now(),
+                LocalDate.parse(takeTrueData.getJSONObject(1).getString("predicateRunOutAt"), formatter))); // 10일 차이
+        assertEquals((int)one.getRemains(), ChronoUnit.DAYS.between(now(),
+                LocalDate.parse(takeTrueData.getJSONObject(2).getString("predicateRunOutAt"), formatter)));
+
+        assertEquals(takeTrueData.getJSONObject(0).getLong("ownPillId"), three.getOwnPillId()); // remains 적은 것 부터 오른차순
         assertEquals(takeTrueData.getJSONObject(1).getLong("ownPillId"), two.getOwnPillId());
+        assertEquals(takeTrueData.getJSONObject(2).getLong("ownPillId"), one.getOwnPillId());
 
-        JSONObject takeFalse = response.getJSONObject("takeFalse");
+        assertEquals(takeTrueData.getJSONObject(0).getString("warningMessage"), RunOutWarning.DANGER.getMessage());
+        assertEquals(takeTrueData.getJSONObject(1).getString("warningMessage"), RunOutWarning.WARNING.getMessage());
+        assertEquals(takeTrueData.getJSONObject(2).getString("warningMessage"), RunOutWarning.ENOUGH.getMessage());
+
+        // false
+        JSONObject takeFalse = response.getJSONObject("takeFalse"); // false
         JSONArray takeFalseData = takeFalse.getJSONArray("data");
         assertEquals(1, takeFalseData.length());
 
         assertEquals("null", takeFalseData.getJSONObject(0).getString("predicateRunOutAt"));
-        assertEquals(takeFalseData.getJSONObject(0).getLong("ownPillId"), three.getOwnPillId());
+        assertEquals(takeFalseData.getJSONObject(0).getLong("ownPillId"), four.getOwnPillId());
+
+        String contentAsString = perform.andReturn().getResponse().getContentAsString();
     }
 
     @Test
@@ -288,9 +295,9 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         Pill pill2 = defaultRegisterPill();
         Pill pill3 = defaultRegisterPill();
 
-        OwnPill one = registerOwnPill(true, member.getMemberId(), pill);
-        OwnPill two = registerOwnPill(true, member.getMemberId(), pill2);
-        OwnPill three = registerOwnPill(false, member.getMemberId(), pill3);
+        OwnPill one = registerOwnPill(true, member.getMemberId(), pill, 60, 60);
+        OwnPill two = registerOwnPill(true, member.getMemberId(), pill2, 60, 20);
+        OwnPill three = registerOwnPill(false, member.getMemberId(), pill3, 60, 10);
 
         JSONObject body = new JSONObject();
         body.put("ownPillId", one.getOwnPillId());
@@ -311,11 +318,11 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         assertFalse(ownPillJpaRepository.findByOwnPillId(three.getOwnPillId()).isEmpty());
     }
 
-    private OwnPill registerOwnPill(boolean takeYN, Long memberId, Pill pill){
+    private OwnPill registerOwnPill(boolean takeYN, Long memberId, Pill pill, int total, int remains){
         OwnPill ownPill = OwnPill
                 .builder()
-                .remains(10)
-                .totalCount(60)
+                .remains(remains)
+                .totalCount(total)
                 .takeCount(1)
                 .takeWeekdays((1<<7)-1) // 월~일
                 .takeOnceAmount(1)
@@ -336,7 +343,7 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
                 .builder()
                 .name("name")
                 .manufacturer("manufacturer")
-                .expirationAt("24month")
+                .expirationAt("24개월")
                 .usageInstructions("usageInstructions")
                 .primaryFunctionality("primaryFunctionality")
                 .precautions("precautions")

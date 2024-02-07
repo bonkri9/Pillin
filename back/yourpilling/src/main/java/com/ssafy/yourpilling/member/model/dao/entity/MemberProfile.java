@@ -61,4 +61,9 @@ public class MemberProfile {
         this.name = name;
     }
 
+    public void setBirthAndGender(LocalDate birth, Gender gender){
+        this.birth = birth;
+        this.gender = gender;
+    }
+
 }

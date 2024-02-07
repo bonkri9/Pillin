@@ -5,6 +5,7 @@ import com.ssafy.yourpilling.analysis.model.dao.entity.AnalysisOwnPill;
 import com.ssafy.yourpilling.analysis.model.service.dto.AnalysisNutrientsDto;
 import com.ssafy.yourpilling.analysis.model.service.dto.AnalysisOwnPillNutritionDto;
 import com.ssafy.yourpilling.analysis.model.service.dto.AnalysisRanksDto;
+import com.ssafy.yourpilling.common.Gender;
 
 import java.util.List;
 

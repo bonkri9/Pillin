@@ -61,7 +61,7 @@ public class JwtManager {
     }
 
     public boolean isTokenValid(String token) {
-        return getUsername(token) != null;
+        return (getUsername(token) != null && token.startsWith(jwtProperties.getTokenPrefix()));
     }
 
     public boolean isFirstLogin(String token){

@@ -50,16 +50,17 @@ public class MemberControllerMapper {
                 .build();
     }
 
-    public MemberPasswordReIssueVo mapToMemberPasswordReIssueVo(Long memberId) {
+    public MemberPasswordReIssueVo mapToMemberPasswordReIssueVo(String email) {
         return MemberPasswordReIssueVo
                 .builder()
-                .memberId(memberId)
+                .username(email)
                 .build();
     }
 
-    public RegisterEssentialVo mapToMemberRegisterEssentialVo(RequestRegisterEssentialDto dto) {
+    public RegisterEssentialVo mapToMemberRegisterEssentialVo(Long memberId, RequestRegisterEssentialDto dto) {
         return RegisterEssentialVo
                 .builder()
+                .memberId(memberId)
                 .birthday(dto.getBirthday())
                 .gender(dto.getGender())
                 .build();

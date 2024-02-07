@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1055153492019",
+    "project_id": "pillin-d420f",
+    "storage_bucket": "pillin-d420f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055153492019:android:28b763f93b95daf65bd346",
+        "android_client_info": {
+          "package_name": "com.example.push"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWwJqXgiQjQDI7QLgQ_LixXzZIEs5RTp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055153492019:android:4c982d79494320545bd346",
+        "android_client_info": {
+          "package_name": "com.example.yourpilling"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWwJqXgiQjQDI7QLgQ_LixXzZIEs5RTp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

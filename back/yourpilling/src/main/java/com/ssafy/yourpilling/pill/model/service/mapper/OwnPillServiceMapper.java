@@ -55,14 +55,13 @@ public class OwnPillServiceMapper {
     public OwnPill mapToOwnPill(OwnPillRegisterValue value) {
         return OwnPill
                 .builder()
-                .remains(value.getVo().getRemains())
-                .takeCount(value.getVo().getTakeCount())
-                .totalCount(value.getVo().getTotalCount())
+                .remains(value.getAdjustRemain())
+                .takeCount(value.getTakeCount())
+                .totalCount(value.getTotalCount())
                 .takeWeekdays(value.getTakeWeekDaysValue())
                 .takeOnceAmount(value.getTakeOnceAmount())
                 .isAlarm(value.isAlarm())
-                .takeYN(value.getVo().getTakeYn())
-                .startAt(value.getVo().getStartAt())
+                .takeYN(value.isAdjustIsTaken())
                 .createdAt(value.getCreateAt())
                 .member(value.getMember())
                 .pill(value.getPill())
@@ -96,10 +95,12 @@ public class OwnPillServiceMapper {
         return ResponsePillInventoryItem
                 .builder()
                 .ownPillId(ownPill.getOwnPillId())
+                .pillName(ownPill.getPill().getName())
                 .imageUrl(imageUrl)
                 .totalCount(ownPill.getTotalCount())
                 .remains(ownPill.getRemains())
                 .predicateRunOutAt(at)
+                .warningMessage(ownPill.runOutMessage())
                 .build();
     }
 }

@@ -9,10 +9,10 @@ import java.time.LocalDate;
 @Component
 public class OwnPillControllerMapper {
 
-    public OwnPillDetailVo mapToPillDetailVo(RequestOwnPillDetailDto dto){
+    public OwnPillDetailVo mapToPillDetailVo(Long ownPillId){
         return OwnPillDetailVo
                 .builder()
-                .ownPillId(dto.getOwnPillId())
+                .ownPillId(ownPillId)
                 .build();
     }
 
@@ -21,13 +21,10 @@ public class OwnPillControllerMapper {
                 .builder()
                 .pillId(dto.getPillId())
                 .memberId(memberId)
-                .startAt(dto.getStartAt())
                 .takeYn(dto.getTakeYn())
                 .remains(dto.getRemains())
                 .totalCount(dto.getTotalCount())
                 .takeWeekdays(dto.getTakeWeekdays())
-                .takeCount(dto.getTakeCount())
-                .takeOnceAmount(dto.getTakeOnceAmount())
                 .build();
     }
 
@@ -37,11 +34,6 @@ public class OwnPillControllerMapper {
                 .ownPillId(dto.getOwnPillId())
                 .remains(dto.getRemains())
                 .totalCount(dto.getTotalCount())
-                .takeWeekdays(dto.getTakeWeekdays())
-                .takeCount(dto.getTakeCount())
-                .takeOnceAmount(dto.getTakeOnceAmount())
-                .takeYn(dto.getTakeYn())
-                .startAt(dto.getStartAt())
                 .build();
     }
 
@@ -87,11 +79,11 @@ public class OwnPillControllerMapper {
 
     }
 
-    public MonthlyTakerHistoryVo mapToMonthlyTakerHistoryVo(Long memberId, RequestDateDto requestDateDto) {
+    public MonthlyTakerHistoryVo mapToMonthlyTakerHistoryVo(Long memberId, LocalDate date) {
         return MonthlyTakerHistoryVo
                 .builder()
                 .memberId(memberId)
-                .date(requestDateDto.getDate())
+                .date(date)
                 .build();
     }
 }

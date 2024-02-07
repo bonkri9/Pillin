@@ -30,12 +30,11 @@ class RankDaoImplTest {
     private RankMidCategoryRepository rankMidCategoryRepository;
 
     @Test
-    @Disabled
     @DisplayName("모든 사용자들이 보유중인 영양제 정보")
     public void rankCal(){
         // given, when
         List<EachCountPerPill> eachCountPerPills =
-                rankPillMemberRepository.countPillTotalMemberWithAgeAndGender(20, 20, Gender.MAN.getGender());
+                rankPillMemberRepository.countPillTotalMemberWithAgeAndGender(20, 30, Gender.MAN.getGender());
 
         // then
         System.out.println("[total size] : " + eachCountPerPills.size());

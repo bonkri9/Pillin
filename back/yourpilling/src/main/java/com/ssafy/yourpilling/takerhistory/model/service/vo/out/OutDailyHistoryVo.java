@@ -6,8 +6,10 @@ import lombok.Value;
 @Value
 @Builder
 public class OutDailyHistoryVo {
+    Long ownPillId;
     String name;
     int actualTakeCount;
     int needToTakeTotalCount;
+    int takeCount;
     boolean takeYn;
 }

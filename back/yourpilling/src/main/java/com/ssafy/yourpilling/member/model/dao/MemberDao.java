@@ -14,5 +14,5 @@ public interface MemberDao {
 
     void deleteByMemberId(Long memberId);
 
-    void registerEssential(LocalDate birthday, Gender gender);
+    MemberProfile findByUsername(String username);
 }

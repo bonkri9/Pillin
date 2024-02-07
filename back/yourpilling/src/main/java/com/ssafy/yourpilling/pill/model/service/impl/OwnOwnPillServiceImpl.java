@@ -2,10 +2,7 @@ package com.ssafy.yourpilling.pill.model.service.impl;
 
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
-import com.ssafy.yourpilling.pill.model.dao.entity.MonthlyTakerHistory;
-import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
-import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
-import com.ssafy.yourpilling.pill.model.dao.entity.TakerHistory;
+import com.ssafy.yourpilling.pill.model.dao.entity.*;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
 import com.ssafy.yourpilling.pill.model.service.dto.TakerHistorySummary;
 import com.ssafy.yourpilling.pill.model.service.mapper.OwnPillServiceMapper;
@@ -18,11 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.time.LocalDateTime.now;
 
@@ -51,15 +44,26 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
         Map<Boolean, List<OwnPill>> partition = OwnPill.ownPillsYN(member.getOwnPills());
 
+        sortByRemains(partition.get(true));
+
         return mapper.mapToResponsePillInventorListVo(
                 calculationPredicateRunOut(partition.get(true)),
                 calculationPredicateRunOut(partition.get(false)));
     }
 
+    private static void sortByRemains(List<OwnPill> partition) {
+            partition.sort(Comparator.comparing(OwnPill::getRemains));
+    }
+
     @Transactional
     @Override
     public void register(OwnPillRegisterVo vo) {
-        OwnPillRegisterValue value = mapToOwnPillRegisterValue(vo);
+        ownPillDao.isAlreadyRegister(vo.getMemberId(), vo.getPillId());
+
+
+        int adjustRemain = Math.max(vo.getRemains(), 0);
+        boolean adjustIsTaken = (adjustRemain > 0) ? vo.getTakeYn() : false;
+        OwnPillRegisterValue value = mapToOwnPillRegisterValue(vo, adjustRemain, adjustIsTaken);
 
         ownPillDao.register(mapper.mapToOwnPill(value));
     }
@@ -67,7 +71,12 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     @Transactional
     @Override
     public void update(OwnPillUpdateVo vo) {
+        if(isUpdateVoInvalid(vo)) throw new IllegalArgumentException("잘못된 재고 수정 요청입니다.");
         ownPillDao.update(vo);
+    }
+
+    private boolean isUpdateVoInvalid(OwnPillUpdateVo vo) {
+        return vo.getRemains() == null || vo.getTotalCount() == null|| vo.getTotalCount() < vo.getRemains();
     }
 
     @Transactional
@@ -88,7 +97,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
                 }
 
-
                 // if 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
 //                int actualTakeCount = ownPill.decreaseRemains();
                 // th.increaseCurrentTakeCount(actualTakeCount);
@@ -103,7 +111,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 break;
             }
         }
-
 
         return OutOwnPillTakeVo
                 .builder()
@@ -123,6 +130,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
         HashMap<LocalDate, TakerHistorySummary> response = new HashMap<>();
 
         for(MonthlyTakerHistory mth : list) {
+            if(mth.isInvalid()) continue;
             response.putIfAbsent(mth.getTakeAt(), new TakerHistorySummary(0, 0, new ArrayList<MonthlyTakerHistory>()));
             TakerHistorySummary ths = response.get(mth.getTakeAt());
             ths.increaseActualTakenCount(mth.getCurrentTakeCount());
@@ -158,8 +166,10 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     .builder()
                     .needToTakeCount(ownPill.getTakeCount())
                     .currentTakeCount(0)
+                    .takeAt(today)
                     .ownPill(ownPill)
                     .build();
+
             // 오늘의 일일 복용 기록 생성!!
             ownPillDao.registerHistory(todayHistory);
         }
@@ -181,17 +191,30 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
     }
 
-    private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo) {
+    private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo, int adjustRemain, boolean adjustIsTaken) {
+
+        if(isOwnPillRegisterVoInvalid(vo)) throw new IllegalArgumentException("잘못된 재고 등록 요청입니다.");
+
+        Pill pill = ownPillDao.findByPillId(vo.getPillId());
+
         return OwnPillRegisterValue
                 .builder()
-                .vo(vo)
+                .adjustRemain(adjustRemain)
+                .adjustIsTaken(adjustIsTaken)
                 .member(ownPillDao.findByMemberId(vo.getMemberId()))
-                .pill(ownPillDao.findByPillId(vo.getPillId()))
+                .pill(pill)
                 .isAlarm(false)
                 .createAt(now())
                 .takeWeekDaysValue(TakeWeekday.toValue(vo.getTakeWeekdays()))
-                .takeOnceAmount(vo.getTakeOnceAmount())
+                .totalCount(vo.getTotalCount())
+                .takeCount(pill.getTakeCount())
+                .takeOnceAmount(pill.getTakeOnceAmount())
                 .build();
+    }
+
+    private boolean isOwnPillRegisterVoInvalid(OwnPillRegisterVo vo) {
+        return vo.getTotalCount() == null || vo.getTakeYn() == null || vo.getTakeWeekdays() == null
+                || vo.getRemains() == null || vo.getRemains() > vo.getTotalCount();
     }
 
     private ResponsePillInventorListData calculationPredicateRunOut(List<OwnPill> ownPills) {

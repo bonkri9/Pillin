@@ -26,14 +26,15 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public void registerEssential(LocalDate birthday, Gender gender) {
-
-    }
-
-    @Override
     public MemberProfile findByMemberId(Long memberId) {
         return memberJpaRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
+    @Override
+    public MemberProfile findByUsername(String username) {
+        return memberJpaRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("이메일이 존재하지 않습니다."));
     }
 
     @Override

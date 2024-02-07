@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Value
 @Builder
 public class RegisterEssentialVo {
+    Long memberId;
     LocalDate birthday;
     Gender gender;
 }

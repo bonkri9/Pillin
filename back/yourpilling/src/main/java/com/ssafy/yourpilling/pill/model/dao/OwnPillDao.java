@@ -29,4 +29,6 @@ public interface OwnPillDao {
     OutWeeklyTakerHistoryVo findWeeklyTakerHistoriesByMemberId(WeeklyTakerHistoryVo weeklyTakerHistoryVo);
 
     List<MonthlyTakerHistory> findMonthlyTakerHistoriesByMemberIdAndDate(MonthlyTakerHistoryVo monthlyTakerHistoryVo);
+
+    void isAlreadyRegister(Long memberId, Long pillId);
 }

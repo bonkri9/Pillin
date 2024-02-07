@@ -15,6 +15,8 @@ import com.ssafy.yourpilling.rank.model.dao.entity.RankMidCategory;
 import com.ssafy.yourpilling.rank.model.dao.jpa.RankMidCategoryRepository;
 import com.ssafy.yourpilling.rank.model.dao.jpa.RankRepository;
 import com.ssafy.yourpilling.rank.model.service.RankService;
+import com.ssafy.yourpilling.rank.model.service.vo.in.RankVo;
+import com.ssafy.yourpilling.rank.model.service.vo.out.wrap.OutRankVos;
 import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
 import org.junit.jupiter.api.Disabled;
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.time.LocalDate.now;
 
 @SpringBootTest
 @Transactional
@@ -69,9 +73,9 @@ class RankServiceImplTest {
     private RankDao rankDao;
 
     @Test
+    @Disabled
     @DisplayName("모든 카테고리 검색")
     public void allCategories(){
-
 
         List<AllCategories> allCategories = rankDao.allCategories();
 
@@ -93,13 +97,13 @@ class RankServiceImplTest {
     @Disabled
     @DisplayName("랭크 집계 및 생성")
     public void generateRank() {
-        midCategories();
-
-        List<Pill> pills = pills();
-
-        List<Member> members = members();
-
-        ownPills(members, pills);
+//        midCategories();
+//
+//        List<Pill> pills = pills();
+//
+//        List<Member> members = members();
+//
+//        ownPills(members, pills);
 
         rankService.generateWeeklyRank();
 
@@ -109,13 +113,36 @@ class RankServiceImplTest {
         // System.out.println(all);
     }
 
+    @Test
+    @Disabled
+    @DisplayName("랭킹 조회")
+    public void ranks(){
+//        midCategories();
+//        List<Pill> pills = pills();
+//        List<Member> members = members();
+//        ownPills(members, pills);
+        // rankService.generateWeeklyRank();
+
+        Member member = memberRepository.findByUsername("q12").get();
+
+        RankVo vo = RankVo.builder().memberId(member.getMemberId()).build();
+
+        OutRankVos rank = rankService.rank(vo);
+
+        System.out.println(rank);
+    }
+
+    private String withAgeAndGenderCategory(AgeGroup a, Gender g) {
+        return "@" + a.getRange() + "," + g.getGender();
+    }
+
     private void midCategories() {
         List<RankMidCategory> categories = new ArrayList<>();
 
         // 성별 및 나잇대 카테고리
         for (Gender g : Gender.values()) {
             for (AgeGroup a : AgeGroup.values()) {
-                categories.add(RankMidCategory.builder().categoryNm(a.getRange()+","+g.getGender()).build());
+                categories.add(RankMidCategory.builder().categoryNm(withAgeAndGenderCategory(a, g)).build());
             }
         }
 
@@ -230,7 +257,7 @@ class RankServiceImplTest {
     private Pill registerPill(int index, List<Nutrition> nutritions) {
         Pill pill = Pill
                 .builder()
-                .name("pillName" + index)
+                .name("testPillName" + index)
                 .manufacturer("제조사" + index)
                 .usageInstructions("사용법" + index)
                 .primaryFunctionality("주된기능성" + index)

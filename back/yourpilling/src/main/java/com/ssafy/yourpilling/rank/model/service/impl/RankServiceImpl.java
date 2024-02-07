@@ -8,7 +8,10 @@ import com.ssafy.yourpilling.rank.model.dao.RankDao;
 import com.ssafy.yourpilling.rank.model.dao.entity.*;
 import com.ssafy.yourpilling.rank.model.service.RankService;
 import com.ssafy.yourpilling.rank.model.service.mapper.RankServiceMapper;
-import com.ssafy.yourpilling.rank.model.service.vo.wrap.CategoryCategoryVos;
+import com.ssafy.yourpilling.rank.model.service.vo.in.RankVo;
+import com.ssafy.yourpilling.rank.model.service.vo.out.OutRankVo;
+import com.ssafy.yourpilling.rank.model.service.vo.out.wrap.OutCategoryVos;
+import com.ssafy.yourpilling.rank.model.service.vo.out.wrap.OutRankVos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,17 +34,71 @@ public class RankServiceImpl implements RankService {
     private final RankDao rankDao;
     private final RankServiceMapper mapper;
 
+    @Scheduled(cron = "30 38 22 * * *")
+    @Transactional
     @Override
-    public CategoryCategoryVos categories() {
+    public void generateWeeklyRank() {
+        registerAllWeeklyRank();
+    }
+
+    @Override
+    public OutCategoryVos categories() {
         List<AllCategories> allCategories = rankDao.allCategories();
 
         return mapper.mapToCategoryCategoryVos(allCategories);
     }
 
-    @Scheduled(cron = "0 30 10 * * SUN")
-    @Transactional
     @Override
-    public void generateWeeklyRank() {
+    public OutRankVos rank(RankVo vo) {
+        int weeks = (LocalDate.now().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()))
+                % Calendar.getInstance().getWeekYear();
+
+        // 나이 조회
+        String ageGroupAndGenderCategoryName = memberAgeGroupAndGender(vo.getMemberId());
+
+        List<Rank> ranks = rankOnlyAgeGroupAndGender(weeks, ageGroupAndGenderCategoryName);
+        ranks.addAll(allRankExceptAgeGroupAndGender(weeks));
+
+        return mapper.mapToOutRankVos(toOutRankVoDatas(ranks));
+    }
+
+    private List<OutRankVo> toOutRankVoDatas(List<Rank> ranks) {
+        Map<String, List<Rank>> grouping = groupingEachMidCategoryName(ranks);
+
+        List<OutRankVo> vos = new ArrayList<>();
+        for (String key : grouping.keySet()) { // midCategoryId
+            List<Rank> under = grouping.get(key);
+            RankMidCategory midCategory = rankDao.searchMidCategoryByMidCategoryName(key);
+
+            vos.add(mapper.mapToOutRankVo(midCategory, under));
+        }
+        return vos;
+    }
+
+    private static Map<String, List<Rank>> groupingEachMidCategoryName(List<Rank> ranks) {
+        return ranks.stream().collect(Collectors.groupingBy(m -> m.getMidCategory().getCategoryNm()));
+    }
+
+    private List<Rank> rankOnlyAgeGroupAndGender(Integer weeks, String ageGroupAndGenderCategoryName) {
+        RankMidCategory ageMidCategory = rankDao.searchMidCategoryByMidCategoryName(ageGroupAndGenderCategoryName);
+
+        return rankDao.findByWeeks(weeks)
+                .stream()
+                .filter(r -> !r.getMidCategory().getMidCategoryId().equals(ageMidCategory.getMidCategoryId()))
+                .collect(Collectors.toList()); // .toList()는 불변 객체라 사용 불가!
+    }
+
+    private List<Rank> allRankExceptAgeGroupAndGender(Integer weeks){
+        return rankDao.allRankExceptMemberAgeAndGender(weeks);
+    }
+
+    private String memberAgeGroupAndGender(Long memberId) {
+        RankPillMember member = rankDao.findByMemberId(memberId);
+
+        return withAgeGroupAndGenderCategoryName(AgeGroup.whatAgeGroup(member.getBirth()), member.getGender());
+    }
+
+    private void registerAllWeeklyRank() {
         int weeks = (LocalDate.now().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()) + 1)
                 % Calendar.getInstance().getWeekYear();
         int year = LocalDate.now().getYear();
@@ -60,7 +117,7 @@ public class RankServiceImpl implements RankService {
     private void ageAndGenderRank(int weeks, int year, List<Rank> infos) {
         for (Gender g : Gender.values()) {
             for (AgeGroup a : AgeGroup.values()) {
-                String midCategoryName = a.getRange() + "," + g.getGender();
+                String midCategoryName = withAgeGroupAndGenderCategoryName(a, g);
 
                 List<EachCountPerPill> each =
                         rankDao.rankAgeAndGender(a.getStartAge(), a.getEndAge(), g.getGender());
@@ -70,15 +127,21 @@ public class RankServiceImpl implements RankService {
         }
     }
 
+    private static String withAgeGroupAndGenderCategoryName(AgeGroup a, Gender g) {
+        return a.getRange() + "," + g.getGender();
+    }
+
     private void nutrientAndHealthConcernRank(int weeks, int year, List<Rank> infos) {
         HealthConcern[] values = HealthConcern.values();
         Map<Long, Long>[] pillAmountPerHealthConcern = new Map[values.length];
-        Arrays.fill(pillAmountPerHealthConcern, new HashMap<>());
+        for(int i=0; i<values.length; i++){
+            pillAmountPerHealthConcern[i] = new HashMap<>();
+        }
 
         for (Nutrient n : Nutrient.values()) {
-            List<EachCountPerPill> each = rankDao.rankNutrition(n.getEnglish());
+            List<EachCountPerPill> each = rankDao.rankNutrition(n.getKorean());
 
-            RankMidCategory midCategory = getMidCategory(n.getEnglish());
+            RankMidCategory midCategory = getMidCategory(n.getKorean());
 
             List<Integer> healthConcernsIndex = n.getHealthConcernIndex();
 
@@ -88,7 +151,7 @@ public class RankServiceImpl implements RankService {
 
                 RankPill rankPill = rankDao.searchPillByPillId(pillId);
 
-                Rank save = mapper.mapToRank(weeks, year, i, rankPill, midCategory, now());
+                Rank save = mapper.mapToRank(weeks, year, i + 1, rankPill, midCategory, now());
                 infos.add(save);
 
                 // 해당 영양소가 포함되는 건강 고민
@@ -105,7 +168,7 @@ public class RankServiceImpl implements RankService {
 
     private void healthConcernRank(int weeks, int year, List<Rank> infos, Map<Long, Long>[] pillAmountPerHealthConcern, HealthConcern[] values) {
         for (int k = 0; k < pillAmountPerHealthConcern.length; k++) {
-            Map<Long, Long> h = pillAmountPerHealthConcern[k]; // key: 영양제 번호, value : 영양제 총 량
+            Map<Long, Long> h = pillAmountPerHealthConcern[k]; // key: 영양제 번호, value : 영양제 총량
 
             // 가장 많은 영양제를 가지고 있는 순으로 정렬
             List<Long> desc = new ArrayList<>(h.keySet());
@@ -114,7 +177,7 @@ public class RankServiceImpl implements RankService {
             for (int i = 0; i < Math.min(LIMIT, desc.size()); i++) {
                 RankPill rankPill = rankDao.searchPillByPillId(desc.get(i));
 
-                Rank save = mapper.mapToRank(weeks, year, i, rankPill, getMidCategory(values[k].getEnglish()), now());
+                Rank save = mapper.mapToRank(weeks, year, i + 1, rankPill, getMidCategory(values[k].getEnglish()), now());
                 infos.add(save);
             }
         }

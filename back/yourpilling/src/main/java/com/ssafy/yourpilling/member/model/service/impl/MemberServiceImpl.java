@@ -46,7 +46,8 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void registerEssential(RegisterEssentialVo vo) {
-        memberDao.registerEssential(vo.getBirthday(), vo.getGender());
+        MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+        member.setBirthAndGender(vo.getBirthday(), vo.getGender());
     }
 
     @Override
@@ -77,12 +78,13 @@ public class MemberServiceImpl implements MemberService {
         memberDao.deleteByMemberId(vo.getMemberId());
     }
 
+    @Transactional
     @Override
     public void passwordReIssue(MemberPasswordReIssueVo vo) {
         try{
-            MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+            MemberProfile member = memberDao.findByUsername(vo.getUsername());
 
-            String to = member.getUsername();
+            String to = vo.getUsername();
             String rawTmpPassword = temporaryPasswordGenerator.generatePassword();
 
             sendTemporaryPassword(to, rawTmpPassword);

@@ -12,11 +12,8 @@ import java.util.List;
 public class OwnPillRegisterVo {
     Long pillId;
     Long memberId;
-    LocalDate startAt;
     Boolean takeYn;
     Integer remains;
     Integer totalCount;
     List<TakeWeekday> takeWeekdays;
-    Integer takeCount;
-    Integer takeOnceAmount;
 }

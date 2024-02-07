@@ -5,13 +5,15 @@ import com.ssafy.yourpilling.takerhistory.controller.dto.request.RequestDailyHis
 import com.ssafy.yourpilling.takerhistory.model.service.vo.in.DailyHistoryVo;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class HistoryControllerMapper {
-    public DailyHistoryVo mapToMemberRegisterVo(RequestDailyHistoryDto dto, Long memberId) {
+    public DailyHistoryVo mapToMemberRegisterVo(LocalDate date, Long memberId) {
         return DailyHistoryVo
                 .builder()
                 .memberId(memberId)
-                .takeAt(dto.getDate())
+                .takeAt(date)
                 .build();
     }
 }
