@@ -24,7 +24,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/push")
 public class PushController {
-
+    private final String PUSH_TITLE = "Pillin";
+    private final String PUSH_IMAGE = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fko%2Fimages%2Fsearch%2F%25EC%2598%2581%25EC%2596%2591%25EC%25A0%259C%2F&psig=AOvVaw2J4FYwok9I3UwNP5WIPR-_&ust=1706684262130000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiij7vEhIQDFQAAAAAdAAAAABAE";
     private final PushService pushService;
     private final PushControllerMapper mapper;
     private final FirebaseMessaging firebaseMessaging;
@@ -105,8 +106,13 @@ public class PushController {
     }
 
 
-    private static Notification getNotification(PushNotification noti) {
-        return Notification.builder().setBody(noti.getMessage()).build();
+    private Notification getNotification(PushNotification noti) {
+        return Notification
+                .builder()
+                .setTitle(PUSH_TITLE)
+                .setBody(noti.getMessage())
+                .setImage(PUSH_IMAGE)
+                .build();
     }
 
     @GetMapping("/send-pushMessageTest")
@@ -117,9 +123,9 @@ public class PushController {
                 .setNotification(
                         Notification
                                 .builder()
-                                .setTitle("Pillin")
+                                .setTitle(PUSH_TITLE)
                                 .setBody("안녕하세요? 여러분의 건강을 책임지는 Pillin 입니다! Pillin은 영양제 재고 관리 및 푸시 알림을 활용하여 여러분의 무병장수를 기원하며 시작되었습니다.")
-                                .setImage("https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fko%2Fimages%2Fsearch%2F%25EC%2598%2581%25EC%2596%2591%25EC%25A0%259C%2F&psig=AOvVaw2J4FYwok9I3UwNP5WIPR-_&ust=1706684262130000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiij7vEhIQDFQAAAAAdAAAAABAE")
+                                .setImage(PUSH_IMAGE)
                                 .build()
                 )
                 .setToken("c5yarpmyQlS8-jnxhpUWQR:APA91bEznsOEGs0D28iSdJqA_CRytIizfp1YfAnmr-c-tiWK_ET7Geuecww7B57XF3JHfa6raXcZUjBIXWD_LM2c-RpIzCzHK8_-KGgKIu0n_Ua1koK8cQAIS1ih7FlJE8mx11lPiIhm")
