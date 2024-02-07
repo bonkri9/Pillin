@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class MemberUpdateVo {
+public class MemberUpdateNameVo {
     Long memberId;
-    String nickname;
+    String name;
 }

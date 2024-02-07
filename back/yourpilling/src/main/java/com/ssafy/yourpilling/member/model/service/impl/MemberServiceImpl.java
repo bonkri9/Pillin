@@ -43,6 +43,13 @@ public class MemberServiceImpl implements MemberService {
         memberDao.register(mapper.mapToMember(vo, encoder, Role.MEMBER));
     }
 
+    @Transactional
+    @Override
+    public void registerEssential(RegisterEssentialVo vo) {
+        MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+        member.setBirthAndGender(vo.getBirthday(), vo.getGender());
+    }
+
     @Override
     public OutMemberVo info(MemberInfoVo vo) {
         MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
@@ -52,10 +59,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void update(MemberUpdateVo vo) {
+    public void updateName(MemberUpdateNameVo vo) {
         MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
 
-        member.updateNickname(vo.getNickname());
+        member.updateName(vo.getName());
+    }
+
+    @Override
+    public void updatePassword(MemberUpdatePasswordVo vo) {
+        MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+
+        member.updatePassword(encoder.encode(vo.getPassword()));
     }
 
     @Transactional

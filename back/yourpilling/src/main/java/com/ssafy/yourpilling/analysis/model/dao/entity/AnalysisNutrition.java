@@ -1,6 +1,5 @@
 package com.ssafy.yourpilling.analysis.model.dao.entity;
 
-import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,9 +38,9 @@ public class AnalysisNutrition {
 
     @ManyToOne
     @JoinColumn(name = "pill_id")
-    private Pill pill;
+    private AnalysisPill pill;
 
-    public void setPill(Pill pill){
+    public void setPill(AnalysisPill pill){
         this.pill = pill;
     }
 }

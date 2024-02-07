@@ -6,9 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class RequestRegisterDto {
-
-    private String email;
-    private String password;
-    private String name;
+public class RequestRegisterEssentialDto {
+    private LocalDate birthday;
+    private Gender gender;
 }
