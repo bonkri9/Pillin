@@ -2,15 +2,16 @@ package com.ssafy.yourpilling.security.auth.model.service.mapper;
 
 import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.model.service.vo.in.value.KakaoValue;
-import com.ssafy.yourpilling.security.auth.model.service.vo.out.OutServerAccessToken;
+import com.ssafy.yourpilling.security.auth.model.service.vo.out.OutServerAccessTokenVo;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OAuthServiceMapper {
 
-    public OutServerAccessToken mapToOutServerAccessToken(String accessToken){
-        return OutServerAccessToken
+    public OutServerAccessTokenVo mapToOutServerAccessToken(String accessToken, boolean isFistLogin){
+        return OutServerAccessTokenVo
                 .builder()
+                .isFirstLogin(isFistLogin)
                 .accessToken(accessToken)
                 .build();
     }

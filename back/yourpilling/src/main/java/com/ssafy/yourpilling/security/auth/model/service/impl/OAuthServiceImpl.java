@@ -12,7 +12,7 @@ import com.ssafy.yourpilling.security.auth.model.service.mapper.OAuthServiceMapp
 import com.ssafy.yourpilling.security.auth.model.service.vo.in.OAuthKaKaoVo;
 import com.ssafy.yourpilling.security.auth.model.service.vo.in.OAuthKakaoAccessTokenVo;
 import com.ssafy.yourpilling.security.auth.model.service.vo.in.value.KakaoValue;
-import com.ssafy.yourpilling.security.auth.model.service.vo.out.OutServerAccessToken;
+import com.ssafy.yourpilling.security.auth.model.service.vo.out.OutServerAccessTokenVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -48,7 +48,7 @@ public class OAuthServiceImpl implements OAuthService {
     private final JwtManager jwtManager;
 
     @Override
-    public OutServerAccessToken serverAccessToken(OAuthKakaoAccessTokenVo vo) {
+    public OutServerAccessTokenVo serverAccessToken(OAuthKakaoAccessTokenVo vo) {
         JsonObject kakaoMemberInfo = requestKaKaoMemberInfo(vo.getKakaoAccessToken());
 
         Optional<Member> member = oAuthDao.findByUsername(getUsername(kakaoMemberInfo));
@@ -61,12 +61,12 @@ public class OAuthServiceImpl implements OAuthService {
             member = Optional.of(newMember);
         }
 
-        return mapper.mapToOutServerAccessToken(createAccessToken(member.get()));
+        return mapper.mapToOutServerAccessToken(createAccessToken(member.get()), isFirstLogin(member));
     }
 
     @Transactional
     @Override
-    public OutServerAccessToken kakao(OAuthKaKaoVo vo) {
+    public OutServerAccessTokenVo kakao(OAuthKaKaoVo vo) {
         JsonObject kakaoMemberInfo = requestKaKaoMemberInfo(requestAccessToken(vo.getCode()));
 
         Optional<Member> member = oAuthDao.findByUsername(getUsername(kakaoMemberInfo));
@@ -79,7 +79,11 @@ public class OAuthServiceImpl implements OAuthService {
             member = Optional.of(newMember);
         }
 
-        return mapper.mapToOutServerAccessToken(createAccessToken(member.get()));
+        return mapper.mapToOutServerAccessToken(createAccessToken(member.get()), isFirstLogin(member));
+    }
+
+    private boolean isFirstLogin(Optional<Member> member) {
+        return member.get().getBirth() == null || member.get().getGender() == null;
     }
 
     private String createAccessToken(Member member){
