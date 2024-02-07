@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:yourpilling/const/url.dart';
 import '../../const/colors.dart';
+import '../../const/url.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -42,7 +43,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     signUp() async {
       // const String signupUrl = "https://i10b101.p.ssafy.io/api/v1/register";
-      const String signupUrl = "${CONVERT_URL}/api/v1/register";
+      const String signupUrl = "http://10.0.2.2:8080/api/v1/register";
 
 //       const String signupUrl = "http://localhost:8080/api/v1/register";
 

@@ -35,45 +35,6 @@ class _MainAppBarState extends State<MainAppBar> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // 로그아웃 기능
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: const Icon(
-                      CupertinoIcons.arrowshape_turn_up_left,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      showCupertinoModalPopup<void>(
-                        context: context,
-                        builder: (BuildContext context) => CupertinoAlertDialog(
-                          title: const Text('알림'),
-                          content: const Text('로그아웃하시겠습니까?'),
-                          actions: <CupertinoDialogAction>[
-                            CupertinoDialogAction(
-                              isDefaultAction: true,
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('아니오'),
-                            ),
-                            CupertinoDialogAction(
-                              isDestructiveAction: true,
-                              onPressed: () async {
-                                SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                                await prefs.remove('token');
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (builder) => LoginScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text('예'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
                   // IconButton(
                   //   padding: EdgeInsets.only(right: 15),
                   //   visualDensity: const VisualDensity(horizontal: -4),
@@ -95,22 +56,22 @@ class _MainAppBarState extends State<MainAppBar> {
                   //     ],
                   //   ),
                   // ),
-                  // IconButton(
-                  //   padding: EdgeInsets.zero,
-                  //   visualDensity: const VisualDensity(horizontal: -4),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //             builder: (context) => MyPage())); // 마이페이지로 이동
-                  //   },
-                  //   icon: Row(
-                  //     children: [
-                  //       SvgPicture.asset('assets/icon/user.svg',
-                  //           width: 28, height: 28),
-                  //     ],
-                  //   ),
-                  // ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    visualDensity: const VisualDensity(horizontal: -4),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyPage())); // 마이페이지로 이동
+                    },
+                    icon: Row(
+                      children: [
+                        SvgPicture.asset('assets/icon/user.svg',
+                            width: 28, height: 28),
+                      ],
+                    ),
+                  ),
                   SizedBox(
                     width: 10,
                   )

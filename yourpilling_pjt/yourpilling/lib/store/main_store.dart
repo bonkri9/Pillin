@@ -105,7 +105,7 @@ class MainStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  takePill(BuildContext context) async {
+  takePill(BuildContext context, dailyData) async {
     const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
 
     print("영양제 복용 완료 요청");
