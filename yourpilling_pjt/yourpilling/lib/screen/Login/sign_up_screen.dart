@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:yourpilling/const/url.dart';
 import '../../const/colors.dart';
+import '../../const/url.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -193,27 +195,27 @@ class _SignupScreenState extends State<SignupScreen> {
                     setBirthday,
                     setName,
                     signUp),
-                ElevatedButton(
-                  onPressed: () {
-                    if (isValidate()) {
-                      signUp();
-                      print('유효 데이터184');
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => LoginScreen()));
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.redAccent,
-                  ),
-                  child: const Text(
-                    "완료",
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     if (isValidate()) {
+                //       signUp();
+                //       print('유효 데이터184');
+                //       // Navigator.push(
+                //       //     context,
+                //       //     MaterialPageRoute(
+                //       //         builder: (context) => LoginScreen()));
+                //     }
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     shape: const StadiumBorder(),
+                //     padding: const EdgeInsets.symmetric(vertical: 16),
+                //     backgroundColor: Colors.redAccent,
+                //   ),
+                //   child: const Text(
+                //     "완료",
+                //     style: TextStyle(fontSize: 20, color: Colors.white),
+                //   ),
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -284,6 +286,8 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         const SizedBox(height: 20),
         TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          focusNode: _emailFocus,
           controller: emailController,
           onChanged: (value) {
             setEmail(value); // 이 부분에서 이름을 state에 저장합니다.
@@ -299,6 +303,8 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         const SizedBox(height: 20),
         TextFormField(
+          keyboardType: TextInputType.visiblePassword,
+          focusNode: _passwordFocus,
           controller: passwordController,
           onChanged: (value) {
             setPassword(value); // 이 부분에서 이름을 state에 저장합니다.
@@ -316,6 +322,8 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         const SizedBox(height: 20),
         TextFormField(
+          keyboardType: TextInputType.name,
+          focusNode: _nicknameFocus,
           controller: nicknameController,
           onChanged: (value) {
             setNickname(value);
@@ -333,6 +341,7 @@ class _SignupScreenState extends State<SignupScreen> {
           height: 20,
         ),
         TextFormField(
+          focusNode: _birthdayFocus,
           controller: birthdayController,
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -414,29 +423,29 @@ class _SignupScreenState extends State<SignupScreen> {
                 )),
           ],
         ),
-        // ElevatedButton(
-        //       onPressed: () {
-        //         if (isValidate()) {
-        //           signUp();
+        ElevatedButton(
+              onPressed: () {
+                if (isValidate()) {
+                  signUp();
 
-        //           print('유효 데이터');
+                  print('유효 데이터');
 
-        //           // Navigator.push(
-        //           //     context,
-        //           //     MaterialPageRoute(
-        //           //         builder: (context) => LoginScreen()));
-        //         }
-        //       },
-        //       style: ElevatedButton.styleFrom(
-        //         shape: const StadiumBorder(),
-        //         padding: const EdgeInsets.symmetric(vertical: 16),
-        //         backgroundColor: Colors.redAccent,
-        //       ),
-        //       child: const Text(
-        //         "완료",
-        //         style: TextStyle(fontSize: 20, color: Colors.white),
-        //       ),
-        //     ),
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => LoginScreen()));
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const StadiumBorder(),
+                padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 15),
+                backgroundColor: Colors.redAccent,
+              ),
+              child: const Text(
+                "완료",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
       ],
     );
   }

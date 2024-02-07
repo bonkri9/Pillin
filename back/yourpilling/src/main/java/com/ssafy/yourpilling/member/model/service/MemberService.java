@@ -5,13 +5,17 @@ import com.ssafy.yourpilling.member.model.service.vo.out.OutMemberVo;
 
 public interface MemberService {
 
-    void register(MemberRegisterVo memberRegisterVo);
+    void register(MemberRegisterVo vo);
 
     OutMemberVo info(MemberInfoVo vo);
 
-    void update(MemberUpdateVo vo);
+    void updateName(MemberUpdateNameVo vo);
+
+    void updatePassword(MemberUpdatePasswordVo vo);
 
     void delete(MemberDeleteVo vo);
 
     void passwordReIssue(MemberPasswordReIssueVo vo);
+
+    void registerEssential(RegisterEssentialVo vo);
 }

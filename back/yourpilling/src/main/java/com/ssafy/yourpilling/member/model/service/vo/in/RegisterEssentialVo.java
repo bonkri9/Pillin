@@ -8,8 +8,8 @@ import java.time.LocalDate;
 
 @Value
 @Builder
-public class MemberRegisterVo {
-    String email;
-    String password;
-    String name;
+public class RegisterEssentialVo {
+    Long memberId;
+    LocalDate birthday;
+    Gender gender;
 }

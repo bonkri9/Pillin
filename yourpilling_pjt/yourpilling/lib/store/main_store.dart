@@ -62,7 +62,7 @@ class MainStore extends ChangeNotifier {
           });
 
       if (response.statusCode == 200) {
-        print("일간 복용 기록 수신 성공");
+        print("일간 복용 기록 수신 성공, 조회 날짜 : " + '$dailyUrl?year=${koreaTime.year}&month=${koreaTime.month}&day=${koreaTime.day}');
 
         dailyData = jsonDecode(utf8.decode(response.bodyBytes))['taken'];
         print("dailyData: $dailyData");
@@ -105,7 +105,7 @@ class MainStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  takePill(BuildContext context) async {
+  takePill(BuildContext context, dailyData) async {
     const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
 
     print("영양제 복용 완료 요청");

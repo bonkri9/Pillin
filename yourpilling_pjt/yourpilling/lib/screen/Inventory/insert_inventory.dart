@@ -29,7 +29,8 @@ class _InsertInventoryState extends State<InsertInventory> {
   TextEditingController totalCountController = TextEditingController();
 
   var pillId;
-  var takeYn;
+  // var takeYn = false;
+  var takeYn = false;
   var remains;
   var totalCount;
   var takeCount;
@@ -111,6 +112,9 @@ class _InsertInventoryState extends State<InsertInventory> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () {
+            print(takeYn);
+            print(remains);
+            print(totalCount);
             context
                 .read<InventoryStore>()
                 .registInven(context, pillId, takeYn, remains, totalCount);
@@ -172,34 +176,42 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
         ),
         Row(
           children: [
-            // LiteRollingSwitch(
-            //     width: 100,
-            //     // onTap: (bool? value) {
-            //     //   setState(() {
-            //     //     takeYn = !(value ?? false);
-            //     //     widget.getTakeYn(takeYn);
-            //     //   });
-            //     // },
-            //     onTap: () {},
-            //     onDoubleTap: () {},
-            //     onSwipe: () {},
-            //     value: takeYn ?? false,
-            //     textOn: '복용중',
-            //     textOff: '미복용',
-            //     colorOn: Colors.greenAccent,
-            //     colorOff: Colors.redAccent,
-            //     iconOn: Icons.done,
-            //     iconOff: Icons.do_not_disturb_on_outlined,
-            //     textSize: 13,
-            //     onChanged: (bool? value) {
-            //       setState(() {
-            //         print(takeYn);
-            //         print('아래가 value');
-            //         print(value);
-            //         takeYn = !(value ?? false);
-            //         widget.getTakeYn(takeYn);
-            //       });
-            //     }),
+            LiteRollingSwitch(
+                width: 100,
+                // onTap: (bool? value) {
+                //   setState(() {
+                //     takeYn = !(value ?? false);
+                //     widget.getTakeYn(takeYn);
+                //   });
+                // },
+                onTap: (bool? value) {
+                  setState(() {
+                    print(takeYn);
+                    print('아래가 value');
+                    print(value);
+                    takeYn = !(value ?? false);
+                    widget.getTakeYn(takeYn);
+                  });
+                },
+                onDoubleTap: () {},
+                onSwipe: () {},
+                value: takeYn ?? false,
+                textOn: '복용중',
+                textOff: '미복용',
+                colorOn: Colors.greenAccent,
+                colorOff: Colors.redAccent,
+                iconOn: Icons.done,
+                iconOff: Icons.do_not_disturb_on_outlined,
+                textSize: 13,
+                onChanged: (bool? value) {
+                  setState(() {
+                    print(takeYn);
+                    print('아래가 value');
+                    print(value);
+                    takeYn = !(value ?? false);
+                    widget.getTakeYn(takeYn);
+                  });
+                }),
           ],
         )
       ],
@@ -289,7 +301,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                           children: [
                             InputQty(
                               maxVal: 500,
-                              initVal: 1,
+                              initVal: 0,
                               steps: 1,
                               // minVal: 0,
                               minVal: curPillCount ?? 0,
@@ -300,7 +312,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 });
                               },
                               validator: (value) {
-                                if (value == null) return "입력이 필요합니다.";
+                                if (value == null || value == 0) return "입력이 필요합니다.";
                                 if (value < 0) {
                                   return "";
                                 } else if (value > 500) {
@@ -337,11 +349,11 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                             InputQty(
                               // maxVal: 500,
                               maxVal: totalPillCount ?? 0,
-                              initVal: 1,
+                              initVal: 0,
                               steps: 1,
                               minVal: 0,
                               validator: (value) {
-                                if (value == null) return "입력이 필요합니다.";
+                                if (value == null || value == 0) return "입력이 필요합니다.";
                                 if (value < 0) {
                                   return "";
                                 } else if (value > 500) {

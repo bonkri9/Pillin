@@ -27,8 +27,8 @@ class InventoryStore extends ChangeNotifier {
     //     'https://i10b101.p.ssafy.io/api/v1/pill/inventory/list';
 
 
-    // const String takeYnListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
-    const String takeYnListUrl = "http://10.0.2.2:8080/api/v1/pill/inventory/list";
+    // const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
+    const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
 
 
     try {
@@ -58,7 +58,7 @@ class InventoryStore extends ChangeNotifier {
   //재고 수정
   Future<void> reviseInven(
       BuildContext context, var ownPillId, var remains, var totalCount) async {
-    String accessToken = context.read<UserStore>().accessToken;
+    String accessToken = context.watch<UserStore>().accessToken;
     const String reviseUrl = "${CONVERT_URL}/api/v1/pill/inventory";
 
 
@@ -120,7 +120,7 @@ class InventoryStore extends ChangeNotifier {
 
   //섭취&미섭취 전환
   Future<void> putTakeYnChange(BuildContext context, var ownPillId) async {
-    String accessToken = context.read<UserStore>().accessToken;
+    String accessToken = context.watch<UserStore>().accessToken;
    const String takeYnChangeUrl = "${CONVERT_URL}/api/v1/pill/inventory/take-yn";
 
     try {
@@ -158,9 +158,13 @@ class InventoryStore extends ChangeNotifier {
       var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String registInvenUrl = "${CONVERT_URL}/api/v1/pill/inventory";
+    print(pillId);
+    print(takeYn);
+    print(remains);
+    print(totalCount);
 
     try {
-      bool takeYnValue = takeYn ?? false;
+      // bool takeYnValue = takeYn ?? false;
 
       var response = await http.post(Uri.parse(registInvenUrl),
           headers: {
@@ -169,16 +173,18 @@ class InventoryStore extends ChangeNotifier {
           },
           body: json.encode({
             'pillId': pillId,
-            'takeYn': takeYnValue,
+            'takeYn': takeYn,
             'remains': remains,
             'totalCount': totalCount,
             'takeWeekdays': ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
           }));
-
+      var responseNew = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 200) {
         print("재고 등록 post 수신 성공");
         print(response.body);
+        print(responseNew);
       } else {
+        print(responseNew);
         print(response.body);
         print("재고 등록 post 수신 실패");
       }

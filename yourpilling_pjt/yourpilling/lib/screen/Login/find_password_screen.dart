@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:yourpilling/const/url.dart';
 import 'package:yourpilling/screen/Login/login_screen.dart';
 import 'package:http/http.dart' as http;
 import '../../const/colors.dart';
+import '../../const/url.dart';
 
 class FindPasswordScreen extends StatefulWidget {
   const FindPasswordScreen({super.key});
@@ -87,9 +89,9 @@ class _SearchBar extends StatelessWidget {
 // 비밀번호찾기
 Future<void> findPassword(BuildContext context, email) async {
   print('체크1');
-  // String url = 'http://10.0.2.2:8080/api/v1/password-reissue';
+  // String url = '${CONVERT_URL}/api/v1/password-reissue';
 
-  String url = "http://10.0.2.2:8080/api/password-reissue";
+  String url = "${CONVERT_URL}/api/password-reissue";
 
   print('email은 ${email}');
   try {

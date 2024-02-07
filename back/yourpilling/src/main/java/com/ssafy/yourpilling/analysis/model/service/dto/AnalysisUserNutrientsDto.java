@@ -6,6 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
+@ToString
 public class AnalysisUserNutrientsDto {
     String nutrition;
     Double recommendedIntake;

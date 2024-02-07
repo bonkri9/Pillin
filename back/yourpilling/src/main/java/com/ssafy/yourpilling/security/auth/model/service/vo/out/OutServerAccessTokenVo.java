@@ -5,6 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class OutServerAccessToken {
+public class OutServerAccessTokenVo {
+    boolean isFirstLogin;
     String accessToken;
 }
