@@ -81,6 +81,11 @@ public class PushDaoImpl implements PushDao {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 
+    public List<PushMember> findAllPushMember() {
+        return pushMemberJpaRepository
+                .findAll();
+    }
+
     @Override
     public void deletePushNotificationById(DeletePushNotificationsVo vo) {
         pushNotificationsJpaRepository.deleteByPushId(vo.getPushId());

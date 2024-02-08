@@ -2,6 +2,7 @@ package com.ssafy.yourpilling.security.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
@@ -25,12 +26,12 @@ public class JwtManager {
     public String createAccessToken(PrincipalDetails principalDetails) {
         return jwtProperties.getTokenPrefix() +
                 JWT.create()
-                .withSubject("token")
-                .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getAccessTokenExpirationTime()))
-                .withClaim("memberId", principalDetails.getMember().getMemberId()) // 발행 유저정보 저장
-                .withClaim("username", principalDetails.getMember().getUsername())
-                .withClaim("role", principalDetails.getMember().getRole().toString())
-                .sign(Algorithm.HMAC512(jwtProperties.getAccessTokenSecret())); //고윳값
+                        .withSubject("token")
+                        .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getAccessTokenExpirationTime()))
+                        .withClaim("memberId", principalDetails.getMember().getMemberId()) // 발행 유저정보 저장
+                        .withClaim("username", principalDetails.getMember().getUsername())
+                        .withClaim("role", principalDetails.getMember().getRole().toString())
+                        .sign(Algorithm.HMAC512(jwtProperties.getAccessTokenSecret())); //고윳값
     }
 
     public Optional<String> resolveAccessToken(HttpServletRequest request) {
@@ -61,5 +62,12 @@ public class JwtManager {
 
     public boolean isTokenValid(String token) {
         return (getUsername(token) != null && token.startsWith(jwtProperties.getTokenPrefix()));
+    }
+
+    public boolean isFirstLogin(String token){
+        Member member = memberRepository.findByUsername(getUsername(token))
+                .orElseThrow(() -> new IllegalArgumentException("토큰생성이 잘못되어 사용자를 찾을 수 없습니다."));
+
+        return (member.getBirth() == null || member.getGender() == null);
     }
 }

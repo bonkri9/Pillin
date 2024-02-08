@@ -2,6 +2,7 @@ package com.ssafy.yourpilling.analysis.model.dao.jpa;
 
 import com.ssafy.yourpilling.analysis.model.dao.entity.NutritionStandard;
 import com.ssafy.yourpilling.analysis.model.service.dto.AnalysisNutrientsDto;
+import com.ssafy.yourpilling.common.Gender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -8,9 +8,8 @@ import com.ssafy.yourpilling.push.model.dao.entity.PushOwnPill;
 import com.ssafy.yourpilling.push.model.service.PushService;
 import com.ssafy.yourpilling.push.model.service.mapper.PushServiceMapper;
 import com.ssafy.yourpilling.push.model.service.vo.in.*;
-import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
-import com.ssafy.yourpilling.push.model.service.vo.out.OutPushMessageInfoMapVo;
-import com.ssafy.yourpilling.push.model.service.vo.out.OutPushMessageInfoVo;
+import com.ssafy.yourpilling.push.model.service.vo.in.DeviceTokenVo;
+import com.ssafy.yourpilling.push.model.service.vo.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,6 +86,11 @@ public class PushServiceImpl implements PushService {
         }
 
         return OutPushMessageInfoMapVo.builder().data(data).build();
+    }
+
+    @Override
+    public OutPushRepurchaseVo findByOutRemains() {
+        return mapper.mapToPushMemberVo(pushDao.findAllPushMember());
     }
 
     private OutPushMessageInfoVo getOutPushMessageInfoVo(PushNotification notification, Boolean[] days) {

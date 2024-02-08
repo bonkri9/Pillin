@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static java.time.LocalDate.now;
 import static org.junit.jupiter.api.Assertions.*;
@@ -131,7 +130,6 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.email").value(member.getUsername()))
                 .andExpect(jsonPath("$.name").value(member.getName()))
                 .andExpect(jsonPath("$.gender").value(member.getGender().getGender()))
-                .andExpect(jsonPath("$.nickname").value(member.getNickname()))
                 .andExpect(jsonPath("$.birthday").value(member.getBirth().toString()));
 
     }
@@ -145,10 +143,10 @@ class MemberControllerTest {
         String change = "change";
 
         JSONObject body = new JSONObject();
-        body.put("nickname", change);
+        body.put("name", change);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .put("/api/v1/member")
+                .put("/api/v1/member/name")
                 .header("accessToken", accessToken)
                 .content(body.toString())
                 .contentType(MediaType.APPLICATION_JSON);
@@ -158,7 +156,7 @@ class MemberControllerTest {
 
         // then
         perform.andExpect(status().isOk());
-        assertEquals(memberJpaRepository.findByMemberId(member.getMemberId()).get().getNickname(), change);
+        assertEquals(memberJpaRepository.findByMemberId(member.getMemberId()).get().getName(), change);
     }
 
     @Test

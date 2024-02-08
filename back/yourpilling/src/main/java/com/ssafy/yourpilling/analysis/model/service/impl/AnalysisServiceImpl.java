@@ -9,13 +9,15 @@ import com.ssafy.yourpilling.analysis.model.service.dto.AnalysisOwnPillNutrition
 import com.ssafy.yourpilling.analysis.model.service.dto.AnalysisRanksDto;
 import com.ssafy.yourpilling.analysis.model.service.dto.AnalysisUserNutrientsDto;
 import com.ssafy.yourpilling.analysis.model.service.mapper.AnalysisServiceMapper;
+import com.ssafy.yourpilling.analysis.model.service.vo.in.AnalysisMemberVo;
+import com.ssafy.yourpilling.analysis.model.service.vo.in.AnalysisVo;
 import com.ssafy.yourpilling.analysis.model.service.vo.out.OutAnalysisVo;
 import com.ssafy.yourpilling.common.AgeGroup;
+import com.ssafy.yourpilling.common.Gender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,84 +30,95 @@ public class AnalysisServiceImpl implements AnalysisService {
     private final AnalysisServiceMapper mapper;
 
     @Override
-    public OutAnalysisVo analysis(Long id) { //params : 사용자 아이디
+    public OutAnalysisVo analysis(AnalysisVo vo) { //params : 사용자 아이디
         //사용자 id로 나이대와 gender 추출
-        AnalysisMember member = analysisDao.findByMemberId(id);
-        LocalDate birthday = member.getBirth();
-        AgeGroup ageGroup = AgeGroup.whatAgeGroup(birthday);
+        AnalysisMemberVo memberInfo = memberInfo(vo);
 
-        //사용자가 먹고 있는 영양제 조회 -> 영양제 번호랑 주의사항 추출???
-        List<AnalysisOwnPill> ownPillList = analysisDao.findByMemberMemberIdAndTakeYn(member.getMemberId());
-
-        if(ownPillList.isEmpty()) {
-            throw new IllegalArgumentException("복용 중인 영양제가 없어 분석이 불가합니다.");
-        }
-
-        List<Long> pillIdList = pillIdList(ownPillList);
         //사용자 복용중인 영양소 총량 조회
-        List<AnalysisOwnPillNutritionDto> userNutritionList = analysisDao.groupByNutritionAmount(pillIdList);
+        List<AnalysisOwnPillNutritionDto> userNutritionList = ownPillNutritionList(memberInfo.getId());
 
-
-        //필수 영양소 + B군 영양소 별로 영양소 데이터 매핑 하면서 부족과다 체크 => 객체 필요
-        List<AnalysisNutrientsDto> EssentialList = analysisDao.findGroupName("필수", member.getGender().toString(), ageGroup.toString());
-        List<AnalysisNutrientsDto> BGroupList = analysisDao.findGroupName("B군", member.getGender().toString(), ageGroup.toString());
-
-        List<AnalysisUserNutrientsDto> EssentialValueList = setAnalysisNutrientsValue(EssentialList, userNutritionList);
-        List<AnalysisUserNutrientsDto> BGroupValueList = setAnalysisNutrientsValue(BGroupList, userNutritionList);
-        printList(EssentialValueList);
-        printList(BGroupValueList);
+        //필수 영양소 + B군 영양소 별로 영양소 데이터 매핑 하면서 부족과다 체크
+        List<AnalysisUserNutrientsDto> EssentialValueList = setAnalysisNutrientsValue("필수", memberInfo.getGender(), memberInfo.getAgeGroup(), userNutritionList);
+        List<AnalysisUserNutrientsDto> BGroupValueList = setAnalysisNutrientsValue("B군", memberInfo.getGender(), memberInfo.getAgeGroup(), userNutritionList);
 
         //부족 영양소 list
-        List<String>  intakeDiagnosisLessStateList = intakeDiagnosisLessStateList(EssentialValueList, BGroupValueList);
-        List<AnalysisRanksDto> analysisRanksDtoList = new ArrayList<>();
-        if(!intakeDiagnosisLessStateList.isEmpty()){
-            analysisRanksDtoList = analysisDao.recommendPillByLessNutrition(intakeDiagnosisLessStateList);
-        }
+        List<AnalysisRanksDto> analysisRanksDtoList = rankList(EssentialValueList,BGroupValueList);
 
-        //mapper
-        //AnalysisUserNutrientsDto (EssentialValueList, BGroupValueList)
-        //AnalysisRanksDto (analysisRanksDtoList)
-        //AnalysisOwnPill (ownPillList)에 주의사항
-
-
-        //mapper로 "" 형식으로 return
         return mapper.mapToAnalysis(EssentialValueList, BGroupValueList, analysisRanksDtoList);
 
     }
 
-    private List<Long> pillIdList(List<AnalysisOwnPill> pillList) {
+    private AnalysisMemberVo memberInfo(AnalysisVo vo){
+        AnalysisMember member = analysisDao.findByMemberId(vo.getId());
+
+        if(member == null){
+            throw new IllegalArgumentException("사용자 정보가 없습니다.");
+        }
+
+        AgeGroup ageGroup = AgeGroup.whatAgeGroup(member.getBirth());
+
+        return AnalysisMemberVo.builder()
+                .id(member.getMemberId())
+                .gender(member.getGender())
+                .ageGroup(ageGroup.toString())
+                .build();
+    }
+
+    private List<Long> pillIdList(Long id) {
+
+        List<AnalysisOwnPill> ownPillList = analysisDao.findByMemberMemberIdAndTakeYn(id);
 
         List<Long> pillIdList = new ArrayList<>();
-        for(AnalysisOwnPill aop : pillList){
+        for(AnalysisOwnPill aop : ownPillList){
             pillIdList.add(aop.getPill().getPillId());
+        }
+
+        if(pillIdList.isEmpty()) {
+            throw new IllegalArgumentException("복용 중인 영양제가 없어 분석이 불가합니다.");
         }
 
         return pillIdList;
     }
 
-    private List<AnalysisUserNutrientsDto> setAnalysisNutrientsValue(List<AnalysisNutrientsDto> nutrients,
-                                                                   List<AnalysisOwnPillNutritionDto> userNutrients){
-        List<AnalysisUserNutrientsDto> IntakeNutrientsList = new ArrayList<>();
+    private List<AnalysisOwnPillNutritionDto> ownPillNutritionList(Long id){
+        //사용자가 먹고 있는 영양제 번호 list 조회
+        List<Long> pillIdList = pillIdList(id);
+        return analysisDao.groupByNutritionAmount(pillIdList);
+    }
 
-        for(AnalysisNutrientsDto nutrientsDto : nutrients){
+    private List<AnalysisUserNutrientsDto> setAnalysisNutrientsValue(String groupName, Gender gender, String ageGroup
+                                                                     , List<AnalysisOwnPillNutritionDto> userNutrients){
+        //사용자의 섭취 영양소 조회
+        List<AnalysisNutrientsDto> nutrientsDtos = analysisDao.findGroupName(groupName, gender.toString(), ageGroup);
+
+        List<AnalysisUserNutrientsDto> IntakeNutrientsList = new ArrayList<>();
+        //섭취 영양소 중 영양제 섭취 상태 설정
+        for(AnalysisNutrientsDto nutrientsDto : nutrientsDtos){
             String name = nutrientsDto.getNutritionName();
             Double exIntake = nutrientsDto.getExcessiveIntake();
             String unit = nutrientsDto.getUnit();
             Double reIntake = nutrientsDto.getRecommendedIntake() != 0 ? nutrientsDto.getRecommendedIntake() : nutrientsDto.getSufficientIntake();
             Double userIntake = 0.0;
-            String intakeDiagnosis = "";
+            String intakeDiagnosis = "부족";
             for(AnalysisOwnPillNutritionDto ownPillNutritionDto : userNutrients){
                 if(ownPillNutritionDto.getNutritionName().equals(nutrientsDto.getNutritionName())){
 
                     userIntake = ownPillNutritionDto.getAmount();
-                    intakeDiagnosis = "";
 
-                    if(userIntake < reIntake){
-                        intakeDiagnosis = "부족";
-                    }else if(userIntake >= reIntake && userIntake < exIntake){
-                        intakeDiagnosis = "적절";
-                    }else{
-                        intakeDiagnosis = "과다";
+                    if(exIntake != 0){
+                        if(userIntake < reIntake){
+                            intakeDiagnosis = "부족";
+                        }else if (userIntake < exIntake) {
+                            intakeDiagnosis = "적절";
+                        }else {
+                            intakeDiagnosis = "과다";
+                        }
+                    }else {
+                        if(userIntake < reIntake){
+                            intakeDiagnosis = "부족";
+                        }else {
+                            intakeDiagnosis = "적절";
+                        }
                     }
                 }
             }
@@ -115,7 +128,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     private List<String> intakeDiagnosisLessStateList(List<AnalysisUserNutrientsDto> essentialList,
-                                                        List<AnalysisUserNutrientsDto> bGroupList){
+                                                      List<AnalysisUserNutrientsDto> bGroupList){
 
         List<String> lessStateList = new ArrayList<>();
         for(AnalysisUserNutrientsDto dto : essentialList){
@@ -132,14 +145,15 @@ public class AnalysisServiceImpl implements AnalysisService {
         return lessStateList;
     }
 
-    private void printList (List<AnalysisUserNutrientsDto> list){
-        for(AnalysisUserNutrientsDto dto : list){
-            System.out.println("{" + dto.getNutrition() + ", " +
-                    dto.getRecommendedIntake() + ", " +
-                    dto.getExcessiveIntake() + ", " +
-                    dto.getUserIntake() + ", " +
-                    dto.getIntakeDiagnosis() + "," +
-                    dto.getUnit() + "}");
+    private List<AnalysisRanksDto> rankList(List<AnalysisUserNutrientsDto> essentialList,
+                                      List<AnalysisUserNutrientsDto> bGroupList){
+        List<String>  intakeDiagnosisLessStateList = intakeDiagnosisLessStateList(essentialList, bGroupList);
+        List<AnalysisRanksDto> analysisRanksDtoList = new ArrayList<>();
+        if(!intakeDiagnosisLessStateList.isEmpty()){
+            analysisRanksDtoList = analysisDao.recommendPillByLessNutrition(intakeDiagnosisLessStateList);
         }
+
+        return analysisRanksDtoList;
     }
+
 }

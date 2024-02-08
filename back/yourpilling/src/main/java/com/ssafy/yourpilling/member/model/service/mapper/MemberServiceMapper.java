@@ -1,9 +1,7 @@
 package com.ssafy.yourpilling.member.model.service.mapper;
 
 import com.ssafy.yourpilling.common.Role;
-import com.ssafy.yourpilling.member.controller.dto.request.RequestUpdateDto;
 import com.ssafy.yourpilling.member.model.dao.entity.MemberProfile;
-import com.ssafy.yourpilling.member.model.service.vo.in.MemberInfoVo;
 import com.ssafy.yourpilling.member.model.service.vo.in.MemberRegisterVo;
 import com.ssafy.yourpilling.member.model.service.vo.out.OutMemberVo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,10 +17,7 @@ public class MemberServiceMapper {
                 .builder()
                 .username(vo.getEmail())
                 .password(encoder.encode(vo.getPassword()))
-                .birth(vo.getBirthday())
-                .nickname(vo.getNickname())
                 .name(vo.getName())
-                .gender(vo.getGender())
                 .createdAt(now())
                 .updatedAt(now())
                 .role(role)
@@ -34,7 +29,7 @@ public class MemberServiceMapper {
                 .builder()
                 .email(member.getUsername())
                 .name(member.getName())
-                .nickname(member.getNickname())
+                .nickname(member.getName())
                 .birthday(member.getBirth())
                 .gender(member.getGender())
                 .providerId(member.getProviderId())

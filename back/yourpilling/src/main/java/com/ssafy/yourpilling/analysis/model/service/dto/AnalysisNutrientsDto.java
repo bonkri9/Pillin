@@ -1,14 +1,12 @@
 package com.ssafy.yourpilling.analysis.model.service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
+@ToString
 public class AnalysisNutrientsDto {
     String nutritionName;
     Double recommendedIntake;

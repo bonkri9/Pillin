@@ -7,7 +7,7 @@ import lombok.Value;
 @Builder
 public class DeviceTokenVo {
 
-    private Long memberId;
-    private String deviceToken;
+    Long memberId;
+    String deviceToken;
 
 }

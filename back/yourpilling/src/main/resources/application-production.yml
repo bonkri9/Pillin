@@ -4,6 +4,8 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: S10P12B101
     password: WW6ZZxMUgt
+    hikari:
+      maximum-pool-size: 6
   jpa:
     open-in-view: true
     hibernate:
