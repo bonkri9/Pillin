@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MoreInfoScreen()));
           } else {
             print("첫번째 로그인 아님");
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
           }
           return accessToken;
         }
