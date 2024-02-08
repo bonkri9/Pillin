@@ -13,6 +13,7 @@ import 'package:yourpilling/screen/Mypage/userinfo_detail_screen.dart';
 
 import '../../component/common/base_container.dart';
 import '../../store/user_store.dart';
+import '../AnalyzeReport/analysis_report.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
@@ -111,6 +112,47 @@ class MyPage extends StatelessWidget {
                               },
                               child: Text(
                                 "내 정보 확인",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        height: 40,
+                        child: Row(
+                          children: [
+                            Icon(Icons.analytics_outlined),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            TextButton(
+                              style: ButtonStyle(
+                                minimumSize:
+                                MaterialStateProperty.all(Size.zero),
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsets.zero), // 버튼의 기본 패딩 없애기
+                              ),
+                              onPressed: () async {
+                                // 분석리포트 페이지로 넘어가기
+                                await context
+                                    .read<UserStore>()
+                                    .getUserDetailData(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            AnalysisReport()));
+                              },
+                              child: Text(
+                                "내 분석리포트",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,

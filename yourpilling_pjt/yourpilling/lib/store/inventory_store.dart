@@ -120,7 +120,7 @@ class InventoryStore extends ChangeNotifier {
 
   //섭취&미섭취 전환
   Future<void> putTakeYnChange(BuildContext context, var ownPillId) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
    const String takeYnChangeUrl = "${CONVERT_URL}/api/v1/pill/inventory/take-yn";
 
     try {
@@ -193,4 +193,5 @@ class InventoryStore extends ChangeNotifier {
     }
     notifyListeners();
   }
+
 }
