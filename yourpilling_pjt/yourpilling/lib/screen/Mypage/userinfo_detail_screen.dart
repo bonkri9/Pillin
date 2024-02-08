@@ -19,7 +19,7 @@ class UserInfoDetailScreen extends StatefulWidget {
 class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    var userDetailInfo = context.read<UserStore>().UserDetail;
+    var userDetailInfo = context.watch<UserStore>().UserDetail;
     // print('userDetailInfo=' + userDetailInfo["data"]);
 
     return Scaffold(
@@ -48,6 +48,7 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
             child: BaseContainer(
                 width: 500,
                 height: 25,
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
                   child: Column(
@@ -95,31 +96,31 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                '${userDetailInfo['email']}',
+                                '${userDetailInfo?['email'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['name']}',
+                                '${userDetailInfo?['name'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['nickname']}',
+                                '${userDetailInfo?['nickname'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['birthday']}',
+                                '${userDetailInfo?['birthday'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['createAt'].substring(0, 10)}',
+                                '${userDetailInfo?['createAt']?.substring(0, 10) ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
@@ -132,6 +133,7 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                         height: 20,
                       ),
                       BaseContainer(
+                        color: Colors.white,
                         width: 200,
                         height: 50,
                         child: TextButton(
@@ -155,6 +157,7 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                         ),
                       ),
                       BaseContainer(
+                          color: Colors.white,
                           width: 200,
                           height: 50,
                           child: TextButton(

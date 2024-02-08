@@ -17,7 +17,8 @@ class PrivacyPolicy extends StatelessWidget {
           },
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
-        title: Text("정보 변경"),
+
+        title: Text("개인정보 처리방침"),
       ),
       body: SingleChildScrollView(
         child: Padding(

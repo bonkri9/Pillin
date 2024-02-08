@@ -21,19 +21,6 @@ class UserInfoUpdateScreen extends StatefulWidget {
 class _UserInfoUpdateScreenState extends State<UserInfoUpdateScreen> {
   @override
   Widget build(BuildContext context) {
-    // var userDetailInfo = context.read<UserStore>().UserDetail;
-    // var nameOrigin = userDetailInfo['name'];
-    // var UserDetail;
-    // var userDetailInfo = context.read<UserStore>().UserDetail;
-    // var nameOrigin = userDetailInfo['name'];
-    // return Scaffold(
-    //   body: Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: [
-    //       _NameChange(),
-    //     ],
-    //   ),
-    // );
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
       appBar: AppBar(
@@ -59,6 +46,91 @@ class _UserInfoUpdateScreenState extends State<UserInfoUpdateScreen> {
             _PasswordChange(),
           ],
         ),
+// =======
+//       body: Column(
+//         children: [
+//           Row(
+//             children: [
+//               IconButton(
+//                   onPressed: () {
+//                     Navigator.pop(context);
+//                   },
+//                   icon: Icon(
+//                     Icons.arrow_back_ios,
+//                     size: 18,
+//                   )),
+//               Text('마이 페이지', style: TextStyle(
+//                 fontSize:TITLE_FONT_SIZE,
+//                 color: BASIC_BLACK,
+//               ),),
+//             ],
+//           ),
+//           Expanded(
+//             child: BaseContainer(width: 500, color: Colors.white, height: 25, child:
+//             Column(
+//               children: [
+//                 Text(
+//                   '이메일 ${userDetailInfo['email']}',
+//                   style: TextStyle(
+//                     fontSize: TITLE_FONT_SIZE+5,
+//                   ),
+//                 ),
+//                 Text(
+//                   '이름 ${userDetailInfo['name']}',
+//                   style: TextStyle(
+//                     fontSize: TITLE_FONT_SIZE+5,
+//                   ),
+//                 ),
+//                 Text(
+//                   '가입일 ${userDetailInfo['createAt'].substring(0, 10)}',
+//                   style: TextStyle(
+//                     fontSize: TITLE_FONT_SIZE+5,
+//                   ),
+//                 ),
+//                 SizedBox(
+//                   height: 20,
+//                 ),
+//                 BaseContainer(
+//                   color: Colors.white,
+//                     width: 200,
+//                     height: 35,
+//                     child: TextButton(
+//                       onPressed: () {
+//                         context.read<UserStore>().deleteToken(); // 로그아웃
+//                         Navigator.pushNamedAndRemoveUntil(
+//                             context, '/', (_) => false);
+//                         Navigator.push(
+//                           context,
+//                           MaterialPageRoute(
+//                               builder: (context) => LoginScreen()),
+//                         );
+//                       },
+//                       child: Text('로그아웃'),
+//                     )),
+//                 BaseContainer(
+//                   color: Colors.white,
+//                     width: 200,
+//                     height: 35,
+//                     child: TextButton(
+//                       onPressed: () {
+//                         context
+//                             .read<UserStore>()
+//                             .deleteUserData(context); // 회원탈퇴
+//                         Navigator.pushNamedAndRemoveUntil(
+//                             context, '/', (_) => false);
+//                         Navigator.push(
+//                           context,
+//                           MaterialPageRoute(
+//                               builder: (context) => LoginScreen()),
+//                         );
+//                       },
+//                       child: Text('회원탈퇴'),
+//                     )),
+//               ],
+//             )),
+//           )
+//         ],
+// >>>>>>> Stashed changes
       ),
     );
   }
@@ -74,30 +146,9 @@ class _NameChange extends StatefulWidget {
 class _NameChangeState extends State<_NameChange> {
   final TextEditingController nameController = TextEditingController();
 
-  // FocusNode _nameFocus = new FocusNode();
-  //
-  // // setName(nameInput) {
-  // //   name = nameInput;
-  // // }
-  //
-  // bool isValidateName(){
-  //   if (nameController.text.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("이름을 입력해주세요"))
-  //     );
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   @override
   Widget build(BuildContext context) {
     FocusNode _nameFocus = new FocusNode();
-
-    // setName(nameInput) {
-    //   name = nameInput;
-    // }
-
     bool isValidateName() {
       if (nameController.text.isEmpty) {
         ScaffoldMessenger.of(context)
@@ -248,29 +299,10 @@ class _PasswordChangeState extends State<_PasswordChange> {
   final TextEditingController passwordVerifyingController =
       TextEditingController();
 
-  // FocusNode _nameFocus = new FocusNode();
-  //
-  // // setName(nameInput) {
-  // //   name = nameInput;
-  // // }
-  //
-  // bool isValidateName(){
-  //   if (nameController.text.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("이름을 입력해주세요"))
-  //     );
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   @override
   Widget build(BuildContext context) {
     FocusNode _passwordFocus = new FocusNode();
     FocusNode _passwordVerifyingFocus = new FocusNode();
-    // setName(nameInput) {
-    //   name = nameInput;
-    // }
 
     bool isValidatePassword() {
       if (passwordController.text.isEmpty) {
@@ -371,6 +403,8 @@ class _PasswordChangeState extends State<_PasswordChange> {
                 fillColor: Colors.purple.withOpacity(0.1),
                 filled: true,
                 prefixIcon: const Icon(Icons.person)),
+            obscureText: true,
+
           ),
         ),
         SizedBox(
@@ -393,9 +427,10 @@ class _PasswordChangeState extends State<_PasswordChange> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
                     borderSide: BorderSide.none),
-                fillColor: Colors.purple.withOpacity(0.1),
+                fillColor: Colors.black.withOpacity(0.1),
                 filled: true,
                 prefixIcon: const Icon(Icons.person)),
+            obscureText: true,
           ),
         ),
         SizedBox(
@@ -436,7 +471,10 @@ class _PasswordChangeState extends State<_PasswordChange> {
                           TextButton(
                             child: Text('닫기'),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()));
                             },
                           ),
                         ],
