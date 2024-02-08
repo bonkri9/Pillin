@@ -6,8 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ssafy.yourpiliing.presentation.page.AnalysisPage
 import com.ssafy.yourpiliing.presentation.page.HistoryPage
 import com.ssafy.yourpiliing.presentation.theme.AppTheme
+import com.ssafy.yourpiliing.presentation.viewmodel.AnalysisViewModel
+import com.ssafy.yourpiliing.presentation.viewmodel.HistoryViewModel
+import com.ssafy.yourpiliing.presentation.viewmodel.LoginViewModel
+import com.ssafy.yourpiliing.presentation.viewmodel.TakeOwnPillViewModel
 import com.ssafy.yourpilling.presentation.page.LoginPage
 
 class MainActivity : ComponentActivity() {
@@ -15,19 +20,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            AppTheme {
-                val navController = rememberNavController()
+            //AppTheme {
+            val navController = rememberNavController()
 
-                NavHost(navController = navController,
-                    startDestination = "login") {
-                    composable("login"){
-                        LoginPage(navController = navController)
-                    }
-                    composable("history"){
-                        HistoryPage()
-                    }
+            val loginViewModel = LoginViewModel()
+            val analysisViewModel = AnalysisViewModel()
+            val historyViewModel = HistoryViewModel()
+            val takeOwnPillViewModel = TakeOwnPillViewModel()
+
+            NavHost(
+                navController = navController,
+                startDestination = "login"
+            ) {
+                composable("login") {
+                    LoginPage(navController = navController, loginViewModel = loginViewModel)
+                }
+                composable("history") {
+                    HistoryPage(
+                        navController = navController,
+                        historyViewModel = historyViewModel,
+                        takeOwnPillViewModel = takeOwnPillViewModel
+                    )
+                }
+                composable(
+                    "analysis"
+                ) {
+                    AnalysisPage(
+                        navController = navController,
+                        analysisViewModel = analysisViewModel
+                    )
                 }
             }
+            //}
         }
     }
 }

@@ -13,6 +13,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -33,21 +35,13 @@ import com.ssafy.yourpiliing.presentation.viewmodel.LoginViewModel
 import com.ssafy.yourpilling.presentation.retrofit.login.LoginRequest
 
 @Composable
-fun LoginPage(navController: NavController) {
+fun LoginPage(navController: NavController, loginViewModel: LoginViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val loginViewModel: LoginViewModel = viewModel()
 
     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
-    val accessToken = sharedPreferences.getString("accessToken", null)
 
-//    LaunchedEffect(accessToken) {
-//        if (accessToken != null) {
-//            navController.navigate("pill")
-//        }
-//    }
-
-    val loginState by loginViewModel.loginState.observeAsState(LoginState.Loading)
+    val loginState by loginViewModel.loginState.collectAsState(LoginState.Loading)
 
     Box(
         modifier = Modifier
@@ -94,7 +88,7 @@ fun LoginPage(navController: NavController) {
 
                 is LoginState.Success -> {
                     // Pill 화면으로 이동
-                    navController.navigate("history")
+                    navController.navigate("analysis")
                 }
 
                 is LoginState.Failure -> {

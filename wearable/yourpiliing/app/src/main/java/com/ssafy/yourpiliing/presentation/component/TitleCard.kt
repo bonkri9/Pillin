@@ -35,9 +35,6 @@ fun TitleCard(
     takeOwnPillViewModel: TakeOwnPillViewModel,
     sharedPreferences: SharedPreferences
 ) {
-
-    val ratio = (actualTakeCount.toFloat() / needToTakeTotalCount.toFloat()) * 100
-
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,

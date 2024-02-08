@@ -70,4 +70,5 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0-rc01")
     implementation("androidx.compose.material:material:1.3.0-alpha02")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.1")
+    implementation("io.github.thechance101:chart:Beta-0.0.5")
 }

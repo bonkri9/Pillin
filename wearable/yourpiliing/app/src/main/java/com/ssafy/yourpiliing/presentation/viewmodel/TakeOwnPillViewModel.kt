@@ -43,7 +43,7 @@ class TakeOwnPillViewModel : ViewModel() {
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
                 _takeOwnPillState.value =
-                    TakeOwnPillState.Failure("네트워크 혹은 시스템에 문제가 발생해 복용에 실패했습니다.")
+                    TakeOwnPillState.Failure("네트워크 혹은 시스템에 문제가 발생해 복용 기록에 실패했습니다.")
             }
         })
     }

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.ssafy.yourpiliing.presentation.retrofit.login.LoginState
 import com.ssafy.yourpilling.presentation.retrofit.login.LoginRequest
 import com.ssafy.yourpilling.presentation.retrofit.login.LoginService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,8 +16,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class LoginViewModel : ViewModel() {
-    private val _loginState = MutableLiveData<LoginState>()
-    val loginState: LiveData<LoginState> = _loginState
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Loading)
+    val loginState: StateFlow<LoginState> = _loginState
 
     fun login(request: LoginRequest, sharedPreferences: SharedPreferences) {
         val loginService = request().create(LoginService::class.java)

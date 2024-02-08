@@ -1,6 +1,7 @@
 package com.ssafy.yourpiliing.presentation.page
 
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,24 +16,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.wear.compose.material.Scaffold
 import com.ssafy.yourpiliing.presentation.component.TitleCard
 import com.ssafy.yourpiliing.presentation.retrofit.dailyhistory.DailyHistoryState
 import com.ssafy.yourpiliing.presentation.retrofit.take.TakeOwnPillState
 import com.ssafy.yourpiliing.presentation.viewmodel.HistoryViewModel
 import com.ssafy.yourpiliing.presentation.viewmodel.TakeOwnPillViewModel
 
-
 @Composable
-fun HistoryPage() {
+fun HistoryPage(navController: NavController, historyViewModel : HistoryViewModel, takeOwnPillViewModel : TakeOwnPillViewModel) {
     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
-    val historyViewModel = HistoryViewModel()
-    val takeOwnPillViewModel = TakeOwnPillViewModel()
 
     val dailyHistoryState by historyViewModel.dailyHistoryState.observeAsState(DailyHistoryState.Loading)
     val takeOwnPillState by takeOwnPillViewModel.takeOwnPillState.collectAsState(TakeOwnPillState.Loading) // 영양제 복용 클릭
@@ -47,8 +46,9 @@ fun HistoryPage() {
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -63,7 +63,8 @@ fun HistoryPage() {
                     val datas = (dailyHistoryState as DailyHistoryState.Success).response.taken
 
                     Column(
-                        modifier = Modifier.verticalScroll(rememberScrollState())
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
                             .padding(top = 40.dp, bottom = 40.dp)
                     ) {
                         for (data in datas) {
