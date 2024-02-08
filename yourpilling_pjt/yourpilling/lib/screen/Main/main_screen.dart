@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
+
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -29,64 +30,52 @@ class _MainScreenState extends State<MainScreen> {
         appBar: MainAppBar(
           barColor: Color(0xFFF5F6F9),
         ),
-        body: Container(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            decoration: BoxDecoration(
-              color: Color(0xFFF5F6F9),
-            ),
-            child: SingleChildScrollView(
-              child: Column(children: [
-                _Welcome(), // 성현님 환영해요
-                _Week(), // 주간 복용 현황
-                _Today(), // 오늘 먹을 영양제
-                _Stock(), // 내 영양제 재고
-              ]),
-            )));
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Welcome(),
+              SizedBox(
+                height: 30,
+              ),
+              _Week(), // 주간 복용 현황
+              _Today(), // 오늘 먹을 영양제
+              _Stock(),
+            ],
+          ),
+        ));
   }
 }
 
-class _Welcome extends StatelessWidget {
-  const _Welcome({super.key});
+class Welcome extends StatefulWidget {
+  const Welcome({super.key});
 
+  @override
+  State<Welcome> createState() => _WelcomeState();
+}
+
+class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    // Duration koreaOffset = Duration(hours: 9);
-    // DateTime koreaTime = now.add(koreaOffset);
-    DateTime koreaTime = now;
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
-      child: Row(
-        children: [
-          Text(
-            '성현님',
-            style: TextStyle(
-              color: BASIC_BLACK,
-              fontSize: 25,
-              fontWeight: FontWeight.w600,
-            ),
+    var screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      width: screenWidth,
+      height: 250,
+      child: Text("gdgd"),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(35),
+          border: Border.all(
+            width: 0.1,
+            color: Colors.grey.withOpacity(0.5),
           ),
-          Text(
-            ' 환영해요!',
-            style: TextStyle(
-              color: Color(0xFFFF6666),
-              fontSize: 25,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 120),
-            child: Text(
-              ' ${koreaTime.month}월 ${koreaTime.day}일',
-              style: TextStyle(
-                color: BASIC_BLACK,
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ],
-      ),
+          boxShadow: [
+            BoxShadow(
+                color: Color(0x00b5b5b5).withOpacity(0.1),
+                offset: Offset(0.1, 0.1),
+                blurRadius: 3 // 그림자 위치 조정
+                ),
+          ]),
     );
   }
 }
@@ -169,7 +158,7 @@ class _WeekState extends State<_Week> {
                   calendarStyle: CalendarStyle(
                     outsideDaysVisible: false,
                     todayTextStyle:
-                    TextStyle(color: Colors.red.withOpacity(0.8)),
+                        TextStyle(color: Colors.red.withOpacity(0.8)),
                     weekendTextStyle: TextStyle(color: Colors.grey),
                     defaultTextStyle: TextStyle(color: Colors.grey),
                     todayDecoration: BoxDecoration(
@@ -188,7 +177,7 @@ class _WeekState extends State<_Week> {
                     markersMaxCount: 1,
                   ),
                   calendarBuilders:
-                  CalendarBuilders(markerBuilder: (context, date, events) {
+                      CalendarBuilders(markerBuilder: (context, date, events) {
                     var weekData = context.watch<MainStore>().weekData;
                     DateTime koreaTime = date.add(Duration(hours: 9));
                     String month = koreaTime.month.toString().padLeft(2, '0');
@@ -198,13 +187,13 @@ class _WeekState extends State<_Week> {
 
                     // 현재 날짜에 해당하는 데이터 찾기
                     var dayData = weekData['data'].firstWhere(
-                          (data) => data['date'] == paramDate,
+                      (data) => data['date'] == paramDate,
                       orElse: () => null,
                     );
 
                     if (dayData != null) {
                       int needToTakenCountToday =
-                      dayData['needToTakenCountToday'];
+                          dayData['needToTakenCountToday'];
                       int actualTakenToday = dayData['actualTakenToday'];
 
                       double dayGauge =
@@ -221,10 +210,10 @@ class _WeekState extends State<_Week> {
                               foregroundColor: dayGauge == 1
                                   ? fullColor
                                   : dayGauge > 0.5
-                                  ? overFiftyColor
-                                  : dayGauge == 0.5
-                                  ? fiftyColor
-                                  : underFiftyColor,
+                                      ? overFiftyColor
+                                      : dayGauge == 0.5
+                                          ? fiftyColor
+                                          : underFiftyColor,
                               backgroundColor: BASIC_GREY.withOpacity(0.2),
                               value: dayGauge, // dayGauge
                             ),
@@ -314,63 +303,63 @@ class _TodayState extends State<_Today> {
               // 여기 패기 추가해야 할 수도
               dailyData.isEmpty
                   ? Center(
-                child: Text(
-                  "오늘은 섭취할 영양제가 없어요 :)",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500, color: BASIC_GREY),
-                ),
-              )
+                      child: Text(
+                        "오늘은 섭취할 영양제가 없어요 :)",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, color: BASIC_GREY),
+                      ),
+                    )
                   : Align(
-                alignment: Alignment.centerRight,
-                child: curCompleteCount != dailyData.length
-                    ? Text(
-                  '${(curCompleteCount * 100 / dailyData.length).round()} %',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: BASIC_BLACK),
-                )
-                    : Text(
-                  "오늘의 영양 충전 완료 :)",
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
+                      alignment: Alignment.centerRight,
+                      child: curCompleteCount != dailyData.length
+                          ? Text(
+                              '${(curCompleteCount * 100 / dailyData.length).round()} %',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: BASIC_BLACK),
+                            )
+                          : Text(
+                              "오늘의 영양 충전 완료 :)",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                              ),
+                            ),
+                    ),
               // Progress Bar
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: dailyData.isEmpty
                     ? Container()
                     : dailyData.length == curCompleteCount
-                    ? // 약 모두 다 먹었을 때 초록색 Progress Bar
-                AnimatedProgressBar(
-                  width: 300,
-                  value: curCompleteCount / dailyData.length,
-                  duration: const Duration(seconds: 1),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Colors.lightGreenAccent,
-                      Colors.greenAccent,
-                    ],
-                  ),
-                  backgroundColor: Colors.grey.withOpacity(0.2),
-                )
-                    : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
-                AnimatedProgressBar(
-                  width: 320,
-                  // height: 11,
-                  value: curCompleteCount / dailyData.length,
-                  duration: const Duration(seconds: 1),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Colors.orangeAccent,
-                      Colors.redAccent,
-                    ],
-                  ),
-                  backgroundColor: Colors.grey.withOpacity(0.2),
-                ),
+                        ? // 약 모두 다 먹었을 때 초록색 Progress Bar
+                        AnimatedProgressBar(
+                            width: 300,
+                            value: curCompleteCount / dailyData.length,
+                            duration: const Duration(seconds: 1),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Colors.lightGreenAccent,
+                                Colors.greenAccent,
+                              ],
+                            ),
+                            backgroundColor: Colors.grey.withOpacity(0.2),
+                          )
+                        : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
+                        AnimatedProgressBar(
+                            width: 320,
+                            // height: 11,
+                            value: curCompleteCount / dailyData.length,
+                            duration: const Duration(seconds: 1),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Colors.orangeAccent,
+                                Colors.redAccent,
+                              ],
+                            ),
+                            backgroundColor: Colors.grey.withOpacity(0.2),
+                          ),
               ),
               SizedBox(
                 height: 10,
@@ -411,104 +400,104 @@ class _TodayState extends State<_Today> {
                                       )),
                                 ),
                                 dailyData[i]['actualTakeCount'] !=
-                                    dailyData[i][
-                                    'needToTakeTotalCount'] // 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
+                                        dailyData[i][
+                                            'needToTakeTotalCount'] // 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
                                     ? Container(
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.redAccent,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20)),
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      print('누름');
-                                      // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.redAccent,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            print('누름');
+                                            // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
 
-                                      if (dailyData.length ==
-                                          curCompleteCount) {
-                                        btnColor = Colors.greenAccent;
-                                      }
-                                    },
-                                    style: ButtonStyle(
-                                      padding: MaterialStateProperty.all(
-                                          EdgeInsets.zero), // 패딩 없애줘야 함
-                                    ),
-                                    child: Text("복용",
-                                        style: TextStyle(
-                                          color: Colors.redAccent,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
-                                )
+                                            if (dailyData.length ==
+                                                curCompleteCount) {
+                                              btnColor = Colors.greenAccent;
+                                            }
+                                          },
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                EdgeInsets.zero), // 패딩 없애줘야 함
+                                          ),
+                                          child: Text("복용",
+                                              style: TextStyle(
+                                                color: Colors.redAccent,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w600,
+                                              )),
+                                        ),
+                                      )
                                     : dailyData.length != curCompleteCount
-                                    ? Container(
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: btnColor,
-                                    border: Border.all(
-                                      color: btnColor,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20)),
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      print("완료버튼클릭");
-                                      await context
-                                          .read<MainStore>()
-                                          .takePill(
-                                          context,
-                                          dailyData[i][
-                                          'ownPillId']); // 복용 요청하기
-                                    },
-                                    style: ButtonStyle(
-                                      padding:
-                                      MaterialStateProperty.all(
-                                          EdgeInsets
-                                              .zero), // 패딩 없애줘야 함
-                                    ),
-                                    child: Text("완료",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
-                                )
-                                    : Container(
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.greenAccent,
-                                    border: Border.all(
-                                      color: Colors.greenAccent,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20)),
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    style: ButtonStyle(
-                                      padding:
-                                      MaterialStateProperty.all(
-                                          EdgeInsets
-                                              .zero), // 패딩 없애줘야 함
-                                    ),
-                                    child: Text("완료찌발",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
-                                )
+                                        ? Container(
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color: btnColor,
+                                              border: Border.all(
+                                                color: btnColor,
+                                                width: 1,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            child: TextButton(
+                                              onPressed: () async {
+                                                print("완료버튼클릭");
+                                                await context
+                                                    .read<MainStore>()
+                                                    .takePill(
+                                                        context,
+                                                        dailyData[i][
+                                                            'ownPillId']); // 복용 요청하기
+                                              },
+                                              style: ButtonStyle(
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        EdgeInsets
+                                                            .zero), // 패딩 없애줘야 함
+                                              ),
+                                              child: Text("완료",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                            ),
+                                          )
+                                        : Container(
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.greenAccent,
+                                              border: Border.all(
+                                                color: Colors.greenAccent,
+                                                width: 1,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                            ),
+                                            child: TextButton(
+                                              onPressed: () {},
+                                              style: ButtonStyle(
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        EdgeInsets
+                                                            .zero), // 패딩 없애줘야 함
+                                              ),
+                                              child: Text("완료찌발",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                            ),
+                                          )
                               ],
                             ),
                           )),
@@ -557,7 +546,7 @@ class _StockState extends State<_Stock> {
     double containerWidth = screenWidth * 0.9; // 화면의 90%
     var userInventoryData = context.watch<MainStore>().userInventoryData;
     return BaseContainer(
-      color: Colors.white,
+        color: Colors.white,
         width: containerWidth,
         height: 250,
         child: Column(
