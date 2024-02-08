@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/component/common/app_bar.dart';
-import 'package:yourpilling/component/common/base_container_noheight.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/Search/search_health_screen.dart';
 import 'package:yourpilling/screen/Search/search_list_screen.dart';
 import 'package:yourpilling/screen/Search/search_nutrient_screen.dart';
 import 'package:yourpilling/component/common/base_container.dart';
+import 'package:yourpilling/screen/Search/search_pill_detail.dart';
+import 'package:yourpilling/store/ranking_store.dart';
 import 'dart:convert';
+import '../../const/url.dart';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
+import 'package:http/http.dart' as http;
 
+getTabData(BuildContext context) async {
+  await context.read<RankingStore>().getCategoriData(context); // 카테고리 데이터 할당
+  await context.read<RankingStore>().getRankingData(context); // 랭킹 데이터 받기
+}
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -30,8 +37,10 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+    getTabData(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
@@ -135,8 +144,10 @@ class _MiddleTap extends StatelessWidget {
             SizedBox(
               width: 20,
             ),
-            BaseContainerOnlyWidth(
+            BaseContainer(
               width: 170,
+              height: 90,
+              color: BASIC_GREY,
               child: TextButton(
                 onPressed: () {
                   // TextField에 입력된 텍스트를 출력합니다.
@@ -158,8 +169,10 @@ class _MiddleTap extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            BaseContainerOnlyWidth(
+            BaseContainer(
               width: 170,
+              height: 90,
+              color: Colors.white,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -190,8 +203,10 @@ class _Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseContainerOnlyWidth(
+    return BaseContainer(
       width: 350,
+      height: 485,
+      color: Colors.white,
       child: DefaultTabController(
         length: 3, // 탭의 수
         child: Column(
@@ -226,17 +241,17 @@ class _Ranking extends StatelessWidget {
             // header end
             TabBar(
               tabs: [
-                Tab(text: '20대 추천'),
+                Tab(text: '건강고민'),
                 Tab(text: '성분'),
-                Tab(text: '건강 고민'),
+                Tab(text: '성별 및 나이'),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  _AgeTab(),
-                  _NutrientTab(),
                   _HealthTab(),
+                  _NutrientTab(),
+                  _AgeTab(),
                 ],
               ),
             ),
@@ -261,17 +276,8 @@ class _AgeTabState extends State<_AgeTab> {
 
   @override
   Widget build(BuildContext context) {
-    var agelist = [
-      {
-        'tabName': '전체', // 영양제 이름
-      },
-      {
-        'tabName': '멀티비타민', // 영양제 이름
-      },
-      {
-        'tabName': '일반', // 영양제 이름
-      },
-    ];
+    var agelist = context.read<RankingStore>().CategoriData[2]['midCategories']; // 복용 요청하기
+// midCategoryId
 
     return Container(
       child: Column(
@@ -285,12 +291,13 @@ class _AgeTabState extends State<_AgeTab> {
               itemBuilder: (context, i) {
                 return TextButton(
                   onPressed: () {
+                    context.read<RankingStore>().getShowData(agelist[i]['midCategoryId']);
                     setState(() {
                       _showText = true;
                       _index = i;
                     });
                   },
-                  child: Text('${agelist[i]['tabName']}'),
+                  child: Text('${agelist[i]['midCategoryName']}'),
                 );
               },
             ),
@@ -316,38 +323,15 @@ class _NutrientTab extends StatefulWidget {
 }
 
 class _NutrientTabState extends State<_NutrientTab> {
-  var nutrientlist = [
-    {
-      'tabName': '오메가3', // 영양제 이름
-    },
-    {
-      'tabName': '비타민B1', // 성분 이름
-    },
-    {
-      'tabName': '아르기닌', // 영양제 이름
-    },
-    {
-      'tabName': '비타민C', // 영양제 이름
-    },
-    {
-      'tabName': '마그네슘', // 영양제 이름
-    },
-    {
-      'tabName': '루테인', // 영양제 이름
-    },
-    {
-      'tabName': '엽산', // 영양제 이름
-    },
-    {
-      'tabName': '비타민D', // 영양제 이름
-    },
-  ];
 
   bool _showText = false;
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
+
+    var nutrientlist = context.read<RankingStore>().CategoriData[1]['midCategories']; // 복용 요청하기
+
     return Container(
       child: Column(
         children: [
@@ -359,12 +343,13 @@ class _NutrientTabState extends State<_NutrientTab> {
               itemBuilder: (context, i) {
                 return TextButton(
                   onPressed: () {
+                    context.read<RankingStore>().getShowData(nutrientlist[i]['midCategoryId']);
                     setState(() {
                       _showText = true;
                       _index = i;
                     });
                   },
-                  child: Text('${nutrientlist[i]['tabName']}'),
+                  child: Text('${nutrientlist[i]['midCategoryName']}'),
                 );
               },
             ),
@@ -390,35 +375,15 @@ class _HealthTab extends StatefulWidget {
 }
 
 class _HealthTabState extends State<_HealthTab> {
-  var healthlist = [
-    {
-      'tabName': '노화', // 건강 이름
-    },
-    {
-      'tabName': '두뇌활동', // 건강 이름
-    },
-    {
-      'tabName': '장 건강', // 건강 이름
-    },
-    {
-      'tabName': '혈중 콜레스테롤', // 건강 이름
-    },
-    {
-      'tabName': '눈 건강', // 건강 이름
-    },
-    {
-      'tabName': '남성 건강', // 건강 이름
-    },
-    {
-      'tabName': '피로감', // 건강 이름
-    },
-  ];
+
 
   bool _showText = false;
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
+    var HealthTapList = context.read<RankingStore>().CategoriData[0]['midCategories']; // 복용 요청하기
+
     return Container(
       child: Column(
         children: [
@@ -426,16 +391,17 @@ class _HealthTabState extends State<_HealthTab> {
             height: 50, // 높이 설정
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: healthlist.length,
+              itemCount: HealthTapList.length,
               itemBuilder: (context, i) {
                 return TextButton(
                   onPressed: () {
+                    context.read<RankingStore>().getShowData(HealthTapList[i]['midCategoryId']);
                     setState(() {
                       _showText = true;
                       _index = i;
                     });
                   },
-                  child: Text('${healthlist[i]['tabName']}'),
+                  child: Text('${HealthTapList[i]['midCategoryName']}'),
                 );
               },
             ),
@@ -462,55 +428,14 @@ class _SearchRanking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 종합비타민 눌렀을때
-    var pillList = [
-      {
-        'pillName': '비타민 C', // 영양제 이름
-        'img': 'pill1', // 사진정보
-      },
-      {
-        'pillName': '아연', // 영양제 이름
-        'img': 'pill2', // 사진정보
-      },
-      {
-        'pillName': '마그네슘', // 영양제 이름
-        'img': 'pill3', // 사진정보
-      },
-      {
-        'pillName': '루테인', // 영양제 이름
-        'img': 'pill4', // 사진정보
-      },
-      {
-        'pillName': '오메가3', // 영양제 이름
-        'img': 'pill5', // 사진정보
-      },
-      {
-        'pillName': '순환엔', // 영양제 이름
-        'img': 'pill6', // 사진정보
-      },
-      {
-        'pillName': '센파워민', // 영양제 이름
-        'img': 'pill7', // 사진정보
-      },
-      {
-        'pillName': '비타민 D', // 영양제 이름
-        'img': 'pill8', // 사진정보
-      },
-      {
-        'pillName': '마그네슘', // 영양제 이름
-        'img': 'pill9', // 사진정보
-      },
-      {
-        'pillName': 'To-per-Day', // 영양제 이름
-        'img': 'pill10', // 사진정보
-      },
-    ];
+    var RankingList = context.watch<RankingStore>().ShowData;
 
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: 10,
+          itemCount: RankingList.length,
           itemBuilder: (context, i) {
             return Row(
               children: [
@@ -522,17 +447,26 @@ class _SearchRanking extends StatelessWidget {
                   height: 30.0,
                   width: 30.0,
                 ),
-                Image.asset(
-                  "assets/image/${pillList[i]['img']}.jpg",
+                Image.network(
+                  "${RankingList[i]['imageUrl']}",
                   width: 110,
                   height: 80,
                 ),
-                Text(
-                  "${pillList[i]['pillName']}",
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.green,
-                  ),
+                Column(
+                  children: [
+                    Text("${RankingList[i]['manufacturer']}")
+                    ,
+                    TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PillDetailScreen(pillId: RankingList[i]['pillId'],)));
+                    }, child: Text("${RankingList[i]['pillName']}",
+                                ),
+                    ),
+                  ],
                 ),
               ],
             );

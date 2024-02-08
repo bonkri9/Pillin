@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/screen/Alarm/alarm_screen.dart';
-import 'package:yourpilling/screen/Login/enter_login_screen.dart';
 import 'package:yourpilling/screen/Login/login_screen.dart';
 import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -11,6 +10,7 @@ import 'package:yourpilling/firebase_options.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 import 'package:yourpilling/store/main_store.dart';
+import 'package:yourpilling/store/ranking_store.dart';
 import 'package:yourpilling/store/record_store.dart';
 import 'package:yourpilling/store/search_store.dart';
 import 'package:yourpilling/store/user_store.dart';
@@ -34,7 +34,7 @@ void main() async {
 
   // Firebase가 앱을 초기화할때까지 기다릴 수있음
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseApi().initNotifications(); // 알람을 초기화함
+  // await FirebaseApi().initNotifications(); // 알람을 초기화함
 
   initializeDateFormatting().then((_) => runApp(
       MultiProvider(
@@ -45,6 +45,7 @@ void main() async {
           ChangeNotifierProvider(create: (c) => InventoryStore()),// AnotherStore 추가
           ChangeNotifierProvider(create: (c) => RecordStore()),// AnotherStore 추가
           ChangeNotifierProvider(create: (c) => SearchRepository()),
+          ChangeNotifierProvider(create: (c) => RankingStore()),
           // 필요한 만큼 ChangeNotifierProvider를 추가하시면 됩니다.
         ],
         child: SafeArea(
