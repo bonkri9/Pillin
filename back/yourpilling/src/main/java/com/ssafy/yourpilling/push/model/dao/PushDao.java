@@ -8,6 +8,8 @@ import com.ssafy.yourpilling.push.model.service.vo.in.RegistPushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.in.UpdatePushNotificationVo;
 import com.ssafy.yourpilling.push.model.service.vo.out.OutNotificationsVo;
 
+import java.util.List;
+
 
 public interface PushDao {
     void tokenRegister(DeviceToken deviceToken);
@@ -21,4 +23,6 @@ public interface PushDao {
     void deletePushNotificationById(DeletePushNotificationsVo vo);
 
     void updatePushNotification(UpdatePushNotificationVo vo);
+
+    List<PushMember> findAllPushMember();
 }

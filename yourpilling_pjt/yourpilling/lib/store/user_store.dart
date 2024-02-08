@@ -43,8 +43,6 @@ class UserStore extends ChangeNotifier {
     day = str;
   }
 
-
-
   getToken(String token) {
     // 로그인할때 발급
     accessToken = token;
@@ -133,16 +131,14 @@ class UserStore extends ChangeNotifier {
   }
 
   // 회원 탈퇴
-  Future<void> deleteUserData(BuildContext context) async {
-    print('체크1');
+  deleteUserData(BuildContext context) async {
     String accessToken = this.accessToken;
-    print('체크2');
-    String url = "${CONVERT_URL}/api/v1/member";
 
-    print('url은 ${url}');
+    String userDeleteUrl = "${CONVERT_URL}/api/v1/member";
+    print('url은 ${userDeleteUrl}');
     print('토큰은 ${accessToken}');
     try {
-      var response = await http.delete(Uri.parse(url), headers: {
+      var response = await http.delete(Uri.parse(userDeleteUrl), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       });
@@ -161,10 +157,8 @@ class UserStore extends ChangeNotifier {
     notifyListeners();
   }
 
-// 회원탈퇴 종료
-
   // 회원 상세정보 가져오기
-  Future<void> getUserDetailData(BuildContext context) async {
+  getUserDetailData(BuildContext context) async {
     print('체크1');
     String accessToken = this.accessToken;
     print('체크2');
@@ -181,7 +175,7 @@ class UserStore extends ChangeNotifier {
     if (response.statusCode == 200) {
       print('상세정보 통신성공');
       UserDetail = jsonDecode(utf8.decode(response.bodyBytes));
-      print("DetailhData: ${UserDetail}");
+      print("DetailData: ${UserDetail}");
       print('체크3');
     } else {
       print(response.body);

@@ -25,6 +25,13 @@ public class PushOwnPill {
         @Column(name = "take_yn")
         private Boolean takeYN;
 
+        @Column(name = "remains")
+        private int remains;
+
+        @Column(name = "total_count")
+        private int totalCount;
+
+
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "member_id")
         private PushMember member;
