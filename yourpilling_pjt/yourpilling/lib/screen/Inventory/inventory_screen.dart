@@ -83,8 +83,9 @@ class _InventoryUpperState extends State<_InventoryUpper> {
   @override
   Widget build(BuildContext context) {
     var takeListData = context.read<InventoryStore>().takeYnListData;
-    var listAllLength = ((takeListData?['takeTrue']?['data']?.length ?? 0) +
-        (takeListData?['takeFalse']?['data']?.length ?? 0));
+    // var listAllLength = ((takeListData?['takeTrue']?['data']?.length ?? 0) +
+    //     (takeListData?['takeFalse']?['data']?.length ?? 0));
+    var listAllLength = context.read<InventoryStore>().length;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
       child: Row(
@@ -101,7 +102,7 @@ class _InventoryUpperState extends State<_InventoryUpper> {
           Container(
             padding: EdgeInsets.only(right: 5),
             child: Text(
-              ' 총 영양제 수 $listAllLength 개 ',
+              '복용 영양제 수 $listAllLength 개',
               style: TextStyle(
                 color: BASIC_BLACK,
                 fontSize: 20,
@@ -198,9 +199,9 @@ class _InventoryContentState extends State<_InventoryContent> {
                   // takeYnListData: takeYnListData,
                 ),
                 _UntakenTab(
-                  // getTotalNumber: getTotalNumber,
-                  // getRestNumber: getRestNumber,
-                ),
+                    // getTotalNumber: getTotalNumber,
+                    // getRestNumber: getRestNumber,
+                    ),
               ],
             ))
           ],
@@ -360,7 +361,6 @@ class _TakenTabState extends State<_TakenTab> {
     // totalPillCount = totalCount;
     print(curPillCount);
     print(totalPillCount);
-    print('이것임임임임');
     return showDialog(
         context: context,
         builder: (context) {
@@ -462,7 +462,6 @@ class _TakenTabState extends State<_TakenTab> {
                     ],
                   ),
                 ),
-
               ],
             ),
             actions: <Widget>[
@@ -504,7 +503,10 @@ class _TakenTabState extends State<_TakenTab> {
 
   @override
   Widget build(BuildContext context) {
-    var takeTrueList = context.read<InventoryStore>().takeTrueListData;
+    // var takeTrueList = context.read<InventoryStore>().takeTrueListData;
+    // context.select<InventoryStore>((provider) => provider.takeYnListData);
+    final takeTrueList = context
+        .select<InventoryStore, List>((provider) => provider.takeTrueListData);
     var listLength = context.read<InventoryStore>().length;
     // print(takeTrueListData);
     // loadData(context);
@@ -515,7 +517,6 @@ class _TakenTabState extends State<_TakenTab> {
 
     print(listLength);
     return ListView.builder(
-
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       itemCount: listLength ?? 0,
@@ -591,9 +592,9 @@ class _TakenTabState extends State<_TakenTab> {
                                       context
                                           .read<InventoryStore>()
                                           .putTakeYnChange(context, ownPillId);
-                                      context
-                                          .read<InventoryStore>()
-                                          .takeTrueListData;
+                                      // context
+                                      //     .read<InventoryStore>()
+                                      //     .takeTrueListData;
                                       context
                                           .read<InventoryStore>()
                                           .getTakeYnListData;
@@ -609,6 +610,15 @@ class _TakenTabState extends State<_TakenTab> {
                                     // var newTrueList = context.read<InventoryStore>().takeTrueListData;
                                     // context.read<InventoryStore>().takeTrueListData = newTrueList;
                                     // context.read<InventoryStore>().putPillTake(context); // 복용 요청하기
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return takeStopDialog();
+                                        }
+                                        );
+                                    context
+                                        .read<InventoryStore>()
+                                        .takeTrueListData;
                                   },
                                   child: Text(
                                     "복용중단",
@@ -679,9 +689,11 @@ class _TakenTabState extends State<_TakenTab> {
 
 //takeFalse 미복용 영양제
 class _UntakenTab extends StatefulWidget {
-  _UntakenTab(
-      {super.key, this.getTotalNumber, this.getRestNumber,
-      });
+  _UntakenTab({
+    super.key,
+    this.getTotalNumber,
+    this.getRestNumber,
+  });
 
   final getTotalNumber;
   final getRestNumber;
@@ -899,7 +911,7 @@ class _UntakenTabState extends State<_UntakenTab> {
 
   @override
   Widget build(BuildContext context) {
-    var takeFalseListData = context.watch<InventoryStore>().takeYnListData;
+    var takeFalseListData = context.read<InventoryStore>().takeYnListData;
     var listLength = takeFalseListData?['takeFalse']?['data']?.length ?? 0;
     print(listLength);
     return ListView.builder(
@@ -966,7 +978,14 @@ class _UntakenTabState extends State<_UntakenTab> {
                                     context
                                         .read<InventoryStore>()
                                         .putTakeYnChange(context, ownPillId);
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return takeStartDialog();
+                                        }
+                                    );
                                   },
+
                                   child: Text(
                                     "복용시작",
                                     style: TextStyle(color: Colors.greenAccent),
@@ -1029,3 +1048,42 @@ class _UntakenTabState extends State<_UntakenTab> {
   }
 }
 
+class takeStopDialog extends StatelessWidget {
+  const takeStopDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('알림'),
+      content: Text("복용이 중단되었습니다."),
+      actions: [
+        TextButton(
+          child: Text("닫기"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class takeStartDialog extends StatelessWidget {
+  const takeStartDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('알림'),
+      content: Text("복용이 시작되었습니다."),
+      actions: [
+        TextButton(
+          child: Text("닫기"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+}

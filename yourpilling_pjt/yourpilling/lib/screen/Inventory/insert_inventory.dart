@@ -13,8 +13,6 @@ import 'dart:convert';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 
-// bool takeYn = false;
-
 class InsertInventory extends StatefulWidget {
   var pillId;
 
@@ -29,8 +27,9 @@ class _InsertInventoryState extends State<InsertInventory> {
   TextEditingController totalCountController = TextEditingController();
 
   var pillId;
-  // var takeYn = false;
+
   var takeYn = false;
+  // var takeYn;
   var remains;
   var totalCount;
   var takeCount;
@@ -89,13 +88,12 @@ class _InsertInventoryState extends State<InsertInventory> {
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            _InsertInvenUpper(
-              getTakeYn: getTakeYn,
-            ),
+            _InsertInvenUpper(),
             SizedBox(
               height: 30,
             ),
             _InsertInvenContent(
+              getTakeYn: getTakeYn,
               getCurPillCount: getCurPillCount,
               getTotalPillCount: getTotalPillCount,
             ),
@@ -112,40 +110,80 @@ class _InsertInventoryState extends State<InsertInventory> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            print(takeYn);
-            print(remains);
-            print(totalCount);
-            context
-                .read<InventoryStore>()
-                .registInven(context, pillId, takeYn, remains, totalCount);
-            showModalBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    width: 450,
-                    height: 200,
-                    color: Colors.transparent,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.redAccent)),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Inventory()));
-                            },
-                            child: const Text(
-                              '등록완료!',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ],
-                    ),
-                  );
-                });
+            // bool checkTrue = false;
+            // var trueList = context.read<InventoryStore>().takeTrueListData;
+            // var trueLength = trueList.length;
+            // for (int i = 0; i < trueLength; i++) {
+            //   if (trueList[i]['pillId'] == pillId) {
+            //     checkTrue = true; // 복용하는 약 중에 이미 존재한다
+            //   }
+            // }
+            //
+            // bool checkFalse = false;
+            // var falseList = context.read<InventoryStore>().takeFalseListData;
+            // var falseLength = falseList.length;
+            // for (int i = 0; i < falseLength; i++) {
+            //   if (falseList[i]['pillId'] == pillId) {
+            //     checkFalse = true; // 미복용하는 약 중에 이미 존재한다
+            //   }
+            // }
+            // print("아래가 checkFalse");
+            // print(checkFalse);
+            // print(checkTrue);
+            // //재고 리스트에 이미 있다면, 이미 등록된 재고라고 모달창 띄우기
+            // if (checkTrue == false && checkFalse == false) {
+              print(takeYn);
+              print(remains);
+              print(totalCount);
+              context
+                  .read<InventoryStore>()
+                  .registInven(context, pillId, takeYn, remains, totalCount);
+              showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: 450,
+                      height: 200,
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.redAccent)),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Inventory()));
+                              },
+                              child: const Text(
+                                '등록완료!',
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ],
+                      ),
+                    );
+                  });
+            // } else {
+            //   showDialog(
+            //       context: context,
+            //       builder: (BuildContext context) {
+            //         return AlertDialog(
+            //           title: Text('알림'),
+            //           content: Text("이미 등록된 영양제입니다."),
+            //           actions: [
+            //             TextButton(
+            //               child: Text("닫기"),
+            //               onPressed: () {
+            //                 Navigator.of(context).pop();
+            //               },
+            //             ),
+            //           ],
+            //         );
+            //       });
+            // }
           },
         ),
       ),
@@ -154,16 +192,14 @@ class _InsertInventoryState extends State<InsertInventory> {
 }
 
 class _InsertInvenUpper extends StatefulWidget {
-  _InsertInvenUpper({super.key, this.getTakeYn});
-
-  var getTakeYn;
+  _InsertInvenUpper({super.key});
 
   @override
   State<_InsertInvenUpper> createState() => _InsertInvenUpperState();
 }
 
 class _InsertInvenUpperState extends State<_InsertInvenUpper> {
-  var takeYn;
+  // var takeYn;
 
   @override
   Widget build(BuildContext context) {
@@ -174,46 +210,6 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
           '영양제 재고 등록',
           style: TextStyle(fontSize: 30),
         ),
-        Row(
-          children: [
-            LiteRollingSwitch(
-                width: 100,
-                // onTap: (bool? value) {
-                //   setState(() {
-                //     takeYn = !(value ?? false);
-                //     widget.getTakeYn(takeYn);
-                //   });
-                // },
-                onTap: (bool? value) {
-                  setState(() {
-                    print(takeYn);
-                    print('아래가 value');
-                    print(value);
-                    takeYn = !(value ?? false);
-                    widget.getTakeYn(takeYn);
-                  });
-                },
-                onDoubleTap: () {},
-                onSwipe: () {},
-                value: takeYn ?? false,
-                textOn: '복용중',
-                textOff: '미복용',
-                colorOn: Colors.greenAccent,
-                colorOff: Colors.redAccent,
-                iconOn: Icons.done,
-                iconOff: Icons.do_not_disturb_on_outlined,
-                textSize: 13,
-                onChanged: (bool? value) {
-                  setState(() {
-                    print(takeYn);
-                    print('아래가 value');
-                    print(value);
-                    takeYn = !(value ?? false);
-                    widget.getTakeYn(takeYn);
-                  });
-                }),
-          ],
-        )
       ],
     );
   }
@@ -221,11 +217,16 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
 
 class _InsertInvenContent extends StatefulWidget {
   _InsertInvenContent(
-      {super.key, this.getCurPillCount, this.getTotalPillCount, this.pillId});
+      {super.key,
+      this.getCurPillCount,
+      this.getTotalPillCount,
+      this.pillId,
+      this.getTakeYn});
 
   var getCurPillCount;
   var getTotalPillCount;
   var pillId;
+  var getTakeYn;
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
@@ -234,6 +235,7 @@ class _InsertInvenContent extends StatefulWidget {
 class _InsertInvenContentState extends State<_InsertInvenContent> {
   var curPillCount;
   var totalPillCount;
+  var takeYn;
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +290,28 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     ],
                   ),
                 ),
+                // LiteRollingSwitch(
+                //     width: 100,
+                //     onTap: () {},
+                //     onDoubleTap: () {},
+                //     onSwipe: () {},
+                //     value: takeYn ?? false,
+                //     textOn: '복용중',
+                //     textOff: '미복용',
+                //     colorOn: Colors.greenAccent,
+                //     colorOff: Colors.redAccent,
+                //     iconOn: Icons.done,
+                //     iconOff: Icons.do_not_disturb_on_outlined,
+                //     textSize: 13,
+                //     onChanged: (bool? value) {
+                //       setState(() {
+                //         print(takeYn);
+                //         print('아래가 value onChanged');
+                //         print(value);
+                //         takeYn = value;
+                //         widget.getTakeYn(takeYn);
+                //       });
+                //     }),
                 Container(
                     height: 50,
                     child: Row(
@@ -312,7 +336,8 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 });
                               },
                               validator: (value) {
-                                if (value == null || value == 0) return "입력이 필요합니다.";
+                                if (value == null || value == 0)
+                                  return "입력이 필요합니다.";
                                 if (value < 0) {
                                   return "";
                                 } else if (value > 500) {
@@ -353,7 +378,8 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                               steps: 1,
                               minVal: 0,
                               validator: (value) {
-                                if (value == null || value == 0) return "입력이 필요합니다.";
+                                if (value == null || value == 0)
+                                  return "입력이 필요합니다.";
                                 if (value < 0) {
                                   return "";
                                 } else if (value > 500) {
