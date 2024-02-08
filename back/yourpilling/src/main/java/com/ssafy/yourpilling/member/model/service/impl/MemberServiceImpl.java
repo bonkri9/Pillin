@@ -65,7 +65,7 @@ public class MemberServiceImpl implements MemberService {
         member.updateName(vo.getName());
     }
 
-
+    @Transactional
     @Override
     public void updatePassword(MemberUpdatePasswordVo vo) {
         MemberProfile member = memberDao.findByMemberId(vo.getMemberId());

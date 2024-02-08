@@ -21,19 +21,6 @@ class UserInfoUpdateScreen extends StatefulWidget {
 class _UserInfoUpdateScreenState extends State<UserInfoUpdateScreen> {
   @override
   Widget build(BuildContext context) {
-    // var userDetailInfo = context.read<UserStore>().UserDetail;
-    // var nameOrigin = userDetailInfo['name'];
-    // var UserDetail;
-    // var userDetailInfo = context.read<UserStore>().UserDetail;
-    // var nameOrigin = userDetailInfo['name'];
-    // return Scaffold(
-    //   body: Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: [
-    //       _NameChange(),
-    //     ],
-    //   ),
-    // );
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
       appBar: AppBar(
@@ -74,30 +61,9 @@ class _NameChange extends StatefulWidget {
 class _NameChangeState extends State<_NameChange> {
   final TextEditingController nameController = TextEditingController();
 
-  // FocusNode _nameFocus = new FocusNode();
-  //
-  // // setName(nameInput) {
-  // //   name = nameInput;
-  // // }
-  //
-  // bool isValidateName(){
-  //   if (nameController.text.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("이름을 입력해주세요"))
-  //     );
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   @override
   Widget build(BuildContext context) {
     FocusNode _nameFocus = new FocusNode();
-
-    // setName(nameInput) {
-    //   name = nameInput;
-    // }
-
     bool isValidateName() {
       if (nameController.text.isEmpty) {
         ScaffoldMessenger.of(context)
@@ -248,29 +214,10 @@ class _PasswordChangeState extends State<_PasswordChange> {
   final TextEditingController passwordVerifyingController =
       TextEditingController();
 
-  // FocusNode _nameFocus = new FocusNode();
-  //
-  // // setName(nameInput) {
-  // //   name = nameInput;
-  // // }
-  //
-  // bool isValidateName(){
-  //   if (nameController.text.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text("이름을 입력해주세요"))
-  //     );
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   @override
   Widget build(BuildContext context) {
     FocusNode _passwordFocus = new FocusNode();
     FocusNode _passwordVerifyingFocus = new FocusNode();
-    // setName(nameInput) {
-    //   name = nameInput;
-    // }
 
     bool isValidatePassword() {
       if (passwordController.text.isEmpty) {
@@ -371,6 +318,8 @@ class _PasswordChangeState extends State<_PasswordChange> {
                 fillColor: Colors.purple.withOpacity(0.1),
                 filled: true,
                 prefixIcon: const Icon(Icons.person)),
+            obscureText: true,
+
           ),
         ),
         SizedBox(
@@ -393,9 +342,10 @@ class _PasswordChangeState extends State<_PasswordChange> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
                     borderSide: BorderSide.none),
-                fillColor: Colors.purple.withOpacity(0.1),
+                fillColor: Colors.black.withOpacity(0.1),
                 filled: true,
                 prefixIcon: const Icon(Icons.person)),
+            obscureText: true,
           ),
         ),
         SizedBox(
@@ -436,7 +386,10 @@ class _PasswordChangeState extends State<_PasswordChange> {
                           TextButton(
                             child: Text('닫기'),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()));
                             },
                           ),
                         ],

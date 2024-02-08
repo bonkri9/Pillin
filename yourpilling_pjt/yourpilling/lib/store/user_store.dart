@@ -4,35 +4,35 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../const/url.dart';
-class UserStore extends ChangeNotifier {
 
+class UserStore extends ChangeNotifier {
   String get loginToken => accessToken;
+
   bool get isLoggedIn => accessToken.isNotEmpty;
   String accessToken = '';
   var UserDetail; // 회원정보 페이지에 뿌려줄 데이터
 
-
-  getToken(String token) { // 로그인할때 발급
+  getToken(String token) {
+    // 로그인할때 발급
     accessToken = token;
     notifyListeners();
   }
 
-  deleteToken() { // 로그아웃할때 실행
+  deleteToken() {
+    // 로그아웃할때 실행
     accessToken = 'Bearer ...';
     notifyListeners();
   }
 
   // 회원 탈퇴
   Future<void> deleteUserData(BuildContext context) async {
-    print('체크1');
     String accessToken = this.accessToken;
-    print('체크2');
-    String url = "${CONVERT_URL}/api/v1/member";
 
-    print('url은 ${url}');
+    String userDeleteUrl = "${CONVERT_URL}/api/v1/member";
+    print('url은 ${userDeleteUrl}');
     print('토큰은 ${accessToken}');
     try {
-      var response = await http.delete(Uri.parse(url), headers: {
+      var response = await http.delete(Uri.parse(userDeleteUrl), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       });
@@ -50,7 +50,7 @@ class UserStore extends ChangeNotifier {
     }
     notifyListeners();
   }
-// 회원탈퇴 종료
+
 
   // 회원 상세정보 가져오기
   Future<void> getUserDetailData(BuildContext context) async {
@@ -62,16 +62,15 @@ class UserStore extends ChangeNotifier {
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
     print("상세정보 요청");
-    var response = await http.get(Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken' : accessToken
-        });
+    var response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+      'accessToken': accessToken
+    });
 
     if (response.statusCode == 200) {
       print('상세정보 통신성공');
       UserDetail = jsonDecode(utf8.decode(response.bodyBytes));
-      print("DetailhData: ${UserDetail}");
+      print("DetailData: ${UserDetail}");
       print('체크3');
     } else {
       print(response.body);
@@ -81,5 +80,4 @@ class UserStore extends ChangeNotifier {
     notifyListeners();
   }
 // 상세정보 종료
-
 }

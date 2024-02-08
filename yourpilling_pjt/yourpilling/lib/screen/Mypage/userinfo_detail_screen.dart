@@ -19,7 +19,7 @@ class UserInfoDetailScreen extends StatefulWidget {
 class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    var userDetailInfo = context.read<UserStore>().UserDetail;
+    var userDetailInfo = context.watch<UserStore>().UserDetail;
     // print('userDetailInfo=' + userDetailInfo["data"]);
 
     return Scaffold(
@@ -95,31 +95,31 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                '${userDetailInfo['email']}',
+                                '${userDetailInfo?['email'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['name']}',
+                                '${userDetailInfo?['name'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['nickname']}',
+                                '${userDetailInfo?['nickname'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['birthday']}',
+                                '${userDetailInfo?['birthday'] ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo['createAt'].substring(0, 10)}',
+                                '${userDetailInfo?['createAt']?.substring(0, 10) ?? 0}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
