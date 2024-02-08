@@ -96,6 +96,15 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   }
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width * 0.9;
     var inputWidth = MediaQuery.of(context).size.width * 0.8;
