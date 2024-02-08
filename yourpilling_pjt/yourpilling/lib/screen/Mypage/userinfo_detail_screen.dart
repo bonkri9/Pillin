@@ -48,6 +48,7 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
             child: BaseContainer(
                 width: 500,
                 height: 25,
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
                   child: Column(
@@ -132,6 +133,7 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                         height: 20,
                       ),
                       BaseContainer(
+                        color: Colors.white,
                         width: 200,
                         height: 50,
                         child: TextButton(
@@ -155,6 +157,7 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                         ),
                       ),
                       BaseContainer(
+                          color: Colors.white,
                           width: 200,
                           height: 50,
                           child: TextButton(

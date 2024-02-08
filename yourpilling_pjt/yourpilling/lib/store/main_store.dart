@@ -15,6 +15,7 @@ class MainStore extends ChangeNotifier {
   var dailyGauge = 0;
   var takenPillIdxList = [];
   var takenOrUnTaken = false;
+  var deadLine = 0;
 
   // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
   getWeeklyData(BuildContext context) async {
@@ -51,7 +52,6 @@ class MainStore extends ChangeNotifier {
     DateTime koreaTime = DateTime.now().add(Duration(hours: 9));
     String dailyUrl = "${CONVERT_URL}/api/v1/pill/history/daily";
 
-
     try {
       var response = await http.get(
           Uri.parse(
@@ -65,6 +65,20 @@ class MainStore extends ChangeNotifier {
         print("일간 복용 기록 수신 성공, 조회 날짜 : " + '$dailyUrl?year=${koreaTime.year}&month=${koreaTime.month}&day=${koreaTime.day}');
 
         dailyData = jsonDecode(utf8.decode(response.bodyBytes))['taken'];
+
+        for (int i = 0; i < dailyData.length; i++) {
+          if (dailyData[i]['actualTakeCount'] == dailyData[i]['needToTakeTotalCount']) {
+            deadLine++;
+          }
+        }
+
+        curCompleteCount = deadLine;
+        deadLine = 0;
+        notifyListeners();
+
+        // 같은 만큼 올라야 하는데 무한랜더링이 되므로
+        //
+
         print("dailyData: $dailyData");
       } else {
         print("일간 복용 기록 조회 실패");
@@ -73,7 +87,7 @@ class MainStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
-    notifyListeners();
+
   }
 
   // 내 영양제 재고

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/component/common/app_bar.dart';
+import 'package:yourpilling/component/common/base_container_noheight.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/Search/search_health_screen.dart';
@@ -134,9 +135,8 @@ class _MiddleTap extends StatelessWidget {
             SizedBox(
               width: 20,
             ),
-            BaseContainer(
+            BaseContainerOnlyWidth(
               width: 170,
-              height: 90,
               child: TextButton(
                 onPressed: () {
                   // TextField에 입력된 텍스트를 출력합니다.
@@ -158,9 +158,8 @@ class _MiddleTap extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            BaseContainer(
+            BaseContainerOnlyWidth(
               width: 170,
-              height: 90,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -191,9 +190,8 @@ class _Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseContainer(
+    return BaseContainerOnlyWidth(
       width: 350,
-      height: 485,
       child: DefaultTabController(
         length: 3, // 탭의 수
         child: Column(

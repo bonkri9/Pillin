@@ -136,6 +136,7 @@ class _SearchResult extends StatelessWidget {
             itemCount: pillList.length,
             itemBuilder: (context, i) {
               return BaseContainer(
+                color: Colors.white,
                 width: 500,
                 height: 190,
                 child: Padding(

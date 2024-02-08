@@ -194,6 +194,7 @@ class _MiddleTab extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
             child: BaseContainer(
+              color: Colors.white,
               width: 50,
               height: 50,
               child: TextButton(
