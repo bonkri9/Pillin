@@ -14,17 +14,19 @@ import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
+
   _Today today = _Today();
+
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   Widget build(BuildContext context) {
-    context.watch<MainStore>().getWeeklyData(context);
+    context.read<MainStore>().getWeeklyData(context);
     context.read<MainStore>().getUserInventory(context);
+    context.read<MainStore>().getDailyData(context);
 
     return Scaffold(
         appBar: MainAppBar(
@@ -168,7 +170,7 @@ class _WeekState extends State<_Week> {
                   calendarStyle: CalendarStyle(
                     outsideDaysVisible: false,
                     todayTextStyle:
-                        TextStyle(color: Colors.red.withOpacity(0.8)),
+                    TextStyle(color: Colors.red.withOpacity(0.8)),
                     weekendTextStyle: TextStyle(color: Colors.grey),
                     defaultTextStyle: TextStyle(color: Colors.grey),
                     todayDecoration: BoxDecoration(
@@ -187,72 +189,72 @@ class _WeekState extends State<_Week> {
                     markersMaxCount: 1,
                   ),
                   calendarBuilders:
-                      CalendarBuilders(markerBuilder: (context, date, events) {
-                      var weekData = context.watch<MainStore>().weekData;
-                      DateTime koreaTime = date.add(Duration(hours: 9));
-                      String month = koreaTime.month.toString().padLeft(2, '0');
-                      String day = koreaTime.day.toString().padLeft(2, '0');
+                  CalendarBuilders(markerBuilder: (context, date, events) {
+                    var weekData = context.watch<MainStore>().weekData;
+                    DateTime koreaTime = date.add(Duration(hours: 9));
+                    String month = koreaTime.month.toString().padLeft(2, '0');
+                    String day = koreaTime.day.toString().padLeft(2, '0');
 
-                      String paramDate = '${date.year}-$month-$day';
+                    String paramDate = '${date.year}-$month-$day';
 
-                      // 현재 날짜에 해당하는 데이터 찾기
-                        var dayData = weekData['data'].firstWhere(
-                              (data) => data['date'] == paramDate,
-                          orElse: () => null,
-                        );
+                    // 현재 날짜에 해당하는 데이터 찾기
+                    var dayData = weekData['data'].firstWhere(
+                          (data) => data['date'] == paramDate,
+                      orElse: () => null,
+                    );
 
-                  if (dayData != null) {
-                    int needToTakenCountToday = dayData['needToTakenCountToday'];
-                    int actualTakenToday = dayData['actualTakenToday'];
+                    if (dayData != null) {
+                      int needToTakenCountToday =
+                      dayData['needToTakenCountToday'];
+                      int actualTakenToday = dayData['actualTakenToday'];
 
-                    double dayGauge = actualTakenToday / needToTakenCountToday;
+                      double dayGauge =
+                          actualTakenToday / needToTakenCountToday;
 
-                    return Positioned(
-                      bottom: 5,
-                      child: SizedBox(
-                        width: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 1),
-                          child: CircleProgressBar(
-                            strokeWidth: 2.6,
-                            foregroundColor: dayGauge == 1
-                                ? fullColor
-                                : dayGauge > 0.5
-                                ? overFiftyColor
-                                : dayGauge == 0.5
-                                ? fiftyColor
-                                : underFiftyColor,
-                            backgroundColor: BASIC_GREY.withOpacity(0.2),
-                            value: dayGauge, // dayGauge
+                      return Positioned(
+                        bottom: 5,
+                        child: SizedBox(
+                          width: 40,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 1),
+                            child: CircleProgressBar(
+                              strokeWidth: 2.6,
+                              foregroundColor: dayGauge == 1
+                                  ? fullColor
+                                  : dayGauge > 0.5
+                                  ? overFiftyColor
+                                  : dayGauge == 0.5
+                                  ? fiftyColor
+                                  : underFiftyColor,
+                              backgroundColor: BASIC_GREY.withOpacity(0.2),
+                              value: dayGauge, // dayGauge
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  } else {
-                    return Positioned(
-                      bottom: 5,
-                      child: SizedBox(
-                        width: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 1),
-                          child: CircleProgressBar(
-                            strokeWidth: 2.6,
-                            foregroundColor: BASIC_GREY.withOpacity(0.2),
-                            backgroundColor: BASIC_GREY.withOpacity(0.2),
-                            value: 0, // dayGauge
+                      );
+                    } else {
+                      return Positioned(
+                        bottom: 5,
+                        child: SizedBox(
+                          width: 40,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 1),
+                            child: CircleProgressBar(
+                              strokeWidth: 2.6,
+                              foregroundColor: BASIC_GREY.withOpacity(0.2),
+                              backgroundColor: BASIC_GREY.withOpacity(0.2),
+                              value: 0, // dayGauge
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }
+                      );
+                    }
                   }),
                 ))
           ],
         ));
   }
 }
-
-
 
 class _Today extends StatefulWidget {
   const _Today({super.key});
@@ -265,14 +267,14 @@ class _TodayState extends State<_Today> {
   // Progress Bar 진행도
   Color btnColor = Colors.redAccent; // 버튼 색상 state
 
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
-    context.read<MainStore>().getDailyData(context); // 오늘 먹을 영양제 목록 [{name, actualTakeCount, needToTakeTotalCount}]
+    // 오늘 먹을 영양제 목록 [{name, actualTakeCount, needToTakeTotalCount}]
     var dailyData = context.watch<MainStore>().dailyData;
-    var curCompleteCount = context.watch<MainStore>().curCompleteCount; // 오늘 현재까지 복용한 영양제 개수
+    var curCompleteCount =
+        context.watch<MainStore>().curCompleteCount; // 오늘 현재까지 복용한 영양제 개수
 
     return BaseContainerOnlyWidth(
         width: containerWidth,
@@ -311,61 +313,65 @@ class _TodayState extends State<_Today> {
               ),
 
               // 여기 패기 추가해야 할 수도
-              dailyData.isEmpty ? Center(
+              dailyData.isEmpty
+                  ? Center(
                 child: Text(
                   "오늘은 섭취할 영양제가 없어요 :)",
                   style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: BASIC_GREY),
+                      fontWeight: FontWeight.w500, color: BASIC_GREY),
                 ),
-              )  : Align(
+              )
+                  : Align(
                 alignment: Alignment.centerRight,
                 child: curCompleteCount != dailyData.length
                     ? Text(
-                        '${(curCompleteCount * 100 / dailyData.length).round()} %',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: BASIC_BLACK),
-                      )
+                  '${(curCompleteCount * 100 / dailyData.length).round()} %',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: BASIC_BLACK),
+                )
                     : Text(
-                        "오늘의 영양 충전 완료 :)",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
-                      ),
+                  "오늘의 영양 충전 완료 :)",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                  ),
+                ),
               ),
               // Progress Bar
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: dailyData.isEmpty ? Container() : dailyData.length == curCompleteCount
+                child: dailyData.isEmpty
+                    ? Container()
+                    : dailyData.length == curCompleteCount
                     ? // 약 모두 다 먹었을 때 초록색 Progress Bar
-                    AnimatedProgressBar(
-                        width: 300,
-                        value: curCompleteCount / dailyData.length,
-                        duration: const Duration(seconds: 1),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Colors.lightGreenAccent,
-                            Colors.greenAccent,
-                          ],
-                        ),
-                        backgroundColor: Colors.grey.withOpacity(0.2),
-                      )
+                AnimatedProgressBar(
+                  width: 300,
+                  value: curCompleteCount / dailyData.length,
+                  duration: const Duration(seconds: 1),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Colors.lightGreenAccent,
+                      Colors.greenAccent,
+                    ],
+                  ),
+                  backgroundColor: Colors.grey.withOpacity(0.2),
+                )
                     : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
-                    AnimatedProgressBar(
-                        width: 320,
-                        // height: 11,
-                            value: curCompleteCount / dailyData.length,
-                      duration: const Duration(seconds: 1),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Colors.orangeAccent,
-                            Colors.redAccent,
-                          ],
-                        ),
-                        backgroundColor: Colors.grey.withOpacity(0.2),
-                      ),
+                AnimatedProgressBar(
+                  width: 320,
+                  // height: 11,
+                  value: curCompleteCount / dailyData.length,
+                  duration: const Duration(seconds: 1),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Colors.orangeAccent,
+                      Colors.redAccent,
+                    ],
+                  ),
+                  backgroundColor: Colors.grey.withOpacity(0.2),
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -405,10 +411,10 @@ class _TodayState extends State<_Today> {
                                         color: BASIC_BLACK,
                                       )),
                                 ),
-                                dailyData[i]['actualTakeCount'] != dailyData[i]['needToTakeTotalCount']// 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
-                                    ?
-
-                                Container(
+                                dailyData[i]['actualTakeCount'] !=
+                                    dailyData[i][
+                                    'needToTakeTotalCount'] // 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
+                                    ? Container(
                                   width: 50,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -420,12 +426,12 @@ class _TodayState extends State<_Today> {
                                         Radius.circular(20)),
                                   ),
                                   child: TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      print('누름');
                                       // 버튼 눌렀을 때 복용 체크, 복용한 영양제 개수 1 증가
-                                      context.read<MainStore>().ownPillId = dailyData[i]['ownPillId'];
-                                      context.read<MainStore>().takePill(context); // 복용 요청하기
 
-                                      if (dailyData.length == curCompleteCount) {
+                                      if (dailyData.length ==
+                                          curCompleteCount) {
                                         btnColor = Colors.greenAccent;
                                       }
                                     },
@@ -441,9 +447,8 @@ class _TodayState extends State<_Today> {
                                         )),
                                   ),
                                 )
-
-                                        : dailyData.length != curCompleteCount ?
-                                Container(
+                                    : dailyData.length != curCompleteCount
+                                    ? Container(
                                   width: 50,
                                   decoration: BoxDecoration(
                                     color: btnColor,
@@ -455,7 +460,15 @@ class _TodayState extends State<_Today> {
                                         Radius.circular(20)),
                                   ),
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      print("완료버튼클릭");
+                                      await context
+                                          .read<MainStore>()
+                                          .takePill(
+                                          context,
+                                          dailyData[i][
+                                          'ownPillId']); // 복용 요청하기
+                                    },
                                     style: ButtonStyle(
                                       padding:
                                       MaterialStateProperty.all(
@@ -470,34 +483,33 @@ class _TodayState extends State<_Today> {
                                         )),
                                   ),
                                 )
-                                    :
-                                Container(
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.greenAccent,
-                                            border: Border.all(
-                                              color: Colors.greenAccent,
-                                              width: 1,
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                          ),
-                                          child: TextButton(
-                                            onPressed: () {},
-                                            style: ButtonStyle(
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      EdgeInsets
-                                                          .zero), // 패딩 없애줘야 함
-                                            ),
-                                            child: Text("완료",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                          ),
-                                        )
+                                    : Container(
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.greenAccent,
+                                    border: Border.all(
+                                      color: Colors.greenAccent,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20)),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    style: ButtonStyle(
+                                      padding:
+                                      MaterialStateProperty.all(
+                                          EdgeInsets
+                                              .zero), // 패딩 없애줘야 함
+                                    ),
+                                    child: Text("완료찌발",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                  ),
+                                )
                               ],
                             ),
                           )),
@@ -540,14 +552,11 @@ class _StockState extends State<_Stock> {
     return restDegreeColor;
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
-    var userInventoryData = context.read<MainStore>().userInventoryData;
+    var userInventoryData = context.watch<MainStore>().userInventoryData;
     return BaseContainer(
         width: containerWidth,
         height: 250,
@@ -587,7 +596,10 @@ class _StockState extends State<_Stock> {
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: userInventoryData.length, // 홈 화면에는 3개까지만 보여주자
+                  itemCount: context
+                      .watch<MainStore>()
+                      .userInventoryData
+                      .length, // 홈 화면에는 3개까지만 보여주자 userInventoryData.length
                   itemBuilder: (context, i) {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -616,7 +628,8 @@ class _StockState extends State<_Stock> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: setColor(userInventoryData[i]['remains'] as int,
+                              color: setColor(
+                                  userInventoryData[i]['remains'] as int,
                                   userInventoryData[i]['totalCount'] as int),
                             ),
                           ),

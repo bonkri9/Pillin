@@ -27,7 +27,7 @@ class UserStore extends ChangeNotifier {
     print('체크1');
     String accessToken = this.accessToken;
     print('체크2');
-    String url = "${CONVERT_URL}/api/v1/login";
+    String url = "${CONVERT_URL}/api/v1/member";
 
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
@@ -57,7 +57,7 @@ class UserStore extends ChangeNotifier {
     print('체크1');
     String accessToken = this.accessToken;
     print('체크2');
-    String url = "${CONVERT_URL}/api/v1/login";
+    String url = "${CONVERT_URL}/api/v1/member";
 
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
