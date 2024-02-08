@@ -14,9 +14,6 @@ import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
-
-  _Today today = _Today();
-
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -54,8 +51,9 @@ class _Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    Duration koreaOffset = Duration(hours: 9);
-    DateTime koreaTime = now.add(koreaOffset);
+    // Duration koreaOffset = Duration(hours: 9);
+    // DateTime koreaTime = now.add(koreaOffset);
+    DateTime koreaTime = now;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
       child: Row(
@@ -77,7 +75,7 @@ class _Welcome extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 140),
+            padding: EdgeInsets.only(left: 120),
             child: Text(
               ' ${koreaTime.month}월 ${koreaTime.day}일',
               style: TextStyle(
@@ -113,6 +111,7 @@ class _WeekState extends State<_Week> {
 
     return BaseContainer(
         width: containerWidth,
+        color: Colors.white,
         height: 160,
         child: Column(
           children: [
@@ -558,6 +557,7 @@ class _StockState extends State<_Stock> {
     double containerWidth = screenWidth * 0.9; // 화면의 90%
     var userInventoryData = context.watch<MainStore>().userInventoryData;
     return BaseContainer(
+      color: Colors.white,
         width: containerWidth,
         height: 250,
         child: Column(

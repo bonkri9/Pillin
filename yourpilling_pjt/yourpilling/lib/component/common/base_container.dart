@@ -3,8 +3,9 @@ import 'package:yourpilling/const/colors.dart';
 
 class BaseContainer extends StatelessWidget {
   final double width, height;
+  final Color color;
   final Widget child;
-  const BaseContainer({super.key, required this.width, required this.height, required this.child});
+  const BaseContainer({super.key, required this.width, required this.height, required this.color, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class BaseContainer extends StatelessWidget {
     return Container (
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: color,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
             width: 0.1,

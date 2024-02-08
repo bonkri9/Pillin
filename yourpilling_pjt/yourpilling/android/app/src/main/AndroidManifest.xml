@@ -23,6 +23,7 @@
         </intent>
     </queries>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:label="yourpilling"
         android:name="${applicationName}"

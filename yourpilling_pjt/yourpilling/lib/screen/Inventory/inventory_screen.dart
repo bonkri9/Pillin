@@ -5,14 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:input_quantity/input_quantity.dart';
-import 'package:provider/provider.dart';
-import 'package:yourpilling/component/common/angle_container.dart';
-import 'package:yourpilling/component/common/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/Search/search_pill_detail.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:yourpilling/store/inventory_store.dart';
-import '../../store/user_store.dart';
 import '../../component/common/base_container.dart';
 import '../../component/common/app_bar.dart';
 import 'detail_inventory.dart';
@@ -170,6 +164,7 @@ class _InventoryContentState extends State<_InventoryContent> {
     }
 
     return BaseContainer(
+      color: Colors.white,
       width: 400,
       height: 600,
       child: DefaultTabController(
@@ -1028,4 +1023,3 @@ class _UntakenTabState extends State<_UntakenTab> {
     );
   }
 }
-

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:yourpilling/const/colors.dart';
 import 'dart:convert';
 
 import '../../store/user_store.dart';
@@ -20,26 +21,33 @@ class _KakaoLoginState extends State<KakaoLogin> {
   @override
   Widget build(BuildContext context) {
     _context = context;
+    var inputWidth = MediaQuery.of(context).size.width * 0.82;
     return InkWell(
       onTap: () {
         signInWithKakao(context);
       },
 //thing to do
 
-      child: Card(
-        margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-        elevation: 2,
-        child: Container(
-          height: 50,
+      child: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/image/kakao_login_medium_wide.png'),
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.yellow.withOpacity(0.95),
+          ),
+
+          width: inputWidth,
+          height: 55,
+          child: TextButton(
+            onPressed: () {signInWithKakao(context);},
+            child: Row(
+              children: [
+                SizedBox(width: 5,),
+                Icon(Icons.chat_bubble, color: BASIC_BLACK),
+                SizedBox(width: 85,),
+                Text("카카오 로그인", style: TextStyle(color: BASIC_BLACK.withOpacity(0.8), fontWeight: FontWeight.w500, fontSize: 15),),
+              ],
             ),
-            borderRadius: BorderRadius.circular(7),
-          ), // BoxDecoration
-        ), //
+
+          )
       ),
     );
 
