@@ -134,7 +134,7 @@ class _MiddleTap extends StatelessWidget {
             SizedBox(
               width: 20,
             ),
-            BaseContainer(
+            Container(
               width: 170,
               height: 90,
               child: TextButton(
@@ -158,7 +158,7 @@ class _MiddleTap extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            BaseContainer(
+            Container(
               width: 170,
               height: 90,
               child: TextButton(
@@ -191,7 +191,7 @@ class _Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseContainer(
+    return Container(
       width: 350,
       height: 485,
       child: DefaultTabController(

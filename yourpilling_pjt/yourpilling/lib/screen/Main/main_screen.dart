@@ -111,7 +111,7 @@ class _WeekState extends State<_Week> {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
 
-    return BaseContainer(
+    return Container(
         width: containerWidth,
         height: 160,
         child: Column(
@@ -557,7 +557,7 @@ class _StockState extends State<_Stock> {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
     var userInventoryData = context.watch<MainStore>().userInventoryData;
-    return BaseContainer(
+    return Container(
         width: containerWidth,
         height: 250,
         child: Column(

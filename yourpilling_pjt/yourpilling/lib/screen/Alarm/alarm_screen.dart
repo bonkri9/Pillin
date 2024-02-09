@@ -237,7 +237,7 @@ class PillItem extends StatefulWidget {
 class _PillItemState extends State<PillItem> {
   @override
   Widget build(BuildContext context) {
-    return BaseContainer(
+    return Container(
       width: 500,
       height: 200,
       child: Padding(

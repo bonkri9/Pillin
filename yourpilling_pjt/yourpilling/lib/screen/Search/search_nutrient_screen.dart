@@ -193,7 +193,7 @@ class _MiddleTab extends StatelessWidget {
         children: nutrientList.map((nutrient) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-            child: BaseContainer(
+            child: Container(
               width: 50,
               height: 50,
               child: TextButton(

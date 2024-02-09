@@ -37,9 +37,9 @@ class AnalysisReportStore extends ChangeNotifier {
 
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
-        essentialNutrientDataList = listAll["essentialNutrientDataList"];
+        essentialNutrientDataList = listAll["essentialNutrientsDataList"];
         essentialNutrientDataLisLength = essentialNutrientDataList.length;
-        print("essentialNutrientDataList: ${essentialNutrientDataList}");
+        print("essentialNutrientDataList: $essentialNutrientDataList");
         print("이게 필수 길이: $essentialNutrientDataLisLength");
       } else {
         print(response.body);
