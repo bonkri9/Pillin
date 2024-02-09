@@ -4,6 +4,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/const/url.dart';
 import 'dart:convert';
 
 import '../../store/user_store.dart';
@@ -98,17 +99,20 @@ class _KakaoLoginState extends State<KakaoLogin> {
 // 통신추가
   Future<void> GiveKakaoToken(token,context) async {
     // 반환 타입을 'Future<void>'로 변경합니다
-    print("카카오엑세스토큰 전달");
+    print("카카오에서 받은 토큰");
     print(token);
-    var response = await http.post(Uri.parse('https://i10b101.p.ssafy.io/api/v1/login/oauth2/kakao'),
+    print("주소출력완료");
+    var response = await http.post(Uri.parse('${CONVERT_URL}/login/oauth2/kakao'),
         headers: {
           'Content-Type': 'application/json',
         },body: json.encode({
           'token' : token,
         }));
-    print('카카오 토큰 ${token}');
+    print("돼지");
+    print('카카오에서 받은 토큰 ${token}');
     print('체크1');
     print(response.body);
+    print('체크1');
     if (response.statusCode == 200) {
       print('카카오토큰을 성공적으로 우리 토큰으로 변한걸 보내고 받음');
       print('변환해서 받은 값 ${response.headers['accesstoken']}');

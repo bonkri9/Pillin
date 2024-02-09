@@ -24,15 +24,14 @@ void main() async {
   // 비동기선언
   // 위젯이 플러터 바인딩 보장이 초기화되었다고 말해야 이 함수를 비동기로 사용이 가능
   WidgetsFlutterBinding.ensureInitialized();
-  Intl.defaultLocale = 'ko_KR';
-  // 시간 초기화를 위해 NTP(Network Time Protocol)를 사용
-
   // runApp() 충돌전 Flutter SDK 초기화
   KakaoSdk.init(
-    nativeAppKey: 'e1c9adc33e833845258363a8b6f9d393',
-    javaScriptAppKey: 'af8f3d2b420f022a8ab3b7f2c29cdd42',
+    nativeAppKey: '7c21f22cbe067e3f41623266b8dab1e5',
+    javaScriptAppKey: '0e507984778d791a08a9585a7a88ff5e',
   );
 
+  Intl.defaultLocale = 'ko_KR';
+  // 시간 초기화를 위해 NTP(Network Time Protocol)를 사용
 
   // Firebase가 앱을 초기화할때까지 기다릴 수있음
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -47,9 +46,7 @@ void main() async {
           ChangeNotifierProvider(create: (c) => InventoryStore()),// AnotherStore 추가
           ChangeNotifierProvider(create: (c) => RecordStore()),// AnotherStore 추가
           ChangeNotifierProvider(create: (c) => SearchRepository()),
-
           ChangeNotifierProvider(create: (c) => RankingStore()),
-
           ChangeNotifierProvider(create: (c) => AnalysisReportStore()),
 
           // 필요한 만큼 ChangeNotifierProvider를 추가하시면 됩니다.
