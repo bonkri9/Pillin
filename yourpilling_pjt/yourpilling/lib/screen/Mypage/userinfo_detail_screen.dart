@@ -45,7 +45,7 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
             ],
           ),
           Expanded(
-            child: BaseContainer(
+            child: Container(
                 width: 500,
                 height: 25,
                 color: Colors.white,
@@ -132,8 +132,10 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                       SizedBox(
                         height: 20,
                       ),
+
                       BaseContainer(
                         color: Colors.white,
+
                         width: 200,
                         height: 50,
                         child: TextButton(
@@ -156,8 +158,10 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                           ),
                         ),
                       ),
+
                       BaseContainer(
                           color: Colors.white,
+
                           width: 200,
                           height: 50,
                           child: TextButton(

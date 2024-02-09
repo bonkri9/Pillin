@@ -10,8 +10,8 @@ import '../const/url.dart';
 
 class InventoryStore extends ChangeNotifier {
   var takeYnListData;
-  List get takeTrueListData => takeYnListData['takeTrue']['data'];
-  List get takeFalseListData => takeYnListData['takeFalse']['data'];
+  List get takeTrueListData => takeYnListData?['takeTrue']?['data'] ?? [];
+  List get takeFalseListData => takeYnListData?['takeFalse']?['data'] ?? [];
   var remains;
   var totalCount;
   var ownPillId;

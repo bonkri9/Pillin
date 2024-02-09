@@ -12,7 +12,7 @@ import '../../component/common/app_bar.dart';
 import 'detail_inventory.dart';
 
 void loadData(BuildContext context) {
-  context.watch<InventoryStore>().getTakeYnListData(context);
+  context.read<InventoryStore>().getTakeYnListData(context);
 }
 
 class Inventory extends StatefulWidget {
@@ -64,6 +64,8 @@ class _InventoryState extends State<Inventory> {
   }
 }
 
+
+
 //재고 상단
 class _InventoryUpper extends StatefulWidget {
   const _InventoryUpper({super.key});
@@ -74,6 +76,10 @@ class _InventoryUpper extends StatefulWidget {
 
 //재고 상단
 class _InventoryUpperState extends State<_InventoryUpper> {
+
+  void loadData(BuildContext context) {
+    context.read<InventoryStore>().getTakeYnListData(context);
+  }
   @override
   Widget build(BuildContext context) {
     var takeListData = context.read<InventoryStore>().takeYnListData;
@@ -119,6 +125,10 @@ class _InventoryContent extends StatefulWidget {
 }
 
 class _InventoryContentState extends State<_InventoryContent> {
+  void loadData(BuildContext context) {
+    context.read<InventoryStore>().getTakeYnListData(context);
+  }
+
   var pillId;
   var takeYn;
   var remains;
@@ -164,8 +174,10 @@ class _InventoryContentState extends State<_InventoryContent> {
       print(totalCount);
     }
 
+
     return BaseContainer(
       color: Colors.white,
+
       width: 400,
       height: 600,
       child: DefaultTabController(
@@ -227,6 +239,10 @@ class _TakenTab extends StatefulWidget {
 }
 
 class _TakenTabState extends State<_TakenTab> {
+
+  void loadData(BuildContext context) {
+    context.read<InventoryStore>().getTakeYnListData(context);
+  }
   //바로바로 렌더링되게 함
   @override
   void didChangeDependencies() {
