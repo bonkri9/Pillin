@@ -1,5 +1,7 @@
 package com.ssafy.yourpiliing.presentation.retrofit.weekly
 
-data class WeeklyResponse (
-    val data : List<WeeklyResponseItem>
+import com.google.gson.annotations.SerializedName
+
+data class WeeklyResponse(
+    val data: MutableList<WeeklyResponseItem>
 )

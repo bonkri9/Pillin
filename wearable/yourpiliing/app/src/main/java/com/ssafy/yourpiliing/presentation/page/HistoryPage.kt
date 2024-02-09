@@ -56,7 +56,7 @@ fun HistoryPage(navController: NavController, historyViewModel : HistoryViewMode
         ) {
             when (dailyHistoryState) {
                 is DailyHistoryState.Loading -> {
-                    // TODO: 로딩중 메시지 띄우기
+                    //TODO: 로딩중 메시지 띄우기
                 }
 
                 is DailyHistoryState.Success -> {
@@ -82,7 +82,7 @@ fun HistoryPage(navController: NavController, historyViewModel : HistoryViewMode
                 }
 
                 is DailyHistoryState.Failure -> {
-                    // TODO: 실패 메시지 띄우기
+                    //TODO: 실패 메시지 띄우기
                 }
             }
         }

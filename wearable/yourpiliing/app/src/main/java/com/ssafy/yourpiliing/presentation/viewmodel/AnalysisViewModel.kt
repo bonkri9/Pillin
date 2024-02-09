@@ -28,7 +28,7 @@ class AnalysisViewModel : ViewModel() {
 
         val analysisService = request(accessToken).create(AnalysisService::class.java)
 
-        analysisService.analysis(2103).enqueue(object : Callback<AnalysisResponse> {
+        analysisService.analysis().enqueue(object : Callback<AnalysisResponse> {
             override fun onResponse(
                 call: Call<AnalysisResponse>,
                 response: Response<AnalysisResponse>
@@ -38,13 +38,13 @@ class AnalysisViewModel : ViewModel() {
                         _analysisState.value = AnalysisState.Success(response.body()!!)
                     }
                 } else {
-                    //_analysisState.value = AnalysisState.Failure("분석 정보를 가져오지 못했습니다.")
+                    _analysisState.value = AnalysisState.Failure("분석 정보를 가져오지 못했습니다.")
                 }
             }
 
             override fun onFailure(call: Call<AnalysisResponse>, t: Throwable) {
-//                _analysisState.value =
-//                    AnalysisState.Failure("네트워크 혹은 시스템에 문제가 발생해 분석 정보를 가져오지 못했습니다.")
+                _analysisState.value =
+                    AnalysisState.Failure("네트워크 혹은 시스템에 문제가 발생해 분석 정보를 가져오지 못했습니다.")
             }
         })
     }

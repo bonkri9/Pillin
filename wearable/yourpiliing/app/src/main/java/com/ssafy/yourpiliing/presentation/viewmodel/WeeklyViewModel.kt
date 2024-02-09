@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import com.ssafy.yourpiliing.presentation.retrofit.TokenInterceptor
 import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyResponse
+import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyResponseItem
 import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyService
 import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,25 +15,32 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
 
 class WeeklyViewModel : ViewModel() {
     private val _weeklySate = MutableStateFlow<WeeklyState>(WeeklyState.Loading)
-    val weeklyState : StateFlow<WeeklyState> = _weeklySate
+    val weeklyState: StateFlow<WeeklyState> = _weeklySate
 
-    fun weekly(sharedPreferences: SharedPreferences){
+    fun weekly(sharedPreferences: SharedPreferences) {
         val accessToken = sharedPreferences.getString("accessToken", null);
 
         if (accessToken == null) return
 
         val weeklyService = request(accessToken).create(WeeklyService::class.java)
 
-        weeklyService.weekly().enqueue(object : Callback<WeeklyResponse>{
+        weeklyService.weekly().enqueue(object : Callback<WeeklyResponse> {
             override fun onResponse(
                 call: Call<WeeklyResponse>,
                 response: Response<WeeklyResponse>
             ) {
                 if (response.isSuccessful) {
-                    _weeklySate.value = WeeklyState.Success(response.body()!!);
+                    if(response.body() != null){
+                        val body = response.body()!!.data
+                        addEmptyDate(body)
+                        _weeklySate.value = WeeklyState.Success(body)
+                    }
                 } else {
                     _weeklySate.value = WeeklyState.Failure("주간 기록을 가져오지 못했습니다! 다시 시도해 주세요.");
                 }
@@ -55,5 +63,27 @@ class WeeklyViewModel : ViewModel() {
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
             .build()
+    }
+
+    // 이번주의 날 중 포함되어 있지 않으면 추가
+    private fun addEmptyDate(body : MutableList<WeeklyResponseItem>){
+        // 주의 시작일 계산
+        val startOfWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        // 주의 종료일 계산
+        val endOfWeek = startOfWeek.plusDays(6)
+
+        var day = startOfWeek
+        while (day.isBefore(endOfWeek) || day.isEqual(endOfWeek)) {
+            val dayString = day.toString()
+
+            val isContainDate = body.any { it.date == dayString }
+            if(!isContainDate){
+                body.add(WeeklyResponseItem(dayString, 0, 0))
+            }
+
+            day = day.plusDays(1)
+        }
+
+        body.sortBy { it.date }
     }
 }
