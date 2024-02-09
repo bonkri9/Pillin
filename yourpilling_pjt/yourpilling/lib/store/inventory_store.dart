@@ -22,7 +22,7 @@ class InventoryStore extends ChangeNotifier {
 
   //복용하는 영양제 전체 리스트 데이터 가져오기
   Future<void> getTakeYnListData(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     // const String takeYnListUrl =
     //     'https://i10b101.p.ssafy.io/api/v1/pill/inventory/list';
 
@@ -44,6 +44,7 @@ class InventoryStore extends ChangeNotifier {
 
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
+        print("takeList데이터는? ${takeYnListData['takeFalse']["data"]}");
         length = takeTrueListData.length;
       } else {
         // print(response.body);
