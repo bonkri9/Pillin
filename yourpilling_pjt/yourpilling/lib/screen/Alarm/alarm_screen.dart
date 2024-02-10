@@ -1,12 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/store/inventory_store.dart';
+import '../../api/firebase_api.dart';
 import '../../component/common/app_bar.dart';
 import '../../component/common/base_container.dart';
 import '../../const/colors.dart';
+import '../../firebase_options.dart';
 import '../../store/alarm_store.dart';
 
 // 시간 등록
@@ -51,8 +54,7 @@ Future<void> _selectTime(
 }
 
 // 시간 수정
-Future<void> _updateTime(
-    BuildContext context, int id) async {
+Future<void> _updateTime(BuildContext context, int id) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -91,10 +93,8 @@ Future<void> _updateTime(
   await context.read<AlarmStore>().getPushAlarm(context);
 }
 
-
 // 요일 입력
-Future<void> _weekRoutine(
-    BuildContext context, int index) async {
+Future<void> _weekRoutine(BuildContext context, int index) async {
   List<bool> selectedDays = List<bool>.filled(7, true); // 새로운 요일 리스트를 초기화합니다.
   await showDialog(
     context: context,
@@ -182,7 +182,6 @@ class AlarmScreen extends StatelessWidget {
   }
 }
 
-
 class _List extends StatefulWidget {
   const _List({super.key});
 
@@ -236,19 +235,48 @@ class _ListState extends State<_List> {
                         ],
                       ),
                       IconButton(
-                          onPressed: () {
-                            _selectTime(
-                                context,
-                                context.read<AlarmStore>().AlarmList[idx]
-                                ['ownPillId'],
-                                context.read<AlarmStore>().AlarmList[idx]
-                                ['pillName']);
+                          onPressed: () async {
+                            try {
+                              await Firebase.initializeApp(
+                                  options:
+                                      DefaultFirebaseOptions.currentPlatform);
+                              await FirebaseApi()
+                                  .initNotifications(context); // 알람을 초기화함
+                              _selectTime(
+                                  context,
+                                  context.read<AlarmStore>().AlarmList[idx]
+                                      ['ownPillId'],
+                                  context.read<AlarmStore>().AlarmList[idx]
+                                      ['pillName']);
+                            } catch (e) {
+                              // 에러 처리 부분
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("경고"),
+                                    content: Text("권한을 허용하지 않으면 등록할 수 없어요"),
+                                    actions: [
+                                      TextButton(
+                                        child: Text("닫기"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
                           },
                           icon: Icon(Icons.add)),
                     ],
                   ), // 컨테이너의 윗부분
-                  _Bottom(idx: idx, ownPillId: context.read<AlarmStore>().AlarmList[idx]
-                  ['ownPillId'],),
+                  _Bottom(
+                    idx: idx,
+                    ownPillId: context.read<AlarmStore>().AlarmList[idx]
+                        ['ownPillId'],
+                  ),
                   //절취선
 
                   // 절취선 종료
@@ -260,11 +288,10 @@ class _ListState extends State<_List> {
   }
 }
 
-
-
 class _Bottom extends StatefulWidget {
   final int idx;
   final int ownPillId;
+
   const _Bottom({super.key, required this.idx, required this.ownPillId});
 
   @override
@@ -286,50 +313,50 @@ class _BottomState extends State<_Bottom> {
       }
       return matchedData.isNotEmpty
           ? Expanded(
-        child: ListView.builder(
-          itemCount: matchedData.length,
-          itemBuilder: (context, index) {
-            var data = matchedData[index];
-            return ListTile(
-              title: Row(
-                children: List<Widget>.generate(7, (int day) {
-                  var days = data['days'];
-                  return Text(
-                    ['월', '화', '수', '목', '금', '토', '일'][day],
-                    style: TextStyle(
-                      color: days[day] ? HOT_PINK : BASIC_BLACK,
+              child: ListView.builder(
+                itemCount: matchedData.length,
+                itemBuilder: (context, index) {
+                  var data = matchedData[index];
+                  return ListTile(
+                    title: Row(
+                      children: List<Widget>.generate(7, (int day) {
+                        var days = data['days'];
+                        return Text(
+                          ['월', '화', '수', '목', '금', '토', '일'][day],
+                          style: TextStyle(
+                            color: days[day] ? HOT_PINK : BASIC_BLACK,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    subtitle: Text("${data['hour']}시 ${data['minute']}분"),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () {
+                            // TODO: 수정 로직을 넣어주세요.
+                            _updateTime(context, data['pushId']);
+                          },
+                          icon: Icon(Icons.edit), // 수정 아이콘 추가
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await context
+                                .read<AlarmStore>()
+                                .deletePushAlarm(context, data['pushId']);
+                          },
+                          icon: Icon(Icons.delete),
+                        ),
+                      ],
                     ),
                   );
-                }).toList(),
+                },
               ),
-              subtitle: Text("${data['hour']}시 ${data['minute']}분"),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      // TODO: 수정 로직을 넣어주세요.
-                      _updateTime(
-                          context,data['pushId']);
-                    },
-                    icon: Icon(Icons.edit),  // 수정 아이콘 추가
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      await context.read<AlarmStore>().deletePushAlarm(context, data['pushId']);
-                    },
-                    icon: Icon(Icons.delete),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      )
+            )
           : Container(
-        child: Text("알람을 추가해주세요"),
-      ); // 'pushData'가 null이거나 'matchedData'가 비어있을 때 반환할 위젯
+              child: Text("알람을 추가해주세요"),
+            ); // 'pushData'가 null이거나 'matchedData'가 비어있을 때 반환할 위젯
     });
   }
 }
-

@@ -52,8 +52,8 @@ class AlarmStore extends ChangeNotifier {
         // print(response.body);
         // InventoryStore에 응답 저장
         var tmp = jsonDecode(utf8.decode(response.bodyBytes));
-        AlarmList = tmp['takeFalse']["data"];
-        print("저장한 알람 데이터는?? ${AlarmList['takeFalse']["data"]}");
+        AlarmList = tmp['takeTrue']["data"];
+        print("저장한 알람 데이터는?? ${AlarmList['takeTrue']["data"]}");
       } else {
         // print(response.body);
         print("재고 복용 목록 get 수신 실패");

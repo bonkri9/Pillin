@@ -35,8 +35,8 @@ void main() async {
   // 시간 초기화를 위해 NTP(Network Time Protocol)를 사용
 
   // Firebase가 앱을 초기화할때까지 기다릴 수있음
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseApi().initNotifications(); // 알람을 초기화함
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await FirebaseApi().initNotifications(); // 알람을 초기화함
 
   initializeDateFormatting().then((_) => runApp(
       MultiProvider(
