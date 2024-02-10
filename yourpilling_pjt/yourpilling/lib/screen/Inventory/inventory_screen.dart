@@ -19,6 +19,8 @@ class InventoryScreen extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     var userName = context.watch<UserStore>().userName;
     context.read<InventoryStore>().getTakeYnListData(context);
+    // context.watch<InventoryStore>().takeFalseListData;
+    // context.watch<InventoryStore>().takeTrueListData;
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: AppBar(

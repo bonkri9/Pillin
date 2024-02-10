@@ -10,8 +10,10 @@ import '../const/url.dart';
 
 class InventoryStore extends ChangeNotifier {
   var takeYnListData;
-  List get takeTrueListData => takeYnListData?['takeTrue']?['data'] ?? [];
-  List get takeFalseListData => takeYnListData?['takeFalse']?['data'] ?? [];
+  late List takeTrueListData = [];
+  late List takeFalseListData = [];
+  //=> takeFalseListData = takeYnListData?['takeFalse']?['data'] ?? [];
+  // takeFalseListData = takeYnListData?['takeTrue']?['data'] ?? [];
   var remains;
   var totalCount;
   var ownPillId;
@@ -21,7 +23,7 @@ class InventoryStore extends ChangeNotifier {
 
   //복용하는 영양제 전체 리스트 데이터 가져오기
   getTakeYnListData(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
 
     try {
@@ -36,9 +38,12 @@ class InventoryStore extends ChangeNotifier {
 
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
+        takeTrueListData = takeYnListData?['takeTrue']?['data'] ?? [];
+        print("ture");
         print(takeTrueListData);
+        takeFalseListData = takeYnListData?['takeFalse']?['data'] ?? [];
+        print("false");
         print(takeFalseListData);
-        notifyListeners();
       } else {
         // print(response.body);
         print("재고 복용 목록 get 수신 실패");
@@ -46,12 +51,13 @@ class InventoryStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
+    notifyListeners();
   }
 
   //재고 수정
   Future<void> reviseInven(
       BuildContext context, var ownPillId, var remains, var totalCount) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String reviseUrl = "${CONVERT_URL}/api/v1/pill/inventory";
 
 
@@ -82,7 +88,7 @@ class InventoryStore extends ChangeNotifier {
 
   //재고 상세 조회
   Future<void> getPillDetailData(BuildContext context, var ownPillId) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String invenDetailUrl = "${CONVERT_URL}/api/v1/pill/inventory";
     try {
       var response = await http
@@ -129,12 +135,13 @@ class InventoryStore extends ChangeNotifier {
         // print(response.body);
 
         // InventoryStore에 응답 저장
-        takeYnData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        notifyListeners();
+        // takeYnData = jsonDecode(utf8.decode(response.bodyBytes));
+        print("체크1");
+        await context.read<InventoryStore>().getTakeYnListData(context);
         // takeTrueListData = takeYnListData['takeTrue']['data'];
         // return takeTrueListData;
         // print(takeYnData);
+        notifyListeners();
       } else {
         // print(response.body);
         print("재고 복용 전환 put 수신 실패");
@@ -142,7 +149,6 @@ class InventoryStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
-    notifyListeners();
   }
 
   //재고 등록

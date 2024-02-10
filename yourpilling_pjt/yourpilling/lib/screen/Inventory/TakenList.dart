@@ -14,6 +14,7 @@ class TakenList extends StatefulWidget {
 class _TakenListState extends State<TakenList> {
   @override
   Widget build(BuildContext context) {
+    var tmp = context.watch<InventoryStore>().takeYnListData;
     var takeTrueList = context.watch<InventoryStore>().takeTrueListData;
     var screenWidth = MediaQuery.of(context).size.width * 0.91;
     var imageWidth = MediaQuery.of(context).size.width * 0.3;
