@@ -1,5 +1,6 @@
 package com.ssafy.yourpiliing.presentation.page
 
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +31,7 @@ fun MainPage(
     analysisViewModel: AnalysisViewModel,
     takeOwnPillViewModel: TakeOwnPillViewModel,
     historyViewModel: HistoryViewModel,
-    weeklyViewModel: WeeklyViewModel,
+    weeklyViewModel: WeeklyViewModel
 ) {
     Box(
         modifier = Modifier
@@ -45,9 +46,12 @@ fun MainPage(
                     historyViewModel = historyViewModel,
                     takeOwnPillViewModel = takeOwnPillViewModel
                 )
-
-                1 -> AnalysisPage(analysisViewModel = analysisViewModel)
-                2 -> WeeklyPage(weeklyViewModel = weeklyViewModel)
+                1 -> AnalysisPage(
+                    analysisViewModel = analysisViewModel
+                )
+                2 -> WeeklyPage(
+                    weeklyViewModel = weeklyViewModel
+                )
             }
         }
         Row(

@@ -1,6 +1,7 @@
 package com.ssafy.yourpilling.presentation.page
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,7 @@ import com.ssafy.yourpiliing.presentation.viewmodel.LoginViewModel
 import com.ssafy.yourpilling.presentation.retrofit.login.LoginRequest
 
 @Composable
-fun LoginPage(navController: NavController, loginViewModel: LoginViewModel) {
+fun LoginPage(navController: NavController, loginViewModel: LoginViewModel, context: Context) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
@@ -72,25 +73,22 @@ fun LoginPage(navController: NavController, loginViewModel: LoginViewModel) {
             Button(
                 onClick = {
                     val request = LoginRequest(email.value, password.value)
-                    loginViewModel.login(request, sharedPreferences)
+                    loginViewModel.login(request, sharedPreferences) { isSuccess, message ->
+                        if(!isSuccess){
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             ) {
                 Text("로그인")
             }
 
             when (loginState) {
-                is LoginState.Loading -> {
-                    // TODO: 로딩중 메시지 띄우기
-                }
-
                 is LoginState.Success -> {
-                    // Pill 화면으로 이동
                     navController.navigate("main")
                 }
 
-                is LoginState.Failure -> {
-                    // TODO: 실패 메시지 띄우기
-                }
+                else->{}
             }
         }
     }

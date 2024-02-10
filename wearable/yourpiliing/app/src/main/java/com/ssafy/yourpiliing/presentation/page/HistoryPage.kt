@@ -1,7 +1,6 @@
 package com.ssafy.yourpiliing.presentation.page
 
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,11 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.wear.compose.material.Scaffold
 import com.ssafy.yourpiliing.presentation.component.TitleCard
 import com.ssafy.yourpiliing.presentation.retrofit.dailyhistory.DailyHistoryState
 import com.ssafy.yourpiliing.presentation.retrofit.take.TakeOwnPillState
@@ -30,19 +26,23 @@ import com.ssafy.yourpiliing.presentation.viewmodel.HistoryViewModel
 import com.ssafy.yourpiliing.presentation.viewmodel.TakeOwnPillViewModel
 
 @Composable
-fun HistoryPage(historyViewModel : HistoryViewModel, takeOwnPillViewModel : TakeOwnPillViewModel) {
+fun HistoryPage(historyViewModel : HistoryViewModel,
+                takeOwnPillViewModel : TakeOwnPillViewModel
+) {
     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
 
     val dailyHistoryState by historyViewModel.dailyHistoryState.observeAsState(DailyHistoryState.Loading)
-    val takeOwnPillState by takeOwnPillViewModel.takeOwnPillState.collectAsState(TakeOwnPillState.Loading) // 영양제 복용 클릭
+    val takeOwnPillState by takeOwnPillViewModel.takeOwnPillState.collectAsState(TakeOwnPillState.Loading)
 
     // 화면 접근시 첫 출력을 위해 사용
     LaunchedEffect(Unit) {
         historyViewModel.dailyHistory(sharedPreferences)
     }
 
+    // 복용 버튼 클릭시 리컴포즈
     LaunchedEffect(takeOwnPillState is TakeOwnPillState.Success) {
         historyViewModel.dailyHistory(sharedPreferences)
+        historyViewModel.resetState() // 제거하면 한 번만 리컴포즈 됨
     }
 
     Box(
@@ -69,7 +69,7 @@ fun HistoryPage(historyViewModel : HistoryViewModel, takeOwnPillViewModel : Take
                     ) {
                         for (data in datas) {
                             TitleCard(
-                                title = data.name,
+                                title = "${data.name}(${data.actualTakeCount}/${data.needToTakeTotalCount})",
                                 ownPillId = data.ownPillId,
                                 needToTakeTotalCount = data.needToTakeTotalCount,
                                 actualTakeCount = data.actualTakeCount,

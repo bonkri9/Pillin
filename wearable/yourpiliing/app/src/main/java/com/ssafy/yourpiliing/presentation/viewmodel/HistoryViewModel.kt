@@ -51,4 +51,8 @@ class HistoryViewModel : ViewModel() {
                 }
             })
     }
+
+    fun resetState(){
+        _dailyHistoryState.value = DailyHistoryState.Loading
+    }
 }

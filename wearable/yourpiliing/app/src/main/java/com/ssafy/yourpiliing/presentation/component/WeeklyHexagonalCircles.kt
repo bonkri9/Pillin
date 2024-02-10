@@ -38,7 +38,7 @@ fun WeeklyHexagonalCircles(
     LaunchedEffect(animateFloat) {
         animateFloat.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
+            animationSpec = tween(durationMillis = 1500, easing = LinearEasing)
         )
     }
 
@@ -78,7 +78,7 @@ fun WeeklyHexagonalCircles(
             drawArc(
                 color = calculateColor(ratio),
                 startAngle = startAngle,
-                sweepAngle = 360f * ratio,
+                sweepAngle = 360f * ratio * animateFloat.value,
                 useCenter = false,
                 topLeft = Offset(center.x - radius, center.y - radius),
                 size = Size(radius * 2, radius * 2),
@@ -115,7 +115,7 @@ fun WeeklyHexagonalCircles(
                 drawArc(
                     color = calculateColor(ratio),
                     startAngle = startAngle,
-                    sweepAngle = 360f * calRatio((data[index+1])),
+                    sweepAngle = 360f * calRatio((data[index+1])) * animateFloat.value,
                     useCenter = false,
                     topLeft = Offset(point.x - radius, point.y - radius), // 수정된 topLeft
                     size = Size(radius * 2, radius * 2),

@@ -3,6 +3,7 @@ package com.ssafy.yourpiliing.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -33,7 +34,11 @@ class MainActivity : ComponentActivity() {
                 startDestination = "login"
             ) {
                 composable("login") {
-                    LoginPage(navController = navController, loginViewModel = loginViewModel)
+                    LoginPage(
+                        navController = navController,
+                        loginViewModel = loginViewModel,
+                        context = LocalContext.current
+                    )
                 }
                 composable("main") {
                     MainPage(
