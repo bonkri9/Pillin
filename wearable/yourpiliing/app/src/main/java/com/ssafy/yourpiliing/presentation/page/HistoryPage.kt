@@ -30,7 +30,7 @@ import com.ssafy.yourpiliing.presentation.viewmodel.HistoryViewModel
 import com.ssafy.yourpiliing.presentation.viewmodel.TakeOwnPillViewModel
 
 @Composable
-fun HistoryPage(navController: NavController, historyViewModel : HistoryViewModel, takeOwnPillViewModel : TakeOwnPillViewModel) {
+fun HistoryPage(historyViewModel : HistoryViewModel, takeOwnPillViewModel : TakeOwnPillViewModel) {
     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
 
     val dailyHistoryState by historyViewModel.dailyHistoryState.observeAsState(DailyHistoryState.Loading)

@@ -88,7 +88,7 @@ fun LoginPage(navController: NavController, loginViewModel: LoginViewModel) {
 
                 is LoginState.Success -> {
                     // Pill 화면으로 이동
-                    navController.navigate("history")
+                    navController.navigate("main")
                 }
 
                 is LoginState.Failure -> {

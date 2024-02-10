@@ -22,7 +22,7 @@ import com.ssafy.yourpiliing.presentation.retrofit.login.LoginState
 import com.ssafy.yourpiliing.presentation.viewmodel.AnalysisViewModel
 
 @Composable
-fun AnalysisPage(navController: NavController, analysisViewModel: AnalysisViewModel) {
+fun AnalysisPage(analysisViewModel: AnalysisViewModel) {
     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE)
     val analysisState by analysisViewModel.analysisState.collectAsState(AnalysisState.Loading)
 

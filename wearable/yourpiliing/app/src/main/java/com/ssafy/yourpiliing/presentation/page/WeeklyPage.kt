@@ -22,7 +22,7 @@ import com.ssafy.yourpiliing.presentation.viewmodel.WeeklyViewModel
 import java.time.LocalDate
 
 @Composable
-fun WeeklyPage(navController: NavController, weeklyViewModel: WeeklyViewModel) {
+fun WeeklyPage(weeklyViewModel: WeeklyViewModel) {
     val sharedPreferences = LocalContext.current.getSharedPreferences("auth", Context.MODE_PRIVATE);
 
     val weeklyState by weeklyViewModel.weeklyState.collectAsState(WeeklyState.Loading)

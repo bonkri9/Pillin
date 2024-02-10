@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ssafy.yourpiliing.presentation.page.AnalysisPage
 import com.ssafy.yourpiliing.presentation.page.HistoryPage
+import com.ssafy.yourpiliing.presentation.page.MainPage
 import com.ssafy.yourpiliing.presentation.page.WeeklyPage
 import com.ssafy.yourpiliing.presentation.theme.AppTheme
 import com.ssafy.yourpiliing.presentation.viewmodel.AnalysisViewModel
@@ -38,21 +39,28 @@ class MainActivity : ComponentActivity() {
                 composable("login") {
                     LoginPage(navController = navController, loginViewModel = loginViewModel)
                 }
+                composable("main"){
+                    MainPage(
+                        navController = navController,
+                        analysisViewModel = analysisViewModel,
+                        takeOwnPillViewModel = takeOwnPillViewModel,
+                        historyViewModel = historyViewModel,
+                        weeklyViewModel = weeklyViewModel
+                    )
+                }
                 composable("history") {
                     HistoryPage(
-                        navController = navController,
                         historyViewModel = historyViewModel,
                         takeOwnPillViewModel = takeOwnPillViewModel
                     )
                 }
                 composable("analysis") {
                     AnalysisPage(
-                        navController = navController,
                         analysisViewModel = analysisViewModel
                     )
                 }
                 composable("weekly"){
-                    WeeklyPage(navController = navController, weeklyViewModel = weeklyViewModel)
+                    WeeklyPage(weeklyViewModel = weeklyViewModel)
                 }
             }
             //}
