@@ -88,7 +88,7 @@ class InventoryStore extends ChangeNotifier {
 
   //재고 상세 조회
   Future<void> getPillDetailData(BuildContext context, var ownPillId) async {
-    String accessToken = context.read<UserStore>().accessToken;
+    String accessToken = context.watch<UserStore>().accessToken;
     const String invenDetailUrl = "${CONVERT_URL}/api/v1/pill/inventory";
     try {
       var response = await http
@@ -133,14 +133,11 @@ class InventoryStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("재고 복용 전환 put 수신 성공");
         // print(response.body);
-
         // InventoryStore에 응답 저장
-        // takeYnData = jsonDecode(utf8.decode(response.bodyBytes));
         print("체크1");
-        await context.read<InventoryStore>().getTakeYnListData(context);
-        // takeTrueListData = takeYnListData['takeTrue']['data'];
-        // return takeTrueListData;
-        // print(takeYnData);
+        takeYnData = jsonDecode(utf8.decode(response.bodyBytes));
+
+        context.read<InventoryStore>().getTakeYnListData(context);
         notifyListeners();
       } else {
         // print(response.body);

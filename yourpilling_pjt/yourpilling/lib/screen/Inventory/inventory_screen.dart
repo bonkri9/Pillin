@@ -10,17 +10,15 @@ import 'package:yourpilling/store/user_store.dart';
 import 'TakenList.dart';
 import 'UnTakenList.dart';
 
-
 class InventoryScreen extends StatelessWidget {
   const InventoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    var userName = context.watch<UserStore>().userName;
+    var userName = context.read<UserStore>().userName;
     context.read<InventoryStore>().getTakeYnListData(context);
-    // context.watch<InventoryStore>().takeFalseListData;
-    // context.watch<InventoryStore>().takeTrueListData;
+
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: AppBar(
@@ -29,7 +27,7 @@ class InventoryScreen extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
-          "${userName}님의 영양제 재고",
+          "$userName님의 영양제 재고",
           style: TextStyle(
             fontSize: 20,
             fontFamily: "Pretendard",

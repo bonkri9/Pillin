@@ -49,20 +49,20 @@ class MainStore extends ChangeNotifier {
   // 일간 복용 기록(status Bar) 부분 조회
   getDailyData(BuildContext context) async {
     String accessToken = context.watch<UserStore>().accessToken;
-    DateTime koreaTime = DateTime.now().add(Duration(hours: 9));
     String dailyUrl = "${CONVERT_URL}/api/v1/pill/history/daily";
+    DateTime now = DateTime.now();
 
     try {
       var response = await http.get(
           Uri.parse(
-              '$dailyUrl?year=${koreaTime.year}&month=${koreaTime.month}&day=${koreaTime.day}'),
+              '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}'),
           headers: {
             'Content-Type': 'application/json',
             'accessToken': accessToken,
           });
 
       if (response.statusCode == 200) {
-        print("일간 복용 기록 수신 성공, 조회 날짜 : " + '$dailyUrl?year=${koreaTime.year}&month=${koreaTime.month}&day=${koreaTime.day}');
+        print("일간 복용 기록 수신 성공, 조회 날짜 : " + '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}');
 
         dailyData = jsonDecode(utf8.decode(response.bodyBytes))['taken'];
 

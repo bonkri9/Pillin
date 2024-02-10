@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print(response.body);
         if (response.statusCode == 200) {
           print("로그인 성공");
-          print(context.read<UserStore>().userName);
+          // print(context.watch<UserStore>().userName);
           var accessToken =
               response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
           print('response header : ${response.headers}');

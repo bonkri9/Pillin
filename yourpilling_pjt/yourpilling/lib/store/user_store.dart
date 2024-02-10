@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/screen/Main/main_screen.dart';
 import 'package:yourpilling/screen/SignUp/more_info_screen.dart';
 
@@ -105,7 +106,7 @@ class UserStore extends ChangeNotifier {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (c, a1, a2) => MainScreen(),
+            pageBuilder: (c, a1, a2) => MainPageChild(),
             transitionsBuilder: (c, a1, a2, child) =>
                 SlideTransition(
                   position: Tween(
