@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme {
         Box(
-            modifier = Modifier.background(Color.White)
+            modifier = Modifier.background(AppColors.backgroundColor)
         ) {
             content()
         }

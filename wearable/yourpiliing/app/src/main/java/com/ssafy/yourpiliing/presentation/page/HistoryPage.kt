@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.Text
 import com.ssafy.yourpiliing.presentation.component.TitleCard
 import com.ssafy.yourpiliing.presentation.retrofit.dailyhistory.DailyHistoryState
 import com.ssafy.yourpiliing.presentation.retrofit.take.TakeOwnPillState
@@ -67,16 +68,22 @@ fun HistoryPage(historyViewModel : HistoryViewModel,
                             .verticalScroll(rememberScrollState())
                             .padding(top = 40.dp, bottom = 40.dp)
                     ) {
-                        for (data in datas) {
-                            TitleCard(
-                                title = "${data.name}(${data.actualTakeCount}/${data.needToTakeTotalCount})",
-                                ownPillId = data.ownPillId,
-                                needToTakeTotalCount = data.needToTakeTotalCount,
-                                actualTakeCount = data.actualTakeCount,
-                                takeOwnPillViewModel = takeOwnPillViewModel,
-                                sharedPreferences = sharedPreferences
+                        if(datas.isNotEmpty()){
+                            for (data in datas) {
+                                TitleCard(
+                                    title = "${data.name}(${data.actualTakeCount}/${data.needToTakeTotalCount})",
+                                    ownPillId = data.ownPillId,
+                                    needToTakeTotalCount = data.needToTakeTotalCount,
+                                    actualTakeCount = data.actualTakeCount,
+                                    takeOwnPillViewModel = takeOwnPillViewModel,
+                                    sharedPreferences = sharedPreferences
+                                )
+                                Spacer(modifier = Modifier.height(8.dp)) // 간격 추가
+                            }
+                        }else{
+                            Text(
+                                text = "오늘 먹을 영양제가 없습니다."
                             )
-                            Spacer(modifier = Modifier.height(8.dp)) // 간격 추가
                         }
                     }
                 }

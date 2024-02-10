@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Text
 import com.ssafy.yourpiliing.presentation.retrofit.take.TakeOwnPillRequest
+import com.ssafy.yourpiliing.presentation.theme.AppColors
 import com.ssafy.yourpiliing.presentation.viewmodel.TakeOwnPillViewModel
 
 
@@ -26,7 +26,7 @@ fun TitleCard(
 ) {
     ElevatedCard(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = AppColors.mainColorWithOpacity,
         ),
         modifier = Modifier
             .size(width = 180.dp, height = 70.dp)
