@@ -1,5 +1,5 @@
 package com.ssafy.yourpiliing.presentation.retrofit.take
 
-data class TakeOwnPillRequest (
+data class TakeOwnPillRequest(
     val ownPillId: Long
 )

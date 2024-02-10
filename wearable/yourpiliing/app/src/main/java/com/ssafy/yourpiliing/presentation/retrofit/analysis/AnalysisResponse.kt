@@ -6,7 +6,7 @@ data class AnalysisResponse(
 
 data class ExtractionAnalysisResponse(
     val essentialNutrientsDataList: List<EssentialNutrientsData>
-){
+) {
     val nutrients = mutableListOf<String>()
     val userTakes = mutableListOf<Double>()
     val excessiveTakes = mutableListOf<Double>()
@@ -14,7 +14,7 @@ data class ExtractionAnalysisResponse(
     val intakeDiagnosis = mutableListOf<String>()
     val units = mutableListOf<String>()
 
-    init{
+    init {
         essentialNutrientsDataList.forEach { datas ->
             nutrients.add(datas.nutrientsName)
             userTakes.add(datas.data.userIntake)
@@ -24,5 +24,4 @@ data class ExtractionAnalysisResponse(
             units.add(datas.data.unit)
         }
     }
-
 }

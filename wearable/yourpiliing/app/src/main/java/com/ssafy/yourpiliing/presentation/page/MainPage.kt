@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.ssafy.yourpiliing.presentation.viewmodel.AnalysisViewModel
 import com.ssafy.yourpiliing.presentation.viewmodel.HistoryViewModel
 import com.ssafy.yourpiliing.presentation.viewmodel.TakeOwnPillViewModel
@@ -28,7 +27,6 @@ import com.ssafy.yourpiliing.presentation.viewmodel.WeeklyViewModel
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainPage(
-    navController: NavController,
     analysisViewModel: AnalysisViewModel,
     takeOwnPillViewModel: TakeOwnPillViewModel,
     historyViewModel: HistoryViewModel,
@@ -42,10 +40,13 @@ fun MainPage(
     ) {
         val pagerState = rememberPagerState(pageCount = { 3 })
         HorizontalPager(state = pagerState) { page ->
-            when(pagerState.currentPage){
-                0 -> HistoryPage(historyViewModel =historyViewModel,
-                    takeOwnPillViewModel = takeOwnPillViewModel)
-                1 -> AnalysisPage(analysisViewModel =analysisViewModel)
+            when (pagerState.currentPage) {
+                0 -> HistoryPage(
+                    historyViewModel = historyViewModel,
+                    takeOwnPillViewModel = takeOwnPillViewModel
+                )
+
+                1 -> AnalysisPage(analysisViewModel = analysisViewModel)
                 2 -> WeeklyPage(weeklyViewModel = weeklyViewModel)
             }
         }
@@ -58,7 +59,8 @@ fun MainPage(
             horizontalArrangement = Arrangement.Center
         ) {
             repeat(pagerState.pageCount) { iteration ->
-                val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+                val color =
+                    if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
                 Box(
                     modifier = Modifier
                         .padding(2.dp)

@@ -16,11 +16,11 @@ import com.aay.compose.radarChart.model.PolygonStyle
 
 @Composable
 fun AnalysisRadarChart(
-    radarLabels : List<String>,
-    excessiveTakes : List<Double>,
+    radarLabels: List<String>,
+    excessiveTakes: List<Double>,
     userTakes: List<Double>,
     recommendedIntakes: List<Double>
-    ) {
+) {
 
     val labelsStyle = TextStyle(
         color = Color.Black,

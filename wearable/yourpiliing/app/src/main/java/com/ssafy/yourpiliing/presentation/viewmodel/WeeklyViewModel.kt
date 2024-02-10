@@ -2,19 +2,16 @@ package com.ssafy.yourpiliing.presentation.viewmodel
 
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
-import com.ssafy.yourpiliing.presentation.retrofit.TokenInterceptor
+import com.ssafy.yourpiliing.presentation.retrofit.RestClient
 import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyResponse
 import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyResponseItem
 import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyService
 import com.ssafy.yourpiliing.presentation.retrofit.weekly.WeeklyState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
@@ -28,7 +25,7 @@ class WeeklyViewModel : ViewModel() {
 
         if (accessToken == null) return
 
-        val weeklyService = request(accessToken).create(WeeklyService::class.java)
+        val weeklyService = RestClient.request().create(WeeklyService::class.java)
 
         weeklyService.weekly().enqueue(object : Callback<WeeklyResponse> {
             override fun onResponse(
@@ -50,19 +47,6 @@ class WeeklyViewModel : ViewModel() {
                 _weeklySate.value = WeeklyState.Failure("네트워크 혹은 시스템에 문제가 발생해 주간 기록을 가져오지 못했습니다");
             }
         })
-    }
-
-    private fun request(accessToken: String): Retrofit {
-        val httpClient = OkHttpClient.Builder()
-            .addInterceptor(TokenInterceptor(accessToken))
-            .build()
-
-        return Retrofit
-            .Builder()
-            .baseUrl("https://i10b101.p.ssafy.io/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient)
-            .build()
     }
 
     // 이번주의 날 중 포함되어 있지 않으면 추가

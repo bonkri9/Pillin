@@ -26,14 +26,12 @@ import kotlin.math.sin
 
 @Composable
 fun WeeklyHexagonalCircles(
-    data: List<WeeklyResponseItem>,
-    today: LocalDate
+    data: List<WeeklyResponseItem>
 ) {
 
     val startAngle = 270f
     val radius = 50f
     val stroke = 3.5f
-    val strokeColor = Color.Green
     val fontColor = Color.White
 
     val animateFloat = remember { Animatable(0f) }
@@ -137,7 +135,7 @@ fun calRatio(item: WeeklyResponseItem): Float {
 fun calculateColor(ratio: Float): Color {
     return when {
         ratio <= 0.2f -> Color.Red
-        ratio <= 0.4f -> Color(1.0f, 0.5f, 0.0f) // Orange
+        ratio < 0.5f -> Color(1.0f, 0.5f, 0.0f) // Orange
         else -> Color.Green
     }
 }

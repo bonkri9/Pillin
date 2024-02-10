@@ -7,18 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import com.ssafy.yourpiliing.presentation.component.AnalysisRadarChart
-import com.ssafy.yourpiliing.presentation.component.RadarChartSample
 import com.ssafy.yourpiliing.presentation.retrofit.analysis.AnalysisState
 import com.ssafy.yourpiliing.presentation.retrofit.analysis.ExtractionAnalysisResponse
-import com.ssafy.yourpiliing.presentation.retrofit.login.LoginState
 import com.ssafy.yourpiliing.presentation.viewmodel.AnalysisViewModel
 
 @Composable
@@ -34,14 +28,14 @@ fun AnalysisPage(analysisViewModel: AnalysisViewModel) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // RadarChartSample()
         when (analysisState) {
             is AnalysisState.Loading -> {
                 // TODO: 로딩 메시지 출력
             }
 
             is AnalysisState.Success -> {
-                val datas = (analysisState as AnalysisState.Success).response.essentialNutrientsDataList
+                val datas =
+                    (analysisState as AnalysisState.Success).response.essentialNutrientsDataList
 
                 // 추출 완료
                 val extractionAnalysisResponse = ExtractionAnalysisResponse(datas)
