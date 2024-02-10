@@ -150,6 +150,7 @@ class AlarmScreen extends StatelessWidget {
     // 모달 경로를 가져오고 인수를 가져옵니다. 알림을 위해. 이 메시지를 받으면
 
     context.read<AlarmStore>().getAlarmListData(context);
+    context.read<AlarmStore>().getPushAlarm(context);
     // 먹는 영양제들의 리스트가 담겨있음 ( takeTrue로 나중에 수정)
 
     return Scaffold(
