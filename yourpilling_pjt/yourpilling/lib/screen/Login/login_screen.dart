@@ -7,7 +7,6 @@ import 'package:vibration/vibration.dart';
 import 'package:yourpilling/const/url.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/Login/find_password_screen.dart';
-import 'package:yourpilling/screen/Main/main_screen.dart';
 import 'package:yourpilling/screen/SignUp/more_info_screen.dart';
 import 'package:yourpilling/store/user_store.dart';
 import '../Main/main_page_child_screen.dart';
@@ -134,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print(response.body);
         if (response.statusCode == 200) {
           print("로그인 성공");
+          print(context.read<UserStore>().userName);
           var accessToken =
               response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
           print('response header : ${response.headers}');
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } catch (error) {
         print(error);
-        return -1; // 에러 시 -1 반환
+        return '-1'; // 에러 시 -1 반환
       }
     }
 

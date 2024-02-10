@@ -10,10 +10,11 @@ class BaseContainerOnlyWidth extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container (
+      height: 200,
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(40),
           border: Border.all(
             width: 0.1,
             color: Colors.grey.withOpacity(0.5),

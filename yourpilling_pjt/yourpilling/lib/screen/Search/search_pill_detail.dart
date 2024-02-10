@@ -65,7 +65,7 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
     }
 
     loadData(context);
-    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
+    var pillDetailInfo = context.watch<SearchStore>().pillDetailData;
     // print(pillDetailInfo);
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
@@ -295,8 +295,7 @@ class PillDetailInfo extends StatefulWidget {
 class _PillDetailInfoState extends State<PillDetailInfo> {
   @override
   Widget build(BuildContext context) {
-    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
-    // print(pillDetailInfo);
+    var pillDetailInfo = context.watch<SearchStore>().pillDetailData;
     return Column(
       children: [
         //유효 복용 기간
@@ -485,7 +484,7 @@ class PillNutrientInfo extends StatefulWidget {
 class _PillNutrientInfoState extends State<PillNutrientInfo> {
   @override
   Widget build(BuildContext context) {
-    var pillDetailInfo = context.read<SearchStore>().PillDetailData;
+    var pillDetailInfo = context.read<SearchStore>().pillDetailData;
     // print(pillDetailInfo);
     var nutrientsList = pillDetailInfo['nutrients']['nutrientsItems'];
     var listLength = nutrientsList.length ?? 0;

@@ -557,7 +557,7 @@ class _RecommendListState extends State<_RecommendList> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    context.read<SearchStore>().PillDetailData;
+                                    context.read<SearchStore>().pillDetailData;
                                     Navigator.push(
 
                                         context,
@@ -566,7 +566,7 @@ class _RecommendListState extends State<_RecommendList> {
                                                 PillDetailScreen(
                                                   pillId: pillId,
                                                 )));
-                                    context.read<SearchStore>().PillDetailData;
+                                    context.read<SearchStore>().pillDetailData;
                                   },
                                   child: const Text(
                                     '상세 보기',

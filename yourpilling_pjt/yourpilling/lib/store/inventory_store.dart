@@ -18,18 +18,11 @@ class InventoryStore extends ChangeNotifier {
   var invenDetailData;
   var takeYnData;
   var takeYn;
-  var length;
 
   //복용하는 영양제 전체 리스트 데이터 가져오기
-  Future<void> getTakeYnListData(BuildContext context) async {
+  getTakeYnListData(BuildContext context) async {
     String accessToken = context.watch<UserStore>().accessToken;
-    // const String takeYnListUrl =
-    //     'https://i10b101.p.ssafy.io/api/v1/pill/inventory/list';
-
-
-    // const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
     const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
-
 
     try {
       var response = await http.get(Uri.parse(takeYnListUrl), headers: {
@@ -37,14 +30,15 @@ class InventoryStore extends ChangeNotifier {
         'accessToken': accessToken,
       });
 
-      print('response 이거임 $response');
       if (response.statusCode == 200) {
         print("재고 복용 목록 get 수신 성공");
-        // print(response.body);
+        print(response.body);
 
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
-        length = takeTrueListData.length;
+        print(takeTrueListData);
+        print(takeFalseListData);
+        notifyListeners();
       } else {
         // print(response.body);
         print("재고 복용 목록 get 수신 실패");
@@ -52,7 +46,6 @@ class InventoryStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
-    notifyListeners();
   }
 
   //재고 수정
@@ -91,8 +84,6 @@ class InventoryStore extends ChangeNotifier {
   Future<void> getPillDetailData(BuildContext context, var ownPillId) async {
     String accessToken = context.watch<UserStore>().accessToken;
     const String invenDetailUrl = "${CONVERT_URL}/api/v1/pill/inventory";
-
-
     try {
       var response = await http
           .get(Uri.parse('$invenDetailUrl?ownPillId=$ownPillId'), headers: {
@@ -119,10 +110,10 @@ class InventoryStore extends ChangeNotifier {
   }
 
   //섭취&미섭취 전환
-  Future<void> putTakeYnChange(BuildContext context, var ownPillId) async {
+  putTakeYnChange(BuildContext context, var ownPillId) async {
     String accessToken = context.read<UserStore>().accessToken;
    const String takeYnChangeUrl = "${CONVERT_URL}/api/v1/pill/inventory/take-yn";
-
+  print("복용으로 전환 요청");
     try {
       var response = await http.put(Uri.parse(takeYnChangeUrl),
           headers: {
@@ -139,8 +130,9 @@ class InventoryStore extends ChangeNotifier {
 
         // InventoryStore에 응답 저장
         takeYnData = jsonDecode(utf8.decode(response.bodyBytes));
+
+        notifyListeners();
         // takeTrueListData = takeYnListData['takeTrue']['data'];
-        length = takeTrueListData.length;
         // return takeTrueListData;
         // print(takeYnData);
       } else {

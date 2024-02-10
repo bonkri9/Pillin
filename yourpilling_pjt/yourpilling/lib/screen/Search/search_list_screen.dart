@@ -123,7 +123,7 @@ class _SearchResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String accessToken = context.watch<UserStore>().accessToken;
-    var pillList = context.read<SearchStore>().SearchData['data'];
+    var pillList = context.read<SearchStore>().searchData['data'];
 
 
     return Container(

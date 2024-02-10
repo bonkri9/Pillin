@@ -67,7 +67,7 @@ class _InsertInventoryState extends State<InsertInventory> {
     }
 
     loadData(context);
-    var pillDetailData = context.read<SearchStore>().PillDetailData;
+    var pillDetailData = context.read<SearchStore>().pillDetailData;
     print(pillDetailData);
 
     return Scaffold(
@@ -132,40 +132,40 @@ class _InsertInventoryState extends State<InsertInventory> {
             // print(checkTrue);
             // //재고 리스트에 이미 있다면, 이미 등록된 재고라고 모달창 띄우기
             // if (checkTrue == false && checkFalse == false) {
-              print(takeYn);
-              print(remains);
-              print(totalCount);
-              context
-                  .read<InventoryStore>()
-                  .registInven(context, pillId, takeYn, remains, totalCount);
-              showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: 450,
-                      height: 200,
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.redAccent)),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Inventory()));
-                              },
-                              child: const Text(
-                                '등록완료!',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    );
-                  });
+            print(takeYn);
+            print(remains);
+            print(totalCount);
+            context
+                .read<InventoryStore>()
+                .registInven(context, pillId, takeYn, remains, totalCount);
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    width: 450,
+                    height: 200,
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.redAccent)),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => InventoryScreen()));
+                            },
+                            child: const Text(
+                              '등록완료!',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ],
+                    ),
+                  );
+                });
             // } else {
             //   showDialog(
             //       context: context,
@@ -218,10 +218,10 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
 class _InsertInvenContent extends StatefulWidget {
   _InsertInvenContent(
       {super.key,
-      this.getCurPillCount,
-      this.getTotalPillCount,
-      this.pillId,
-      this.getTakeYn});
+        this.getCurPillCount,
+        this.getTotalPillCount,
+        this.pillId,
+        this.getTakeYn});
 
   var getCurPillCount;
   var getTotalPillCount;
@@ -245,7 +245,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
     }
 
     loadData(context);
-    var pillDetailData = context.read<SearchStore>().PillDetailData;
+    var pillDetailData = context.read<SearchStore>().pillDetailData;
 
     return Container(
       decoration: BoxDecoration(
@@ -350,7 +350,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
                                 minusBtn:
-                                    Icon(Icons.remove_circle_outline_rounded),
+                                Icon(Icons.remove_circle_outline_rounded),
                                 plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
@@ -398,7 +398,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
                                 minusBtn:
-                                    Icon(Icons.remove_circle_outline_rounded),
+                                Icon(Icons.remove_circle_outline_rounded),
                                 plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
@@ -408,20 +408,20 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     )),
                 Container(
                     child: Row(
-                  children: [
-                    Text('일일 복용 횟수 : '),
-                    Text('${pillDetailData['takeCount']}'),
-                    Text('회(변경 불가능)'),
-                  ],
-                )),
+                      children: [
+                        Text('일일 복용 횟수 : '),
+                        Text('${pillDetailData['takeCount']}'),
+                        Text('회(변경 불가능)'),
+                      ],
+                    )),
                 Container(
                     child: Row(
-                  children: [
-                    Text('1회 복용량 : '),
-                    Text('${pillDetailData['takeOnceAmount']}'),
-                    Text('정(변경 불가능)'),
-                  ],
-                )),
+                      children: [
+                        Text('1회 복용량 : '),
+                        Text('${pillDetailData['takeOnceAmount']}'),
+                        Text('정(변경 불가능)'),
+                      ],
+                    )),
               ],
             ),
           ),

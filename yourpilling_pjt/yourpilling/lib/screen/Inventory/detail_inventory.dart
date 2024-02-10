@@ -6,44 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:http/http.dart' as http;
 import '../../store/inventory_store.dart';
-import '../../store/user_store.dart';
-import 'insert_inventory.dart';
-
-// var pillDetailInfo = [
-//   {
-//     'pillName': '트리플 스트렝스 오메가3 피쉬오일 (오메가3 1040mg)', // 영양제 이름
-//     'manufacturer': '나우푸드', // 제조사
-//     'expirationAt': '2년', //유효복용기간
-//     'usageInstructions': '물과 함께 잘 드세요', //복약지도
-//     'primaryFunctionality': '기력 증진', //주요기능
-//     'precautions': '약이 상당히 크니 삼킬 때 조심하세요', //주의사항
-//     'storageInstructions': '상온 보관', //보관방법
-//     'standardSpecification': '붕해시험 : 적합', //기준규격
-//     'productForm': '고체형', // 제형
-//     'takecycle': '1', //1일
-//     'takeCount': '1', //1회
-//     'takeOnceAmount': '2', //2정
-//     'createdAt': '',
-//     'updatedAt': '2024-01-29', //제품 정보 수정날짜
-//     'nutrients': [
-//       {
-//         'nutrition': '오메가3',
-//         'amount': '40',
-//         'unit': 'mg',
-//         'includePercent': '3.33',
-//       } //사람마다 등록한 날이 다를텐데 userId없어도 되는지? createAt, updateAt 관련.
-//     ]
-//   },
-// ];
-//
-// var nutients = [
-//   {
-//     'nutrition': '오메가3',
-//     'amount': '40',
-//     'unit': 'mg',
-//     'includePercent': '3.33',
-//   }
-// ];
 
 void loadData(BuildContext context, ownPillId) {
   context.watch<InventoryStore>().getPillDetailData(context, ownPillId);

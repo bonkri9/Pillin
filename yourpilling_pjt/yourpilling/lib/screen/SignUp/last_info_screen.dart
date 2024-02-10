@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/screen/Login/login_screen.dart';
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/screen/Main/main_screen.dart';
 import 'package:yourpilling/screen/SignUp/greeting_screen.dart';
 import 'package:yourpilling/store/user_store.dart';
@@ -246,10 +247,10 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         context.read<UserStore>().setDay(day);
                         context.read<UserStore>().signUpEssential(context); // 생년월일 및 성별 포함 회원가입
 
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (c, a1, a2) => MainScreen(),
+                            pageBuilder: (c, a1, a2) => MainPageChild(),
                             transitionsBuilder: (c, a1, a2, child) =>
                                 SlideTransition(
                                   position: Tween(

@@ -63,6 +63,7 @@ dependencies:
   get: ^4.6.6
   lottie: ^3.0.0
   vibration: ^1.8.4
+  fluttertoast: ^8.2.4
 
   carousel_slider: ^4.2.1
   flutter_radar_chart: ^0.2.1

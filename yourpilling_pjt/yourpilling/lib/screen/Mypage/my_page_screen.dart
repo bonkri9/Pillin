@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/component/common/angle_container.dart';
 import 'package:yourpilling/component/common/app_bar_search.dart';
 import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/screen/Login/enter_login_screen.dart';
 import 'package:yourpilling/screen/Login/login_screen.dart';
 import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/screen/Main/main_screen.dart';
@@ -15,8 +16,8 @@ import '../../component/common/base_container.dart';
 import '../../store/user_store.dart';
 import '../AnalyzeReport/analysis_report.dart';
 
-class MyPage extends StatelessWidget {
-  const MyPage({super.key});
+class MyPageScreen extends StatelessWidget {
+  const MyPageScreen({super.key});
 
 // todo : 상단바 위젯 스크롤 내리면 사라지고 올리면 뜨게 하기
   @override
@@ -232,7 +233,7 @@ class MyPage extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                               builder: (builder) =>
-                                                  LoginScreen(),
+                                                  EnterLoginScreen(),
                                             ),
                                           );
                                         },
