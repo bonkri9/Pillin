@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 import 'package:yourpilling/component/common/app_bar.dart';
 import 'package:yourpilling/component/common/base_container_noheight.dart';
 import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/screen/Inventory/insert_inventory.dart';
+import 'package:yourpilling/screen/Search/search_screen.dart';
 import 'package:yourpilling/store/main_store.dart';
 import '../Record/record_screen.dart';
 import '../Alarm/alarm_screen.dart';
@@ -26,21 +30,62 @@ class _MainScreenState extends State<MainScreen> {
     context.read<MainStore>().getUserInventory(context);
     context.read<MainStore>().getDailyData(context);
 
+    DateTime? currentBackPressTime;
+    Future<bool> onWillPop(){
+
+      DateTime now = DateTime.now();
+
+      if(currentBackPressTime == null || now.difference(currentBackPressTime!)
+          > Duration(seconds: 2))
+      {
+
+        currentBackPressTime = now;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+          ),
+          content: Text(
+            "한 번 더 누르면 앱이 종료돼요",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: BASIC_BLACK),
+          ),
+          backgroundColor: Colors.yellow,
+          duration: Duration(milliseconds: 1100),
+        ));
+        return Future.value(false);
+
+      }
+
+      return Future.value(true);
+    }
+
+
     return Scaffold(
+        backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
         appBar: MainAppBar(
-          barColor: Color(0xFFF5F6F9),
+          barColor: Colors.white,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Welcome(),
-              SizedBox(
-                height: 30,
-              ),
-              _Week(), // 주간 복용 현황
-              _Today(), // 오늘 먹을 영양제
-              _Stock(),
-            ],
+        body: WillPopScope(
+          onWillPop: onWillPop,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Welcome(),
+                SizedBox(
+                  height: 15,
+                ),
+                _Today(), // 오늘 먹을 영양제
+                SizedBox(
+                  height: 15,
+                ),
+                _Week(), // 주간 복용 현황
+                SizedBox(
+                  height: 15,
+                ),
+                _Stock(),
+              ],
+            ),
           ),
         ));
   }
@@ -57,14 +102,18 @@ class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
+    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
     var screenWidth = MediaQuery.of(context).size.width;
+    var dailyData = context.watch<MainStore>().dailyData;
+    var curCompleteCount = context.watch<MainStore>().curCompleteCount;
     return Container(
       width: screenWidth,
-      height: 250,
-      child: Text("gdgd"),
+      height: 150,
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(35),
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30)),
           border: Border.all(
             width: 0.1,
             color: Colors.grey.withOpacity(0.5),
@@ -76,6 +125,137 @@ class _WelcomeState extends State<Welcome> {
                 blurRadius: 3 // 그림자 위치 조정
                 ),
           ]),
+      child: Center(
+        child: Column(
+          children: [
+            // Lottie.asset('assets/lottie/running.json', width: 120, height: 120),
+            SizedBox(
+              height: 23,
+            ),
+
+            dailyData.length == 0 // dailyData가 없을 때 재고 등록해야 함
+                ? Column(
+                  children: [
+                    RichText(
+                        text: TextSpan(
+                          text: '아직 등록된 영양제가 없어요',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: BASIC_GREY,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Pretendard',
+                          ),
+                        ),
+                      ),
+                    SizedBox(height: 25,),
+                    // 추가 버튼
+                    GestureDetector(
+                      onTap: () {
+
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => SearchScreen(),
+                              transitionsBuilder: (c, a1, a2, child) =>
+                                  SlideTransition(
+                                    position: Tween(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset(0.0, 0.0),
+                                    )
+                                        .chain(
+                                        CurveTween(curve: Curves.easeInOut))
+                                        .animate(a1),
+                                    child: child,
+                                  ),
+                              transitionDuration: Duration(
+                                  milliseconds: 750),
+                            ),
+                          );
+                        },
+                      child: CircleAvatar(
+                        radius: 15.0,
+                        backgroundColor: Colors.yellow, // 원의 배경색
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white, // 화살표 아이콘의 색상
+                        ),
+                      ),
+                    ),
+
+                  ],
+                )
+                : RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '"성현님 오늘 섭취할 영양제가 ',
+                          style: TextStyle(
+                            fontSize: 19,
+                            color: BASIC_BLACK,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Pretendard',
+                          ),
+                        ),
+                        TextSpan(
+                          text: '${dailyData.length}',
+                          style: TextStyle(
+                            color: Colors.redAccent, // 영양이 부분의 색상을 빨간색으로 지정
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Pretendard',
+                          ),
+                        ),
+                        TextSpan(
+                          text: '개 남았어요!"',
+                          style: TextStyle(
+                            fontSize: 19,
+                            color: BASIC_BLACK,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Pretendard',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+            // 여기에 Progress Bar 넣을까
+            // Progress Bar
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: dailyData.isEmpty
+                  ? Container()
+                  : dailyData.length == curCompleteCount
+                      ? // 약 모두 다 먹었을 때 초록색 Progress Bar
+                      AnimatedProgressBar(
+                          width: 300,
+                          value: curCompleteCount / dailyData.length,
+                          duration: const Duration(seconds: 1),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Colors.lightGreenAccent,
+                              Colors.greenAccent,
+                            ],
+                          ),
+                          backgroundColor: Colors.grey.withOpacity(0.2),
+                        )
+                      : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
+                      AnimatedProgressBar(
+                          width: 320,
+                          // height: 11,
+                          value: curCompleteCount / dailyData.length,
+                          duration: const Duration(seconds: 1),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Colors.orangeAccent,
+                              Colors.redAccent,
+                            ],
+                          ),
+                          backgroundColor: Colors.grey.withOpacity(0.2),
+                        ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -96,149 +276,155 @@ class _WeekState extends State<_Week> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double containerWidth = screenWidth * 0.9; // 화면의 90%
-
-    return BaseContainer(
-        width: containerWidth,
-        color: Colors.white,
+    DateTime now = DateTime.now();
+    return Container(
+        width: screenWidth,
         height: 160,
+        constraints: BoxConstraints(
+          minHeight: 200,
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(36),
+            border: Border.all(
+              width: 0.1,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Color(0x00b5b5b5).withOpacity(0.1),
+                  offset: Offset(0.1, 0.1),
+                  blurRadius: 3 // 그림자 위치 조정
+              ),
+            ]),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "주간 복용 현황",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "Pretendard",
-                      fontSize: 17.5,
-                      color: BASIC_BLACK,
-                    ),
+              padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "주간 복용 현황",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontFamily: "Pretendard",
+                    fontSize: 20,
+                    color: BASIC_BLACK,
                   ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RecordScreen()));
-                    },
-                    icon: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 17,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
+            SizedBox(height: 20,),
             Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: TableCalendar(
-                  calendarFormat: CalendarFormat.week,
-                  startingDayOfWeek: StartingDayOfWeek.monday,
-                  availableCalendarFormats: const {
-                    CalendarFormat.week: 'Week',
-                  },
-                  focusedDay: DateTime.now().add(Duration(hours: 9)),
-                  firstDay: DateTime(2024, 1, 1),
-                  lastDay: DateTime(2024, 12, 31),
-                  headerVisible: false,
-                  locale: 'ko-KR',
-                  daysOfWeekStyle: DaysOfWeekStyle(
-                      weekendStyle: TextStyle(
-                        color: Color(0xFFD0D0D0),
-                        fontSize: 13,
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: IgnorePointer(
+                  ignoring: true,
+                  child: TableCalendar(
+                    calendarFormat: CalendarFormat.week,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    availableCalendarFormats: const {
+                      CalendarFormat.week: 'Week',
+                    },
+                    focusedDay: DateTime.now().add(Duration(hours: 9)),
+                    firstDay: DateTime(2024, 1, 1),
+                    lastDay: DateTime(2024, 12, 31),
+                    headerVisible: false,
+                    locale: 'ko-KR',
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                        weekendStyle: TextStyle(
+                          color: Color(0xFFD0D0D0),
+                          fontSize: 13,
+                          height: 1,
+                        ),
+                        weekdayStyle: TextStyle(
+                          height: 1,
+                          color: Color(0xFFD0D0D0),
+                          fontSize: 13,
+                        )),
+                    calendarStyle: CalendarStyle(
+                      outsideDaysVisible: false,
+                      todayTextStyle:
+                      TextStyle(color: Colors.red.withOpacity(0.8)),
+                      weekendTextStyle: TextStyle(color: Colors.grey),
+                      defaultTextStyle: TextStyle(color: Colors.grey),
+                      todayDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                        // color: Colors.red.withOpacity(0.1),
                       ),
-                      weekdayStyle: TextStyle(
-                        color: Color(0xFFD0D0D0),
-                        fontSize: 13,
-                      )),
-                  calendarStyle: CalendarStyle(
-                    outsideDaysVisible: false,
-                    todayTextStyle:
-                        TextStyle(color: Colors.red.withOpacity(0.8)),
-                    weekendTextStyle: TextStyle(color: Colors.grey),
-                    defaultTextStyle: TextStyle(color: Colors.grey),
-                    todayDecoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                      // color: Colors.red.withOpacity(0.1),
+                      defaultDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                      ),
+                      weekendDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                      ),
+                      markersMaxCount: 1,
                     ),
-                    defaultDecoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                    ),
-                    weekendDecoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                    ),
-                    markersMaxCount: 1,
+                    calendarBuilders:
+                    CalendarBuilders(markerBuilder: (context, date, events) {
+                      var weekData = context.watch<MainStore>().weekData;
+                      String month = now.month.toString().padLeft(2, '0');
+                      String day = now.day.toString().padLeft(2, '0');
+
+                      String paramDate = '${date.year}-$month-$day';
+
+                      // 현재 날짜에 해당하는 데이터 찾기
+                      var dayData = weekData['data'].firstWhere(
+                            (data) => data['date'] == paramDate,
+                        orElse: () => null,
+                      );
+
+                      if (dayData != null) {
+                        int needToTakenCountToday =
+                        dayData['needToTakenCountToday'];
+                        int actualTakenToday = dayData['actualTakenToday'];
+
+                        double dayGauge =
+                            actualTakenToday / needToTakenCountToday;
+
+                        return Positioned(
+                          bottom:5,
+                          child: SizedBox(
+                            width: 40,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 1),
+                              child: CircleProgressBar(
+                                strokeWidth: 2.6,
+                                foregroundColor: dayGauge == 1
+                                    ? fullColor
+                                    : dayGauge > 0.5
+                                    ? overFiftyColor
+                                    : dayGauge == 0.5
+                                    ? fiftyColor
+                                    : underFiftyColor,
+                                backgroundColor: BASIC_GREY.withOpacity(0.2),
+                                value: dayGauge, // dayGauge
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Positioned(
+                          bottom: 5,
+                          child: SizedBox(
+                            width: 40,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 1),
+                              child: CircleProgressBar(
+                                strokeWidth: 2.6,
+                                foregroundColor: BASIC_GREY.withOpacity(0.2),
+                                backgroundColor: BASIC_GREY.withOpacity(0.2),
+                                value: 0, // dayGauge
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    }),
                   ),
-                  calendarBuilders:
-                      CalendarBuilders(markerBuilder: (context, date, events) {
-                    var weekData = context.watch<MainStore>().weekData;
-                    DateTime koreaTime = date.add(Duration(hours: 9));
-                    String month = koreaTime.month.toString().padLeft(2, '0');
-                    String day = koreaTime.day.toString().padLeft(2, '0');
-
-                    String paramDate = '${date.year}-$month-$day';
-
-                    // 현재 날짜에 해당하는 데이터 찾기
-                    var dayData = weekData['data'].firstWhere(
-                      (data) => data['date'] == paramDate,
-                      orElse: () => null,
-                    );
-
-                    if (dayData != null) {
-                      int needToTakenCountToday =
-                          dayData['needToTakenCountToday'];
-                      int actualTakenToday = dayData['actualTakenToday'];
-
-                      double dayGauge =
-                          actualTakenToday / needToTakenCountToday;
-
-                      return Positioned(
-                        bottom: 5,
-                        child: SizedBox(
-                          width: 40,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 1),
-                            child: CircleProgressBar(
-                              strokeWidth: 2.6,
-                              foregroundColor: dayGauge == 1
-                                  ? fullColor
-                                  : dayGauge > 0.5
-                                      ? overFiftyColor
-                                      : dayGauge == 0.5
-                                          ? fiftyColor
-                                          : underFiftyColor,
-                              backgroundColor: BASIC_GREY.withOpacity(0.2),
-                              value: dayGauge, // dayGauge
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Positioned(
-                        bottom: 5,
-                        child: SizedBox(
-                          width: 40,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 1),
-                            child: CircleProgressBar(
-                              strokeWidth: 2.6,
-                              foregroundColor: BASIC_GREY.withOpacity(0.2),
-                              backgroundColor: BASIC_GREY.withOpacity(0.2),
-                              value: 0, // dayGauge
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  }),
-                ))
+                )),
           ],
         ));
   }
@@ -258,55 +444,69 @@ class _TodayState extends State<_Today> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double containerWidth = screenWidth * 0.9; // 화면의 90%
+    double containerWidth = screenWidth; // 화면의 90%
     // 오늘 먹을 영양제 목록 [{name, actualTakeCount, needToTakeTotalCount}]
     var dailyData = context.watch<MainStore>().dailyData;
     var curCompleteCount =
         context.watch<MainStore>().curCompleteCount; // 오늘 현재까지 복용한 영양제 개수
 
-    return BaseContainerOnlyWidth(
+    return Container(
         width: containerWidth,
+        constraints: BoxConstraints(
+          minHeight: 250,
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(36),
+            border: Border.all(
+              width: 0.1,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Color(0x00b5b5b5).withOpacity(0.1),
+                  offset: Offset(0.1, 0.1),
+                  blurRadius: 3// 그림자 위치 조정
+              ),
+            ]
+        ),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "오늘 섭취할 영양제",
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         fontFamily: "Pretendard",
-                        fontSize: 17.5,
+                        fontSize: 20,
                         color: BASIC_BLACK,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AlarmScreen()));
-                      },
-                      icon: Icon(
-                        Icons.add,
-                        size: 25,
                       ),
                     ),
                   ],
                 ),
               ),
-
+              SizedBox(height: 50,),
               // 여기 패기 추가해야 할 수도
               dailyData.isEmpty
                   ? Center(
-                      child: Text(
-                        "오늘은 섭취할 영양제가 없어요 :)",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, color: BASIC_GREY),
+                      child: Column(
+                        children: [
+                          Lottie.asset('assets/lottie/jump.json',
+                              fit: BoxFit.fill,
+                              width: 200,
+                              height: 200),
+                          Text(
+                            "영양제 없으면 영양이 휴무날",
+                            style: TextStyle(
+                                fontSize: 18,fontWeight: FontWeight.w500, color: BASIC_GREY, fontFamily: "Pretendard"),
+                          ),
+                        ],
                       ),
                     )
                   : Align(
@@ -327,40 +527,40 @@ class _TodayState extends State<_Today> {
                               ),
                             ),
                     ),
-              // Progress Bar
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: dailyData.isEmpty
-                    ? Container()
-                    : dailyData.length == curCompleteCount
-                        ? // 약 모두 다 먹었을 때 초록색 Progress Bar
-                        AnimatedProgressBar(
-                            width: 300,
-                            value: curCompleteCount / dailyData.length,
-                            duration: const Duration(seconds: 1),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Colors.lightGreenAccent,
-                                Colors.greenAccent,
-                              ],
-                            ),
-                            backgroundColor: Colors.grey.withOpacity(0.2),
-                          )
-                        : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
-                        AnimatedProgressBar(
-                            width: 320,
-                            // height: 11,
-                            value: curCompleteCount / dailyData.length,
-                            duration: const Duration(seconds: 1),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Colors.orangeAccent,
-                                Colors.redAccent,
-                              ],
-                            ),
-                            backgroundColor: Colors.grey.withOpacity(0.2),
-                          ),
-              ),
+              // // Progress Bar
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 5),
+              //   child: dailyData.isEmpty
+              //       ? Container()
+              //       : dailyData.length == curCompleteCount
+              //           ? // 약 모두 다 먹었을 때 초록색 Progress Bar
+              //           AnimatedProgressBar(
+              //               width: 300,
+              //               value: curCompleteCount / dailyData.length,
+              //               duration: const Duration(seconds: 1),
+              //               gradient: const LinearGradient(
+              //                 colors: [
+              //                   Colors.lightGreenAccent,
+              //                   Colors.greenAccent,
+              //                 ],
+              //               ),
+              //               backgroundColor: Colors.grey.withOpacity(0.2),
+              //             )
+              //           : // 약 아직 다 안먹었다면 원래 색상의 Progress Bar
+              //           AnimatedProgressBar(
+              //               width: 320,
+              //               // height: 11,
+              //               value: curCompleteCount / dailyData.length,
+              //               duration: const Duration(seconds: 1),
+              //               gradient: const LinearGradient(
+              //                 colors: [
+              //                   Colors.orangeAccent,
+              //                   Colors.redAccent,
+              //                 ],
+              //               ),
+              //               backgroundColor: Colors.grey.withOpacity(0.2),
+              //             ),
+              // ),
               SizedBox(
                 height: 10,
               ),
@@ -545,34 +745,37 @@ class _StockState extends State<_Stock> {
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth * 0.9; // 화면의 90%
     var userInventoryData = context.watch<MainStore>().userInventoryData;
-    return BaseContainer(
-        color: Colors.white,
-        width: containerWidth,
+    return Container(
+        width: screenWidth,
         height: 250,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(36),
+            border: Border.all(
+              width: 0.1,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Color(0x00b5b5b5).withOpacity(0.1),
+                  offset: Offset(0.1, 0.1),
+                  blurRadius: 3 // 그림자 위치 조정
+              ),
+            ]),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
+              padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "내 영양제 재고",
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontFamily: "Pretendard",
-                      fontSize: 17.5,
+                      fontSize: 20,
                       color: BASIC_BLACK,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Inventory()));
-                    },
-                    icon: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 15,
                     ),
                   ),
                 ],

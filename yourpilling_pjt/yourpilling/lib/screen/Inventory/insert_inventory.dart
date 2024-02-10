@@ -29,7 +29,6 @@ class _InsertInventoryState extends State<InsertInventory> {
   TextEditingController totalCountController = TextEditingController();
 
   var pillId;
-  // var takeYn = false;
   var takeYn = false;
   var remains;
   var totalCount;
@@ -68,7 +67,7 @@ class _InsertInventoryState extends State<InsertInventory> {
     }
 
     loadData(context);
-    var pillDetailData = context.read<SearchStore>().PillDetailData;
+    var pillDetailData = context.read<SearchStore>().pillDetailData;
     print(pillDetailData);
 
     return Scaffold(
@@ -136,7 +135,7 @@ class _InsertInventoryState extends State<InsertInventory> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Inventory()));
+                                      builder: (context) => InventoryScreen()));
                             },
                             child: const Text(
                               '등록완료!',
@@ -178,12 +177,6 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
           children: [
             LiteRollingSwitch(
                 width: 100,
-                // onTap: (bool? value) {
-                //   setState(() {
-                //     takeYn = !(value ?? false);
-                //     widget.getTakeYn(takeYn);
-                //   });
-                // },
                 onTap: (bool? value) {
                   setState(() {
                     print(takeYn);
@@ -242,8 +235,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
       context.read<SearchStore>().getSearchDetailData(context, pillId);
     }
 
-    loadData(context);
-    var pillDetailData = context.read<SearchStore>().PillDetailData;
+    var pillDetailData = context.read<SearchStore>().pillDetailData;
 
     return Container(
       decoration: BoxDecoration(
