@@ -168,15 +168,15 @@ class _SearchBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(
         horizontal: 25,
       ),
-      child: Container(
-        height: 55,
-        decoration: BoxDecoration(
-          color: Colors.white, // 검색창 배경색
-          borderRadius: BorderRadius.circular(35.0), // 둥근 모서리 적용
-        ),
-        child: Row(
-          children: [
-            Expanded(
+      child: Column(
+        children: [
+          Container(
+            height: 55,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(35.0),
+            ),
+            child: Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
@@ -211,12 +211,13 @@ class _SearchBar extends StatelessWidget {
                               size: 34,
                             ),
                             onPressed: () async {
-                              // 검색 버튼 클릭 시의 동작
                               try {
                                 await context
                                     .read<SearchStore>()
                                     .getSearchNameData(
-                                        context, myController.text);
+                                  context,
+                                  myController.text,
+                                );
                                 print('검색 통신 성공');
                                 Navigator.push(
                                   context,
@@ -240,8 +241,8 @@ class _SearchBar extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ], // 여기에 누락된 괄호를 추가합니다.
       ),
     );
   }
@@ -371,9 +372,10 @@ class _Ranking extends StatelessWidget {
             ),
             // header end
             TabBar(
-              indicatorColor: Colors.red, // 선택된 탭의 아래에 표시되는 줄의 색상
-              labelColor: Colors.black, // 선택된 탭의 텍스트 색상
-              unselectedLabelColor: Colors.grey, // 선택되지 않은 탭의 텍스트 색상
+              indicatorWeight: 2,
+              indicatorColor: Color(0xFFFF6F61), // 선택된 탭의 아래에 표시되는 줄의 색상
+              labelColor: Color(0xFFFF6F61), // 선택된 탭의 텍스트 색상
+              unselectedLabelColor: Colors.grey.withOpacity(0.7), // 선택되지 않은 탭의 텍스트 색상
               tabs: [
                 _StyledTab('건강고민'),
                 _StyledTab('성분'),
@@ -405,16 +407,18 @@ class _StyledTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8), // 텍스트 주변 여백 조절
-      padding: EdgeInsets.all(8), // 텍스트 내부 여백 조절
+      margin: EdgeInsets.symmetric(horizontal: 1), // 텍스트 주변 여백 조절
+      padding: EdgeInsets.fromLTRB(2, 15, 2, 15), // 텍스트 내부 여백 조절
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20), // 탭 모서리 둥글게
-        border: Border.all(color: Colors.grey), // 탭 테두리
         color: Colors.white, // 탭 배경색
       ),
       child: Align(
         alignment: Alignment.center,
-        child: Text(text),
+        child: Text(text, style: TextStyle(
+          fontSize: 16,
+          fontFamily: "Pretendard",
+          fontWeight: FontWeight.w500,
+        ),),
       ),
     );
   }
@@ -602,18 +606,18 @@ class _SearchRanking extends StatelessWidget {
           itemBuilder: (context, i) {
             return Row(
               children: [
-                SizedBox(
-                  width: 10,
-                ),
-                Image.asset(
-                  'assets/image/${i + 1}.png', // 랭킹번호
-                  height: 30.0,
-                  width: 30.0,
+                Text("${i+1}",
+                  style: TextStyle(
+                    color: Colors.amberAccent,
+                    fontSize: 18,
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 Image.network(
                   "${RankingList[i]['imageUrl']}",
-                  width: 110,
-                  height: 80,
+                  width: 100,
+                  height: 70,
                 ),
                 Column(
                   children: [

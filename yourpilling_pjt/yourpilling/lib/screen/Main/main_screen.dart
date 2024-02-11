@@ -128,7 +128,8 @@ class _WelcomeState extends State<Welcome> {
             SizedBox(
               height: 23,
             ),
-            dailyData.length == 0 // dailyData가 없을 때 재고 등록해야 함
+            dailyData == null ||
+                    dailyData.length == 0 // dailyData가 없을 때 재고 등록해야 함
                 ? Column(
                     children: [
                       RichText(
@@ -250,10 +251,11 @@ class _WelcomeState extends State<Welcome> {
                           ),
                         ],
                       ),
-            dailyData != null
-                ?
-                // Progress Bar
-                dailyData.length != curCompleteCount
+
+            // Progress Bar
+            dailyData == null || dailyData.length == 0
+                ? Container()
+                : dailyData.length != curCompleteCount
                     ? Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Column(
@@ -320,39 +322,39 @@ class _WelcomeState extends State<Welcome> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            // RichText(
-                            //   text: TextSpan(
-                            //     children: [
-                            //       TextSpan(
-                            //         text: '섭취 완료율    ',
-                            //         style: TextStyle(
-                            //           fontWeight: FontWeight.w500,
-                            //           fontFamily: "Pretendard",
-                            //           color: Colors.greenAccent.withOpacity(1),
-                            //           fontSize: 15,
-                            //         ),
-                            //       ),
-                            //       TextSpan(
-                            //         text:
-                            //             '${(curCompleteCount * 100 / dailyData.length).round()}',
-                            //         style: TextStyle(
-                            //           fontWeight: FontWeight.w600,
-                            //           fontFamily: "Pretendard",
-                            //           color: BASIC_BLACK,
-                            //           fontSize: 36,
-                            //         ),
-                            //       ),
-                            //       TextSpan(
-                            //         text: ' %',
-                            //         style: TextStyle(
-                            //           fontSize: 20,
-                            //           color: BASIC_BLACK,
-                            //           fontWeight: FontWeight.w600,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '섭취 완료율    ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Pretendard",
+                                      color: Colors.greenAccent.withOpacity(1),
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Pretendard",
+                                      color: BASIC_BLACK,
+                                      fontSize: 36,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' %',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: BASIC_BLACK,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             Padding(
                               padding: EdgeInsets.only(top: 15),
                               child: dailyData.isEmpty
@@ -375,8 +377,7 @@ class _WelcomeState extends State<Welcome> {
                             ),
                           ],
                         ),
-                      )
-                : Container(),
+                      ),
           ],
         ),
       ),
@@ -656,7 +657,7 @@ class _TodayState extends State<_Today> {
               ListView.builder(
                   physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
                   shrinkWrap: true,
-                  itemCount: dailyData.length,
+                  itemCount: dailyData != null ? dailyData.length : 0,
                   itemBuilder: (context, i) {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
