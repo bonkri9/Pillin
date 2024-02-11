@@ -129,7 +129,8 @@ class _WelcomeState extends State<Welcome> {
               height: 23,
             ),
 
-            dailyData.length == 0 // dailyData가 없을 때 재고 등록해야 함
+            dailyData == null ||
+                    dailyData.length == 0 // dailyData가 없을 때 재고 등록해야 함
                 ? Column(
                     children: [
                       RichText(
@@ -237,7 +238,6 @@ class _WelcomeState extends State<Welcome> {
                                     fontFamily: 'Pretendard',
                                   ),
                                 ),
-
                                 TextSpan(
                                   text: '이걸 다 드셔?!"',
                                   style: TextStyle(
@@ -254,127 +254,131 @@ class _WelcomeState extends State<Welcome> {
                       ),
 
             // Progress Bar
-            dailyData.length == 0
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '섭취 완료율    ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "Pretendard",
-                                  color: Colors.redAccent,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              TextSpan(
-                                text:
-                                    '${(curCompleteCount * 100 / dailyData.length).round()}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: "Pretendard",
-                                  color: BASIC_BLACK,
-                                  fontSize: 36,
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' %',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: BASIC_BLACK,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: dailyData.isEmpty
-                              ? Container()
-                              :
-                              AnimatedProgressBar(
-                                  width: 340,
-                                  height: 15,
-                                  value: curCompleteCount / dailyData.length,
-                                  duration: const Duration(seconds: 1),
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Colors.orangeAccent,
-                                      Colors.redAccent,
-                                    ],
+            dailyData == null || dailyData.length == 0
+                ? Container()
+                : dailyData.length != curCompleteCount
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '섭취 완료율    ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Pretendard",
+                                      color: Colors.redAccent,
+                                      fontSize: 15,
+                                    ),
                                   ),
-                                  backgroundColor: BASIC_GREY.withOpacity(0.2),
-                                ),
+                                  TextSpan(
+                                    text:
+                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Pretendard",
+                                      color: BASIC_BLACK,
+                                      fontSize: 36,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' %',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: BASIC_BLACK,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: dailyData.isEmpty
+                                  ? Container()
+                                  : AnimatedProgressBar(
+                                      width: 340,
+                                      height: 15,
+                                      value:
+                                          curCompleteCount / dailyData.length,
+                                      duration: const Duration(seconds: 1),
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Colors.orangeAccent,
+                                          Colors.redAccent,
+                                        ],
+                                      ),
+                                      backgroundColor:
+                                          BASIC_GREY.withOpacity(0.2),
+                                    ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )
-                : Padding(
-              padding: EdgeInsets.only(top: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '섭취 완료율    ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Pretendard",
-                            color: Colors.greenAccent.withOpacity(1),
-                            fontSize: 15,
-                          ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.only(top: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '섭취 완료율    ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Pretendard",
+                                      color: Colors.greenAccent.withOpacity(1),
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Pretendard",
+                                      color: BASIC_BLACK,
+                                      fontSize: 36,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' %',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: BASIC_BLACK,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 15),
+                              child: dailyData.isEmpty
+                                  ? Container()
+                                  : AnimatedProgressBar(
+                                      width: 340,
+                                      height: 15,
+                                      value:
+                                          curCompleteCount / dailyData.length,
+                                      duration: Duration(seconds: 1),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFFD2FF9B).withOpacity(0.7),
+                                          Colors.greenAccent,
+                                        ],
+                                      ),
+                                      backgroundColor:
+                                          BASIC_GREY.withOpacity(0.2),
+                                    ),
+                            ),
+                          ],
                         ),
-                        TextSpan(
-                          text:
-                          '${(curCompleteCount * 100 / dailyData.length).round()}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "Pretendard",
-                            color: BASIC_BLACK,
-                            fontSize: 36,
-                          ),
-                        ),
-                        TextSpan(
-                          text: ' %',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: BASIC_BLACK,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: dailyData.isEmpty
-                        ? Container()
-                        :
-                    AnimatedProgressBar(
-                      width: 340,
-                      height: 15,
-                      value: curCompleteCount / dailyData.length,
-                      duration: Duration(seconds: 1),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFFD2FF9B).withOpacity(0.7),
-                          Colors.greenAccent,
-                        ],
                       ),
-                      backgroundColor: BASIC_GREY.withOpacity(0.2),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -499,7 +503,6 @@ class _WeekState extends State<_Week> {
                     ),
                     calendarBuilders: CalendarBuilders(
                         markerBuilder: (context, date, events) {
-
                       String month = now.month.toString().padLeft(2, '0');
                       String day = now.day.toString().padLeft(2, '0');
 
@@ -655,7 +658,7 @@ class _TodayState extends State<_Today> {
               ListView.builder(
                   physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
                   shrinkWrap: true,
-                  itemCount: dailyData.length,
+                  itemCount: dailyData != null ? dailyData.length : 0,
                   itemBuilder: (context, i) {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
