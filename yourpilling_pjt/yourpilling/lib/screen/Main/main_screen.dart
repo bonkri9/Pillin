@@ -120,7 +120,7 @@ class _WelcomeState extends State<Welcome> {
                 color: Color(0x00b5b5b5).withOpacity(0.1),
                 offset: Offset(0.1, 0.1),
                 blurRadius: 3 // 그림자 위치 조정
-                ),
+            ),
           ]),
       child: Center(
         child: Column(
@@ -129,255 +129,255 @@ class _WelcomeState extends State<Welcome> {
               height: 23,
             ),
             dailyData == null ||
-                    dailyData.length == 0 // dailyData가 없을 때 재고 등록해야 함
+                dailyData.length == 0 // dailyData가 없을 때 재고 등록해야 함
                 ? Column(
+              children: [
+                RichText(
+                  text: TextSpan(
+                    text: '아직 등록된 영양제가 없어요',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: BASIC_GREY,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Pretendard',
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                // 추가 버튼
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (c, a1, a2) => SearchScreen(),
+                        transitionsBuilder: (c, a1, a2, child) =>
+                            SlideTransition(
+                              position: Tween(
+                                begin: Offset(1.0, 0.0),
+                                end: Offset(0.0, 0.0),
+                              )
+                                  .chain(CurveTween(curve: Curves.easeInOut))
+                                  .animate(a1),
+                              child: child,
+                            ),
+                        transitionDuration: Duration(milliseconds: 750),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 15.0,
+                    backgroundColor: Colors.yellow, // 원의 배경색
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white, // 화살표 아이콘의 색상
+                    ),
+                  ),
+                ),
+              ],
+            )
+                : dailyData.length != curCompleteCount
+                ? // 영양제 다 안먹었을 때 몇 개 남았어요 ~ 화면
+            Column(
+              children: [
+                Lottie.asset('assets/lottie/running.json',
+                    width: 120, height: 120),
+                RichText(
+                  text: TextSpan(
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          text: '아직 등록된 영양제가 없어요',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: BASIC_GREY,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Pretendard',
-                          ),
+                      TextSpan(
+                        text: '"$userName 회원님 ',
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: BASIC_BLACK,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Pretendard',
                         ),
                       ),
-                      SizedBox(
-                        height: 25,
+                      TextSpan(
+                        text:
+                        '${dailyData.length - curCompleteCount}',
+                        style: TextStyle(
+                          color: Colors
+                              .redAccent, // 영양이 부분의 색상을 빨간색으로 지정
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Pretendard',
+                        ),
                       ),
-                      // 추가 버튼
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => SearchScreen(),
-                              transitionsBuilder: (c, a1, a2, child) =>
-                                  SlideTransition(
-                                position: Tween(
-                                  begin: Offset(1.0, 0.0),
-                                  end: Offset(0.0, 0.0),
-                                )
-                                    .chain(CurveTween(curve: Curves.easeInOut))
-                                    .animate(a1),
-                                child: child,
-                              ),
-                              transitionDuration: Duration(milliseconds: 750),
-                            ),
-                          );
-                        },
-                        child: CircleAvatar(
-                          radius: 15.0,
-                          backgroundColor: Colors.yellow, // 원의 배경색
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white, // 화살표 아이콘의 색상
-                          ),
+                      TextSpan(
+                        text: '개 남았어요!"',
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: BASIC_BLACK,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Pretendard',
                         ),
                       ),
                     ],
-                  )
-                : dailyData.length != curCompleteCount
-                    ? // 영양제 다 안먹었을 때 몇 개 남았어요 ~ 화면
-                    Column(
-                        children: [
-                          Lottie.asset('assets/lottie/running.json',
-                              width: 120, height: 120),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '"$userName 회원님 ',
-                                  style: TextStyle(
-                                    fontSize: 19,
-                                    color: BASIC_BLACK,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Pretendard',
-                                  ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      '${dailyData.length - curCompleteCount}',
-                                  style: TextStyle(
-                                    color: Colors
-                                        .redAccent, // 영양이 부분의 색상을 빨간색으로 지정
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Pretendard',
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '개 남았어요!"',
-                                  style: TextStyle(
-                                    fontSize: 19,
-                                    color: BASIC_BLACK,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Pretendard',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Lottie.asset('assets/lottie/rabbit.json',
-                              width: 120, height: 120),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '"$userName 회원님 ',
-                                  style: TextStyle(
-                                    fontSize: 21,
-                                    color: BASIC_BLACK,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Pretendard',
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '이걸 다 드셔?!"',
-                                  style: TextStyle(
-                                    fontSize: 21,
-                                    color: BASIC_BLACK,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Pretendard',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                  ),
+                ),
+              ],
+            )
+                : Column(
+              children: [
+                Lottie.asset('assets/lottie/rabbit.json',
+                    width: 120, height: 120),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '"$userName 회원님 ',
+                        style: TextStyle(
+                          fontSize: 21,
+                          color: BASIC_BLACK,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Pretendard',
+                        ),
                       ),
+                      TextSpan(
+                        text: '이걸 다 드셔?!"',
+                        style: TextStyle(
+                          fontSize: 21,
+                          color: BASIC_BLACK,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Pretendard',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
 
             // Progress Bar
             dailyData == null || dailyData.length == 0
                 ? Container()
                 : dailyData.length != curCompleteCount
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '섭취 완료율    ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Pretendard",
-                                      color: Colors.redAccent,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: "Pretendard",
-                                      color: BASIC_BLACK,
-                                      fontSize: 36,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' %',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: BASIC_BLACK,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: dailyData.isEmpty
-                                  ? Container()
-                                  : AnimatedProgressBar(
-                                      width: 340,
-                                      height: 15,
-                                      value:
-                                          curCompleteCount / dailyData.length,
-                                      duration: const Duration(seconds: 1),
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Colors.orangeAccent,
-                                          Colors.redAccent,
-                                        ],
-                                      ),
-                                      backgroundColor:
-                                          BASIC_GREY.withOpacity(0.2),
-                                    ),
-                            ),
-                          ],
+                ? Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '섭취 완료율    ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "Pretendard",
+                            color: Colors.redAccent,
+                            fontSize: 15,
+                          ),
                         ),
-                      )
-                    : Padding(
-                        padding: EdgeInsets.only(top: 30),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '섭취 완료율    ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Pretendard",
-                                      color: Colors.greenAccent.withOpacity(1),
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: "Pretendard",
-                                      color: BASIC_BLACK,
-                                      fontSize: 36,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' %',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: BASIC_BLACK,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 15),
-                              child: dailyData.isEmpty
-                                  ? Container()
-                                  : AnimatedProgressBar(
-                                      width: 340,
-                                      height: 15,
-                                      value:
-                                          curCompleteCount / dailyData.length,
-                                      duration: Duration(seconds: 1),
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Color(0xFFD2FF9B).withOpacity(0.7),
-                                          Colors.greenAccent,
-                                        ],
-                                      ),
-                                      backgroundColor:
-                                          BASIC_GREY.withOpacity(0.2),
-                                    ),
-                            ),
-                          ],
+                        TextSpan(
+                          text:
+                          '${(curCompleteCount * 100 / dailyData.length).round()}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Pretendard",
+                            color: BASIC_BLACK,
+                            fontSize: 36,
+                          ),
                         ),
+                        TextSpan(
+                          text: ' %',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: BASIC_BLACK,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: dailyData.isEmpty
+                        ? Container()
+                        : AnimatedProgressBar(
+                      width: 340,
+                      height: 15,
+                      value:
+                      curCompleteCount / dailyData.length,
+                      duration: const Duration(seconds: 1),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Colors.orangeAccent,
+                          Colors.redAccent,
+                        ],
                       ),
+                      backgroundColor:
+                      BASIC_GREY.withOpacity(0.2),
+                    ),
+                  ),
+                ],
+              ),
+            )
+                : Padding(
+              padding: EdgeInsets.only(top: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '섭취 완료율    ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "Pretendard",
+                            color: Colors.greenAccent.withOpacity(1),
+                            fontSize: 15,
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                          '${(curCompleteCount * 100 / dailyData.length).round()}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Pretendard",
+                            color: BASIC_BLACK,
+                            fontSize: 36,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' %',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: BASIC_BLACK,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15),
+                    child: dailyData.isEmpty
+                        ? Container()
+                        : AnimatedProgressBar(
+                      width: 340,
+                      height: 15,
+                      value:
+                      curCompleteCount / dailyData.length,
+                      duration: Duration(seconds: 1),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFFD2FF9B).withOpacity(0.7),
+                          Colors.greenAccent,
+                        ],
+                      ),
+                      backgroundColor:
+                      BASIC_GREY.withOpacity(0.2),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -421,7 +421,7 @@ class _WeekState extends State<_Week> {
                   color: Color(0x00b5b5b5).withOpacity(0.1),
                   offset: Offset(0.1, 0.1),
                   blurRadius: 3 // 그림자 위치 조정
-                  ),
+              ),
             ]),
         child: Column(
           children: [
@@ -482,7 +482,7 @@ class _WeekState extends State<_Week> {
                     calendarStyle: CalendarStyle(
                       outsideDaysVisible: false,
                       todayTextStyle:
-                          TextStyle(color: Colors.red.withOpacity(0.8)),
+                      TextStyle(color: Colors.red.withOpacity(0.8)),
                       weekendTextStyle: TextStyle(color: Colors.grey),
                       defaultTextStyle: TextStyle(color: Colors.grey),
                       todayDecoration: BoxDecoration(
@@ -502,64 +502,64 @@ class _WeekState extends State<_Week> {
                     ),
                     calendarBuilders: CalendarBuilders(
                         markerBuilder: (context, date, events) {
-                      String month = now.month.toString().padLeft(2, '0');
-                      String day = now.day.toString().padLeft(2, '0');
+                          String month = now.month.toString().padLeft(2, '0');
+                          String day = now.day.toString().padLeft(2, '0');
 
-                      String paramDate = '${date.year}-$month-$day';
+                          String paramDate = '${date.year}-$month-$day';
 
-                      // 현재 날짜에 해당하는 데이터 찾기
-                      var dayData = weekData['data'].firstWhere(
-                        (data) => data['date'] == paramDate,
-                        orElse: () => null,
-                      );
+                          // 현재 날짜에 해당하는 데이터 찾기
+                          var dayData = weekData['data'].firstWhere(
+                                (data) => data['date'] == paramDate,
+                            orElse: () => null,
+                          );
 
-                      if (dayData != null) {
-                        int needToTakenCountToday =
+                          if (dayData != null) {
+                            int needToTakenCountToday =
                             dayData['needToTakenCountToday'];
-                        int actualTakenToday = dayData['actualTakenToday'];
+                            int actualTakenToday = dayData['actualTakenToday'];
 
-                        double dayGauge =
-                            actualTakenToday / needToTakenCountToday;
+                            double dayGauge =
+                                actualTakenToday / needToTakenCountToday;
 
-                        return Positioned(
-                          bottom: 5,
-                          child: SizedBox(
-                            width: 40,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 1),
-                              child: CircleProgressBar(
-                                strokeWidth: 2.6,
-                                foregroundColor: dayGauge == 1
-                                    ? fullColor
-                                    : dayGauge > 0.5
+                            return Positioned(
+                              bottom: 5,
+                              child: SizedBox(
+                                width: 40,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 1),
+                                  child: CircleProgressBar(
+                                    strokeWidth: 2.6,
+                                    foregroundColor: dayGauge == 1
+                                        ? fullColor
+                                        : dayGauge > 0.5
                                         ? overFiftyColor
                                         : dayGauge == 0.5
-                                            ? fiftyColor
-                                            : underFiftyColor,
-                                backgroundColor: BASIC_GREY.withOpacity(0.2),
-                                value: dayGauge, // dayGauge
+                                        ? fiftyColor
+                                        : underFiftyColor,
+                                    backgroundColor: BASIC_GREY.withOpacity(0.2),
+                                    value: dayGauge, // dayGauge
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Positioned(
-                          bottom: 5,
-                          child: SizedBox(
-                            width: 40,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 1),
-                              child: CircleProgressBar(
-                                strokeWidth: 2.6,
-                                foregroundColor: BASIC_GREY.withOpacity(0.2),
-                                backgroundColor: BASIC_GREY.withOpacity(0.2),
-                                value: 0, // dayGauge
+                            );
+                          } else {
+                            return Positioned(
+                              bottom: 5,
+                              child: SizedBox(
+                                width: 40,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 1),
+                                  child: CircleProgressBar(
+                                    strokeWidth: 2.6,
+                                    foregroundColor: BASIC_GREY.withOpacity(0.2),
+                                    backgroundColor: BASIC_GREY.withOpacity(0.2),
+                                    value: 0, // dayGauge
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      }
-                    }),
+                            );
+                          }
+                        }),
                   ),
                 )),
           ],
@@ -583,11 +583,10 @@ class _TodayState extends State<_Today> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double containerWidth = screenWidth; // 화면의 90%
-    // 오늘 먹을 영양제 목록 [{name, actualTakeCount, needToTakeTotalCount}]
-    var dailyData = context.watch<MainStore>().dailyData;
-    var curCompleteCount =
-        context.watch<MainStore>().curCompleteCount; // 오늘 현재까지 복용한 영양제 개수
+    double containerWidth = screenWidth;
+    var mainStore = context.watch<MainStore>();
+    var dailyData = mainStore.dailyData;
+    var curCompleteCount = mainStore.curCompleteCount;
 
     return Container(
         width: containerWidth,
@@ -606,7 +605,7 @@ class _TodayState extends State<_Today> {
                   color: Color(0x00b5b5b5).withOpacity(0.1),
                   offset: Offset(0.1, 0.1),
                   blurRadius: 3 // 그림자 위치 조정
-                  ),
+              ),
             ]),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20),
@@ -637,21 +636,21 @@ class _TodayState extends State<_Today> {
               // 여기 패기 추가해야 할 수도
               dailyData == null || dailyData.isEmpty
                   ? Center(
-                      child: Column(
-                        children: [
-                          Lottie.asset('assets/lottie/jump.json',
-                              fit: BoxFit.fill, width: 200, height: 200),
-                          Text(
-                            "영양제 없으면 영양이 휴무날",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: BASIC_GREY,
-                                fontFamily: "Pretendard"),
-                          ),
-                        ],
-                      ),
-                    )
+                child: Column(
+                  children: [
+                    Lottie.asset('assets/lottie/jump.json',
+                        fit: BoxFit.fill, width: 200, height: 200),
+                    Text(
+                      "영양제 없으면 영양이 휴무날",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: BASIC_GREY,
+                          fontFamily: "Pretendard"),
+                    ),
+                  ],
+                ),
+              )
                   : Container(),
 
               ListView.builder(
@@ -673,7 +672,7 @@ class _TodayState extends State<_Today> {
                             height: 85,
                             decoration: BoxDecoration(
                               color: dailyData[i]['actualTakeCount'] !=
-                                      dailyData[i]['needToTakeTotalCount']
+                                  dailyData[i]['needToTakeTotalCount']
                                   ? beforeTakeColor
                                   : afterTakeColor,
                               borderRadius: BorderRadius.circular(23),
@@ -688,13 +687,13 @@ class _TodayState extends State<_Today> {
                                 width: 260,
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text("${dailyData[i]['name']}",
                                             overflow: TextOverflow.ellipsis,
@@ -717,20 +716,20 @@ class _TodayState extends State<_Today> {
                                       ],
                                     ),
                                     dailyData[i]['actualTakeCount'] !=
-                                            dailyData[i][
-                                                'needToTakeTotalCount'] // 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
+                                        dailyData[i][
+                                        'needToTakeTotalCount'] // 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
                                         ? Icon(
-                                            Icons.check_circle_outline,
-                                            color: Color(0xFFFF6F61)
-                                                .withOpacity(0.2),
-                                            size: 30, // 아이콘 크기 조절
-                                          )
+                                      Icons.check_circle_outline,
+                                      color: Color(0xFFFF6F61)
+                                          .withOpacity(0.2),
+                                      size: 30, // 아이콘 크기 조절
+                                    )
                                         : Icon(
-                                            Icons.check_circle,
-                                            color: Colors.greenAccent
-                                                .withOpacity(0.9),
-                                            size: 30, // 아이콘 크기 조절
-                                          )
+                                      Icons.check_circle,
+                                      color: Colors.greenAccent
+                                          .withOpacity(0.9),
+                                      size: 30, // 아이콘 크기 조절
+                                    )
                                   ],
                                 ),
                               ),
@@ -800,7 +799,7 @@ class _StockState extends State<_Stock> {
                   color: Color(0x00b5b5b5).withOpacity(0.1),
                   offset: Offset(0.1, 0.1),
                   blurRadius: 3 // 그림자 위치 조정
-                  ),
+              ),
             ]),
         child: Column(
           children: [
@@ -830,7 +829,7 @@ class _StockState extends State<_Stock> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   itemCount:
-                      context.watch<MainStore>().userInventoryData.length,
+                  context.watch<MainStore>().userInventoryData.length,
                   itemBuilder: (context, i) {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),

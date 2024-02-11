@@ -18,9 +18,8 @@ class MainStore extends ChangeNotifier {
 
   // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
   getWeeklyData(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
-    const String weeklyUrl ="${CONVERT_URL}/api/v1/pill/history/weekly";
-
+    String accessToken = context.read<UserStore>().accessToken;
+    const String weeklyUrl = "${CONVERT_URL}/api/v1/pill/history/weekly";
 
     try {
       var response = await http.get(Uri.parse(weeklyUrl), headers: {
@@ -47,10 +46,9 @@ class MainStore extends ChangeNotifier {
 
   // 일간 복용 기록(status Bar) 부분 조회
   getDailyData(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     String dailyUrl = "${CONVERT_URL}/api/v1/pill/history/daily";
     DateTime now = DateTime.now();
-
     try {
       var response = await http.get(
           Uri.parse(
@@ -59,25 +57,19 @@ class MainStore extends ChangeNotifier {
             'Content-Type': 'application/json',
             'accessToken': accessToken,
           });
-
       if (response.statusCode == 200) {
-        print("일간 복용 기록 수신 성공, 조회 날짜 : " + '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}');
-
+        print("일간 복용 기록 수신 성공, 조회 날짜 : " +
+            '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}');
         dailyData = jsonDecode(utf8.decode(response.bodyBytes))['taken'];
-
         for (int i = 0; i < dailyData.length; i++) {
-          if (dailyData[i]['actualTakeCount'] == dailyData[i]['needToTakeTotalCount']) {
+          if (dailyData[i]['actualTakeCount'] ==
+              dailyData[i]['needToTakeTotalCount']) {
             deadLine++;
           }
         }
-
         curCompleteCount = deadLine;
         deadLine = 0;
         notifyListeners();
-
-        // 같은 만큼 올라야 하는데 무한랜더링이 되므로
-        //
-
         print("dailyData: $dailyData");
       } else {
         print("일간 복용 기록 조회 실패");
@@ -86,42 +78,11 @@ class MainStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
-
-  }
-
-  // 내 영양제 재고
-  getUserInventory(BuildContext context) async{
-    String accessToken = context.watch<UserStore>().accessToken;
-    String inventoryListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
-
-
-    try {
-      var response = await http.get(
-        Uri.parse(inventoryListUrl),
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': accessToken,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("내 영양제 재고 요청 성공");
-        userInventoryData = json.decode(utf8.decode(response.bodyBytes))['takeTrue']['data'];
-        print('userInventoryData: $userInventoryData');
-        notifyListeners();
-      } else {
-        print("내 영양제 재고 요청 실패");
-      }
-    } catch (error) {
-      print(error);
-    }
-    notifyListeners();
   }
 
   // 미복용 => 복용
   takePill(BuildContext context, ownPillId) async {
     const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
-
     print("영양제 복용 완료 요청");
     String accessToken = context.read<UserStore>().accessToken;
     var response = await http.put(Uri.parse(takePillUrl),
@@ -135,18 +96,41 @@ class MainStore extends ChangeNotifier {
     if (response.statusCode == 200) {
       print("영양제 복용 완료 요청 수신 성공");
       print("복용버튼 DailyData $dailyData");
-      getDailyData(context);
+      await getDailyData(context);
       curCompleteCount++;
       notifyListeners();
-
-
-
       print(response.body);
     } else {
       print(response.body);
       print("영양제 복용 완료 요청 수신 실패");
     }
-    // MainScreen().today.createState();
+    notifyListeners();
+  }
+
+  // 내 영양제 재고
+  getUserInventory(BuildContext context) async {
+    String accessToken = context.watch<UserStore>().accessToken;
+    String inventoryListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
+    try {
+      var response = await http.get(
+        Uri.parse(inventoryListUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },
+      );
+      if (response.statusCode == 200) {
+        print("내 영양제 재고 요청 성공");
+        userInventoryData =
+        json.decode(utf8.decode(response.bodyBytes))['takeTrue']['data'];
+        print('userInventoryData: $userInventoryData');
+        notifyListeners();
+      } else {
+        print("내 영양제 재고 요청 실패");
+      }
+    } catch (error) {
+      print(error);
+    }
     notifyListeners();
   }
 }
