@@ -7,6 +7,7 @@ import com.ssafy.yourpilling.common.RunOutWarning;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.dao.entity.PillMember;
+import com.ssafy.yourpilling.pill.model.dao.jpa.BuyRecordRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
 import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
@@ -15,7 +16,9 @@ import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
 import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
 import com.ssafy.yourpilling.security.auth.model.dao.jpa.MemberRepository;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
 @DisplayName("영양제 통합 테스트")
-class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
+class OwnPillControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -67,6 +70,9 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
 
     @Autowired
     private PillMemberJpaRepository pillMemberJpaRepository;
+
+    @Autowired
+    private BuyRecordRepository buyRecordRepository;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -316,6 +322,31 @@ class TakerHistoryOwnTakerHistoryTakerHistoryPillControllerTest {
         assertTrue(ownPillJpaRepository.findByOwnPillId(one.getOwnPillId()).isEmpty());
         assertFalse(ownPillJpaRepository.findByOwnPillId(two.getOwnPillId()).isEmpty());
         assertFalse(ownPillJpaRepository.findByOwnPillId(three.getOwnPillId()).isEmpty());
+    }
+
+    @Test
+    public void buy() throws Exception {
+        // given
+        Member member = defaultRegisterMember();
+        String accessToken = getAccessToken(member);
+        Pill pill = defaultRegisterPill();
+
+        JSONObject body = new JSONObject();
+        body.put("pillId", pill.getPillId());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post("/api/v1/pill/buy")
+                .header("accessToken", accessToken)
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+        int originalSize = buyRecordRepository.findAll().size();
+
+        // when
+        mockMvc.perform(request);
+        mockMvc.perform(request);
+
+        // then
+        assertEquals(originalSize + 2, buyRecordRepository.findAll().size());
     }
 
     private OwnPill registerOwnPill(boolean takeYN, Long memberId, Pill pill, int total, int remains){

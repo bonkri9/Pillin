@@ -1,8 +1,10 @@
 package com.ssafy.yourpilling.pill.model.service.mapper;
 
+import com.ssafy.yourpilling.pill.model.dao.entity.BuyRecord;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
+import com.ssafy.yourpilling.pill.model.service.vo.in.BuyRecordVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo.OutOwnPillPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
@@ -101,6 +103,14 @@ public class OwnPillServiceMapper {
                 .remains(ownPill.getRemains())
                 .predicateRunOutAt(at)
                 .warningMessage(ownPill.runOutMessage())
+                .build();
+    }
+
+    public BuyRecord mapToBuyRecord(BuyRecordVo vo) {
+        return BuyRecord
+                .builder()
+                .memberId(vo.getMemberId())
+                .pillId(vo.getPillId())
                 .build();
     }
 }

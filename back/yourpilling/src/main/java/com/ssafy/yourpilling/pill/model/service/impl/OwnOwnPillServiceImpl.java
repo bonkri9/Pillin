@@ -167,8 +167,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
             // 섭취에서 미섭취로 전환
             ownPill.setTakeYN(false);
             todayHistory.decreaseNeedToTakeByUpdateTakeYn();
-
-
         } else {
 
             // 미섭취에서 섭취로 전환
@@ -176,7 +174,12 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
             todayHistory.increaseNeedToTakeByUpdateTakeYn();
 
         }
+    }
 
+    @Transactional
+    @Override
+    public void buyRecord(BuyRecordVo vo) {
+        ownPillDao.buyRecord(mapper.mapToBuyRecord(vo));
     }
 
     private TakerHistory makeTakerHistoryIfAbsent(OwnPill ownPill) {
