@@ -96,6 +96,7 @@ class _InsertInventoryState extends State<InsertInventory> {
               getTakeYn: getTakeYn,
               getCurPillCount: getCurPillCount,
               getTotalPillCount: getTotalPillCount,
+                detailData : pillDetailData
             ),
           ],
         ),
@@ -110,28 +111,6 @@ class _InsertInventoryState extends State<InsertInventory> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            // bool checkTrue = false;
-            // var trueList = context.read<InventoryStore>().takeTrueListData;
-            // var trueLength = trueList.length;
-            // for (int i = 0; i < trueLength; i++) {
-            //   if (trueList[i]['pillId'] == pillId) {
-            //     checkTrue = true; // 복용하는 약 중에 이미 존재한다
-            //   }
-            // }
-            //
-            // bool checkFalse = false;
-            // var falseList = context.read<InventoryStore>().takeFalseListData;
-            // var falseLength = falseList.length;
-            // for (int i = 0; i < falseLength; i++) {
-            //   if (falseList[i]['pillId'] == pillId) {
-            //     checkFalse = true; // 미복용하는 약 중에 이미 존재한다
-            //   }
-            // }
-            // print("아래가 checkFalse");
-            // print(checkFalse);
-            // print(checkTrue);
-            // //재고 리스트에 이미 있다면, 이미 등록된 재고라고 모달창 띄우기
-            // if (checkTrue == false && checkFalse == false) {
             print(takeYn);
             print(remains);
             print(totalCount);
@@ -166,24 +145,6 @@ class _InsertInventoryState extends State<InsertInventory> {
                     ),
                   );
                 });
-            // } else {
-            //   showDialog(
-            //       context: context,
-            //       builder: (BuildContext context) {
-            //         return AlertDialog(
-            //           title: Text('알림'),
-            //           content: Text("이미 등록된 영양제입니다."),
-            //           actions: [
-            //             TextButton(
-            //               child: Text("닫기"),
-            //               onPressed: () {
-            //                 Navigator.of(context).pop();
-            //               },
-            //             ),
-            //           ],
-            //         );
-            //       });
-            // }
           },
         ),
       ),
@@ -215,18 +176,23 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
   }
 }
 
+
 class _InsertInvenContent extends StatefulWidget {
+
   _InsertInvenContent(
       {super.key,
         this.getCurPillCount,
         this.getTotalPillCount,
         this.pillId,
-        this.getTakeYn});
+        this.getTakeYn,
+      this.detailData});
 
   var getCurPillCount;
   var getTotalPillCount;
   var pillId;
   var getTakeYn;
+  var detailData;
+
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
@@ -240,12 +206,12 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
   @override
   Widget build(BuildContext context) {
     var pillId = widget.pillId;
-    void loadData(BuildContext context) {
-      context.read<SearchStore>().getSearchDetailData(context, pillId);
-    }
-
-    loadData(context);
-    var pillDetailData = context.read<SearchStore>().pillDetailData;
+    // void loadData(BuildContext context) {
+    //   context.read<SearchStore>().getSearchDetailData(context, pillId);
+    // }
+    //
+    // loadData(context);
+    var pillDetailData = widget.detailData;
 
     return Container(
       decoration: BoxDecoration(
@@ -290,28 +256,6 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     ],
                   ),
                 ),
-                // LiteRollingSwitch(
-                //     width: 100,
-                //     onTap: () {},
-                //     onDoubleTap: () {},
-                //     onSwipe: () {},
-                //     value: takeYn ?? false,
-                //     textOn: '복용중',
-                //     textOff: '미복용',
-                //     colorOn: Colors.greenAccent,
-                //     colorOff: Colors.redAccent,
-                //     iconOn: Icons.done,
-                //     iconOff: Icons.do_not_disturb_on_outlined,
-                //     textSize: 13,
-                //     onChanged: (bool? value) {
-                //       setState(() {
-                //         print(takeYn);
-                //         print('아래가 value onChanged');
-                //         print(value);
-                //         takeYn = value;
-                //         widget.getTakeYn(takeYn);
-                //       });
-                //     }),
                 Container(
                     height: 50,
                     child: Row(

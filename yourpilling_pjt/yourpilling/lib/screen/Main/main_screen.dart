@@ -320,39 +320,39 @@ class _WelcomeState extends State<Welcome> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '섭취 완료율    ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Pretendard",
-                                      color: Colors.greenAccent.withOpacity(1),
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: "Pretendard",
-                                      color: BASIC_BLACK,
-                                      fontSize: 36,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' %',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: BASIC_BLACK,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     children: [
+                            //       TextSpan(
+                            //         text: '섭취 완료율    ',
+                            //         style: TextStyle(
+                            //           fontWeight: FontWeight.w500,
+                            //           fontFamily: "Pretendard",
+                            //           color: Colors.greenAccent.withOpacity(1),
+                            //           fontSize: 15,
+                            //         ),
+                            //       ),
+                            //       TextSpan(
+                            //         text:
+                            //             '${(curCompleteCount * 100 / dailyData.length).round()}',
+                            //         style: TextStyle(
+                            //           fontWeight: FontWeight.w600,
+                            //           fontFamily: "Pretendard",
+                            //           color: BASIC_BLACK,
+                            //           fontSize: 36,
+                            //         ),
+                            //       ),
+                            //       TextSpan(
+                            //         text: ' %',
+                            //         style: TextStyle(
+                            //           fontSize: 20,
+                            //           color: BASIC_BLACK,
+                            //           fontWeight: FontWeight.w600,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                             Padding(
                               padding: EdgeInsets.only(top: 15),
                               child: dailyData.isEmpty

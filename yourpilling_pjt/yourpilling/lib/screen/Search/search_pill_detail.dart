@@ -24,6 +24,41 @@ class PillDetailScreen extends StatefulWidget {
 }
 
 class _pillDetailScreenState extends State<PillDetailScreen> {
+
+
+  @override
+  Widget build(BuildContext context) {
+    var pillId = widget.pillId;
+    void loadData(BuildContext context) {
+      context.read<SearchStore>().getSearchDetailData(context, pillId);
+    }
+
+    loadData(context);
+    return info();
+  }
+
+  void onRefresh() {}
+}
+
+class NoBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
+  }
+}
+
+class info extends StatefulWidget {
+  const info({super.key});
+
+
+
+  @override
+  State<info> createState() => _infoState();
+}
+
+
+class _infoState extends State<info> {
   final _scrollController = ScrollController();
   double scrollOpacity = 0;
 
@@ -57,16 +92,11 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var pillDetailInfo = context.watch<SearchStore>().pillDetailData;
+
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
 
-    var pillId = widget.pillId;
-    void loadData(BuildContext context) {
-      context.read<SearchStore>().getSearchDetailData(context, pillId);
-    }
 
-    loadData(context);
-    var pillDetailInfo = context.watch<SearchStore>().pillDetailData;
-    // print(pillDetailInfo);
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR,
       body: RefreshIndicator(
@@ -271,17 +301,8 @@ class _pillDetailScreenState extends State<PillDetailScreen> {
       ),
     );
   }
-
-  void onRefresh() {}
 }
 
-class NoBehavior extends ScrollBehavior {
-  @override
-  Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
-    return child;
-  }
-}
 
 class PillDetailInfo extends StatefulWidget {
   var pillId;
