@@ -28,7 +28,7 @@ class _AnalysisReportState extends State<AnalysisReport> {
     var userDetailInfo = context.watch<UserStore>().UserDetail;
 
     return Scaffold(
-      backgroundColor: Color(0xFFF5F6F9),
+      backgroundColor: BACKGROUND_COLOR.withOpacity(0.9),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -36,31 +36,38 @@ class _AnalysisReportState extends State<AnalysisReport> {
           },
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
-        title: Text("${userDetailInfo?['name'] ?? ""}님의 분석 리포트"),
+        title: Text("${userDetailInfo?['name'] ?? ""}님의 분석 리포트",
+          style: TextStyle(
+            color: BASIC_BLACK,
+            fontSize: 25,
+            fontFamily: "Pretendard",
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         // scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
           child: Column(
             children: [
               _ReportIntro(), //리포트 개요
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               _EssentialNutrients(), //필수영양소 레이더
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               _VitaminBGroupRadar(), //비타민 B군 레이더
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               // _VitaminBGroup(),
+              // SizedBox(
+              //   height: 15,
+              // ),
               _RecommendList(), //추천리스트
             ],
           ),
-        ),
       ),
     );
   }
@@ -77,69 +84,107 @@ class _ReportIntro extends StatefulWidget {
 class _ReportIntroState extends State<_ReportIntro> {
   @override
   Widget build(BuildContext context) {
-    var takeTrueList = context.read<InventoryStore>().takeTrueListData;
-    var userDetailInfo = context.watch<UserStore>().UserDetail;
+    var takeTrueList = context.watch<InventoryStore>().takeTrueListData;
+    var userDetailInfo = context.read<UserStore>().UserDetail;
     var imageWidth = MediaQuery.of(context).size.width * 0.3;
+    var screenWidth = MediaQuery.of(context).size.width;
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text("${userDetailInfo?['name'] ?? ""}의 분석리포트입니다.", style: TextStyle(fontSize: 25),),
-          ],
-        ),
-        Row(
-          children: [
-            Text("(현재 복용 중인 영양제 기준)", style: TextStyle(fontSize: 20),),
-          ],
-        ),
-        Row(
-          children: [
-            Text("복용 중인 영양제 목록", style: TextStyle(fontSize: 20),),
-          ],
-        ),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: takeTrueList.length,
-            itemBuilder: (context, i) {
-            return Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
+    return Container(
+      width: screenWidth,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30)),
+          border: Border.all(
+            width: 0.1,
+            color: Colors.grey.withOpacity(0.5),
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: Color(0x00b5b5b5).withOpacity(0.1),
+                offset: Offset(0.1, 0.1),
+                blurRadius: 3 // 그림자 위치 조정
+            ),
+          ]),
+
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(30, 30, 30, 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 15, 0, 15),
-                    child: Image.network(
-                      takeTrueList[i]["imageUrl"],
-                      width: imageWidth,
-                      height: 100,
-                    ),
-                  ),
-                  Container(
-                    width: 200,
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      text: TextSpan(
-                        text: takeTrueList[i]['pillName'],
-                        style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontFamily: "Pretendard",
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                          fontSize: 15.5,
-                        ),
+                  Row(
+                    children: [
+                      Text(
+                        "${userDetailInfo?['name'] ?? ""}의 분석리포트입니다.",
+                        style: TextStyle(fontSize: 25),
                       ),
-                    ),
-                  )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "(현재 복용 중인 영양제 기준)",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "복용 중인 영양제 목록",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: takeTrueList.length,
+                      itemBuilder: (context, i) {
+                        return Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 15, 0, 15),
+                                child: Image.network(
+                                  takeTrueList[i]["imageUrl"],
+                                  width: imageWidth,
+                                  height: 100,
+                                ),
+                              ),
+                              Container(
+                                width: 200,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  text: TextSpan(
+                                    text: takeTrueList[i]['pillName'],
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                      fontSize: 15.5,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
                 ],
               ),
-            );
-
-            }
-        ),
-      ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -153,14 +198,16 @@ class _EssentialNutrients extends StatefulWidget {
 }
 
 class _EssentialNutrientsState extends State<_EssentialNutrients> {
+
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     var essentialNutrientDataList =
         context.watch<AnalysisReportStore>().essentialNutrientDataList;
     var essentialNutrientDataLisLength =
-        context.read<AnalysisReportStore>().essentialNutrientDataLisLength;
+        context.watch<AnalysisReportStore>().essentialNutrientDataLisLength;
     var numberOfFeatures = essentialNutrientDataLisLength;
-    print("이거 필수 길이이이이$numberOfFeatures");
 
     const ticks = [50, 100, 150];
 
@@ -186,64 +233,100 @@ class _EssentialNutrientsState extends State<_EssentialNutrients> {
     print(data);
     print(features);
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              "필수 영양소 섭취 분석",
-              style: TextStyle(fontSize: 25),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "(100%가 권장섭취량입니다.)",
-              style: TextStyle(fontSize: 15),
-            ),
-            Text(
-              "단위 : [%]",
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
-        Container(
-          width: 300,
-          height: 300,
-          // color: Colors.white, //배경색
-          child: RadarChart(
-            //차트 축 기준
-            ticks: ticks,
-            // 각각의 영양소 이름
-            features: features,
-            // 각 영양소 수치
-            data: data,
-            // 데이터 표시 범위 색상 변경 : 리스트 타입으로 색상을 나열
-            graphColors: const [
-              Colors.yellow, // features(현재 섭취량) 빨간색으로 표시
-              Colors.red, // data(권장섭취량) 노란색으로 표시
-            ],
-            axisColor: Colors.green,
-            // 축 색상 변경
-            outlineColor: Colors.grey,
-            // 차트 테두리 색상 변경
-            // 축 표시 글꼴 색상 변경
-            ticksTextStyle: const TextStyle(color: Colors.green, fontSize: 16),
-            // 피처 표시 글꼴 색상 변경
-            featuresTextStyle: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-            // 축 표시 값 반전 : 기본값 false
-            reverseAxis: false,
-            // 다각형 설정
-            sides: essentialNutrientDataLisLength,
+    return Container(
+      width: screenWidth,
+      constraints: BoxConstraints(
+        minHeight: 210,
+      ),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(36),
+          border: Border.all(
+            width: 0.1,
+            color: Colors.grey.withOpacity(0.5),
           ),
-        ),
-      ],
+          boxShadow: [
+            BoxShadow(
+                color: Color(0x00b5b5b5).withOpacity(0.1),
+                offset: Offset(0.1, 0.1),
+                blurRadius: 3 // 그림자 위치 조정
+            ),
+          ]),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(30, 30, 30, 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "필수 영양소 섭취 분석",
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "(100%가 권장섭취량입니다.)",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      Text(
+                        "단위 : [%]",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 300,
+              height: 300,
+              // color: Colors.white, //배경색
+              child: RadarChart(
+                //차트 축 기준
+                ticks: ticks,
+                // 각각의 영양소 이름
+                features: features,
+                // 각 영양소 수치
+                data: data,
+                // 데이터 표시 범위 색상 변경 : 리스트 타입으로 색상을 나열
+                graphColors: const [
+                  Colors.yellow, // features(현재 섭취량) 빨간색으로 표시
+                  Colors.red, // data(권장섭취량) 노란색으로 표시
+                ],
+                axisColor: Colors.green,
+                // 축 색상 변경
+                outlineColor: Colors.grey,
+                // 차트 테두리 색상 변경
+                // 축 표시 글꼴 색상 변경
+                ticksTextStyle: const TextStyle(color: Colors.green, fontSize: 16),
+                // 피처 표시 글꼴 색상 변경
+                featuresTextStyle: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                // 축 표시 값 반전 : 기본값 false
+                reverseAxis: false,
+                // 다각형 설정
+                sides: essentialNutrientDataLisLength,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -257,15 +340,15 @@ class _VitaminBGroupRadar extends StatefulWidget {
 }
 
 class _VitaminBGroupRadarState extends State<_VitaminBGroupRadar> {
-  bool darkMode = false;
-  bool useSides = false;
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     var vitaminBGroupDataList =
         context.watch<AnalysisReportStore>().vitaminBGroupDataList;
     var vitaminBGroupDataListLength =
-        context.read<AnalysisReportStore>().vitaminBGroupDataListLength;
+        context.watch<AnalysisReportStore>().vitaminBGroupDataListLength;
     var numberOfFeatures = vitaminBGroupDataListLength;
     print("이거 필수 길이이이이$numberOfFeatures");
 
@@ -293,73 +376,94 @@ class _VitaminBGroupRadarState extends State<_VitaminBGroupRadar> {
     print(data);
     print(features);
 
-    // features = features.sublist(0, numberOfFeatures.floor());
-    // data = data
-    //     .map((graph) => graph.sublist(0, numberOfFeatures.floor()))
-    //     .toList();
-
-    // bool darkMode = false;
-    // bool useSides = false;
-    // double numberOfFeatures = essentialNutrientDataLisLength;
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              "비타민 B군 섭취 분석",
-              style: TextStyle(fontSize: 25),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "(100%가 권장섭취량입니다.)",
-              style: TextStyle(fontSize: 15),
-            ),
-            Text(
-              "단위 : [%]",
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
-        Container(
-          width: 300,
-          height: 300,
-          // color: Colors.white, //배경색
-          child: RadarChart(
-            // 차트 축 간격
-            ticks: ticks,
-            // 비타민 B군 이름
-            features: features,
-            // 비타민 B군 세부 수치
-            data: data,
-            // 데이터 표시 범위 색상 변경 : 리스트 타입으로 색상을 나열
-            graphColors: const [
-              Colors.yellow, // 현재섭취량 빨간색으로 표시
-              Colors.red, // 권장섭취량 노란색으로 표시
-            ],
-            axisColor: Colors.green,
-            // 축 색상 변경
-            outlineColor: Colors.grey,
-            // 차트 테두리 색상 변경
-            // 축 표시 글꼴 색상 변경
-            ticksTextStyle: const TextStyle(color: Colors.green, fontSize: 16),
-            // 피처 표시 글꼴 색상 변경
-            featuresTextStyle: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-            // 축 표시 값 반전 : 기본값 false
-            reverseAxis: false,
-            // 다각형 설정
-            sides: vitaminBGroupDataListLength,
+    return Container(
+      width: screenWidth,
+      constraints: BoxConstraints(
+        minHeight: 210,
+      ),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(36),
+          border: Border.all(
+            width: 0.1,
+            color: Colors.grey.withOpacity(0.5),
           ),
-        ),
-      ],
+          boxShadow: [
+            BoxShadow(
+                color: Color(0x00b5b5b5).withOpacity(0.1),
+                offset: Offset(0.1, 0.1),
+                blurRadius: 3 // 그림자 위치 조정
+            ),
+          ]),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(30, 30, 30, 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "비타민 B군 섭취 분석",
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "(100%가 권장섭취량입니다.)",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      Text(
+                        "단위 : [%]",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 300,
+                    height: 300,
+                    // color: Colors.white, //배경색
+                    child: RadarChart(
+                      // 차트 축 간격
+                      ticks: ticks,
+                      // 비타민 B군 이름
+                      features: features,
+                      // 비타민 B군 세부 수치
+                      data: data,
+                      // 데이터 표시 범위 색상 변경 : 리스트 타입으로 색상을 나열
+                      graphColors: const [
+                        Colors.yellow, // 현재섭취량 빨간색으로 표시
+                        Colors.red, // 권장섭취량 노란색으로 표시
+                      ],
+                      axisColor: Colors.green,
+                      // 축 색상 변경
+                      outlineColor: Colors.grey,
+                      // 차트 테두리 색상 변경
+                      // 축 표시 글꼴 색상 변경
+                      ticksTextStyle: const TextStyle(color: Colors.green, fontSize: 16),
+                      // 피처 표시 글꼴 색상 변경
+                      featuresTextStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      // 축 표시 값 반전 : 기본값 false
+                      reverseAxis: false,
+                      // 다각형 설정
+                      sides: vitaminBGroupDataListLength,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -551,11 +655,12 @@ class _RecommendList extends StatefulWidget {
 
 //추천 리스트
 class _RecommendListState extends State<_RecommendList> {
-  var _current = 0;
   CarouselController carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     var recommendList = context.read<AnalysisReportStore>().recommendList;
     var listLength = context.read<AnalysisReportStore>().recommendListLength;
     var userDetailInfo = context.watch<UserStore>().UserDetail;
@@ -563,190 +668,220 @@ class _RecommendListState extends State<_RecommendList> {
     print("이게 추천길이 $listLength");
     print(recommendList);
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              "${userDetailInfo?['name'] ?? 0}님에게 드릴 추천리스트",
-              style: TextStyle(fontSize: 25),
+    return Container(
+      width: screenWidth,
+      constraints: BoxConstraints(
+        minHeight: 210,
+      ),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(36),
+          border: Border.all(
+            width: 0.1,
+            color: Colors.grey.withOpacity(0.5),
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: Color(0x00b5b5b5).withOpacity(0.1),
+                offset: Offset(0.1, 0.1),
+                blurRadius: 3 // 그림자 위치 조정
             ),
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              "(부족한 영양소에 대한 추천 영양제입니다.)",
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: listLength ?? 0,
-              itemBuilder: (context, int index) {
-                var nutrientsName =
-                    recommendList[index]["nutritionName"] ?? "미표기";
-                List recommendOneData = recommendList[index]["data"] ?? "미표기";
-                var recommendOneDataLength = recommendOneData.length;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        // Text(
-                        //   "인기",
-                        //   style: TextStyle(fontSize: 20),
-                        // ),
-                        Text(
-                          " $nutrientsName ",
-                          style:
-                              TextStyle(fontSize: 30, color: Colors.redAccent),
-                        ),
-                        Text(
-                          "포함된 인기 영양제",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SingleChildScrollView(
-                      child: CarouselSlider.builder(
-                        itemCount: recommendOneDataLength ?? 0,
-                        options: CarouselOptions(
-                          height: 400,
-                          aspectRatio: 16 / 9,
-                          viewportFraction: 0.8,
-                          initialPage: 0,
-                          enableInfiniteScroll: true,
-                          reverse: false,
-                          autoPlay: false,
-                          autoPlayInterval: Duration(seconds: 3),
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 800),
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                        itemBuilder: (context, int index, int realIndex) {
-                          var pillId =
-                              recommendOneData[index]["pillId"] ?? "미표기";
-                          var rank =
-                              recommendOneData[index]["rank"] + 1 ?? "미표기";
-                          var pillName =
-                              recommendOneData[index]["pillName"] ?? "미표기";
-                          var manufacturer =
-                              recommendOneData[index]["manufacturer"] ?? "미표기";
-                          var imageUrl =
-                              recommendOneData[index]["imageUrl"] ?? "미표기";
-
-                          return Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.0),
-                                border: Border.all(
-                                  width: 3,
-                                  color: Colors.grey,
-                                )),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    // Text(
-                                    //   // "$rank 위 (Pillin 사용자 기준)",
-                                    //   textAlign: TextAlign.start,
-                                    // ),
-                                  ],
-                                ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  child: Image.network(
-                                    imageUrl,
-                                    width: 200,
-                                    // height: 200,
-                                  ),
-                                ),
-                                Text(
-                                  manufacturer,
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                Container(
-                                  width: 150,
-                                  child: RichText(
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      text: TextSpan(
-                                          text: pillName,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ))),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        context
-                                            .read<SearchStore>()
-                                            .pillDetailData;
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PillDetailScreen(
-                                                      pillId: pillId,
-                                                    )));
-                                        context
-                                            .read<SearchStore>()
-                                            .pillDetailData;
-                                      },
-                                      child: const Text(
-                                        '상세 보기',
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      child: const Text('구매하기'),
-                                      onPressed: () async {
-                                        context
-                                            .read<SearchRepository>()
-                                            .getNaverBlogSearch(pillName);
-                                        var buyLink = context
-                                            .read<SearchRepository>()
-                                            .BuyLink;
-                                        print(buyLink);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+          ]),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(30, 30, 30, 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "${userDetailInfo?['name'] ?? 0}님에게 드릴 추천리스트",
+                        style: TextStyle(fontSize: 25),
                       ),
-                    ),
-                  ],
-                );
-              }),
-        ),
-      ],
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "(부족한 영양소에 대한 추천 영양제입니다.)",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: listLength ?? 0,
+                        itemBuilder: (context, int index) {
+                          var nutrientsName =
+                              recommendList[index]["nutritionName"] ?? "미표기";
+                          List recommendOneData = recommendList[index]["data"] ?? "미표기";
+                          var recommendOneDataLength = recommendOneData.length;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  // Text(
+                                  //   "인기",
+                                  //   style: TextStyle(fontSize: 20),
+                                  // ),
+                                  Text(
+                                    " $nutrientsName ",
+                                    style:
+                                        TextStyle(fontSize: 30, color: Colors.redAccent),
+                                  ),
+                                  Text(
+                                    "포함된 인기 영양제",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              SingleChildScrollView(
+                                child: CarouselSlider.builder(
+                                  itemCount: recommendOneDataLength ?? 0,
+                                  options: CarouselOptions(
+                                    height: 400,
+                                    aspectRatio: 16 / 9,
+                                    viewportFraction: 0.8,
+                                    initialPage: 0,
+                                    enableInfiniteScroll: true,
+                                    reverse: false,
+                                    autoPlay: false,
+                                    autoPlayInterval: Duration(seconds: 3),
+                                    autoPlayAnimationDuration:
+                                        Duration(milliseconds: 800),
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    enlargeCenterPage: true,
+                                    scrollDirection: Axis.horizontal,
+                                  ),
+                                  itemBuilder: (context, int index, int realIndex) {
+                                    var pillId =
+                                        recommendOneData[index]["pillId"] ?? "미표기";
+                                    var rank =
+                                        recommendOneData[index]["rank"] + 1 ?? "미표기";
+                                    var pillName =
+                                        recommendOneData[index]["pillName"] ?? "미표기";
+                                    var manufacturer =
+                                        recommendOneData[index]["manufacturer"] ?? "미표기";
+                                    var imageUrl =
+                                        recommendOneData[index]["imageUrl"] ?? "미표기";
+
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(16.0),
+                                          border: Border.all(
+                                            width: 3,
+                                            color: Colors.grey,
+                                          )),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Text(
+                                                "$rank 위 (Pillin 사용자 기준)",
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            ],
+                                          ),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(16.0),
+                                            child: Image.network(
+                                              imageUrl,
+                                              width: 200,
+                                              // height: 200,
+                                            ),
+                                          ),
+                                          Text(
+                                            manufacturer,
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                          Container(
+                                            width: 150,
+                                            child: RichText(
+                                                textAlign: TextAlign.center,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                text: TextSpan(
+                                                    text: pillName,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    ))),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  context
+                                                      .read<SearchStore>()
+                                                      .pillDetailData;
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PillDetailScreen(
+                                                                pillId: pillId,
+                                                              )));
+                                                  context
+                                                      .read<SearchStore>()
+                                                      .pillDetailData;
+                                                },
+                                                child: const Text(
+                                                  '상세 보기',
+                                                ),
+                                              ),
+                                              ElevatedButton(
+                                                child: const Text('구매하기'),
+                                                onPressed: () async {
+                                                  context
+                                                      .read<SearchRepository>()
+                                                      .getNaverBlogSearch(pillName);
+                                                  var buyLink = context
+                                                      .read<SearchRepository>()
+                                                      .BuyLink;
+                                                  print(buyLink);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

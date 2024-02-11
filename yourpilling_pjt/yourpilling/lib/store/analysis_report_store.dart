@@ -22,7 +22,7 @@ class AnalysisReportStore extends ChangeNotifier {
 
   // 필수 영양소 정보 데이터 가져오기
   getEssentialNutrientsDataList(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String essentialNutrientsDataListUrl ="${CONVERT_URL}/api/v1/pill/analysis";
 
     try {
@@ -53,7 +53,7 @@ class AnalysisReportStore extends ChangeNotifier {
 
   // 비타민 B군 정보 데이터 가져오기
   getVitaminBGroupDataList(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String vitaminBGroupDataListUrl ="${CONVERT_URL}/api/v1/pill/analysis";
 
     try {
@@ -84,7 +84,7 @@ class AnalysisReportStore extends ChangeNotifier {
 
   // 추천리스트 데이터 가져오기
   getRecommendList(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String recommendListUrl ="${CONVERT_URL}/api/v1/pill/analysis";
 
     try {
@@ -113,34 +113,4 @@ class AnalysisReportStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  // takePill(BuildContext context, dailyData) async {
-  //   const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
-  //
-  //   print("영양제 복용 완료 요청");
-  //   String accessToken = context.read<UserStore>().accessToken;
-  //   var response = await http.put(Uri.parse(takePillUrl),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'accessToken': accessToken,
-  //       },
-  //       body: json.encode({
-  //         "ownPillId": ownPillId,
-  //       }));
-  //   if (response.statusCode == 200) {
-  //     print("영양제 복용 완료 요청 수신 성공");
-  //
-  //     print("복용버튼 DailyData $dailyData");
-  //     curCompleteCount++;
-  //     notifyListeners();
-  //
-  //
-  //
-  //     print(response.body);
-  //   } else {
-  //     print(response.body);
-  //     print("영양제 복용 완료 요청 수신 실패");
-  //   }
-  //   // MainScreen().today.createState();
-  //   notifyListeners();
-  // }
 }
