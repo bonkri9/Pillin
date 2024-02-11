@@ -23,14 +23,14 @@ fun AnalysisRadarChart(
 ) {
 
     val labelsStyle = TextStyle(
-        color = Color.Black,
+        color = Color.White,
         fontFamily = FontFamily.Serif,
         fontWeight = FontWeight.Medium,
         fontSize = 10.sp
     )
 
     val scalarValuesStyle = TextStyle(
-        color = Color.Black,
+        color = Color.White,
         fontFamily = FontFamily.Serif,
         fontWeight = FontWeight.Medium,
         fontSize = 10.sp

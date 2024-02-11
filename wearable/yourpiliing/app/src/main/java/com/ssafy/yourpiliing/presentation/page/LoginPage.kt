@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,7 +46,6 @@ fun LoginPage(navController: NavController, loginViewModel: LoginViewModel, cont
     Box(
         modifier = Modifier
             .background(Color.Black.copy(alpha = 0.5f))
-            .padding(16.dp)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
@@ -56,29 +56,29 @@ fun LoginPage(navController: NavController, loginViewModel: LoginViewModel, cont
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "로그인",
-                color = AppColors.mainColor
+                text = "로그인"
             )
             Spacer(modifier = Modifier.height(4.dp))
             OutlinedTextField(
                 value = email.value,
                 onValueChange = { email.value = it },
                 label = { Text("이메일 주소") },
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .height(40.dp)
+
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { password.value = it },
+                maxLines = 1,
                 label = { Text("비밀번호") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .height(40.dp)
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
                     val request = LoginRequest(email.value, password.value)

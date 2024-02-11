@@ -5,5 +5,6 @@ data class DailyHistoryItem(
     val name: String,
     val actualTakeCount: Int,
     val needToTakeTotalCount: Int,
+    val takeCount: Int,
     val takeYn: Boolean
 )

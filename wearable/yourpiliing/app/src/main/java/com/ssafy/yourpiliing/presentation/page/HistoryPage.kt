@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -68,17 +69,26 @@ fun HistoryPage(historyViewModel : HistoryViewModel,
                             .verticalScroll(rememberScrollState())
                             .padding(top = 40.dp, bottom = 40.dp)
                     ) {
+                        Text(
+                            text = "오늘 먹을 영양제",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 20.dp, top = 10.dp) // 텍스트 사이의 간격 추가
+                                .wrapContentSize(Alignment.Center) // 텍스트를 세로 방향으로 중앙에 정렬
+                        )
+
                         if(datas.isNotEmpty()){
                             for (data in datas) {
                                 TitleCard(
-                                    title = "${data.name}(${data.actualTakeCount}/${data.needToTakeTotalCount})",
+                                    title = data.name,
                                     ownPillId = data.ownPillId,
                                     needToTakeTotalCount = data.needToTakeTotalCount,
                                     actualTakeCount = data.actualTakeCount,
+                                    takeCount = data.takeCount,
                                     takeOwnPillViewModel = takeOwnPillViewModel,
                                     sharedPreferences = sharedPreferences
                                 )
-                                Spacer(modifier = Modifier.height(8.dp)) // 간격 추가
+                                Spacer(modifier = Modifier.height(5.dp)) // 간격 추가
                             }
                         }else{
                             Text(
