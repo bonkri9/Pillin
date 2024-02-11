@@ -11,7 +11,6 @@ class MainStore extends ChangeNotifier {
   var dailyData;
   var userInventoryData;
   var curCompleteCount = 0;
-  var ownPillId = 0;
   var dailyGauge = 0;
   var takenPillIdxList = [];
   var takenOrUnTaken = false;
@@ -119,7 +118,8 @@ class MainStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  takePill(BuildContext context, dailyData) async {
+  // 미복용 => 복용
+  takePill(BuildContext context, ownPillId) async {
     const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
 
     print("영양제 복용 완료 요청");
@@ -134,8 +134,8 @@ class MainStore extends ChangeNotifier {
         }));
     if (response.statusCode == 200) {
       print("영양제 복용 완료 요청 수신 성공");
-
       print("복용버튼 DailyData $dailyData");
+      getDailyData(context);
       curCompleteCount++;
       notifyListeners();
 

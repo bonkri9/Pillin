@@ -3,15 +3,20 @@ import 'package:provider/provider.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 
 import '../../const/colors.dart';
-import 'package:http/http.dart' as http;
-class UnTakenList extends StatelessWidget {
+
+class UnTakenList extends StatefulWidget {
   const UnTakenList({super.key});
 
   @override
+  State<UnTakenList> createState() => _UnTakenListState();
+}
+
+class _UnTakenListState extends State<UnTakenList> {
+  @override
   Widget build(BuildContext context) {
+    // context.watch<InventoryStore>().takeYnListData;
     var tmp = context.watch<InventoryStore>().takeYnListData;
     var takeFalseList = context.watch<InventoryStore>().takeFalseListData;
-
     var screenWidth = MediaQuery.of(context).size.width * 0.91;
     var imageWidth = MediaQuery.of(context).size.width * 0.3;
 
@@ -52,7 +57,7 @@ class UnTakenList extends StatelessWidget {
                             color: BASIC_GREY.withOpacity(0.4),
                             offset: Offset(0.1, 0.1),
                             blurRadius: 3 // 그림자 위치 조정
-                            ),
+                        ),
                       ]),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 25, 20),
@@ -113,7 +118,7 @@ class UnTakenList extends StatelessWidget {
                                       ),
                                       TextSpan(
                                         text:
-                                            '${takeFalseList[i]['totalCount']}정',
+                                        '${takeFalseList[i]['totalCount']}정',
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: BASIC_BLACK.withOpacity(0.7),
@@ -134,8 +139,8 @@ class UnTakenList extends StatelessWidget {
                                 print("복용 시작 버튼 누름");
                                 // 복용중 탭으로 이동
                                 context.read<InventoryStore>().putTakeYnChange(context, takeFalseList[i]['ownPillId']);
-                                // context.read<InventoryStore>().getTakeYnListData(context);
-                                takeFalseList = context.read<InventoryStore>().takeFalseListData;
+                                context.watch<InventoryStore>().takeFalseListData;
+                                context.watch<InventoryStore>().takeTrueListData;
                               },
                               child: Container(
                                 padding: EdgeInsets.fromLTRB(13, 7, 13, 7),

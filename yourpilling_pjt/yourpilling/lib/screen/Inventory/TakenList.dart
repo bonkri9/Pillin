@@ -14,6 +14,7 @@ class TakenList extends StatefulWidget {
 class _TakenListState extends State<TakenList> {
   @override
   Widget build(BuildContext context) {
+    var tmp = context.watch<InventoryStore>().takeYnListData;
     var takeTrueList = context.watch<InventoryStore>().takeTrueListData;
     var screenWidth = MediaQuery.of(context).size.width * 0.91;
     var imageWidth = MediaQuery.of(context).size.width * 0.3;
@@ -137,8 +138,8 @@ class _TakenListState extends State<TakenList> {
                               onTap: () {
                                 // 미복용 탭으로 이동
                                 context.read<InventoryStore>().putTakeYnChange(context, takeTrueList[i]['ownPillId']);
-                                context.read<InventoryStore>().getTakeYnListData(context);
-                                takeTrueList = context.read<InventoryStore>().takeTrueListData;
+                                context.watch<InventoryStore>().takeFalseListData;
+                                context.watch<InventoryStore>().takeTrueListData;
                               },
                               child: Container(
                                 padding: EdgeInsets.fromLTRB(13, 7, 13, 7),

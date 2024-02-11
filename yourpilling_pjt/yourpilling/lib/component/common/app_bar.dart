@@ -22,7 +22,7 @@ class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+    const weekDays = ['월', '화', '수', '목', '금', '토', '일'];
     return AppBar(
       centerTitle: true,
       automaticallyImplyLeading: false,
@@ -40,7 +40,7 @@ class _MainAppBarState extends State<MainAppBar> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${now.month}.${now.day} ${weekDays[now.weekday]}",
+                    "${now.month}.${now.day} ${weekDays[now.weekday - 1]}",
                     style: TextStyle(
                       color: BASIC_BLACK,
                       fontSize: 18,
