@@ -22,6 +22,8 @@ fun AnalysisRadarChart(
     recommendedIntakes: List<Double>
 ) {
 
+    val adjust = adjust(userTakes, recommendedIntakes)
+
     val labelsStyle = TextStyle(
         color = Color.White,
         fontFamily = FontFamily.Serif,
@@ -45,46 +47,67 @@ fun AnalysisRadarChart(
             netLinesStrokeWidth = 2f,
             netLinesStrokeCap = StrokeCap.Butt
         ),
-        scalarSteps = 2,
-        scalarValue = 4000.0,
+        scalarSteps = 3,
+        scalarValue = 100.0,
         scalarValuesStyle = scalarValuesStyle,
         polygons = listOf(
             Polygon(
-                values = excessiveTakes,
-                unit = "$",
+                values = adjust.first,
+                unit = "%",
                 style = PolygonStyle(
-                    fillColor = Color(0xffc2ff86),
+                    fillColor = Color(0xFFEE4351),
                     fillColorAlpha = 0.5f,
-                    borderColor = Color(0xffe6ffd6),
-                    borderColorAlpha = 0.5f,
-                    borderStrokeWidth = 2f,
-                    borderStrokeCap = StrokeCap.Butt,
-                )
-            ),
-            Polygon(
-                values = userTakes,
-                unit = "$",
-                style = PolygonStyle(
-                    fillColor = Color(0xffFFDBDE),
-                    fillColorAlpha = 0.5f,
-                    borderColor = Color(0xffFF8B99),
+                    borderColor = Color(0xFFD35060),
                     borderColorAlpha = 0.5f,
                     borderStrokeWidth = 2f,
                     borderStrokeCap = StrokeCap.Butt
                 )
             ),
             Polygon(
-                values = recommendedIntakes,
-                unit = "$",
+                values = adjust.second,
+                unit = "%",
                 style = PolygonStyle(
-                    fillColor = Color(0xffaaDDDE),
+                    fillColor = Color(0xFFDAD077),
                     fillColorAlpha = 0.5f,
-                    borderColor = Color(0xffaaDDDE),
+                    borderColor = Color(0xFFDFD280),
                     borderColorAlpha = 0.5f,
                     borderStrokeWidth = 2f,
                     borderStrokeCap = StrokeCap.Butt
                 )
-            )
+            ),
+//            Polygon(
+//                values = excessiveTakes,
+//                unit = "$",
+//                style = PolygonStyle(
+//                    fillColor = Color(0xffc2ff86),
+//                    fillColorAlpha = 0.5f,
+//                    borderColor = Color(0xffe6ffd6),
+//                    borderColorAlpha = 0.5f,
+//                    borderStrokeWidth = 2f,
+//                    borderStrokeCap = StrokeCap.Butt,
+//                )
+//            ),
         )
     )
+}
+
+@Composable
+private fun adjust(
+    userTakes: List<Double>,
+    recommendedIntakes: List<Double>
+) : Pair<List<Double>, List<Double>> {
+    val adjustedUserTakes = userTakes.mapIndexed { index, item ->
+        val recommended = recommendedIntakes[index]
+        val ratio = if (recommended != 0.0) item / recommended else 1.0
+        val adjusted = ratio * 100
+        if (adjusted > 150) {
+            150.0 // 최대값을 150으로 제한
+        } else {
+            adjusted
+        }
+    }
+
+    val adjustedRecommendedIntakes = List(recommendedIntakes.size) { 100.0 }
+
+    return Pair(adjustedUserTakes, adjustedRecommendedIntakes)
 }

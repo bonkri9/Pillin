@@ -19,6 +19,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Text
 import com.ssafy.yourpiliing.presentation.component.TitleCard
@@ -68,6 +69,7 @@ fun HistoryPage(historyViewModel : HistoryViewModel,
                         modifier = Modifier
                             .verticalScroll(rememberScrollState())
                             .padding(top = 40.dp, bottom = 40.dp)
+
                     ) {
                         Text(
                             text = "오늘 먹을 영양제",
@@ -92,7 +94,9 @@ fun HistoryPage(historyViewModel : HistoryViewModel,
                             }
                         }else{
                             Text(
-                                text = "오늘 먹을 영양제가 없습니다."
+                                text = "오늘 먹을 영양제가 없습니다.",
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
