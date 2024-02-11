@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/component/common/app_bar.dart';
 import 'package:yourpilling/component/kakao/kakao_login.dart';
@@ -37,28 +38,110 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     getTabData(context);
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
-      },
-      child: Scaffold(
-        backgroundColor: BACKGROUND_COLOR,
-        appBar: MainAppBar(
-          barColor: Color(0xFFF5F6F9),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+    var screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            _SearchBar(
-              myController: myController,
+            Container(
+              width: screenWidth,
+              constraints: BoxConstraints(
+                minHeight: 550,
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(36),
+                    bottomLeft: Radius.circular(36),
+                  ),
+                  border: Border.all(
+                    width: 0.1,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color(0x00b5b5b5).withOpacity(0.1),
+                        offset: Offset(0.1, 0.1),
+                        blurRadius: 3 // 그림자 위치 조정
+                        ),
+                  ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Lottie.asset('assets/lottie/jump.json',
+                      width: 230, height: 200),
+                  SizedBox(
+                    height: 45,
+                  ),
+                  _SearchBar(myController: myController), // 검색창
+                  SizedBox(
+                    height: 25,
+                  ),
+                  _MiddleTap(),
+                ],
+              ),
             ),
-            _MiddleTap(),
-            _Ranking(),
-            // 랭킹페이지
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              width: screenWidth,
+              constraints: BoxConstraints(
+                minHeight: 400,
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(36),
+                    topRight: Radius.circular(36),
+                  ),
+                  border: Border.all(
+                    width: 0.1,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color(0x00b5b5b5).withOpacity(0.1),
+                        offset: Offset(0.1, 0.1),
+                        blurRadius: 3 // 그림자 위치 조정
+                        ),
+                  ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(25, 25, 0, 0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "영양제 랭킹",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "Pretendard",
+                            fontSize: 20,
+                            color: BASIC_BLACK,
+                          ),
+                        ),
+                        Lottie.asset('assets/lottie/star.json',
+                            width: 90, height: 50),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // 미복용 중인 영양제 목록
+                  _Ranking(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -83,48 +166,82 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: 30,
+        horizontal: 25,
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: myController,
-              decoration: InputDecoration(
-                labelText: '영양제명,제조사명',
-                hoverColor: BASIC_GREY,
+      child: Container(
+        height: 55,
+        decoration: BoxDecoration(
+          color: Colors.white, // 검색창 배경색
+          borderRadius: BorderRadius.circular(35.0), // 둥근 모서리 적용
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: BASIC_GREY.withOpacity(0.15),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            textAlign: TextAlign.center,
+                            controller: myController,
+                            decoration: InputDecoration(
+                              hintText: '어떤 영양제를 찾으세요?',
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 17,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.search,
+                              color: Color(0xFFFF6F61),
+                              size: 34,
+                            ),
+                            onPressed: () async {
+                              // 검색 버튼 클릭 시의 동작
+                              try {
+                                await context
+                                    .read<SearchStore>()
+                                    .getSearchNameData(
+                                        context, myController.text);
+                                print('검색 통신 성공');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SearchListScreen(
+                                      myControllerValue: myController.text,
+                                    ),
+                                  ),
+                                );
+                              } catch (error) {
+                                print('이름 검색 실패');
+                                falseDialog(context);
+                                print(error);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Color(0xFFFF6666),
-                size: 34,
-              ),
-              onPressed: () async {
-                // 통신추가 - 희태
-                try {
-                  await context.read<SearchStore>().getSearchNameData(context, myController.text);
-                  print('검색 통신성공');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SearchListScreen(
-                            myControllerValue: myController.text,
-                          )
-                      )
-                  );
-                }
-                catch(error) {
-                  print('이름 검색 실패');
-                  falseDialog(context);
-                  print(error);
-                }
-
-                // 통신끝 - 희태
-              }),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -136,63 +253,100 @@ class _MiddleTap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
-      child: Container(
-        child: Row(
-          children: [
-            SizedBox(
-              width: 20,
-            ),
-            Container(
-              width: 170,
-              height: 90,
-              color: BASIC_GREY,
-              child: TextButton(
-                onPressed: () {
-                  // TextField에 입력된 텍스트를 출력합니다.
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SearchNutrientScreen()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("영양소 검색",
-                        style: TextStyle(
-                            color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
-                  ],
+    var buttonWidth = MediaQuery.of(context).size.width * 0.89;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SearchNutrientScreen()));
+            },
+            child: Container(
+                width: buttonWidth,
+                height: 70,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF6F61).withOpacity(0.65),
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    width: 0.1,
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 170,
-              height: 90,
-              color: Colors.white,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SearchHealthScreen()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("건강 검색",
-                        style: TextStyle(
-                            color: BASIC_BLACK, fontSize: TITLE_FONT_SIZE)),
-                  ],
-                ),
-              ),
-            ),
-          ],
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 0, 20, 0),
+                  child: Container(
+                    width: 260,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("영양소로 검색할게요",
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                  ),
+                )),
+          ),
         ),
-      ),
+
+        // 건강 고민으로 검색
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 17, 8, 0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SearchHealthScreen()));
+            },
+            child: Container(
+                width: buttonWidth,
+                height: 70,
+                decoration: BoxDecoration(
+                  color: Colors.indigoAccent.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    width: 0.1,
+                    color: Colors.grey.withOpacity(0.1),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 0, 20, 0),
+                  child: Container(
+                    width: 260,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("건강 고민으로 검색할게요",
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                  ),
+                )),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -203,51 +357,32 @@ class _Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var rankWidth = MediaQuery.of(context).size.width * 0.9;
     return Container(
-      width: 350,
+      width: rankWidth,
       height: 485,
       color: Colors.white,
       child: DefaultTabController(
         length: 3, // 탭의 수
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "영양제 랭킹",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: TITLE_FONT_SIZE,
-                      color: BASIC_BLACK,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Image.asset(
-                    "assets/image/crown.png",
-                    width: 40,
-                    height: 40,
-                  )
-                ],
-              ),
+            SizedBox(
+              width: 10,
             ),
             // header end
             TabBar(
+              indicatorColor: Colors.red, // 선택된 탭의 아래에 표시되는 줄의 색상
+              labelColor: Colors.black, // 선택된 탭의 텍스트 색상
+              unselectedLabelColor: Colors.grey, // 선택되지 않은 탭의 텍스트 색상
               tabs: [
-                Tab(text: '건강고민'),
-                Tab(text: '성분'),
-                Tab(text: '성별 및 나이'),
+                _StyledTab('건강고민'),
+                _StyledTab('성분'),
+                _StyledTab('성별 및 나이'),
               ],
             ),
             Expanded(
               child: TabBarView(
+
                 children: [
                   _HealthTab(),
                   _NutrientTab(),
@@ -257,6 +392,29 @@ class _Ranking extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _StyledTab extends StatelessWidget {
+  final String text;
+
+  const _StyledTab(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8), // 텍스트 주변 여백 조절
+      padding: EdgeInsets.all(8), // 텍스트 내부 여백 조절
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20), // 탭 모서리 둥글게
+        border: Border.all(color: Colors.grey), // 탭 테두리
+        color: Colors.white, // 탭 배경색
+      ),
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(text),
       ),
     );
   }
@@ -276,7 +434,8 @@ class _AgeTabState extends State<_AgeTab> {
 
   @override
   Widget build(BuildContext context) {
-    var agelist = context.read<RankingStore>().CategoriData[2]['midCategories']; // 복용 요청하기
+    var agelist = context.read<RankingStore>().CategoriData[2]
+        ['midCategories']; // 복용 요청하기
 // midCategoryId
 
     return Container(
@@ -291,7 +450,9 @@ class _AgeTabState extends State<_AgeTab> {
               itemBuilder: (context, i) {
                 return TextButton(
                   onPressed: () {
-                    context.read<RankingStore>().getShowData(agelist[i]['midCategoryId']);
+                    context
+                        .read<RankingStore>()
+                        .getShowData(agelist[i]['midCategoryId']);
                     setState(() {
                       _showText = true;
                       _index = i;
@@ -304,9 +465,9 @@ class _AgeTabState extends State<_AgeTab> {
           ),
           _showText
               ? Expanded(
-              child: _SearchRanking(
-                title: '${_index}',
-              ))
+                  child: _SearchRanking(
+                  title: '${_index}',
+                ))
               : Expanded(child: Text('선택')),
         ],
       ),
@@ -323,14 +484,13 @@ class _NutrientTab extends StatefulWidget {
 }
 
 class _NutrientTabState extends State<_NutrientTab> {
-
   bool _showText = false;
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
-
-    var nutrientlist = context.read<RankingStore>().CategoriData[1]['midCategories']; // 복용 요청하기
+    var nutrientlist = context.read<RankingStore>().CategoriData[1]
+        ['midCategories']; // 복용 요청하기
 
     return Container(
       child: Column(
@@ -343,7 +503,9 @@ class _NutrientTabState extends State<_NutrientTab> {
               itemBuilder: (context, i) {
                 return TextButton(
                   onPressed: () {
-                    context.read<RankingStore>().getShowData(nutrientlist[i]['midCategoryId']);
+                    context
+                        .read<RankingStore>()
+                        .getShowData(nutrientlist[i]['midCategoryId']);
                     setState(() {
                       _showText = true;
                       _index = i;
@@ -356,9 +518,9 @@ class _NutrientTabState extends State<_NutrientTab> {
           ),
           _showText
               ? Expanded(
-              child: _SearchRanking(
-                title: '${_index}',
-              ))
+                  child: _SearchRanking(
+                  title: '${_index}',
+                ))
               : Expanded(child: Text('선택2')),
         ],
       ),
@@ -375,14 +537,13 @@ class _HealthTab extends StatefulWidget {
 }
 
 class _HealthTabState extends State<_HealthTab> {
-
-
   bool _showText = false;
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
-    var HealthTapList = context.read<RankingStore>().CategoriData[0]['midCategories']; // 복용 요청하기
+    var HealthTapList = context.read<RankingStore>().CategoriData[0]
+        ['midCategories']; // 복용 요청하기
 
     return Container(
       child: Column(
@@ -395,7 +556,9 @@ class _HealthTabState extends State<_HealthTab> {
               itemBuilder: (context, i) {
                 return TextButton(
                   onPressed: () {
-                    context.read<RankingStore>().getShowData(HealthTapList[i]['midCategoryId']);
+                    context
+                        .read<RankingStore>()
+                        .getShowData(HealthTapList[i]['midCategoryId']);
                     setState(() {
                       _showText = true;
                       _index = i;
@@ -408,9 +571,9 @@ class _HealthTabState extends State<_HealthTab> {
           ),
           _showText
               ? Expanded(
-              child: _SearchRanking(
-                title: '${_index}',
-              ))
+                  child: _SearchRanking(
+                  title: '${_index}',
+                ))
               : Expanded(child: Text('선택3')),
         ],
       ),
@@ -454,17 +617,19 @@ class _SearchRanking extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    Text("${RankingList[i]['manufacturer']}")
-                    ,
+                    Text("${RankingList[i]['manufacturer']}"),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    PillDetailScreen(pillId: RankingList[i]['pillId'],)));
-                      }, child: Text("${RankingList[i]['pillName']}",
-                    ),
+                                builder: (context) => PillDetailScreen(
+                                      pillId: RankingList[i]['pillId'],
+                                    )));
+                      },
+                      child: Text(
+                        "${RankingList[i]['pillName']}",
+                      ),
                     ),
                   ],
                 ),
