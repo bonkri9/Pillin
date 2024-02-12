@@ -286,29 +286,47 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     SizedBox(width: 10),
                     // 회원가입 요청
                     GestureDetector(
-                      onTap: () {
-                        context.read<UserStore>().userEmail = email;
-                        context.read<UserStore>().password = password;
-                        context.read<UserStore>().signUp(context);
-                        if (isValidate()) {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => LoginScreen(),
-                              transitionsBuilder: (c, a1, a2, child) =>
-                                  SlideTransition(
-                                position: Tween(
-                                  begin: Offset(-1.0, 0.0),
-                                  end: Offset(0.0, 0.0),
-                                )
-                                    .chain(CurveTween(curve: Curves.easeInOut))
-                                    .animate(a1),
-                                child: child,
+                      onTap: () async {
+                        try{
+                          context.read<UserStore>().userEmail = email;
+                          context.read<UserStore>().password = password;
+                          await context.read<UserStore>().signUp(context);
+                          if (isValidate()) {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (c, a1, a2) => LoginScreen(),
+                                transitionsBuilder: (c, a1, a2, child) =>
+                                    SlideTransition(
+                                      position: Tween(
+                                        begin: Offset(-1.0, 0.0),
+                                        end: Offset(0.0, 0.0),
+                                      )
+                                          .chain(CurveTween(curve: Curves.easeInOut))
+                                          .animate(a1),
+                                      child: child,
+                                    ),
+                                transitionDuration: Duration(milliseconds: 750),
                               ),
-                              transitionDuration: Duration(milliseconds: 750),
+                            );
+                          }
+                        }catch(e){
+                          Vibration.vibrate(duration: 300); // 진동
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            shape: RoundedRectangleBorder(
+                              // ShapeDecoration을 사용하여 borderRadius 적용
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
                             ),
-                          );
+                            content: Text(
+                              "이미 가입된 이메일입니다!",
+                              style: TextStyle(color: BASIC_BLACK),
+                            ),
+                            backgroundColor: Colors.yellow,
+                            duration: Duration(milliseconds: 1100),
+                          ));
                         }
+
                       },
                       child: Container(
                         padding: EdgeInsets.all(10.0),

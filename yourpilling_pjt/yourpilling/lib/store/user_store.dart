@@ -60,7 +60,7 @@ class UserStore extends ChangeNotifier {
     print("회원가입 요청");
     String url = "${CONVERT_URL}/api/v1/register"; // 회원가입 요청 url
     print('${userEmail} $password $userName');
-    try {
+
       var response = await http.post(Uri.parse(url),
           headers: {
             'Content-Type': 'application/json',
@@ -76,19 +76,15 @@ class UserStore extends ChangeNotifier {
       } else {
         print("회원가입 요청 실패");
         print(response.body);
+        throw Error();
       }
-    } catch (error) {
-      print(error);
-    }
+
   }
 
   signUpEssential(BuildContext context) async {
     print("생년월일 및 성별 포함 회원가입 요청");
     String url = "${CONVERT_URL}/api/v1/register/essential";
     print('$userEmail $password $userName $year $month $day ${gender}'); // 잘 들어옴
-
-
-
     try {
       print(" accessToken 이야 이게 $accessToken");
       var response = await http.put(Uri.parse(url), headers: {
@@ -126,6 +122,7 @@ class UserStore extends ChangeNotifier {
       } else {
         print("추가 회원가입 요청 실패");
         print(response.body);
+
       }
 
     } catch (error) {

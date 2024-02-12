@@ -160,10 +160,7 @@ class InventoryStore extends ChangeNotifier {
     print(takeYn);
     print(remains);
     print(totalCount);
-
-    try {
       // bool takeYnValue = takeYn ?? false;
-
       var response = await http.post(Uri.parse(registInvenUrl),
           headers: {
             'Content-Type': 'application/json',
@@ -185,10 +182,9 @@ class InventoryStore extends ChangeNotifier {
         print(responseNew);
         print(response.body);
         print("재고 등록 post 수신 실패");
+        throw Error();
       }
-    } catch (error) {
-      print(error);
-    }
+
     notifyListeners();
   }
 

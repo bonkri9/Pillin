@@ -29,6 +29,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   var pillId;
 
   var takeYn = false;
+
   // var takeYn;
   var remains;
   var totalCount;
@@ -93,11 +94,10 @@ class _InsertInventoryState extends State<InsertInventory> {
               height: 30,
             ),
             _InsertInvenContent(
-              getTakeYn: getTakeYn,
-              getCurPillCount: getCurPillCount,
-              getTotalPillCount: getTotalPillCount,
-                detailData : pillDetailData
-            ),
+                getTakeYn: getTakeYn,
+                getCurPillCount: getCurPillCount,
+                getTotalPillCount: getTotalPillCount,
+                detailData: pillDetailData),
           ],
         ),
       ),
@@ -110,41 +110,66 @@ class _InsertInventoryState extends State<InsertInventory> {
             '등록',
             style: TextStyle(color: Colors.white),
           ),
-          onPressed: () {
-            print(takeYn);
-            print(remains);
-            print(totalCount);
-            context
-                .read<InventoryStore>()
-                .registInven(context, pillId, takeYn, remains, totalCount);
-            showModalBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    width: 450,
-                    height: 200,
-                    color: Colors.transparent,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.redAccent)),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => InventoryScreen()));
-                            },
-                            child: const Text(
-                              '등록완료!',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ],
-                    ),
-                  );
-                });
+          onPressed: () async {
+            try {
+              await context
+                  .read<InventoryStore>()
+                  .registInven(context, pillId, takeYn, remains, totalCount);
+              showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: 450,
+                      height: 200,
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.redAccent)),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            InventoryScreen()));
+                              },
+                              child: const Text(
+                                '재고 확인하러 가기!',
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ],
+                      ),
+                    );
+                  });
+            } catch (e) {
+              showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: 450,
+                      height: 200,
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.redAccent)),
+                              onPressed: () {
+                              },
+                              child: const Text(
+                                '이미 등록된 영양제입니다!',
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ],
+                      ),
+                    );
+                  });
+            }
           },
         ),
       ),
@@ -176,15 +201,13 @@ class _InsertInvenUpperState extends State<_InsertInvenUpper> {
   }
 }
 
-
 class _InsertInvenContent extends StatefulWidget {
-
   _InsertInvenContent(
       {super.key,
-        this.getCurPillCount,
-        this.getTotalPillCount,
-        this.pillId,
-        this.getTakeYn,
+      this.getCurPillCount,
+      this.getTotalPillCount,
+      this.pillId,
+      this.getTakeYn,
       this.detailData});
 
   var getCurPillCount;
@@ -192,7 +215,6 @@ class _InsertInvenContent extends StatefulWidget {
   var pillId;
   var getTakeYn;
   var detailData;
-
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
@@ -294,7 +316,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
                                 minusBtn:
-                                Icon(Icons.remove_circle_outline_rounded),
+                                    Icon(Icons.remove_circle_outline_rounded),
                                 plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
@@ -342,7 +364,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
                                 minusBtn:
-                                Icon(Icons.remove_circle_outline_rounded),
+                                    Icon(Icons.remove_circle_outline_rounded),
                                 plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
@@ -352,20 +374,20 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     )),
                 Container(
                     child: Row(
-                      children: [
-                        Text('일일 복용 횟수 : '),
-                        Text('${pillDetailData['takeCount']}'),
-                        Text('회(변경 불가능)'),
-                      ],
-                    )),
+                  children: [
+                    Text('일일 복용 횟수 : '),
+                    Text('${pillDetailData['takeCount']}'),
+                    Text('회(변경 불가능)'),
+                  ],
+                )),
                 Container(
                     child: Row(
-                      children: [
-                        Text('1회 복용량 : '),
-                        Text('${pillDetailData['takeOnceAmount']}'),
-                        Text('정(변경 불가능)'),
-                      ],
-                    )),
+                  children: [
+                    Text('1회 복용량 : '),
+                    Text('${pillDetailData['takeOnceAmount']}'),
+                    Text('정(변경 불가능)'),
+                  ],
+                )),
               ],
             ),
           ),
