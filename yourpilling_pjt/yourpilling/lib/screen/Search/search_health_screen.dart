@@ -28,25 +28,46 @@ class _SearchHealthScreenState extends State<SearchHealthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width * 0.91;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
       },
       child: Scaffold(
-        appBar: MainAppBar(
-          barColor: Color(0xFFF5F6F9),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_new),
+            onPressed: () {
+              // 뒤로 가기 기능 추가
+              Navigator.pop(context);
+            },
+          ),
+          toolbarHeight: 70,
+          // title: _SearchBar(
+          //   myController: myController,
+          // ),
         ),
-        backgroundColor: BACKGROUND_COLOR,
-        body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // _SearchBar(
-              //   myController: myController,
-              // ),
-              _MiddleTab(),
-            ],
+        backgroundColor: Colors.white,
+        body: Center(
+          child: SizedBox(
+            width: screenWidth,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 18,),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("어떤 건강고민을 하고 계신가요?" ,style: TextStyle(
+                    fontSize: 22,
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w700,
+                  ),),
+                ),
+                SizedBox(height: 25,),
+                _MiddleTab(),
+              ],
+            ),
           ),
         ),
       ),
@@ -60,7 +81,7 @@ class _SearchHealthScreenState extends State<SearchHealthScreen> {
     super.dispose();
   }
 }
-//
+
 // // 검색바
 // class _SearchBar extends StatelessWidget {
 //   final TextEditingController myController;
@@ -184,39 +205,42 @@ class _MiddleTab extends StatelessWidget {
         crossAxisCount: 3,
         children: healthList.map((health) {
           return Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-            child: Stack(children: [
-              Positioned(
-                top: 0,
-                left: 15,
-
-                child: BaseContainer(
-                  color: Colors.white,
-
-                  width: 100,
-                  height: 100,
-                  child: TextButton(
-                    onPressed: () async {
-                      try{
-                        print('체크 건강사항 ${health['health']}');
-                        print('체크 건강번호 ${health['id']}');
-                        await context.read<SearchStore>().getSearchHealthData(context, health['id'].toString()!);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchListScreen(
-                                    myControllerValue: health['health'].toString()!)));
-                      }catch(error){
-                        falseDialog(context);
-                      }
-
-                    },
-                    child: Text(health['health'].toString()!),
-                  ),
+            padding: const EdgeInsets.all(9),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.yellow.withOpacity(0.1),
+                border: Border.all(
+                  width: 0.2,
+                  color: BASIC_GREY.withOpacity(0.2),
                 ),
+                borderRadius: BorderRadius.circular(20.0),
               ),
+              width: 100,
+              height: 100,
+              child: TextButton(
+                onPressed: () async {
+                  try{
+                    print('체크 건강사항 ${health['health']}');
+                    print('체크 건강번호 ${health['id']}');
+                    await context.read<SearchStore>().getSearchHealthData(context, health['id'].toString()!);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SearchListScreen(
+                                myControllerValue: health['health'].toString()!)));
+                  }catch(error){
+                    falseDialog(context);
+                  }
 
-            ]),
+                },
+                child: Text(health['health'].toString(), style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Pretendard",
+                  fontWeight: FontWeight.w500,
+                  color: BASIC_BLACK.withOpacity(0.8),
+                ),),
+              ),
+            ),
           );
         }).toList(),
       ),

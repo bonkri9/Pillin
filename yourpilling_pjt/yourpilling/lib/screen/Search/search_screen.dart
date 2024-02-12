@@ -215,9 +215,9 @@ class _SearchBar extends StatelessWidget {
                                 await context
                                     .read<SearchStore>()
                                     .getSearchNameData(
-                                  context,
-                                  myController.text,
-                                );
+                                      context,
+                                      myController.text,
+                                    );
                                 print('검색 통신 성공');
                                 Navigator.push(
                                   context,
@@ -352,6 +352,28 @@ class _MiddleTap extends StatelessWidget {
   }
 }
 
+String getAgeGroup(int age) {
+  if (age < 10) {
+    return "10대 미만";
+  } else if (age >= 10 && age < 20) {
+    return "10대";
+  } else if (age >= 20 && age < 30) {
+    return "20대";
+  } else if (age >= 30 && age < 40) {
+    return "30대";
+  } else if (age >= 40 && age < 50) {
+    return "40대";
+  } else if (age >= 50 && age < 60) {
+    return "50대";
+  } else if (age >= 60 && age < 70) {
+    return "60대";
+  } else if (age >= 70 && age < 80) {
+    return "70대";
+  } else {
+    return "80대 이상";
+  }
+}
+
 // 랭킹페이지
 class _Ranking extends StatelessWidget {
   const _Ranking({Key? key}) : super(key: key);
@@ -359,6 +381,24 @@ class _Ranking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var rankWidth = MediaQuery.of(context).size.width * 0.9;
+
+    var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
+
+    DateTime now = DateTime.now();
+    // int userBirthYear = int.parse(context.read<UserStore>().year);
+    // int userBirthMonth = int.parse(context.read<UserStore>().month);
+    // int userBirthDay = int.parse(context.read<UserStore>().day);
+
+    // int age = now.year - userBirthYear;
+    //
+    // if (now.month < userBirthMonth || (now.month == userBirthMonth && now.day < userBirthDay)) {
+    //   age--;
+    // }
+
+    // String ageGroup = getAgeGroup(age);
+
+    print('gender $gender');
+
     return Container(
       width: rankWidth,
       height: 485,
@@ -373,18 +413,23 @@ class _Ranking extends StatelessWidget {
             // header end
             TabBar(
               indicatorWeight: 2,
-              indicatorColor: Color(0xFFFF6F61), // 선택된 탭의 아래에 표시되는 줄의 색상
-              labelColor: Color(0xFFFF6F61), // 선택된 탭의 텍스트 색상
-              unselectedLabelColor: Colors.grey.withOpacity(0.7), // 선택되지 않은 탭의 텍스트 색상
+              indicatorColor: Color(0xFFFF6F61),
+              // 선택된 탭의 아래에 표시되는 줄의 색상
+              labelColor: Color(0xFFFF6F61),
+              // 선택된 탭의 텍스트 색상
+              unselectedLabelColor: Colors.grey.withOpacity(0.7),
+              // 선택되지 않은 탭의 텍스트 색상
               tabs: [
                 _StyledTab('건강고민'),
                 _StyledTab('성분'),
-                _StyledTab('성별 및 나이'),
+                _StyledTab('20대 ${gender}'),
               ],
+            ),
+            SizedBox(
+              height: 8,
             ),
             Expanded(
               child: TabBarView(
-
                 children: [
                   _HealthTab(),
                   _NutrientTab(),
@@ -414,11 +459,14 @@ class _StyledTab extends StatelessWidget {
       ),
       child: Align(
         alignment: Alignment.center,
-        child: Text(text, style: TextStyle(
-          fontSize: 16,
-          fontFamily: "Pretendard",
-          fontWeight: FontWeight.w500,
-        ),),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: "Pretendard",
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }
@@ -433,7 +481,6 @@ class _AgeTab extends StatefulWidget {
 }
 
 class _AgeTabState extends State<_AgeTab> {
-  bool _showText = false;
   int _index = 0;
 
   @override
@@ -446,33 +493,44 @@ class _AgeTabState extends State<_AgeTab> {
       child: Column(
         children: [
           Container(
-            height: 50, // 높이 설정
+            height: 0, // 높이 설정
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: agelist.length, // 배열의 길이로 할당해야겠네
-              // 카테고리설정부분이야
+              itemCount: 0,
               itemBuilder: (context, i) {
-                return TextButton(
-                  onPressed: () {
-                    context
-                        .read<RankingStore>()
-                        .getShowData(agelist[i]['midCategoryId']);
-                    setState(() {
-                      _showText = true;
-                      _index = i;
-                    });
-                  },
-                  child: Text('${agelist[i]['midCategoryName']}'),
+                return Container(
+                  padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
+                  child: TextButton(
+                    onPressed: () {
+                      context
+                          .read<RankingStore>()
+                          .getShowData(agelist[i]['midCategoryId']);
+                      setState(() {
+                        _index = i;
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
+                    ),
+                    child: Text(
+                      '${agelist[i]['midCategoryName']}',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        color: BASIC_BLACK.withOpacity(0.65),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
                 );
               },
             ),
           ),
-          _showText
-              ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
-              : Expanded(child: Text('선택')),
+          Expanded(
+              child: _SearchRanking(
+            title: '${_index}',
+          )),
         ],
       ),
     );
@@ -488,7 +546,6 @@ class _NutrientTab extends StatefulWidget {
 }
 
 class _NutrientTabState extends State<_NutrientTab> {
-  bool _showText = false;
   int _index = 0;
 
   @override
@@ -503,29 +560,41 @@ class _NutrientTabState extends State<_NutrientTab> {
             height: 50, // 높이 설정
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: nutrientlist.length, // 배열의 길이로 할당해야겠네
+              itemCount: nutrientlist.length,
               itemBuilder: (context, i) {
-                return TextButton(
-                  onPressed: () {
-                    context
-                        .read<RankingStore>()
-                        .getShowData(nutrientlist[i]['midCategoryId']);
-                    setState(() {
-                      _showText = true;
-                      _index = i;
-                    });
-                  },
-                  child: Text('${nutrientlist[i]['midCategoryName']}'),
+                return Container(
+                  padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
+                  child: TextButton(
+                    onPressed: () {
+                      context
+                          .read<RankingStore>()
+                          .getShowData(nutrientlist[i]['midCategoryId']);
+                      setState(() {
+                        _index = i;
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
+                    ),
+                    child: Text(
+                      '${nutrientlist[i]['midCategoryName']}',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        color: BASIC_BLACK.withOpacity(0.65),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
                 );
               },
             ),
           ),
-          _showText
-              ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
-              : Expanded(child: Text('선택2')),
+          Expanded(
+              child: _SearchRanking(
+            title: '${_index}',
+          )),
         ],
       ),
     );
@@ -541,7 +610,6 @@ class _HealthTab extends StatefulWidget {
 }
 
 class _HealthTabState extends State<_HealthTab> {
-  bool _showText = false;
   int _index = 0;
 
   @override
@@ -558,27 +626,39 @@ class _HealthTabState extends State<_HealthTab> {
               scrollDirection: Axis.horizontal,
               itemCount: HealthTapList.length,
               itemBuilder: (context, i) {
-                return TextButton(
-                  onPressed: () {
-                    context
-                        .read<RankingStore>()
-                        .getShowData(HealthTapList[i]['midCategoryId']);
-                    setState(() {
-                      _showText = true;
-                      _index = i;
-                    });
-                  },
-                  child: Text('${HealthTapList[i]['midCategoryName']}'),
+                return Container(
+                  padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
+                  child: TextButton(
+                    onPressed: () {
+                      context
+                          .read<RankingStore>()
+                          .getShowData(HealthTapList[i]['midCategoryId']);
+                      setState(() {
+                        _index = i;
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
+                    ),
+                    child: Text(
+                      '${HealthTapList[i]['midCategoryName']}',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        color: BASIC_BLACK.withOpacity(0.65),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
                 );
               },
             ),
           ),
-          _showText
-              ? Expanded(
-                  child: _SearchRanking(
-                  title: '${_index}',
-                ))
-              : Expanded(child: Text('선택3')),
+          Expanded(
+              child: _SearchRanking(
+            title: '${_index}',
+          )),
         ],
       ),
     );
@@ -599,45 +679,80 @@ class _SearchRanking extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: ListView.builder(
+      child: ListView.separated(
+          separatorBuilder: (context, index) {
+            return Divider(
+              color: BASIC_GREY.withOpacity(0.4),
+              thickness: 1,
+              height: 0,
+            );
+          },
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: RankingList.length,
           itemBuilder: (context, i) {
-            return Row(
-              children: [
-                Text("${i+1}",
-                  style: TextStyle(
-                    color: Colors.amberAccent,
-                    fontSize: 18,
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Image.network(
-                  "${RankingList[i]['imageUrl']}",
-                  width: 100,
-                  height: 70,
-                ),
-                Column(
-                  children: [
-                    Text("${RankingList[i]['manufacturer']}"),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PillDetailScreen(
-                                      pillId: RankingList[i]['pillId'],
-                                    )));
-                      },
-                      child: Text(
-                        "${RankingList[i]['pillName']}",
-                      ),
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
+              child: Row(
+                children: [
+                  Text(
+                    "${i + 1}",
+                    style: TextStyle(
+                      color: Color(0xFFFF6F61).withOpacity(0.9),
+                      fontSize: 20,
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  Image.network(
+                    "${RankingList[i]['imageUrl']}",
+                    width: 130,
+                    height: 80,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 150,
+                        child: Text(
+                          "${RankingList[i]['manufacturer']}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: BASIC_BLACK.withOpacity(0.3),
+                            fontSize: 13,
+                            fontFamily: "Pretendard",
+                            overflow: TextOverflow.ellipsis,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PillDetailScreen(
+                                        pillId: RankingList[i]['pillId'],
+                                      )));
+                        },
+                        child: Container(
+                          width: 150,
+                          child: Text(
+                            "${RankingList[i]['pillName']}",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: BASIC_BLACK.withOpacity(0.9),
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 15,
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
           }),
     );

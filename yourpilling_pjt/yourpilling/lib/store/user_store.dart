@@ -25,7 +25,7 @@ class UserStore extends ChangeNotifier {
   String month = '';
   String day = '';
 
-  // 성별 : enum Type / 남자 : 1, 여자 : 0
+  // 성별 : enum Type / 남자 : 'MAN', 여자 : 'WOMAN'
   String gender = '';
 
   setGender(String str) {
@@ -86,6 +86,8 @@ class UserStore extends ChangeNotifier {
     print("생년월일 및 성별 포함 회원가입 요청");
     String url = "${CONVERT_URL}/api/v1/register/essential";
     print('$userEmail $password $userName $year $month $day ${gender}'); // 잘 들어옴
+
+
 
     try {
       print(" accessToken 이야 이게 $accessToken");

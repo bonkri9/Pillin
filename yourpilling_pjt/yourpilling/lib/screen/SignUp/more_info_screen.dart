@@ -40,6 +40,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                         TextSpan(
                           text: context.watch<UserStore>().userName,
                           style: TextStyle(
+                            fontFamily: "Pretendard",
                             color: Colors.redAccent, // 영양이 부분의 색상을 빨간색으로 지정
                             fontSize: 26,
                             fontWeight: FontWeight.w600,
@@ -48,6 +49,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                         TextSpan(
                           text: '님 성별은 어떻게 되시나요?',
                           style: TextStyle(
+                            fontFamily: "Pretendard",
                             fontSize: 26,
                             color: BASIC_BLACK,
                             fontWeight: FontWeight.w600,
