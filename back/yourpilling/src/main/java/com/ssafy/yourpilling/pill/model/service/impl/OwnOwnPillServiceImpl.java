@@ -74,7 +74,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
             makeTakerHistoryIfAbsent(ownPill);
         }
 
-
     }
 
     @Transactional
@@ -98,7 +97,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     @Override
     public OutOwnPillTakeVo take(OwnPillTakeVo ownPillTakeVo) {
         boolean needToUpdate = false;
-        OwnPill ownPill = ownPillDao.takeByOwnPillId(ownPillTakeVo.getOwnPillId());
+         OwnPill ownPill = ownPillDao.takeByOwnPillId(ownPillTakeVo.getOwnPillId());
 
         for(TakerHistory th : ownPill.getTakerHistories()) {
             if(th.getTakeAt().equals(LocalDate.now())) {
@@ -106,11 +105,11 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
                 }
 
-                // if 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
+                // 만약 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
 //                int actualTakeCount = ownPill.decreaseRemains();
                 // th.increaseCurrentTakeCount(actualTakeCount);
 
-                // if 복용 직후 재고가 다 떨어졌을 때, 복용 누르면 TakerHistory의 섭취량 컬럼 신경 안쓰고 완료로 할 경우
+                // 만약 복용 직후 재고가 다 떨어졌을 때, 복용 누르면 TakerHistory의 섭취량 컬럼 신경 안쓰고 완료로 할 경우
                 ownPill.decreaseRemains();
                 th.increaseCurrentTakeCount(ownPill.getTakeOnceAmount());
 
@@ -120,7 +119,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 break;
             }
         }
-
+ 
         return OutOwnPillTakeVo
                 .builder()
                 .needToUpdateWeeklyHistory(needToUpdate)
