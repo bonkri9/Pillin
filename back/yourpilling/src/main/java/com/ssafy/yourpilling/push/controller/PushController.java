@@ -160,27 +160,27 @@ public class PushController {
                 .build();
     }
 
-//    @GetMapping("/send-pushMessageTest")
-//    ResponseEntity<Void> sendPushMessageTest() {
-//
-//        Message fcmMessage = Message
-//                .builder()
-//                .setNotification(
-//                        Notification
-//                                .builder()
-//                                .setTitle(PUSH_TITLE)
-//                                .setBody("안녕하세요? 여러분의 건강을 책임지는 Pillin 입니다! Pillin은 영양제 재고 관리 및 푸시 알림을 활용하여 여러분의 무병장수를 기원하며 시작되었습니다.")
-//                                .setImage(PUSH_IMAGE)
-//                                .build()
-//                )
-//                .setToken("c5yarpmyQlS8-jnxhpUWQR:APA91bEznsOEGs0D28iSdJqA_CRytIizfp1YfAnmr-c-tiWK_ET7Geuecww7B57XF3JHfa6raXcZUjBIXWD_LM2c-RpIzCzHK8_-KGgKIu0n_Ua1koK8cQAIS1ih7FlJE8mx11lPiIhm")
-//                .build();
-//        try {
-//            firebaseMessaging.send(fcmMessage);
-//        } catch (FirebaseMessagingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @GetMapping("/send-pushMessageTest")
+    ResponseEntity<Void> sendPushMessageTest(@RequestParam(name = "deviceToken") String deviceToken) {
+
+        Message fcmMessage = Message
+                .builder()
+                .setNotification(
+                        Notification
+                                .builder()
+                                .setTitle(PUSH_TITLE)
+                                .setBody("안녕하세요? 여러분의 건강을 책임지는 Pillin 입니다! Pillin은 영양제 재고 관리 및 푸시 알림을 활용하여 여러분의 무병장수를 기원하며 시작되었습니다.")
+                                .setImage(PUSH_IMAGE)
+                                .build()
+                )
+                .setToken(deviceToken)
+                .build();
+        try {
+            firebaseMessaging.send(fcmMessage);
+        } catch (FirebaseMessagingException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
