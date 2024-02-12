@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.time.LocalDateTime.now;
@@ -65,7 +66,14 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
         boolean adjustIsTaken = (adjustRemain > 0) ? vo.getTakeYn() : false;
         OwnPillRegisterValue value = mapToOwnPillRegisterValue(vo, adjustRemain, adjustIsTaken);
 
-        ownPillDao.register(mapper.mapToOwnPill(value));
+        OwnPill registOwnPill = mapper.mapToOwnPill(value);
+        ownPillDao.register(registOwnPill);
+
+        if(adjustIsTaken) {
+            OwnPill ownPill = ownPillDao.findByOwnPillId(registOwnPill.getOwnPillId());
+            makeTakerHistoryIfAbsent(ownPill);
+        }
+
     }
 
     @Transactional
@@ -89,7 +97,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
     @Override
     public OutOwnPillTakeVo take(OwnPillTakeVo ownPillTakeVo) {
         boolean needToUpdate = false;
-        OwnPill ownPill = ownPillDao.takeByOwnPillId(ownPillTakeVo.getOwnPillId());
+         OwnPill ownPill = ownPillDao.takeByOwnPillId(ownPillTakeVo.getOwnPillId());
 
         for(TakerHistory th : ownPill.getTakerHistories()) {
             if(th.getTakeAt().equals(LocalDate.now())) {
@@ -97,11 +105,11 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
                 }
 
-                // if 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
+                // 만약 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
 //                int actualTakeCount = ownPill.decreaseRemains();
                 // th.increaseCurrentTakeCount(actualTakeCount);
 
-                // if 복용 직후 재고가 다 떨어졌을 때, 복용 누르면 TakerHistory의 섭취량 컬럼 신경 안쓰고 완료로 할 경우
+                // 만약 복용 직후 재고가 다 떨어졌을 때, 복용 누르면 TakerHistory의 섭취량 컬럼 신경 안쓰고 완료로 할 경우
                 ownPill.decreaseRemains();
                 th.increaseCurrentTakeCount(ownPill.getTakeOnceAmount());
 
@@ -111,7 +119,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 break;
             }
         }
-
+ 
         return OutOwnPillTakeVo
                 .builder()
                 .needToUpdateWeeklyHistory(needToUpdate)
@@ -151,36 +159,13 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
         OwnPill ownPill = ownPillDao.findByOwnPillId(ownPillTakeYnVo.getOwnPillId());
 
-        LocalDate today = LocalDate.now();
-        TakerHistory todayHistory = null;
-
-        for(TakerHistory th : ownPill.getTakerHistories()) {
-                if(th.getTakeAt().equals(today)) {
-                    todayHistory = th;
-                    break;
-                }
-        }
-
-        if(todayHistory == null) {
-            todayHistory = TakerHistory
-                    .builder()
-                    .needToTakeCount(ownPill.getTakeCount())
-                    .currentTakeCount(0)
-                    .takeAt(today)
-                    .ownPill(ownPill)
-                    .build();
-
-            // 오늘의 일일 복용 기록 생성!!
-            ownPillDao.registerHistory(todayHistory);
-        }
+        TakerHistory todayHistory = makeTakerHistoryIfAbsent(ownPill);
 
         if(ownPill.getTakeYN()) {
 
             // 섭취에서 미섭취로 전환
             ownPill.setTakeYN(false);
             todayHistory.decreaseNeedToTakeByUpdateTakeYn();
-
-
         } else {
 
             // 미섭취에서 섭취로 전환
@@ -188,7 +173,51 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
             todayHistory.increaseNeedToTakeByUpdateTakeYn();
 
         }
+    }
 
+    @Transactional
+    @Override
+    public void buyRecord(BuyRecordVo vo) {
+        ownPillDao.buyRecord(mapper.mapToBuyRecord(vo));
+    }
+
+    private TakerHistory makeTakerHistoryIfAbsent(OwnPill ownPill) {
+        LocalDate today = LocalDate.now();
+        TakerHistory todayHistory = null;
+
+        if(ownPill.getTakerHistories() == null) {
+            todayHistory = registTakerHistory(ownPill, today);
+            return todayHistory;
+        }
+
+        for (TakerHistory th : ownPill.getTakerHistories()) {
+            if (th.getTakeAt().equals(today)) {
+                todayHistory = th;
+                break;
+            }
+        }
+
+        if (todayHistory == null) {
+            todayHistory = registTakerHistory(ownPill, today);
+        }
+
+        return todayHistory;
+    }
+
+    private TakerHistory registTakerHistory(OwnPill ownPill, LocalDate today) {
+        TakerHistory todayHistory;
+        todayHistory = TakerHistory
+                .builder()
+                .needToTakeCount(ownPill.getTakeCount())
+                .currentTakeCount(0)
+                .createdAt(LocalDateTime.now())
+                .takeAt(today)
+                .ownPill(ownPill)
+                .build();
+
+        // 오늘의 일일 복용 기록 생성!!
+        ownPillDao.registerHistory(todayHistory);
+        return todayHistory;
     }
 
     private OwnPillRegisterValue mapToOwnPillRegisterValue(OwnPillRegisterVo vo, int adjustRemain, boolean adjustIsTaken) {

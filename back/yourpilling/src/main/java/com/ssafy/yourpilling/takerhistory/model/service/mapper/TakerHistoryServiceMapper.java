@@ -24,6 +24,7 @@ public class TakerHistoryServiceMapper {
                 .ownPillId(takerHistory.getOwnPill().getOwnPillId())
                 .name(takerHistory.getOwnPill().getPill().getName())
                 .takeYn(isTake)
+                .remains(takerHistory.getOwnPill().getRemains())
                 .actualTakeCount(takerHistory.getCurrentTakeCount())
                 .needToTakeTotalCount(takerHistory.getNeedToTakeCount())
                 .takeCount(takerHistory.getOwnPill().getTakeCount())

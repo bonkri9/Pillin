@@ -86,4 +86,12 @@ public class OwnPillControllerMapper {
                 .date(date)
                 .build();
     }
+
+    public BuyRecordVo mapToBuyRecordVo(Long memberId, RequestPillBuyRecordDto dto) {
+        return BuyRecordVo
+                .builder()
+                .memberId(memberId)
+                .pillId(dto.getPillId())
+                .build();
+    }
 }

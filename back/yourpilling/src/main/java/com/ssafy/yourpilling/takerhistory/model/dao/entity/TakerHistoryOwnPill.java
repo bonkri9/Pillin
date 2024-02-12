@@ -21,6 +21,9 @@ public class TakerHistoryOwnPill {
     @Column(name = "take_count")
     private Integer takeCount;
 
+    @Column(name = "remains")
+    private Integer remains;
+
     @Column(name = "take_once_amount")
     private Integer takeOnceAmount;
 
