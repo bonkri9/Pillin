@@ -55,7 +55,7 @@ class InventoryStore extends ChangeNotifier {
   }
 
   //재고 수정
-  Future<void> reviseInven(
+  reviseInven(
       BuildContext context, var ownPillId, var remains, var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String reviseUrl = "${CONVERT_URL}/api/v1/pill/inventory";

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yourpilling/screen/Inventory/update_untaken.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 
 import '../../const/colors.dart';
@@ -158,6 +159,19 @@ class _UnTakenListState extends State<UnTakenList> {
                                   ),
                                 ),
                               ),
+                            ),
+                            IconButton(
+                              iconSize: 16,
+                              onPressed: () {
+                                // var ownPillId =
+                                //     '${takeTrueListData['takeTrue']['data'][i]['ownPillId']}';
+                                var ownPillId = '${takeFalseList[i]?['ownPillId'] ?? 0}';
+                                var index = i;
+                                print(index);
+                                print('위는 인덱스');
+                                showUpdateUntakenDialog(context, ownPillId, index);
+                              },
+                              icon: Icon(Icons.edit),
                             ),
                           ],
                         ),

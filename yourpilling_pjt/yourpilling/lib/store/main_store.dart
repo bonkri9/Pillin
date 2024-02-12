@@ -136,7 +136,7 @@ class MainStore extends ChangeNotifier {
 
   // 내 영양제 재고
   getUserInventory(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     String inventoryListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
     try {
       var response = await http.get(

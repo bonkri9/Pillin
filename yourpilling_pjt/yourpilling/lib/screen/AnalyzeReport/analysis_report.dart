@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import '../../store/analysis_report_store.dart';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 import '../Search/search_pill_detail.dart';
+import '../Search/search_screen.dart';
 
 class AnalysisReport extends StatefulWidget {
   const AnalysisReport({super.key});
@@ -22,13 +25,18 @@ class AnalysisReport extends StatefulWidget {
 class _AnalysisReportState extends State<AnalysisReport> {
   @override
   Widget build(BuildContext context) {
+    context.read<InventoryStore>().getTakeYnListData(context);
+    context.read<InventoryStore>().takeTrueListData;
     context.read<AnalysisReportStore>().getEssentialNutrientsDataList(context);
     context.read<AnalysisReportStore>().getVitaminBGroupDataList(context);
     context.read<AnalysisReportStore>().getRecommendList(context);
+
     var userDetailInfo = context.watch<UserStore>().UserDetail;
+    var takeTrueListData = context.read<InventoryStore>().takeTrueListData;
+    var takeTrueListDataLength = takeTrueListData.length;
 
     return Scaffold(
-      backgroundColor: BACKGROUND_COLOR.withOpacity(0.9),
+      backgroundColor: BACKGROUND_COLOR.withOpacity(0.95),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -36,7 +44,8 @@ class _AnalysisReportState extends State<AnalysisReport> {
           },
           icon: Icon(Icons.arrow_back_ios_rounded),
         ),
-        title: Text("${userDetailInfo?['name'] ?? ""}님의 분석 리포트",
+        title: Text(
+          "${userDetailInfo?['name'] ?? ""}님의 분석 리포트",
           style: TextStyle(
             color: BASIC_BLACK,
             fontSize: 25,
@@ -47,27 +56,114 @@ class _AnalysisReportState extends State<AnalysisReport> {
       ),
       body: SingleChildScrollView(
         // scrollDirection: Axis.vertical,
+        child: Center(
           child: Column(
             children: [
-              _ReportIntro(), //리포트 개요
-              SizedBox(
-                height: 15,
-              ),
-              _EssentialNutrients(), //필수영양소 레이더
-              SizedBox(
-                height: 15,
-              ),
-              _VitaminBGroupRadar(), //비타민 B군 레이더
-              SizedBox(
-                height: 15,
-              ),
-              // _VitaminBGroup(),
-              // SizedBox(
-              //   height: 15,
-              // ),
-              _RecommendList(), //추천리스트
+              takeTrueListData == null || takeTrueListDataLength == 0
+                  ? Column(
+                      //복용중인 영양제가 없다면 표시할 것들
+                      children: [
+                        Container(
+                          width: 350,
+                          height: 150,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                  bottomLeft: Radius.circular(30),
+                                  bottomRight: Radius.circular(30)),
+                              border: Border.all(
+                                width: 0.1,
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color(0x00b5b5b5).withOpacity(0.1),
+                                    offset: Offset(0.1, 0.1),
+                                    blurRadius: 3 // 그림자 위치 조정
+                                    ),
+                              ]),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text: '아직 분석할 복용 영양제가 없어요',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: BASIC_BLACK,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              // 추가 버튼
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (c, a1, a2) =>
+                                          SearchScreen(),
+                                      transitionsBuilder: (c, a1, a2, child) =>
+                                          SlideTransition(
+                                        position: Tween(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset(0.0, 0.0),
+                                        )
+                                            .chain(CurveTween(
+                                                curve: Curves.easeInOut))
+                                            .animate(a1),
+                                        child: child,
+                                      ),
+                                      transitionDuration:
+                                          Duration(milliseconds: 750),
+                                    ),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  radius: 15.0,
+                                  backgroundColor: Colors.yellow, // 원의 배경색
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.white, // 화살표 아이콘의 색상
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      //복용 중인 영양제가 있다면 표시할 것들
+                      children: [
+                        _ReportIntro(), //리포트 개요
+                        SizedBox(
+                          height: 15,
+                        ),
+                        _EssentialNutrients(), //필수영양소 레이더
+                        SizedBox(
+                          height: 15,
+                        ),
+                        _VitaminBGroupRadar(), //비타민 B군 레이더
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // _VitaminBGroup(),
+                        // SizedBox(
+                        //   height: 15,
+                        // ),
+                        _RecommendList(), //추천리스트
+                      ],
+                    ),
             ],
           ),
+        ),
       ),
     );
   }
@@ -105,9 +201,8 @@ class _ReportIntroState extends State<_ReportIntro> {
                 color: Color(0x00b5b5b5).withOpacity(0.1),
                 offset: Offset(0.1, 0.1),
                 blurRadius: 3 // 그림자 위치 조정
-            ),
+                ),
           ]),
-
       child: Column(
         children: [
           Padding(
@@ -150,7 +245,8 @@ class _ReportIntroState extends State<_ReportIntro> {
                           child: Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 15, 0, 15),
+                                padding:
+                                    const EdgeInsets.fromLTRB(5, 15, 0, 15),
                                 child: Image.network(
                                   takeTrueList[i]["imageUrl"],
                                   width: imageWidth,
@@ -198,6 +294,7 @@ class _EssentialNutrients extends StatefulWidget {
 }
 
 class _EssentialNutrientsState extends State<_EssentialNutrients> {
+  var darkMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +347,7 @@ class _EssentialNutrientsState extends State<_EssentialNutrients> {
                 color: Color(0x00b5b5b5).withOpacity(0.1),
                 offset: Offset(0.1, 0.1),
                 blurRadius: 3 // 그림자 위치 조정
-            ),
+                ),
           ]),
       child: Column(
         children: [
@@ -311,7 +408,8 @@ class _EssentialNutrientsState extends State<_EssentialNutrients> {
                 outlineColor: Colors.grey,
                 // 차트 테두리 색상 변경
                 // 축 표시 글꼴 색상 변경
-                ticksTextStyle: const TextStyle(color: Colors.green, fontSize: 16),
+                ticksTextStyle:
+                    const TextStyle(color: Colors.green, fontSize: 16),
                 // 피처 표시 글꼴 색상 변경
                 featuresTextStyle: const TextStyle(
                   color: Colors.black,
@@ -340,7 +438,6 @@ class _VitaminBGroupRadar extends StatefulWidget {
 }
 
 class _VitaminBGroupRadarState extends State<_VitaminBGroupRadar> {
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -393,7 +490,7 @@ class _VitaminBGroupRadarState extends State<_VitaminBGroupRadar> {
                 color: Color(0x00b5b5b5).withOpacity(0.1),
                 offset: Offset(0.1, 0.1),
                 blurRadius: 3 // 그림자 위치 조정
-            ),
+                ),
           ]),
       child: Column(
         children: [
@@ -445,7 +542,8 @@ class _VitaminBGroupRadarState extends State<_VitaminBGroupRadar> {
                       outlineColor: Colors.grey,
                       // 차트 테두리 색상 변경
                       // 축 표시 글꼴 색상 변경
-                      ticksTextStyle: const TextStyle(color: Colors.green, fontSize: 16),
+                      ticksTextStyle:
+                          const TextStyle(color: Colors.green, fontSize: 16),
                       // 피처 표시 글꼴 색상 변경
                       featuresTextStyle: const TextStyle(
                         color: Colors.black,
@@ -661,7 +759,7 @@ class _RecommendListState extends State<_RecommendList> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    var recommendList = context.read<AnalysisReportStore>().recommendList;
+    var recommendList = context.watch<AnalysisReportStore>().recommendList;
     var listLength = context.read<AnalysisReportStore>().recommendListLength;
     var userDetailInfo = context.watch<UserStore>().UserDetail;
 
@@ -685,7 +783,7 @@ class _RecommendListState extends State<_RecommendList> {
                 color: Color(0x00b5b5b5).withOpacity(0.1),
                 offset: Offset(0.1, 0.1),
                 blurRadius: 3 // 그림자 위치 조정
-            ),
+                ),
           ]),
       child: Column(
         children: [
@@ -698,7 +796,15 @@ class _RecommendListState extends State<_RecommendList> {
                   Row(
                     children: [
                       Text(
-                        "${userDetailInfo?['name'] ?? 0}님에게 드릴 추천리스트",
+                        "Pillin이 ${userDetailInfo?['name'] ?? 0}님에게",
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "추천하는 영양제 리스트",
                         style: TextStyle(fontSize: 25),
                       ),
                     ],
@@ -720,7 +826,8 @@ class _RecommendListState extends State<_RecommendList> {
                         itemBuilder: (context, int index) {
                           var nutrientsName =
                               recommendList[index]["nutritionName"] ?? "미표기";
-                          List recommendOneData = recommendList[index]["data"] ?? "미표기";
+                          List recommendOneData =
+                              recommendList[index]["data"] ?? "미표기";
                           var recommendOneDataLength = recommendOneData.length;
 
                           return Column(
@@ -737,8 +844,8 @@ class _RecommendListState extends State<_RecommendList> {
                                   // ),
                                   Text(
                                     " $nutrientsName ",
-                                    style:
-                                        TextStyle(fontSize: 30, color: Colors.redAccent),
+                                    style: TextStyle(
+                                        fontSize: 30, color: Colors.redAccent),
                                   ),
                                   Text(
                                     "포함된 인기 영양제",
@@ -767,21 +874,28 @@ class _RecommendListState extends State<_RecommendList> {
                                     enlargeCenterPage: true,
                                     scrollDirection: Axis.horizontal,
                                   ),
-                                  itemBuilder: (context, int index, int realIndex) {
-                                    var pillId =
-                                        recommendOneData[index]["pillId"] ?? "미표기";
+                                  itemBuilder:
+                                      (context, int index, int realIndex) {
+                                    var pillId = recommendOneData[index]
+                                            ["pillId"] ??
+                                        "미표기";
                                     var rank =
-                                        recommendOneData[index]["rank"] + 1 ?? "미표기";
-                                    var pillName =
-                                        recommendOneData[index]["pillName"] ?? "미표기";
-                                    var manufacturer =
-                                        recommendOneData[index]["manufacturer"] ?? "미표기";
-                                    var imageUrl =
-                                        recommendOneData[index]["imageUrl"] ?? "미표기";
+                                        recommendOneData[index]["rank"] + 1 ??
+                                            "미표기";
+                                    var pillName = recommendOneData[index]
+                                            ["pillName"] ??
+                                        "미표기";
+                                    var manufacturer = recommendOneData[index]
+                                            ["manufacturer"] ??
+                                        "미표기";
+                                    var imageUrl = recommendOneData[index]
+                                            ["imageUrl"] ??
+                                        "미표기";
 
                                     return Container(
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(16.0),
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
                                           border: Border.all(
                                             width: 3,
                                             color: Colors.grey,
@@ -803,7 +917,8 @@ class _RecommendListState extends State<_RecommendList> {
                                             ],
                                           ),
                                           ClipRRect(
-                                            borderRadius: BorderRadius.circular(16.0),
+                                            borderRadius:
+                                                BorderRadius.circular(16.0),
                                             child: Image.network(
                                               imageUrl,
                                               width: 200,
@@ -812,7 +927,8 @@ class _RecommendListState extends State<_RecommendList> {
                                           ),
                                           Text(
                                             manufacturer,
-                                            style: TextStyle(color: Colors.grey),
+                                            style:
+                                                TextStyle(color: Colors.grey),
                                           ),
                                           Container(
                                             width: 150,
@@ -825,7 +941,8 @@ class _RecommendListState extends State<_RecommendList> {
                                                     style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ))),
                                           ),
                                           Row(
@@ -857,7 +974,8 @@ class _RecommendListState extends State<_RecommendList> {
                                                 onPressed: () async {
                                                   context
                                                       .read<SearchRepository>()
-                                                      .getNaverBlogSearch(pillName);
+                                                      .getNaverBlogSearch(
+                                                          pillName);
                                                   var buyLink = context
                                                       .read<SearchRepository>()
                                                       .BuyLink;
@@ -885,109 +1003,3 @@ class _RecommendListState extends State<_RecommendList> {
     );
   }
 }
-
-//return Container(
-//       color: darkMode ? Colors.black : Colors.white,
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Padding(
-//             padding: EdgeInsets.symmetric(horizontal: 8.0),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 darkMode
-//                     ? Text(
-//                         'Light mode',
-//                         style: TextStyle(color: Colors.white),
-//                       )
-//                     : Text(
-//                         'Dark mode',
-//                         style: TextStyle(color: Colors.black),
-//                       ),
-//                 Switch(
-//                   value: this.darkMode,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       darkMode = value;
-//                     });
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 useSides
-//                     ? Text(
-//                         'Polygon border',
-//                         style: darkMode
-//                             ? TextStyle(color: Colors.white)
-//                             : TextStyle(color: Colors.black),
-//                       )
-//                     : Text(
-//                         'Circular border',
-//                         style: darkMode
-//                             ? TextStyle(color: Colors.white)
-//                             : TextStyle(color: Colors.black),
-//                       ),
-//                 Switch(
-//                   value: this.useSides,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       useSides = value;
-//                     });
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.end,
-//               children: <Widget>[
-//                 Text(
-//                   'Number of features',
-//                   style:
-//                       TextStyle(color: darkMode ? Colors.white : Colors.black),
-//                 ),
-//                 Expanded(
-//                   child: Slider(
-//                     value: numberOfFeatures,
-//                     min: 3,
-//                     max: 8,
-//                     divisions: 5,
-//                     onChanged: (value) {
-//                       setState(() {
-//                         numberOfFeatures = value;
-//                       });
-//                     },
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Expanded(
-//             child: darkMode
-//                 ? RadarChart.dark(
-//                     ticks: ticks,
-//                     features: features,
-//                     data: data,
-//                     reverseAxis: true,
-//                     useSides: useSides,
-//                   )
-//                 : RadarChart.light(
-//                     ticks: ticks,
-//                     features: features,
-//                     data: data,
-//                     reverseAxis: true,
-//                     useSides: useSides,
-//                   ),
-//           ),
-//         ],
-//       ),
-//     );

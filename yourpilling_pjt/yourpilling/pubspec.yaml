@@ -67,6 +67,7 @@ dependencies:
 
   carousel_slider: ^4.2.1
   flutter_radar_chart: ^0.2.1
+  fl_chart: ^0.66.2
 
 
 dev_dependencies:

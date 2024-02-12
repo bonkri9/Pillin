@@ -11,9 +11,9 @@ class AnalysisReportStore extends ChangeNotifier {
   // var takenPillIdxList = [];
   // var takenOrUnTaken = false;
 
-  var essentialNutrientDataList;
-  var vitaminBGroupDataList;
-  var recommendList;
+  late List essentialNutrientDataList = [];
+  late List vitaminBGroupDataList = [];
+  late List recommendList = [];
   var listAll;
 
   var essentialNutrientDataLisLength;
@@ -37,8 +37,8 @@ class AnalysisReportStore extends ChangeNotifier {
 
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
-        essentialNutrientDataList = listAll["essentialNutrientsDataList"];
-        essentialNutrientDataLisLength = essentialNutrientDataList.length;
+        essentialNutrientDataList = listAll?["essentialNutrientsDataList"] ?? [];
+        essentialNutrientDataLisLength = essentialNutrientDataList.length ?? 0;
         print("essentialNutrientDataList: $essentialNutrientDataList");
         print("이게 필수 길이: $essentialNutrientDataLisLength");
       } else {
@@ -68,8 +68,8 @@ class AnalysisReportStore extends ChangeNotifier {
 
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
-        vitaminBGroupDataList = listAll["vitaminBGroupDataList"];
-        vitaminBGroupDataListLength = vitaminBGroupDataList.length;
+        vitaminBGroupDataList = listAll?["vitaminBGroupDataList"] ?? [];
+        vitaminBGroupDataListLength = vitaminBGroupDataList.length ?? 0;
         print("vitaminBGroupDataList: ${vitaminBGroupDataList}");
         print("이게 B 길이: $vitaminBGroupDataListLength");
       } else {
@@ -99,8 +99,8 @@ class AnalysisReportStore extends ChangeNotifier {
 
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
-        recommendList = listAll["recommendList"]["data"];
-        recommendListLength = recommendList.length;
+        recommendList = listAll?["recommendList"]?["data"] ?? [];
+        recommendListLength = recommendList.length ?? 0;
         print("recommendList: ${recommendList}");
         print("이게 추천 길이: $recommendListLength");
       } else {

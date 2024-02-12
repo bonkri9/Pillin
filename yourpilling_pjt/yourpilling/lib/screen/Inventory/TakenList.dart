@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/screen/Inventory/update_taken.dart';
 
 import '../../store/inventory_store.dart';
 
@@ -158,6 +159,21 @@ class _TakenListState extends State<TakenList> {
                                 ),
                               ),
                             ),
+                            IconButton(
+                              iconSize: 16,
+                              onPressed: () {
+                                // var ownPillId =
+                                //     '${takeTrueListData['takeTrue']['data'][i]['ownPillId']}';
+                                var ownPillId = '${takeTrueList[i]?['ownPillId'] ?? 0}';
+                                var index = i;
+                                print(index);
+                                print('위는 인덱스');
+                                showUpdateTakenDialog(context, ownPillId, index);
+                              },
+                              icon: Icon(Icons.edit),
+                            ),
+
+
                           ],
                         ),
                       ],

@@ -11,6 +11,7 @@ import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/screen/Main/main_screen.dart';
 import 'package:yourpilling/screen/Mypage/privacy_policy.dart';
 import 'package:yourpilling/screen/Mypage/userinfo_detail_screen.dart';
+import 'package:yourpilling/store/inventory_store.dart';
 
 import '../../component/common/base_container.dart';
 import '../../store/user_store.dart';
@@ -146,6 +147,9 @@ class MyPageScreen extends StatelessWidget {
                                     await context
                                         .read<UserStore>()
                                         .getUserDetailData(context);
+                                    context.read<InventoryStore>().getTakeYnListData(context);
+                                    context.read<InventoryStore>().takeTrueListData;
+                                    context.read<UserStore>().UserDetail;
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
