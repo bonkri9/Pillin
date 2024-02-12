@@ -33,9 +33,13 @@ import com.ssafy.yourpilling.presentation.retrofit.login.LoginState
 import com.ssafy.yourpilling.presentation.theme.AppColors
 import com.ssafy.yourpilling.presentation.viewmodel.LoginViewModel
 import com.ssafy.yourpilling.presentation.retrofit.login.LoginRequest
+import com.ssafy.yourpilling.presentation.viewmodel.FcmViewModel
 
 @Composable
-fun LoginPage(navController: NavController, loginViewModel: LoginViewModel, context: Context) {
+fun LoginPage(navController: NavController,
+              loginViewModel: LoginViewModel,
+              fcmViewModel: FcmViewModel,
+              context: Context) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
@@ -83,8 +87,10 @@ fun LoginPage(navController: NavController, loginViewModel: LoginViewModel, cont
                 onClick = {
                     val request = LoginRequest(email.value, password.value)
                     loginViewModel.login(request, sharedPreferences) { isSuccess, message ->
-                        if(!isSuccess){
+                        if (!isSuccess) {
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }else{
+                            fcmViewModel.fcmRegister(sharedPreferences)
                         }
                     }
                 },
@@ -101,7 +107,7 @@ fun LoginPage(navController: NavController, loginViewModel: LoginViewModel, cont
                     navController.navigate("main")
                 }
 
-                else->{}
+                else -> {}
             }
         }
     }

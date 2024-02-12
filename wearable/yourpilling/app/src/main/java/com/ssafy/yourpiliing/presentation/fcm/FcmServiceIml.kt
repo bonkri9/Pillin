@@ -3,7 +3,7 @@ package com.ssafy.yourpilling.presentation.fcm
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class FCMServiceIml : FirebaseMessagingService() {
+class FcmServiceIml : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
