@@ -128,23 +128,14 @@ public class OwnPill {
         return after;
     }
 
-    public int decreaseRemains() {
-
-        int returnVal = this.takeOnceAmount;
+    public void decreaseRemains() {
 
         if(this.remains - this.takeOnceAmount > 0) {
             this.remains -= this.takeOnceAmount;
-        }
-        else if(this.remains - this.takeOnceAmount < 0) {
-            returnVal = this.remains;
-            this.remains = 0;
-            this.takeYN = false;
         }
         else {
             this.remains = 0;
             this.takeYN = false;
         }
-
-        return returnVal;
     }
 }

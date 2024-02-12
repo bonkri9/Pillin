@@ -99,15 +99,15 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
         boolean needToUpdate = false;
          OwnPill ownPill = ownPillDao.takeByOwnPillId(ownPillTakeVo.getOwnPillId());
 
+         if(ownPill.getRemains() == 0) {
+             throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
+         }
+
         for(TakerHistory th : ownPill.getTakerHistories()) {
             if(th.getTakeAt().equals(LocalDate.now())) {
                 if(th.getCurrentTakeCount() >= th.getNeedToTakeCount()) {
                     throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
                 }
-
-                // 만약 복용 직후 재고가 다 떨어졌을 때, 일일 복용 기록의 섭취량 컬럼까지 정확하게 카운트할 경우
-//                int actualTakeCount = ownPill.decreaseRemains();
-                // th.increaseCurrentTakeCount(actualTakeCount);
 
                 // 만약 복용 직후 재고가 다 떨어졌을 때, 복용 누르면 TakerHistory의 섭취량 컬럼 신경 안쓰고 완료로 할 경우
                 ownPill.decreaseRemains();
