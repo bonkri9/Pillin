@@ -141,6 +141,7 @@ public class OwnPill {
             this.takeYN = false;
         }
         else {
+            this.remains = 0;
             this.takeYN = false;
         }
 
