@@ -100,8 +100,9 @@ class _WelcomeState extends State<Welcome> {
     const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
     var screenWidth = MediaQuery.of(context).size.width;
     var dailyData = context.watch<MainStore>().dailyData;
-    var curCompleteCount = context.watch<MainStore>().curCompleteCount;
     var userName = context.read<UserStore>().userName;
+    var denominator = context.watch<MainStore>().denominator;
+    var numerator = context.watch<MainStore>().numerator;
     double firstHeight = dailyData.length == 0 ? 150.0 : 300.0;
     return Container(
       width: screenWidth,
@@ -178,7 +179,7 @@ class _WelcomeState extends State<Welcome> {
                       ),
                     ],
                   )
-                : dailyData.length != curCompleteCount
+                : denominator != numerator
                     ? // 영양제 다 안먹었을 때 몇 개 남았어요 ~ 화면
                     Column(
                         children: [
@@ -198,7 +199,7 @@ class _WelcomeState extends State<Welcome> {
                                 ),
                                 TextSpan(
                                   text:
-                                      '${dailyData.length - curCompleteCount}',
+                                      '${denominator - numerator}',
                                   style: TextStyle(
                                     color: Colors
                                         .redAccent, // 영양이 부분의 색상을 빨간색으로 지정
@@ -253,9 +254,9 @@ class _WelcomeState extends State<Welcome> {
                       ),
 
             // Progress Bar
-            dailyData == null || dailyData.length == 0
+            dailyData == null || denominator == 0
                 ? Container()
-                : dailyData.length != curCompleteCount
+                : denominator != numerator
                     ? Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Column(
@@ -275,7 +276,7 @@ class _WelcomeState extends State<Welcome> {
                                   ),
                                   TextSpan(
                                     text:
-                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
+                                        '${(numerator * 100 / denominator).round()}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontFamily: "Pretendard",
@@ -302,7 +303,7 @@ class _WelcomeState extends State<Welcome> {
                                       width: 340,
                                       height: 15,
                                       value:
-                                          curCompleteCount / dailyData.length,
+                                      numerator / denominator,
                                       duration: const Duration(seconds: 1),
                                       gradient: const LinearGradient(
                                         colors: [
@@ -336,7 +337,7 @@ class _WelcomeState extends State<Welcome> {
                                   ),
                                   TextSpan(
                                     text:
-                                        '${(curCompleteCount * 100 / dailyData.length).round()}',
+                                        '${(numerator * 100 / denominator).round()}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontFamily: "Pretendard",
@@ -363,7 +364,7 @@ class _WelcomeState extends State<Welcome> {
                                       width: 340,
                                       height: 15,
                                       value:
-                                          curCompleteCount / dailyData.length,
+                                      numerator / denominator,
                                       duration: Duration(seconds: 1),
                                       gradient: LinearGradient(
                                         colors: [
@@ -586,7 +587,7 @@ class _TodayState extends State<_Today> {
     double containerWidth = screenWidth;
     var mainStore = context.watch<MainStore>();
     var dailyData = mainStore.dailyData;
-    var curCompleteCount = mainStore.curCompleteCount;
+    var numerator = mainStore.numerator;
 
     return Container(
         width: containerWidth,
@@ -671,10 +672,9 @@ class _TodayState extends State<_Today> {
                             width: 300,
                             height: 85,
                             decoration: BoxDecoration(
-                              color: dailyData[i]['actualTakeCount'] !=
-                                      dailyData[i]['needToTakeTotalCount']
-                                  ? beforeTakeColor
-                                  : afterTakeColor,
+                              color: (dailyData[i]['actualTakeCount'] == dailyData[i]['needToTakeTotalCount']  || dailyData[i]['remains'] == 0)
+                                  ? afterTakeColor : beforeTakeColor, // 다 먹으면 노랑, 다 못먹으면 파랑                              // beforeTakeColor
+                              //     : afterTakeColor,
                               borderRadius: BorderRadius.circular(23),
                               border: Border.all(
                                 width: 0.1,
@@ -704,32 +704,34 @@ class _TodayState extends State<_Today> {
                                               fontSize: 16.5,
                                               color: BASIC_BLACK,
                                             )),
-                                        Text("${dailyData[i]['takeCount']}정",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontFamily: "Pretendard",
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 13,
-                                              color: Colors.black38,
-                                            )),
+                                        Text(
+                                          dailyData[i]['remains'] < dailyData[i]['takeCount']
+                                              ? "${dailyData[i]['remains']}정 남음"
+                                              : "${dailyData[i]['actualTakeCount']}/${dailyData[i]['needToTakeTotalCount']}정",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 13,
+                                            color: Colors.black38,
+                                          ),
+                                        )
                                       ],
                                     ),
-                                    dailyData[i]['actualTakeCount'] !=
-                                            dailyData[i][
-                                                'needToTakeTotalCount'] // 해당 영양제 먹어야할 개수가 실제 개수보다 작다면
-                                        ? Icon(
-                                            Icons.check_circle_outline,
-                                            color: Color(0xFFFF6F61)
-                                                .withOpacity(0.2),
-                                            size: 30, // 아이콘 크기 조절
-                                          )
-                                        : Icon(
+                                    (dailyData[i]['actualTakeCount'] == dailyData[i]['needToTakeTotalCount']  || dailyData[i]['remains'] == 0)
+                                        ?
+                                        Icon(
                                             Icons.check_circle,
                                             color: Colors.greenAccent
                                                 .withOpacity(0.9),
                                             size: 30, // 아이콘 크기 조절
-                                          )
+                                          ):Icon(
+                                      Icons.check_circle_outline,
+                                      color: Color(0xFFFF6F61)
+                                          .withOpacity(0.2),
+                                      size: 30, // 아이콘 크기 조절
+                                    )
                                   ],
                                 ),
                               ),

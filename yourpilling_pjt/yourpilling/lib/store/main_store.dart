@@ -10,12 +10,12 @@ class MainStore extends ChangeNotifier {
   var weekData;
   var dailyData;
   var userInventoryData;
-  var curCompleteCount = 0;
   var dailyGauge = 0;
   var takenPillIdxList = [];
   var takenOrUnTaken = false;
   var deadLine = 0;
-
+  int  numerator = 0; // 분자
+  int  denominator = 0; // 분모
   // 주간 데이터 복용 기록(주간 Calendar) 데이터 가져오기
   getWeeklyData(BuildContext context) async {
     String accessToken = context.read<UserStore>().accessToken;
@@ -58,19 +58,47 @@ class MainStore extends ChangeNotifier {
             'accessToken': accessToken,
           });
       if (response.statusCode == 200) {
-        print("일간 복용 기록 수신 성공, 조회 날짜 : " +
-            '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}');
+        // print("일간 복용 기록 수신 성공, 조회 날짜 : " +
+        //     '$dailyUrl?year=${now.year}&month=${now.month}&day=${now.day}');
         dailyData = jsonDecode(utf8.decode(response.bodyBytes))['taken'];
+        denominator = 0;
+        numerator = 0;
+        print("오늘 복용해야하는거 전체 출력 $dailyData");
         for (int i = 0; i < dailyData.length; i++) {
-          if (dailyData[i]['actualTakeCount'] ==
-              dailyData[i]['needToTakeTotalCount']) {
-            deadLine++;
+          try {
+            num remains = dailyData[i]['remains']; // 재고 남아있는 수
+            num takeCount = dailyData[i]['needToTakeTotalCount']; // 하루에 먹어야하는 총 갯수
+            num tmp = dailyData[i]['actualTakeCount']; // 그날 먹은 먹은 갯수
+
+            // 분모 연산
+            if (remains != null && takeCount != null) {
+              int remainsInt = remains.toInt();
+              int takeCountInt = takeCount.toInt();
+              int tmpInt = tmp.toInt();
+              if (remainsInt != null && takeCountInt != null) {
+                if (tmpInt != takeCountInt && remainsInt <= takeCountInt) { // 리메인즈가 니드투보다 적으면
+                  denominator += remainsInt; // 리메인즈
+                  denominator += tmpInt; // 액츄얼
+                } else {
+                  denominator += takeCountInt; // 니드투
+                }
+              }
+            }
+
+            // 분자연산
+            if (remains != null && tmp != null) {
+              int tmpInt = tmp.toInt();
+              if (tmpInt != null) {
+                  numerator += tmpInt; // 먹은 갯수를 추가
+              }
+            }
+          } catch (e) {
+            print("Error at index $i: $e");
           }
         }
-        curCompleteCount = deadLine;
-        deadLine = 0;
+        print("분자는 $numerator");
+        print("분모는 $denominator");
         notifyListeners();
-        print("dailyData: $dailyData");
       } else {
         print("일간 복용 기록 조회 실패");
         print(response.body);
@@ -97,7 +125,6 @@ class MainStore extends ChangeNotifier {
       print("영양제 복용 완료 요청 수신 성공");
       print("복용버튼 DailyData $dailyData");
       await getDailyData(context);
-      curCompleteCount++;
       notifyListeners();
       print(response.body);
     } else {
