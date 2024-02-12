@@ -27,7 +27,7 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     public void isAlreadyRegister(Long memberId, Long pillId) {
         List<OwnPill> ownPills = findByMemberId(memberId).getOwnPills();
 
-        if (ownPills.stream().anyMatch(ownPill -> ownPill.getPill().equals(pillId))) {
+        if (ownPills.stream().anyMatch(ownPill -> ownPill.getPill().getPillId().equals(pillId))) {
             throw new IllegalArgumentException("이미 등록된 영양제를 재등록할 수 없습니다.");
         }
     }
