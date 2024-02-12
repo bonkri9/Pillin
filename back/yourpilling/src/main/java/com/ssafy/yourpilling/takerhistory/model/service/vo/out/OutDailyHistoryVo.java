@@ -11,5 +11,6 @@ public class OutDailyHistoryVo {
     int actualTakeCount;
     int needToTakeTotalCount;
     int takeCount;
+    int remains;
     boolean takeYn;
 }
