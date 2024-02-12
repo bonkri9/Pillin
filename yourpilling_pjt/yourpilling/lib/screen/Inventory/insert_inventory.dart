@@ -206,11 +206,6 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
   @override
   Widget build(BuildContext context) {
     var pillId = widget.pillId;
-    // void loadData(BuildContext context) {
-    //   context.read<SearchStore>().getSearchDetailData(context, pillId);
-    // }
-    //
-    // loadData(context);
     var pillDetailData = widget.detailData;
 
     return Container(

@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:yourpilling/const/colors.dart';
+import 'package:yourpilling/screen/Inventory/insert_inventory.dart';
+import 'package:yourpilling/screen/Search/search_screen.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 import 'package:yourpilling/store/user_store.dart';
 import 'TakenList.dart';
@@ -19,8 +21,7 @@ class InventoryScreen extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     var userName = context.watch<UserStore>().userName;
     context.read<InventoryStore>().getTakeYnListData(context);
-    // context.watch<InventoryStore>().takeFalseListData;
-    // context.watch<InventoryStore>().takeTrueListData;
+
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: AppBar(
@@ -68,14 +69,51 @@ class InventoryScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(25, 25, 0, 0),
-                    child: Text(
-                      "지금 복용 중이에요",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Pretendard",
-                        fontSize: 20,
-                        color: BASIC_BLACK,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "지금 복용 중이에요",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "Pretendard",
+                            fontSize: 20,
+                            color: BASIC_BLACK,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 30),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (c, a1, a2) => SearchScreen(),
+                                  transitionsBuilder: (c, a1, a2, child) =>
+                                      SlideTransition(
+                                        position: Tween(
+                                          begin: Offset(1.0, 0.0),
+                                          end: Offset(0.0, 0.0),
+                                        )
+                                            .chain(CurveTween(curve: Curves.easeInOut))
+                                            .animate(a1),
+                                        child: child,
+                                      ),
+                                  transitionDuration: Duration(milliseconds: 750),
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 15.0,
+                              backgroundColor: Color(0xFFFF6F61).withOpacity(0.9), // 원의 배경색
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white, // 화살표 아이콘의 색상
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -140,4 +178,3 @@ class InventoryScreen extends StatelessWidget {
     );
   }
 }
-

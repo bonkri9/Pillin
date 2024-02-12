@@ -71,7 +71,7 @@ class _invenDetailScreenState extends State<InvenDetailScreen> {
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
     // print(invenDetailData);
     return Scaffold(
-      backgroundColor: BACKGROUND_COLOR,
+      backgroundColor: BASIC_GREY.withOpacity(0.2),
       body: RefreshIndicator(
           child: CustomScrollView(
             physics: RangeMaintainingScrollPhysics(),

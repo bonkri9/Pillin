@@ -54,7 +54,7 @@ class _RecordScreenState extends State<RecordScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.red.withOpacity(0.8),
+        backgroundColor: Color(0xFFFF6F61).withOpacity(0.8),
         toolbarHeight: 75,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -193,6 +193,7 @@ class _RecordScreenState extends State<RecordScreen> {
                       Text(
                         "${selectedDay.month}월 ${selectedDay.day}일 (${DateFormat('EEEE', 'ko-KR').format(selectedDay)[0]})", // date 설정하기
                         style: TextStyle(
+                          fontFamily: "Pretendard",
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
                         ),
@@ -415,19 +416,23 @@ class _CalenderState extends State<Calendar> {
         onDaySelected: _onDaySelected,
         calendarStyle: CalendarStyle(
           outsideDaysVisible: false,
+          todayTextStyle: TextStyle(
+            color: Colors.redAccent.withOpacity(0.9), // 오늘 날짜의 글자 색상
+            fontWeight: FontWeight.bold, // 글자 굵기 설정 (원하는대로 조절)
+          ),
           todayDecoration: BoxDecoration(
-            color: Colors.redAccent.withOpacity(0.3),
+            color: Colors.white,
             shape: BoxShape.circle,
-            border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 4),
+            border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 2),
             // color: Colors.red.withOpacity(0.1),
           ),
           defaultDecoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 4),
+            border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 2),
           ),
           weekendDecoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 4),
+            border: Border.all(color: BASIC_GREY.withOpacity(0.2), width: 2),
           ),
           markersMaxCount: 1,
         ),
@@ -451,7 +456,7 @@ class _CalenderState extends State<Calendar> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 1),
                   child: CircleProgressBar(
-                    strokeWidth: 3,
+                    strokeWidth: 2,
                     foregroundColor: dayGauge == 1 ? fullColor : dayGauge > 0.5 ? overFiftyColor : dayGauge == 0.5 ? fiftyColor : underFiftyColor,
                     backgroundColor: BASIC_GREY.withOpacity(0.2),
                     value: dayGauge, // dayGauge

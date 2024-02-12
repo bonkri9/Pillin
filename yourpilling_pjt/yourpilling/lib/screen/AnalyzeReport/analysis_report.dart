@@ -28,7 +28,7 @@ class _AnalysisReportState extends State<AnalysisReport> {
     var userDetailInfo = context.watch<UserStore>().UserDetail;
 
     return Scaffold(
-      backgroundColor: BACKGROUND_COLOR.withOpacity(0.9),
+      backgroundColor: BASIC_GREY.withOpacity(0.2),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {

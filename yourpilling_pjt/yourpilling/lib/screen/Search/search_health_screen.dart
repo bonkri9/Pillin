@@ -82,56 +82,6 @@ class _SearchHealthScreenState extends State<SearchHealthScreen> {
   }
 }
 
-// // 검색바
-// class _SearchBar extends StatelessWidget {
-//   final TextEditingController myController;
-//
-//   const _SearchBar({Key? key, required this.myController}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsets.symmetric(
-//         horizontal: 30,
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         children: [
-//           Expanded(
-//             child: TextField(
-//               controller: myController,
-//               decoration: InputDecoration(
-//                 labelText: '건강고민을 검색하세요',
-//                 hoverColor: BASIC_GREY,
-//               ),
-//             ),
-//           ),
-//           IconButton(
-//               icon: Icon(
-//                 Icons.search,
-//                 color: Color(0xFFFF6666),
-//                 size: 34,
-//               ),
-//               onPressed: () async {
-//                 try{
-//                   await context.read<SearchStore>().getSearchHealthData(context, myController.text);
-//                   Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                           builder: (context) => SearchListScreen(
-//                             myControllerValue: myController.text,
-//                           )));
-//                 }catch(error){
-//                   falseDialog(context);
-//                 }
-//
-//               }),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 // 중간탭
 class _MiddleTab extends StatelessWidget {
   _MiddleTab({super.key});
