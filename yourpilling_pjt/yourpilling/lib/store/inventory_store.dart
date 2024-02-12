@@ -154,13 +154,11 @@ class InventoryStore extends ChangeNotifier {
   //재고 등록
   Future<void> registInven(BuildContext context, var pillId, var takeYn, var remains,
       var totalCount) async {
+    print("재고등록 도착");
     String accessToken = context.read<UserStore>().accessToken;
     const String registInvenUrl = "${CONVERT_URL}/api/v1/pill/inventory";
-    print(pillId);
-    print(takeYn);
-    print(remains);
-    print(totalCount);
       // bool takeYnValue = takeYn ?? false;
+    print("체크1");
       var response = await http.post(Uri.parse(registInvenUrl),
           headers: {
             'Content-Type': 'application/json',
@@ -173,13 +171,13 @@ class InventoryStore extends ChangeNotifier {
             'totalCount': totalCount,
             'takeWeekdays': ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
           }));
-      var responseNew = jsonDecode(utf8.decode(response.bodyBytes));
+    print("체크2");
+      print(response.body);
+      print("리스폰스 체크");
       if (response.statusCode == 200) {
         print("재고 등록 post 수신 성공");
         print(response.body);
-        print(responseNew);
       } else {
-        print(responseNew);
         print(response.body);
         print("재고 등록 post 수신 실패");
         throw Error();
