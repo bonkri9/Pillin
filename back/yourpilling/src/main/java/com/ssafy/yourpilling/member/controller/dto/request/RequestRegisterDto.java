@@ -10,8 +10,5 @@ public class RequestRegisterDto {
 
     private String email;
     private String password;
-    private LocalDate birthday;
-    private String nickname;
     private String name;
-    private Gender gender;
 }

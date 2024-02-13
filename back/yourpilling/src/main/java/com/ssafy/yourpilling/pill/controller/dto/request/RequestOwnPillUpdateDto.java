@@ -11,9 +11,4 @@ public class RequestOwnPillUpdateDto {
     Long ownPillId;
     Integer remains;
     Integer totalCount;
-    List<TakeWeekday> takeWeekdays;
-    Integer takeCount;
-    Integer takeOnceAmount;
-    Boolean takeYn;
-    LocalDate startAt;
 }

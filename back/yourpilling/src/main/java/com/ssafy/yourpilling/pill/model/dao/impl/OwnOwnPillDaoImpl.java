@@ -3,10 +3,7 @@ package com.ssafy.yourpilling.pill.model.dao.impl;
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
 import com.ssafy.yourpilling.pill.model.dao.entity.*;
-import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
-import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
-import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
-import com.ssafy.yourpilling.pill.model.dao.jpa.TakerHistoryRepository;
+import com.ssafy.yourpilling.pill.model.dao.jpa.*;
 import com.ssafy.yourpilling.pill.model.service.vo.in.MonthlyTakerHistoryVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.WeeklyTakerHistoryVo;
@@ -24,13 +21,22 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     private final PillJpaRepository pillJpaRepository;
     private final PillMemberJpaRepository pillMemberJpaRepository;
     private final TakerHistoryRepository takerHistoryRepository;
+    private final BuyRecordRepository buyRecordRepository;
+
+    @Override
+    public void isAlreadyRegister(Long memberId, Long pillId) {
+        List<OwnPill> ownPills = findByMemberId(memberId).getOwnPills();
+
+        if (ownPills.stream().anyMatch(ownPill -> ownPill.getPill().getPillId().equals(pillId))) {
+            throw new IllegalArgumentException("이미 등록된 영양제를 재등록할 수 없습니다.");
+        }
+    }
 
     @Override
     public OwnPill findByOwnPillId(Long ownPillId) {
         return ownPillJpaRepository.findByOwnPillId(ownPillId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 보유중인 영양제를 찾을 수 없습니다."));
     }
-
 
     @Override
     public void registerHistory(TakerHistory takerHistory) {
@@ -57,7 +63,6 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     @Override
     public void update(OwnPillUpdateVo vo) {
         OwnPill ownPill = findByOwnPillId(vo.getOwnPillId());
-
         updateValues(vo, ownPill);
     }
 
@@ -76,7 +81,8 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
 
     @Override
     public List<MonthlyTakerHistory> findMonthlyTakerHistoriesByMemberIdAndDate(MonthlyTakerHistoryVo monthlyTakerHistoryVo) {
-        return takerHistoryRepository.findTakerHistoryDetailsByMemberIdAndMonth(monthlyTakerHistoryVo.getMemberId(), monthlyTakerHistoryVo.getDate().getYear(),  monthlyTakerHistoryVo.getDate().getMonthValue());
+        List<MonthlyTakerHistory> tmp = takerHistoryRepository.findTakerHistoryDetailsByMemberIdAndMonth(monthlyTakerHistoryVo.getMemberId(), monthlyTakerHistoryVo.getDate().getYear(), monthlyTakerHistoryVo.getDate().getMonthValue());
+        return tmp;
     }
 
     @Override
@@ -85,15 +91,13 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
                 .orElseThrow(() -> new IllegalArgumentException("보유중인 영양제 삭제에 실패했습니다."));
     }
 
+    @Override
+    public void buyRecord(BuyRecord buyRecord) {
+        buyRecordRepository.save(buyRecord);
+    }
+
     private void updateValues(OwnPillUpdateVo vo, OwnPill ownPill) {
         ownPill.setRemains(vo.getRemains());
         ownPill.setTotalCount(vo.getTotalCount());
-        ownPill.setTakeCount(vo.getTakeCount());
-        ownPill.setTakeOnceAmount(vo.getTakeOnceAmount());
-        ownPill.setTakeYN(vo.getTakeYn());
-        ownPill.setStartAt(vo.getStartAt());
-        ownPill.setTakeWeekdays(vo.getTakeYn() ? TakeWeekday.toValue(vo.getTakeWeekdays()) : null);
     }
-
-
 }

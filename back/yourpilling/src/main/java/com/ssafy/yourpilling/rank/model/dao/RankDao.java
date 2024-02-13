@@ -17,4 +17,12 @@ public interface RankDao {
     RankPill searchPillByPillId(Long pillId);
 
     List<AllCategories> allCategories();
+
+    RankPillMember findByMemberId(Long memberId);
+
+    List<Rank> allRankExceptMemberAgeAndGender(Integer weeks);
+
+    List<Rank> findAll();
+
+    List<Rank> findByWeeks(Integer weeks);
 }

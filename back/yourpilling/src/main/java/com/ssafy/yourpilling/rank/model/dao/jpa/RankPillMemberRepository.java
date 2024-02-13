@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RankPillMemberRepository extends JpaRepository<RankPillMember, Long> {
+
+    Optional<RankPillMember> findByMemberId(Long memberId);
 
     @Query(value =
             "SELECT p.pill_pill_id AS pillId, COUNT(p.pill_pill_id) AS pillCount " +
@@ -27,4 +30,6 @@ public interface RankPillMemberRepository extends JpaRepository<RankPillMember, 
             "WHERE n.nutrition = :targetNutrient " +
             "GROUP BY n.pill_id", nativeQuery = true)
     List<EachCountPerPill> countPillTotalMemberWithNutrient(String targetNutrient);
+
+
 }

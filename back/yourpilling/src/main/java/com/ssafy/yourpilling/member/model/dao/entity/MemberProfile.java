@@ -57,8 +57,13 @@ public class MemberProfile {
         this.password = password;
     }
 
-    public void updateNickname(String nickname){
-        this.nickname = nickname;
+    public void updateName(String name){
+        this.name = name;
+    }
+
+    public void setBirthAndGender(LocalDate birth, Gender gender){
+        this.birth = birth;
+        this.gender = gender;
     }
 
 }

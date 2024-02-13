@@ -1,7 +1,11 @@
 package com.ssafy.yourpilling.rank.controller;
 
-import com.ssafy.yourpilling.common.Gender;
-import com.ssafy.yourpilling.common.Role;
+import com.ssafy.yourpilling.common.*;
+import com.ssafy.yourpilling.pill.model.dao.entity.Nutrition;
+import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
+import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
+import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
+import com.ssafy.yourpilling.rank.model.dao.entity.RankMidCategory;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import com.ssafy.yourpilling.security.auth.jwt.JwtManager;
 import com.ssafy.yourpilling.security.auth.model.dao.entity.Member;
@@ -22,7 +26,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.time.LocalDate.now;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,11 +54,10 @@ class RankControllerTest {
     private JwtManager jwtManager;
 
     @Test
-    @DisplayName("모든 키테고리")
+    @DisplayName("모든 카테고리")
     public void allCategories() throws Exception {
         Member member = defaultRegisterMember();
         String accessToken = getAccessToken(member);
-
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get("/api/v1/rank/categories")
@@ -94,4 +100,5 @@ class RankControllerTest {
         }
         return member;
     }
+
 }

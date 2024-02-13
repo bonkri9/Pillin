@@ -53,6 +53,9 @@ public class TakerHistoryServiceImpl implements TakerHistoryService {
         List<OutDailyHistoryVo> responses = new ArrayList<>();
 
         for (TakerHistoryTakerHistory dailyHistory : dailyHistories) {
+
+            if(dailyHistory.isInvalid()) continue;
+
             boolean isTake = dailyHistory.getNeedToTakeCount().equals(dailyHistory.getCurrentTakeCount());
 
             responses.add(mapper.mapToResponseDailyHistoryVo(dailyHistory, isTake));

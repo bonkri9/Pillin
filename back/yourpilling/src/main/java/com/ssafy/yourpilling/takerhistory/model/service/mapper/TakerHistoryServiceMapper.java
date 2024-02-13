@@ -21,10 +21,13 @@ public class TakerHistoryServiceMapper {
 
     public OutDailyHistoryVo mapToResponseDailyHistoryVo(TakerHistoryTakerHistory takerHistory, boolean isTake) {
         return OutDailyHistoryVo.builder()
+                .ownPillId(takerHistory.getOwnPill().getOwnPillId())
                 .name(takerHistory.getOwnPill().getPill().getName())
                 .takeYn(isTake)
+                .remains(takerHistory.getOwnPill().getRemains())
                 .actualTakeCount(takerHistory.getCurrentTakeCount())
                 .needToTakeTotalCount(takerHistory.getNeedToTakeCount())
+                .takeCount(takerHistory.getOwnPill().getTakeCount())
                 .build();
     }
 }

@@ -11,8 +11,5 @@ import java.time.LocalDate;
 public class MemberRegisterVo {
     String email;
     String password;
-    LocalDate birthday;
-    String nickname;
     String name;
-    Gender gender;
 }

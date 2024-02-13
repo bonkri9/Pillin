@@ -80,14 +80,14 @@ public class OwnPill {
 
     public static Map<Boolean, List<OwnPill>> ownPillsYN(List<OwnPill> ownPills) {
         return ownPills
-                .parallelStream()
+                .stream()
                 .collect(Collectors.partitioningBy(OwnPill::isTakeYN));
     }
 
     public String runOutMessage() {
         if (!this.isTakeYN()) return null;
 
-        return RunOutWarning.getMessage((double) this.getRemains() / this.getTotalCount());
+        return RunOutWarning.getMessage(((double) this.getRemains() / this.getTotalCount()) * 100);
     }
 
     public static List<String> imageUrls(List<OwnPill> ownPills) {
@@ -128,22 +128,14 @@ public class OwnPill {
         return after;
     }
 
-    public int decreaseRemains() {
-
-        int returnVal = this.takeOnceAmount;
+    public void decreaseRemains() {
 
         if(this.remains - this.takeOnceAmount > 0) {
             this.remains -= this.takeOnceAmount;
         }
-        else if(this.remains - this.takeOnceAmount < 0) {
-            returnVal = this.remains;
+        else {
             this.remains = 0;
             this.takeYN = false;
         }
-        else {
-            this.takeYN = false;
-        }
-
-        return returnVal;
     }
 }

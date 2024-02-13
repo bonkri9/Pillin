@@ -62,7 +62,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             ErrorCode e4012 = ErrorCode.E4012;
             request.setAttribute("exception", new ErrorResponse(ErrorStatues.findByErrorCode(e4012), e4012));
         } catch (Exception e) {
-            request.setAttribute("exception", HttpStatus.UNAUTHORIZED);
+            ErrorCode e4012 = ErrorCode.E4012;
+            request.setAttribute("exception", new ErrorResponse(ErrorStatues.findByErrorCode(e4012), e4012));
         }
 
         chain.doFilter(request, response);

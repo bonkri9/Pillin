@@ -19,7 +19,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationProvider authenticationProvider;
-    private final JwtManager jwtTokenProvider;
+    private final JwtManager jwtTokenManager;
     private final JwtProperties jwtProperties;
 
     @Override
@@ -45,9 +45,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication authResult) {
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        String jwtAccessToken = jwtTokenProvider.createAccessToken(principalDetails);
+        String jwtAccessToken = jwtTokenManager.createAccessToken(principalDetails);
 
         response.addHeader(jwtProperties.getAccessTokenHeader(), jwtAccessToken);
+        response.addHeader("isFirstLogin",  Boolean.toString(jwtTokenManager.isFirstLogin(jwtAccessToken)));
     }
 }
 

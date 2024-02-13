@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/s10p12b101?serverTimezone=Asia/Seoul
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: S10P12B101
+    password: WW6ZZxMUgt
+    hikari:
+      maximum-pool-size: 6
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate.format_sql: false
+
+  oauth:
+    kakao:
+      client-id: 9c3a8e5f9209260e3e7f9cd8602c0d68
+      redirect-uri: "http://localhost:8080/login/oauth2/kakao"
+      grant_type: authorization_code
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: zhfldk35@naver.com
+    password: ksb980520.
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.naver.com
+

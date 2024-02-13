@@ -43,6 +43,13 @@ public class MemberServiceImpl implements MemberService {
         memberDao.register(mapper.mapToMember(vo, encoder, Role.MEMBER));
     }
 
+    @Transactional
+    @Override
+    public void registerEssential(RegisterEssentialVo vo) {
+        MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+        member.setBirthAndGender(vo.getBirthday(), vo.getGender());
+    }
+
     @Override
     public OutMemberVo info(MemberInfoVo vo) {
         MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
@@ -52,10 +59,18 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void update(MemberUpdateVo vo) {
+    public void updateName(MemberUpdateNameVo vo) {
         MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
 
-        member.updateNickname(vo.getNickname());
+        member.updateName(vo.getName());
+    }
+
+    @Transactional
+    @Override
+    public void updatePassword(MemberUpdatePasswordVo vo) {
+        MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+
+        member.updatePassword(encoder.encode(vo.getPassword()));
     }
 
     @Transactional
@@ -64,12 +79,13 @@ public class MemberServiceImpl implements MemberService {
         memberDao.deleteByMemberId(vo.getMemberId());
     }
 
+    @Transactional
     @Override
     public void passwordReIssue(MemberPasswordReIssueVo vo) {
         try{
-            MemberProfile member = memberDao.findByMemberId(vo.getMemberId());
+            MemberProfile member = memberDao.findByUsername(vo.getUsername());
 
-            String to = member.getUsername();
+            String to = vo.getUsername();
             String rawTmpPassword = temporaryPasswordGenerator.generatePassword();
 
             sendTemporaryPassword(to, rawTmpPassword);

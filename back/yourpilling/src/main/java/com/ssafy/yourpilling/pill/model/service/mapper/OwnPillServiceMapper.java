@@ -1,8 +1,10 @@
 package com.ssafy.yourpilling.pill.model.service.mapper;
 
+import com.ssafy.yourpilling.pill.model.dao.entity.BuyRecord;
 import com.ssafy.yourpilling.pill.model.dao.entity.OwnPill;
 import com.ssafy.yourpilling.pill.model.dao.entity.Pill;
 import com.ssafy.yourpilling.pill.model.service.mapper.value.OwnPillRegisterValue;
+import com.ssafy.yourpilling.pill.model.service.vo.in.BuyRecordVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillDetailVo.OutOwnPillPillDetailVo;
 import com.ssafy.yourpilling.pill.model.service.vo.out.OutOwnPillInventorListVo;
@@ -55,14 +57,13 @@ public class OwnPillServiceMapper {
     public OwnPill mapToOwnPill(OwnPillRegisterValue value) {
         return OwnPill
                 .builder()
-                .remains(value.getVo().getRemains())
-                .takeCount(value.getVo().getTakeCount())
-                .totalCount(value.getVo().getTotalCount())
+                .remains(value.getAdjustRemain())
+                .takeCount(value.getTakeCount())
+                .totalCount(value.getTotalCount())
                 .takeWeekdays(value.getTakeWeekDaysValue())
                 .takeOnceAmount(value.getTakeOnceAmount())
                 .isAlarm(value.isAlarm())
-                .takeYN(value.getVo().getTakeYn())
-                .startAt(value.getVo().getStartAt())
+                .takeYN(value.isAdjustIsTaken())
                 .createdAt(value.getCreateAt())
                 .member(value.getMember())
                 .pill(value.getPill())
@@ -96,10 +97,20 @@ public class OwnPillServiceMapper {
         return ResponsePillInventoryItem
                 .builder()
                 .ownPillId(ownPill.getOwnPillId())
+                .pillName(ownPill.getPill().getName())
                 .imageUrl(imageUrl)
                 .totalCount(ownPill.getTotalCount())
                 .remains(ownPill.getRemains())
                 .predicateRunOutAt(at)
+                .warningMessage(ownPill.runOutMessage())
+                .build();
+    }
+
+    public BuyRecord mapToBuyRecord(BuyRecordVo vo) {
+        return BuyRecord
+                .builder()
+                .memberId(vo.getMemberId())
+                .pillId(vo.getPillId())
                 .build();
     }
 }
