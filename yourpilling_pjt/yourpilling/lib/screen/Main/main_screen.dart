@@ -706,7 +706,7 @@ class _TodayState extends State<_Today> {
                                             )),
                                         Text(
                                           dailyData[i]['remains'] < dailyData[i]['takeCount']
-                                              ? "${dailyData[i]['remains']}정 남음"
+                                              ? "재고 ${dailyData[i]['remains']}정 남음"
                                               : "${dailyData[i]['actualTakeCount']}/${dailyData[i]['needToTakeTotalCount']}정",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
