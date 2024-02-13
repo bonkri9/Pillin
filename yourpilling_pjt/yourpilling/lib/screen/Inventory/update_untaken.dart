@@ -13,7 +13,6 @@ void showUpdateUntakenDialog(BuildContext context, var ownPillId, var index){
 
   String? codeDialog;
   String? valueText;
-
   showDialog(
       context: context,
       builder: (context) {

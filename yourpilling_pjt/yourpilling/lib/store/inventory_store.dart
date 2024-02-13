@@ -12,6 +12,7 @@ class InventoryStore extends ChangeNotifier {
   var takeYnListData;
   late List takeTrueListData = [];
   late List takeFalseListData = [];
+
   //=> takeFalseListData = takeYnListData?['takeFalse']?['data'] ?? [];
   // takeFalseListData = takeYnListData?['takeTrue']?['data'] ?? [];
   var remains;
@@ -25,17 +26,14 @@ class InventoryStore extends ChangeNotifier {
   getTakeYnListData(BuildContext context) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
-
     try {
       var response = await http.get(Uri.parse(takeYnListUrl), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       });
-
       if (response.statusCode == 200) {
         print("재고 복용 목록 get 수신 성공");
         print(response.body);
-
         // InventoryStore에 응답 저장
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
         takeTrueListData = takeYnListData?['takeTrue']?['data'] ?? [];
@@ -59,8 +57,6 @@ class InventoryStore extends ChangeNotifier {
       BuildContext context, var ownPillId, var remains, var totalCount) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String reviseUrl = "${CONVERT_URL}/api/v1/pill/inventory";
-
-
     try {
       var response = await http.put(Uri.parse(reviseUrl),
           headers: {
@@ -72,10 +68,19 @@ class InventoryStore extends ChangeNotifier {
             'remains': remains,
             'totalCount': totalCount,
           }));
-
       if (response.statusCode == 200) {
         print("재고 수정 put 수신 성공");
+        const String takeYnListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
+        var response = await http.get(Uri.parse(takeYnListUrl), headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        });
+        print("재고 리스트 받아오기 성공");
         takeYnListData = jsonDecode(utf8.decode(response.bodyBytes));
+        takeTrueListData = takeYnListData?['takeTrue']?['data'] ?? [];
+        takeFalseListData = takeYnListData?['takeFalse']?['data'] ?? [];
+        print("true false 받아오기 성공");
+        notifyListeners();
       } else {
         // print(response.body);
         print("재고 수정 put 수신 실패");
@@ -83,7 +88,7 @@ class InventoryStore extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
-    notifyListeners();
+
   }
 
   //재고 상세 조회
@@ -100,10 +105,8 @@ class InventoryStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("재고 상세 get 수신 성공");
         // print(response.body);
-
         // InventoryStore에 응답 저장
         invenDetailData = jsonDecode(utf8.decode(response.bodyBytes));
-
         // print(invenDetailData);
       } else {
         // print(response.body);
@@ -118,7 +121,8 @@ class InventoryStore extends ChangeNotifier {
   //섭취&미섭취 전환
   putTakeYnChange(BuildContext context, var ownPillId) async {
     String accessToken = context.read<UserStore>().accessToken;
-    const String takeYnChangeUrl = "${CONVERT_URL}/api/v1/pill/inventory/take-yn";
+    const String takeYnChangeUrl =
+        "${CONVERT_URL}/api/v1/pill/inventory/take-yn";
     print("복용으로 전환 요청");
     try {
       var response = await http.put(Uri.parse(takeYnChangeUrl),
@@ -152,38 +156,37 @@ class InventoryStore extends ChangeNotifier {
   }
 
   //재고 등록
-  Future<void> registInven(BuildContext context, var pillId, var takeYn, var remains,
-      var totalCount) async {
+  Future<void> registInven(BuildContext context, var pillId, var takeYn,
+      var remains, var totalCount) async {
     print("재고등록 도착");
     String accessToken = context.read<UserStore>().accessToken;
     const String registInvenUrl = "${CONVERT_URL}/api/v1/pill/inventory";
-      // bool takeYnValue = takeYn ?? false;
+    // bool takeYnValue = takeYn ?? false;
     print("체크1");
-      var response = await http.post(Uri.parse(registInvenUrl),
-          headers: {
-            'Content-Type': 'application/json',
-            'accessToken': accessToken,
-          },
-          body: json.encode({
-            'pillId': pillId,
-            'takeYn': takeYn,
-            'remains': remains,
-            'totalCount': totalCount,
-            'takeWeekdays': ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
-          }));
+    var response = await http.post(Uri.parse(registInvenUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },
+        body: json.encode({
+          'pillId': pillId,
+          'takeYn': takeYn,
+          'remains': remains,
+          'totalCount': totalCount,
+          'takeWeekdays': ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        }));
     print("체크2");
+    print(response.body);
+    print("리스폰스 체크");
+    if (response.statusCode == 200) {
+      print("재고 등록 post 수신 성공");
       print(response.body);
-      print("리스폰스 체크");
-      if (response.statusCode == 200) {
-        print("재고 등록 post 수신 성공");
-        print(response.body);
-      } else {
-        print(response.body);
-        print("재고 등록 post 수신 실패");
-        throw Error();
-      }
+    } else {
+      print(response.body);
+      print("재고 등록 post 수신 실패");
+      throw Error();
+    }
 
     notifyListeners();
   }
-
 }

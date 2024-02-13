@@ -20,17 +20,14 @@ class MainStore extends ChangeNotifier {
   getWeeklyData(BuildContext context) async {
     String accessToken = context.read<UserStore>().accessToken;
     const String weeklyUrl = "${CONVERT_URL}/api/v1/pill/history/weekly";
-
     try {
       var response = await http.get(Uri.parse(weeklyUrl), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       });
-
       if (response.statusCode == 200) {
         print("주간 복용 기록 수신 성공");
         print(response.body);
-
         // MainStore에 응답 저장
         var tmp = json.decode(response.body);
         weekData = tmp["data"];

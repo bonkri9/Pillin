@@ -15,8 +15,6 @@ class UnTakenList extends StatefulWidget {
 class _UnTakenListState extends State<UnTakenList> {
   @override
   Widget build(BuildContext context) {
-    // context.watch<InventoryStore>().takeYnListData;
-    var tmp = context.watch<InventoryStore>().takeYnListData;
     var takeFalseList = context.watch<InventoryStore>().takeFalseListData;
     var screenWidth = MediaQuery.of(context).size.width * 0.91;
     var imageWidth = MediaQuery.of(context).size.width * 0.3;
