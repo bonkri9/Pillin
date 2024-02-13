@@ -27,9 +27,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   TextEditingController totalCountController = TextEditingController();
 
   var pillId;
-
   var takeYn = false;
-  // var takeYn;
   var remains;
   var totalCount;
   var takeCount;
@@ -38,11 +36,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   @override
   Widget build(BuildContext context) {
     var pillId = widget.pillId;
-    void loadData(BuildContext context) {
-      context.read<SearchStore>().getSearchDetailData(context, pillId);
-    }
-
-    loadData(context);
+    context.read<SearchStore>().getSearchDetailData(context, pillId);
 
     // 영양제 등록 때 보낼 데이터 변수명
     getCurPillCount(count) {
@@ -66,54 +60,58 @@ class _InsertInventoryState extends State<InsertInventory> {
       print(totalCount);
     }
 
-    loadData(context);
     var pillDetailData = context.read<SearchStore>().pillDetailData;
-    print(pillDetailData);
+    print('pillDetailData $pillDetailData');
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: BACKGROUND_COLOR,
+        backgroundColor: Colors.white,
         leading: IconButton(
           padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
           onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios),
-          iconSize: 24,
           disabledColor: Colors.black,
+        ),
+        toolbarHeight: 70,
+        centerTitle: true,
+        title: Text(
+          '내 영양제 등록',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontFamily: "Pretendard",
+            fontSize: 20,
+            color: BASIC_BLACK.withOpacity(0.9),
+          ),
         ),
       ),
       body: SingleChildScrollView(
-        // color: BACKGROUND_COLOR,
-        padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            _InsertInvenUpper(),
-            SizedBox(
-              height: 30,
-            ),
             _InsertInvenContent(
-              getTakeYn: getTakeYn,
-              getCurPillCount: getCurPillCount,
-              getTotalPillCount: getTotalPillCount,
-                detailData : pillDetailData
-            ),
+                getTakeYn: getTakeYn,
+                getCurPillCount: getCurPillCount,
+                getTotalPillCount: getTotalPillCount,
+                detailData: pillDetailData),
           ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: BACKGROUND_COLOR,
+        color: Colors.white,
         child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
           child: Text(
             '등록',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Pretendard",
+              fontSize: 17,
+            ),
           ),
           onPressed: () {
-            print(takeYn);
-            print(remains);
-            print(totalCount);
             context
                 .read<InventoryStore>()
                 .registInven(context, pillId, takeYn, remains, totalCount);
@@ -129,17 +127,20 @@ class _InsertInventoryState extends State<InsertInventory> {
                       children: [
                         ElevatedButton(
                             style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.redAccent)),
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white)),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => InventoryScreen()));
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                             },
                             child: const Text(
-                              '등록완료!',
-                              style: TextStyle(color: Colors.white),
+                              '내 영양제로 등록했어요 :)',
+                              style: TextStyle(
+                                color: BASIC_BLACK,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Pretendard",
+                                fontSize: 17,
+                              ),
                             )),
                       ],
                     ),
@@ -152,39 +153,13 @@ class _InsertInventoryState extends State<InsertInventory> {
   }
 }
 
-class _InsertInvenUpper extends StatefulWidget {
-  _InsertInvenUpper({super.key});
-
-  @override
-  State<_InsertInvenUpper> createState() => _InsertInvenUpperState();
-}
-
-class _InsertInvenUpperState extends State<_InsertInvenUpper> {
-  // var takeYn;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          '영양제 재고 등록',
-          style: TextStyle(fontSize: 30),
-        ),
-      ],
-    );
-  }
-}
-
-
 class _InsertInvenContent extends StatefulWidget {
-
   _InsertInvenContent(
       {super.key,
-        this.getCurPillCount,
-        this.getTotalPillCount,
-        this.pillId,
-        this.getTakeYn,
+      this.getCurPillCount,
+      this.getTotalPillCount,
+      this.pillId,
+      this.getTakeYn,
       this.detailData});
 
   var getCurPillCount;
@@ -192,7 +167,6 @@ class _InsertInvenContent extends StatefulWidget {
   var pillId;
   var getTakeYn;
   var detailData;
-
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
@@ -243,7 +217,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                             text: TextSpan(
                                 text: '${pillDetailData['pillName']}',
                                 style: const TextStyle(
-                                  color: Colors.black,
+                                  color: BASIC_BLACK,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ))),
@@ -289,7 +263,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
                                 minusBtn:
-                                Icon(Icons.remove_circle_outline_rounded),
+                                    Icon(Icons.remove_circle_outline_rounded),
                                 plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
@@ -337,7 +311,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                                 isBordered: false,
                                 // borderShape: BorderShapeBtn.circle,
                                 minusBtn:
-                                Icon(Icons.remove_circle_outline_rounded),
+                                    Icon(Icons.remove_circle_outline_rounded),
                                 plusBtn: Icon(Icons.add_circle_outline_rounded),
                               ),
                             ),
@@ -347,20 +321,20 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     )),
                 Container(
                     child: Row(
-                      children: [
-                        Text('일일 복용 횟수 : '),
-                        Text('${pillDetailData['takeCount']}'),
-                        Text('회(변경 불가능)'),
-                      ],
-                    )),
+                  children: [
+                    Text('일일 복용 횟수 : '),
+                    Text('${pillDetailData['takeCount']}'),
+                    Text('회(변경 불가능)'),
+                  ],
+                )),
                 Container(
                     child: Row(
-                      children: [
-                        Text('1회 복용량 : '),
-                        Text('${pillDetailData['takeOnceAmount']}'),
-                        Text('정(변경 불가능)'),
-                      ],
-                    )),
+                  children: [
+                    Text('1회 복용량 : '),
+                    Text('${pillDetailData['takeOnceAmount']}'),
+                    Text('정(변경 불가능)'),
+                  ],
+                )),
               ],
             ),
           ),

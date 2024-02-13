@@ -67,7 +67,7 @@ class _MyAppState extends State<MainPageChild> {
             label: '마이페이지',
             backgroundColor: Colors.white,
             icon: Icon(Icons.person_outline, color: Color(0xFFD3D3D3)),
-            activeIcon: Icon(Icons.alarm, color: Color(0xFFFF6666)),
+            activeIcon: Icon(Icons.person, color: Color(0xFFFF6666)),
           ),
         ],
       ),
