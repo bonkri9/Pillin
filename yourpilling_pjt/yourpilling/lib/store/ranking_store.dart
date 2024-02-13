@@ -12,7 +12,12 @@ class RankingStore extends ChangeNotifier {
   var ShowData;
 
   Future<void> getShowData(index) async {
-    ShowData = RankingData[index]['outRankData'];
+    for (var data in RankingData) {
+      if (data['midCategoryId'] == index) {
+        ShowData = RankingData[index]['outRankData'];
+        break;
+      }
+    }
     // print("카테고리 전체 데이터입니다 ${CategoriData}");
     // print("카테고리 데이터 입니다 ${CategoriData[0]['midCategories']}");
     notifyListeners();
@@ -69,7 +74,7 @@ class RankingStore extends ChangeNotifier {
       var Rankingdata = jsonDecode(utf8.decode(response.bodyBytes));
       print("체크3");
       RankingData = Rankingdata['data'];
-      print("랭킹 데이터 입니다: ${RankingData[0]['outRankData']}");
+      print("랭킹 데이터 입니다: ${RankingData}");
       getShowData(CategoriData[0]['midCategories'][0]['midCategoryId']);
     } else {
       print(response.body);

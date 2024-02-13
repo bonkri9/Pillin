@@ -395,7 +395,7 @@ class _Ranking extends StatelessWidget {
     context.watch<RankingStore>().RankingData;
     var rankWidth = MediaQuery.of(context).size.width * 0.9;
 
-    // var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
+    var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
     // DateTime now = DateTime.now();
     // print('gender $gender');
 
@@ -404,7 +404,7 @@ class _Ranking extends StatelessWidget {
       height: 485,
       color: Colors.white,
       child: DefaultTabController(
-        length: 2, // 탭의 수
+        length: 3, // 탭의 수
         child: Column(
           children: [
             SizedBox(
@@ -412,7 +412,7 @@ class _Ranking extends StatelessWidget {
             ),
             // header end
             TabBar(
-              indicatorWeight: 2,
+              indicatorWeight: 3,
               indicatorColor: Color(0xFFFF6F61),
               // 선택된 탭의 아래에 표시되는 줄의 색상
               labelColor: Color(0xFFFF6F61),
@@ -431,15 +431,19 @@ class _Ranking extends StatelessWidget {
                     print('성분 탭 선택');
                     context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[1]['midCategories'][0]['midCategoryId']);
                     break;
-                  // case 2:
-                  //   print('20대 ${gender} 탭 선택');
-                  //   break;
+                  case 2:
+
+                context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[2]['midCategories'][2]['midCategoryId']);
+                print(context.read<RankingStore>().CategoriData[2]['midCategories'][2]);
+                print(context.read<RankingStore>().CategoriData[2]['midCategories'][2]['midCategoryId']);
+                print("나이 출력완료");
+                    break;
                 }
               },
               tabs: [
                 _StyledTab('건강고민'),
                 _StyledTab('성분'),
-                // _StyledTab('20대 ${gender}'),
+                _StyledTab('20대 ${gender}'),
               ],
             ),
             SizedBox(
@@ -450,7 +454,7 @@ class _Ranking extends StatelessWidget {
                 children: [
                   _HealthTab(),
                   _NutrientTab(),
-                  // _AgeTab(),
+                  _AgeTab(),
                 ],
               ),
             ),
@@ -490,69 +494,68 @@ class _StyledTab extends StatelessWidget {
 }
 
 // 나이 탭
-// class _AgeTab extends StatefulWidget {
-//   const _AgeTab({super.key});
-//
-//   @override
-//   State<_AgeTab> createState() => _AgeTabState();
-// }
-//
-// class _AgeTabState extends State<_AgeTab> {
-//   int _index = 0;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     var agelist = context.read<RankingStore>().CategoriData[2]
-//         ['midCategories']; // 복용 요청하기
-// // midCategoryId
-//
-//     return Container(
-//       child: Column(
-//         children: [
-//           Container(
-//             height: 0, // 높이 설정
-//             child: ListView.builder(
-//               scrollDirection: Axis.horizontal,
-//               itemCount: 0,
-//               itemBuilder: (context, i) {
-//                 return Container(
-//                   padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
-//                   child: TextButton(
-//                     onPressed: () {
-//                       context
-//                           .read<RankingStore>()
-//                           .getShowData(agelist[i]['midCategoryId']);
-//                       setState(() {
-//                         _index = i;
-//                       });
-//                     },
-//                     style: TextButton.styleFrom(
-//                       backgroundColor:
-//                           BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
-//                     ),
-//                     child: Text(
-//                       '${agelist[i]['midCategoryName']}',
-//                       style: TextStyle(
-//                         fontFamily: "Pretendard",
-//                         color: BASIC_BLACK.withOpacity(0.65),
-//                         fontSize: 14,
-//                         fontWeight: FontWeight.w400,
-//                       ),
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//           Expanded(
-//               child: _SearchRanking(
-//             title: '${_index}',
-//           )),
-//         ],
-//       ),
-//     );
-//   }
-// }
+class _AgeTab extends StatefulWidget {
+  const _AgeTab({super.key});
+
+  @override
+  State<_AgeTab> createState() => _AgeTabState();
+}
+
+class _AgeTabState extends State<_AgeTab> {
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    var agelist = context.read<RankingStore>().CategoriData[2]
+        ['midCategories']; // 복용 요청하기
+// midCategoryId
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            height: 20, // 높이 설정
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 3,
+              itemBuilder: (context, i) {
+                return Container(
+                  padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
+                  child: TextButton(
+                    onPressed: () {
+                      // context
+                      //     .read<RankingStore>()
+                      //     .getShowData(agelist[i]['midCategoryId']);
+                      // setState(() {
+                      //   _index = i;
+                      // });
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
+                    ),
+                    child: Text(
+                      '안녕',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        color: BASIC_BLACK.withOpacity(0.65),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+              child: _SearchRanking(
+            title: '${_index}',
+          )),
+        ],
+      ),
+    );
+  }
+}
 
 // 성분 탭
 class _NutrientTab extends StatefulWidget {
