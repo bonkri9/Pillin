@@ -17,7 +17,7 @@ class _MyAppState extends State<MainPageChild> {
 
   final mainTabs = [
     MainScreen(),
-    SearchScreen(),
+    SearchScreen(showAppBar:false),
     InventoryScreen(),
     AlarmScreen(),
     MyPageScreen(),

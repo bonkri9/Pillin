@@ -163,7 +163,7 @@ class _WelcomeState extends State<Welcome> {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => SearchScreen(),
+                              pageBuilder: (c, a1, a2) => SearchScreen(showAppBar: true,),
                               transitionsBuilder: (c, a1, a2, child) =>
                                   SlideTransition(
                                 position: Tween(
@@ -656,7 +656,7 @@ class _TodayState extends State<_Today> {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => SearchScreen(),
+                              pageBuilder: (c, a1, a2) => SearchScreen(showAppBar: true,),
                               transitionsBuilder: (c, a1, a2, child) =>
                                   SlideTransition(
                                 position: Tween(

@@ -108,7 +108,7 @@ class _AnalysisReportState extends State<AnalysisReport> {
                                     context,
                                     PageRouteBuilder(
                                       pageBuilder: (c, a1, a2) =>
-                                          SearchScreen(),
+                                          SearchScreen(showAppBar: true,),
                                       transitionsBuilder: (c, a1, a2, child) =>
                                           SlideTransition(
                                         position: Tween(

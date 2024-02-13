@@ -158,15 +158,14 @@ class _InsertInvenContent extends StatefulWidget {
       {super.key,
       this.getCurPillCount,
       this.getTotalPillCount,
-      this.pillId,
       this.getTakeYn,
       this.detailData});
 
-  var getCurPillCount;
-  var getTotalPillCount;
-  var pillId;
-  var getTakeYn;
-  var detailData;
+  final getCurPillCount;
+  final getTotalPillCount;
+  // var pillId;
+  final getTakeYn;
+  final detailData;
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
@@ -179,7 +178,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
 
   @override
   Widget build(BuildContext context) {
-    var pillId = widget.pillId;
+    // var pillId = widget.pillId;
     var pillDetailData = widget.detailData;
 
     return Container(

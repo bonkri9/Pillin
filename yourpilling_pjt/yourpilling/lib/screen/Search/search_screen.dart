@@ -22,17 +22,20 @@ getTabData(BuildContext context) async {
 }
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final bool showAppBar;
+
+  const SearchScreen({Key? key, required this.showAppBar}) : super(key: key);
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchScreen> createState() => _SearchScreenState(showAppBar);
 }
 
 class _SearchScreenState extends State<SearchScreen> {
   // TextEditingController를 생성하여 TextField에 사용자의 입력을 관리합니다.
   final myController = TextEditingController();
+  final bool showAppBar;
 
-  _SearchScreenState() {
+  _SearchScreenState(this.showAppBar) {
     myController.addListener(() {
       print("TextField content: ${myController.text}");
     });
@@ -44,6 +47,17 @@ class _SearchScreenState extends State<SearchScreen> {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
+      appBar: showAppBar ? AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+            // 뒤로 가기 기능 추가
+            Navigator.pop(context);
+          },
+        ),
+        toolbarHeight: 70,
+      ) : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
