@@ -2,39 +2,143 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-class UserStore extends ChangeNotifier {
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
+import 'package:yourpilling/screen/Main/main_screen.dart';
+import 'package:yourpilling/screen/SignUp/more_info_screen.dart';
 
+import '../const/url.dart';
+
+class UserStore extends ChangeNotifier {
   String get loginToken => accessToken;
+
   bool get isLoggedIn => accessToken.isNotEmpty;
   String accessToken = '';
   var UserDetail; // 회원정보 페이지에 뿌려줄 데이터
 
+  // 회원가입 정보
+  String userName = '';
+  String userEmail = '';
+  String password = '';
 
-  getToken(String token) { // 로그인할때 발급
+  // 생년 월일
+  String year = '';
+  String month = '';
+  String day = '';
+
+  // 성별 : enum Type / 남자 : 'MAN', 여자 : 'WOMAN'
+  String gender = '';
+
+  setGender(String str) {
+    gender = str;
+  }
+
+  setYear(String str) {
+    year = str;
+  }
+
+  setMonth(String str) {
+    month = str;
+  }
+
+  setDay(String str) {
+    day = str;
+  }
+
+  getToken(String token) {
+    // 로그인할때 발급
     accessToken = token;
     notifyListeners();
   }
 
-  deleteToken() { // 로그아웃할때 실행
+  deleteToken() {
+    // 로그아웃할때 실행
     accessToken = 'Bearer ...';
     notifyListeners();
   }
 
+  signUp(BuildContext context) async {
+    print("회원가입 요청");
+    String url = "${CONVERT_URL}/api/v1/register"; // 회원가입 요청 url
+    print('${userEmail} $password $userName');
+
+      var response = await http.post(Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            'email': userEmail,
+            'password': password,
+            'name': userName,
+          }));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print("회원가입 요청 성공");
+      } else {
+        print("회원가입 요청 실패");
+        print(response.body);
+        throw Error();
+      }
+
+  }
+
+  signUpEssential(BuildContext context) async {
+    print("생년월일 및 성별 포함 회원가입 요청");
+    String url = "${CONVERT_URL}/api/v1/register/essential";
+    print('$userEmail $password $userName $year $month $day ${gender}'); // 잘 들어옴
+    try {
+      print(" accessToken 이야 이게 $accessToken");
+      var response = await http.put(Uri.parse(url), headers: {
+        'Content-Type' : 'application/json',
+        'accessToken' : accessToken,
+      }, body: json.encode({
+        'email': userEmail,
+        'password': password,
+        'name': userName,
+        'birthday' : '$year-$month-$day',
+        'gender' : gender,
+      }));
+
+      if (response.statusCode == 200) {
+        print("추가 회원가입 요청 성공");
+        // 메인 페이지로 이동
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => MainPageChild(),
+            transitionsBuilder: (c, a1, a2, child) =>
+                SlideTransition(
+                  position: Tween(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset(0.0, 0.0),
+                  )
+                      .chain(CurveTween(curve: Curves.easeInOut))
+                      .animate(a1),
+                  child: child,
+                ),
+            transitionDuration: Duration(milliseconds: 750),
+          ),
+        );
+
+      } else {
+        print("추가 회원가입 요청 실패");
+        print(response.body);
+
+      }
+
+    } catch (error) {
+      print(error);
+    }
+  }
+
   // 회원 탈퇴
-  Future<void> deleteUserData(BuildContext context) async {
-    print('체크1');
+  deleteUserData(BuildContext context) async {
     String accessToken = this.accessToken;
-    print('체크2');
-    // String url = 'https://i10b101.p.ssafy.io/api/v1/member';
 
-
-    //String url = "http://10.0.2.2:8080/api/v1/member";
-    String url = "http://10.0.2.2:8080/api/v1/login";
-
-    print('url은 ${url}');
+    String userDeleteUrl = "${CONVERT_URL}/api/v1/member";
+    print('url은 ${userDeleteUrl}');
     print('토큰은 ${accessToken}');
     try {
-      var response = await http.delete(Uri.parse(url), headers: {
+      var response = await http.delete(Uri.parse(userDeleteUrl), headers: {
         'Content-Type': 'application/json',
         'accessToken': accessToken,
       });
@@ -52,32 +156,26 @@ class UserStore extends ChangeNotifier {
     }
     notifyListeners();
   }
-// 회원탈퇴 종료
 
   // 회원 상세정보 가져오기
-  Future<void> getUserDetailData(BuildContext context) async {
+  getUserDetailData(BuildContext context) async {
     print('체크1');
     String accessToken = this.accessToken;
     print('체크2');
-    // String url = 'https://i10b101.p.ssafy.io/api/v1/member';
-
-
-    //String url = "http://10.0.2.2:8080/api/v1/member";
-    String url = "http://10.0.2.2:8080/api/v1/login";
+    String url = "${CONVERT_URL}/api/v1/member";
 
     print('url은 ${url}');
     print('토큰은 ${accessToken}');
     print("상세정보 요청");
-    var response = await http.get(Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken' : accessToken
-        });
+    var response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+      'accessToken': accessToken
+    });
 
     if (response.statusCode == 200) {
       print('상세정보 통신성공');
       UserDetail = jsonDecode(utf8.decode(response.bodyBytes));
-      print("DetailhData: ${UserDetail}");
+      print("DetailData: ${UserDetail}");
       print('체크3');
     } else {
       print(response.body);
@@ -87,5 +185,4 @@ class UserStore extends ChangeNotifier {
     notifyListeners();
   }
 // 상세정보 종료
-
 }

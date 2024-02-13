@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:yourpilling/screen/main_page_child_screen.dart';
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -18,7 +18,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 1500), () {
+    Timer(Duration(milliseconds: 800), () {
       if(Condition){
         exit(0);
       }
@@ -49,7 +49,7 @@ class _SplashState extends State<Splash> {
             children: <Widget>[
               Image.asset(
                 imageLogoName,
-                width: 400,
+                fit: BoxFit.cover,
               ),
               Text("© Copyright 2024, Pillin",
                   style: TextStyle(color: Colors.black)

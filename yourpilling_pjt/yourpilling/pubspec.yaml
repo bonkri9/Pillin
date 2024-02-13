@@ -36,7 +36,6 @@ dependencies:
   intl: ^0.18.0
   share:
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -60,6 +59,17 @@ dependencies:
   just_bottom_sheet: ^1.3.0
   shared_preferences: ^2.2.2
 
+  get: ^4.6.6
+  lottie: ^3.0.0
+  vibration: ^1.8.4
+  fluttertoast: ^8.2.4
+
+  carousel_slider: ^4.2.1
+  flutter_radar_chart: ^0.2.1
+  fl_chart: ^0.66.2
+  flutter_launcher_icons: ^0.12.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -81,7 +91,17 @@ dev_dependencies:
   firebase_messaging: ^14.7.10
   just_bottom_sheet: ^1.3.0
   getwidget: ^2.0.4 #토글위젯
-  ntp: ^2.0.0
+  get: ^4.6.6
+  shimmer: ^3.0.0
+  lottie: ^3.0.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/only_pillin_logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
+
 
 dependency_overrides:
   path: ^1.8.1
@@ -94,6 +114,7 @@ flutter:
     - assets/icon/
     - assets/image/
     - assets/logo/
+    - assets/lottie/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
