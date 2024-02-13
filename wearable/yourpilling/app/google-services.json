@@ -28,7 +28,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1055153492019:android:4c982d79494320545bd346",
         "android_client_info": {
-          "package_name": "com.ssafy.yourpilling"
+          "package_name": "com.example.yourpilling"
         }
       },
       "oauth_client": [],

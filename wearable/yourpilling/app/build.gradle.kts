@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    namespace = "com.ssafy.yourpilling"
+    namespace = "com.example.yourpilling"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.ssafy.yourpilling"
-        minSdk = 30
+        applicationId = "com.example.yourpilling"
+        minSdk = 33
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
