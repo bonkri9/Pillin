@@ -32,6 +32,7 @@ public class PushServiceImpl implements PushService {
 
     }
 
+
     @Override
     public OutNotificationsVo findAllByPushDayAndPushTime(PushNotificationVo vo) {
         return pushDao.findAllByPushDayAndPushTime(vo);
