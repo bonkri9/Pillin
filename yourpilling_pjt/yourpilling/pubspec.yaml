@@ -36,7 +36,6 @@ dependencies:
   intl: ^0.18.0
   share:
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -68,6 +67,7 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter_radar_chart: ^0.2.1
   fl_chart: ^0.66.2
+  flutter_launcher_icons: ^0.12.0
 
 
 dev_dependencies:
@@ -94,6 +94,14 @@ dev_dependencies:
   get: ^4.6.6
   shimmer: ^3.0.0
   lottie: ^3.0.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/only_pillin_logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
+
 
 dependency_overrides:
   path: ^1.8.1
