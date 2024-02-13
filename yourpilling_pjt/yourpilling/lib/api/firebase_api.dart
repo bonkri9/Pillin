@@ -6,30 +6,67 @@ handleMessage(): 푸시 알림 메시지를 처리하는 함수입니다. 메시
 initPushNotifications(): 앱이 종료된 상태에서 푸시 알림을 통해 새로 열릴 때를 처리하는 이벤트 리스너를 설정합니다.
  */
 
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:yourpilling/main.dart';
 
+import '../const/url.dart';
+import '../store/user_store.dart';
+import 'package:http/http.dart' as http;
 class FirebaseApi{
   // create an instance of Firebase Messaging
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   // function to initalize notifications
-  Future<void> initNotifications() async {
+  Future<void> initNotifications(BuildContext context) async {
     // request permission from user
     // 알람 허용 하시겠습니까??
-    await _firebaseMessaging.requestPermission();
+    NotificationSettings settings = await _firebaseMessaging.requestPermission();
 
-    // fetch the FCM token
-    // 메세징 토큰 가져오기
-    final fCMToken = await _firebaseMessaging.getToken();
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      // 알림 허용이 된 경우
+      print("User granted permission");
+      // fetch the FCM token
+      final fCMToken = await _firebaseMessaging.getToken();
+      print('Token: $fCMToken'); // 토큰값 알아내기
+      // 푸시알람을 초기화하고 맨처음에 이 메서드를 시작시켜보자
+      String accessToken = context.read<UserStore>().accessToken;
+      const String takeYnListUrl = "${CONVERT_URL}/api/v1/push/device-token";
+      try {
+        var response = await http.post(Uri.parse(takeYnListUrl), headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },body: jsonEncode({
+          "deviceToken" : fCMToken,
+        }));
+        print('response 이거임 $response');
+        if (response.statusCode == 200) {
+          print("디바이스 토큰 등록 완료");
+        } else {
+          print("디바이스 토큰 등록 실패");
+          throw Exception("디바이스 토큰 등록 오류");
+        }
+      } catch (error) {
+        print("토큰 등록 에러");
+        print(error);
+      }
 
-    print('Token $fCMToken Token'); // 토큰값 알아내기
 
-    // 푸시알람을 초기화하고 맨처음에 이 메서드를 시작시켜보자
-    initPushNotifications();
-
-    // 이러면 토큰을 다시 설치했기떄문에 다른 토큰이 있는것처럼 보임
-
+      initPushNotifications();
+    } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      // 알림 허용이 거부된 경우
+      print("User declined permission");
+      throw Exception("Notification permission was declined");
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      // 알림 허용이 임시로 허가된 경우
+      print("User granted provisional permission");
+    } else {
+      // 알림 허용이 결정되지 않은 경우
+      print("User has not yet made a choice");
+    }
   }
 
   // function to handle receive message
