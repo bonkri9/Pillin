@@ -37,6 +37,7 @@ public class HPillServiceMapper {
                 .imageUrl(pill.getImageUrl())
                 .takeCount(pill.getTakeCount())
                 .takeCycle(pill.getTakeCycle())
+                .takeOnceAmount(pill.getTakeOnceAmount())
                 .nutrients(mapToResponsPillNutrientsListData(pill.getNutritions()))
                 .categories(mapToResponsPillCategoryListData(pill.getPillCategories()))
                 .alreadyHave(alreadyHave)
