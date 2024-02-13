@@ -25,6 +25,8 @@ class InventoryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
         backgroundColor: Colors.white,
         toolbarHeight: 70,
         centerTitle: true,

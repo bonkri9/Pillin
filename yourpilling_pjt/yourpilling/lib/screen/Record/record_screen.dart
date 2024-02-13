@@ -53,6 +53,8 @@ class _RecordScreenState extends State<RecordScreen> {
     print("필리스트 : ${pillListOfTheDay}");
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
         centerTitle: true,
         backgroundColor: Color(0xFFFF6F61).withOpacity(0.8),
         toolbarHeight: 75,

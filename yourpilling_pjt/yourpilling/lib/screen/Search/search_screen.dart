@@ -49,6 +49,8 @@ class _SearchScreenState extends State<SearchScreen> {
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: showAppBar ? AppBar(
         backgroundColor: Colors.white,
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
