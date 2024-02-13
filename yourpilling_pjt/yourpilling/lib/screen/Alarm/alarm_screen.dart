@@ -451,7 +451,7 @@ class _ListState extends State<_List> {
         itemCount: context.read<AlarmStore>().AlarmList.length,
         itemBuilder: (context, idx) {
           // itemBuilder는 위젯을 반환해야함
-          return Material(
+          return Container(
             // elevation: 5.0,
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -557,7 +557,6 @@ class _ListState extends State<_List> {
                             ), // 컨테이너의 윗부분
                           ],
                         ),
-
                         SizedBox(
                           height: 30,
                         ),
