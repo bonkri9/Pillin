@@ -38,7 +38,7 @@ class RankingStore extends ChangeNotifier {
       // dailyData[i]['actualTakeCount']
       var categoriesData = jsonDecode(utf8.decode(response.bodyBytes));
       CategoriData = categoriesData['categoires'];
-      // print("카테고리 전체 데이터입니다 ${CategoriData}");
+      print("카테고리 전체 데이터입니다 ${CategoriData}");
       // print("카테고리 데이터 입니다 ${CategoriData[0]['midCategories']}");
     } else {
       print(response.body);

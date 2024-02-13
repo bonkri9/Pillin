@@ -369,11 +369,10 @@ class _Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<RankingStore>().CategoriData;
-    context.watch<RankingStore>().RankingData;
     var rankWidth = MediaQuery.of(context).size.width * 0.9;
     var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
     print('gender $gender');
+    var CategoriData = context.watch<RankingStore>().CategoriData;
 
     return Container(
       width: rankWidth,
@@ -401,23 +400,23 @@ class _Ranking extends StatelessWidget {
                 switch (index) {
                   case 0:
                     print('건강고민 탭 선택');
-                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[0]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(CategoriData[0]['midCategories'][0]['midCategoryId']);
                     break;
                   case 1:
                     print('성분 탭 선택');
-                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
                     break;
                   case 2:
                     print('20대 ${gender} 탭 선택');
-                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
                     // context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[2]['midCategories'][0]['midCategoryId']);
                     break;
                 }
               },
               tabs: [
-                _StyledTab('건강고민'),
-                _StyledTab('성분'),
-                _StyledTab('성별 및 나이'),
+                _StyledTab('${CategoriData[0]['bigCategoryName']}'),
+                _StyledTab('${CategoriData[1]['bigCategoryName']}'),
+                _StyledTab('${CategoriData[2]['bigCategoryName']}'),
               ],
             ),
             SizedBox(
@@ -670,7 +669,7 @@ class _SearchRanking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 종합비타민 눌렀을때
-    var RankingList = context.read<RankingStore>().ShowData;
+    var RankingList = context.watch<RankingStore>().ShowData;
 
     return Padding(
       padding: const EdgeInsets.all(15.0),
