@@ -24,6 +24,8 @@ class _UserInfoUpdateScreenState extends State<UserInfoUpdateScreen> {
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

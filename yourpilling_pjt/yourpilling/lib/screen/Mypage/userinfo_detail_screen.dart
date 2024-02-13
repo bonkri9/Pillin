@@ -23,27 +23,27 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
     // print('userDetailInfo=' + userDetailInfo["data"]);
 
     return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios_rounded),
+        ),
+        title: Text(
+          "${userDetailInfo?['name'] ?? ""}님의 정보",
+          style: TextStyle(
+            color: BASIC_BLACK,
+            fontSize: 25,
+            fontFamily: "Pretendard",
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
       body: Column(
         children: [
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 18,
-                  )),
-              Text(
-                '내 정보 확인',
-                style: TextStyle(
-                  fontSize: TITLE_FONT_SIZE,
-                  color: BASIC_BLACK,
-                ),
-              ),
-            ],
-          ),
           Expanded(
             child: Container(
                 width: 500,
@@ -72,8 +72,14 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
+                              // Text(
+                              //   '닉네임',
+                              //   style: TextStyle(
+                              //     fontSize: TITLE_FONT_SIZE + 5,
+                              //   ),
+                              // ),
                               Text(
-                                '닉네임',
+                                '성별',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
@@ -102,13 +108,21 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                                 ),
                               ),
                               Text(
-                                '${userDetailInfo?['name'] ?? 0}',
+                                '${userDetailInfo?['name'] ?? ''}',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
                               ),
+                              // Text(
+                              //   '${userDetailInfo?['nickname'] ?? ''}',
+                              //   style: TextStyle(
+                              //     fontSize: TITLE_FONT_SIZE + 5,
+                              //   ),
+                              // ),
                               Text(
-                                '${userDetailInfo?['nickname'] ?? 0}',
+                                userDetailInfo?['gender'] == 'MAN'
+                                    ? '남자'
+                                    : '여자',
                                 style: TextStyle(
                                   fontSize: TITLE_FONT_SIZE + 5,
                                 ),
@@ -132,10 +146,8 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                       SizedBox(
                         height: 20,
                       ),
-
                       BaseContainer(
                         color: Colors.white,
-
                         width: 200,
                         height: 50,
                         child: TextButton(
@@ -158,10 +170,8 @@ class _UserInfoDetailScreenState extends State<UserInfoDetailScreen> {
                           ),
                         ),
                       ),
-
                       BaseContainer(
                           color: Colors.white,
-
                           width: 200,
                           height: 50,
                           child: TextButton(

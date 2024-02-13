@@ -49,6 +49,8 @@ class _SearchScreenState extends State<SearchScreen> {
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: showAppBar ? AppBar(
         backgroundColor: Colors.white,
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
@@ -394,6 +396,8 @@ class _Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<RankingStore>().CategoriData;
+    context.watch<RankingStore>().RankingData;
     var rankWidth = MediaQuery.of(context).size.width * 0.9;
 
     var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
@@ -433,10 +437,27 @@ class _Ranking extends StatelessWidget {
               // 선택된 탭의 텍스트 색상
               unselectedLabelColor: Colors.grey.withOpacity(0.7),
               // 선택되지 않은 탭의 텍스트 색상
+              onTap: (index){
+                // 여기에 원하는 동작을 추가하세요.
+                // 예를 들면, 각 탭에 따라 다른 동작을 수행하게끔 설정할 수 있습니다.
+                switch (index) {
+                  case 0:
+                    print('건강고민 탭 선택');
+                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[0]['midCategories'][0]['midCategoryId']);
+                    break;
+                  case 1:
+                    print('성분 탭 선택');
+                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    break;
+                  // case 2:
+                  //   print('20대 ${gender} 탭 선택');
+                  //   break;
+                }
+              },
               tabs: [
                 _StyledTab('건강고민'),
                 _StyledTab('성분'),
-                _StyledTab('20대 ${gender}'),
+                // _StyledTab('20대 ${gender}'),
               ],
             ),
             SizedBox(
@@ -447,7 +468,7 @@ class _Ranking extends StatelessWidget {
                 children: [
                   _HealthTab(),
                   _NutrientTab(),
-                  _AgeTab(),
+                  // _AgeTab(),
                 ],
               ),
             ),
@@ -565,7 +586,7 @@ class _NutrientTabState extends State<_NutrientTab> {
   @override
   Widget build(BuildContext context) {
     var nutrientlist = context.read<RankingStore>().CategoriData[1]
-        ['midCategories']; // 복용 요청하기
+        ['midCategories'];
 
     return Container(
       child: Column(
@@ -689,7 +710,7 @@ class _SearchRanking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 종합비타민 눌렀을때
-    var RankingList = context.watch<RankingStore>().ShowData;
+    var RankingList = context.read<RankingStore>().ShowData;
 
     return Padding(
       padding: const EdgeInsets.all(15.0),

@@ -38,6 +38,8 @@ class _AnalysisReportState extends State<AnalysisReport> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
