@@ -11,9 +11,9 @@ class AnalysisReportStore extends ChangeNotifier {
   // var takenPillIdxList = [];
   // var takenOrUnTaken = false;
 
-  var essentialNutrientDataList;
-  var vitaminBGroupDataList;
-  var recommendList;
+  late List essentialNutrientDataList = [];
+  late List vitaminBGroupDataList = [];
+  late List recommendList = [];
   var listAll;
 
   var essentialNutrientDataLisLength;
@@ -22,7 +22,7 @@ class AnalysisReportStore extends ChangeNotifier {
 
   // 필수 영양소 정보 데이터 가져오기
   getEssentialNutrientsDataList(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String essentialNutrientsDataListUrl ="${CONVERT_URL}/api/v1/pill/analysis";
 
     try {
@@ -37,8 +37,8 @@ class AnalysisReportStore extends ChangeNotifier {
 
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
-        essentialNutrientDataList = listAll["essentialNutrientsDataList"];
-        essentialNutrientDataLisLength = essentialNutrientDataList.length;
+        essentialNutrientDataList = listAll?["essentialNutrientsDataList"] ?? [];
+        essentialNutrientDataLisLength = essentialNutrientDataList.length ?? 0;
         print("essentialNutrientDataList: $essentialNutrientDataList");
         print("이게 필수 길이: $essentialNutrientDataLisLength");
       } else {
@@ -53,7 +53,7 @@ class AnalysisReportStore extends ChangeNotifier {
 
   // 비타민 B군 정보 데이터 가져오기
   getVitaminBGroupDataList(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String vitaminBGroupDataListUrl ="${CONVERT_URL}/api/v1/pill/analysis";
 
     try {
@@ -68,8 +68,8 @@ class AnalysisReportStore extends ChangeNotifier {
 
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
-        vitaminBGroupDataList = listAll["vitaminBGroupDataList"];
-        vitaminBGroupDataListLength = vitaminBGroupDataList.length;
+        vitaminBGroupDataList = listAll?["vitaminBGroupDataList"] ?? [];
+        vitaminBGroupDataListLength = vitaminBGroupDataList.length ?? 0;
         print("vitaminBGroupDataList: ${vitaminBGroupDataList}");
         print("이게 B 길이: $vitaminBGroupDataListLength");
       } else {
@@ -84,7 +84,7 @@ class AnalysisReportStore extends ChangeNotifier {
 
   // 추천리스트 데이터 가져오기
   getRecommendList(BuildContext context) async {
-    String accessToken = context.watch<UserStore>().accessToken;
+    String accessToken = context.read<UserStore>().accessToken;
     const String recommendListUrl ="${CONVERT_URL}/api/v1/pill/analysis";
 
     try {
@@ -99,8 +99,8 @@ class AnalysisReportStore extends ChangeNotifier {
 
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
-        recommendList = listAll["recommendList"]["data"];
-        recommendListLength = recommendList.length;
+        recommendList = listAll?["recommendList"]?["data"] ?? [];
+        recommendListLength = recommendList.length ?? 0;
         print("recommendList: ${recommendList}");
         print("이게 추천 길이: $recommendListLength");
       } else {
@@ -113,34 +113,4 @@ class AnalysisReportStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  // takePill(BuildContext context, dailyData) async {
-  //   const String takePillUrl = "${CONVERT_URL}/api/v1/pill/take";
-  //
-  //   print("영양제 복용 완료 요청");
-  //   String accessToken = context.read<UserStore>().accessToken;
-  //   var response = await http.put(Uri.parse(takePillUrl),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'accessToken': accessToken,
-  //       },
-  //       body: json.encode({
-  //         "ownPillId": ownPillId,
-  //       }));
-  //   if (response.statusCode == 200) {
-  //     print("영양제 복용 완료 요청 수신 성공");
-  //
-  //     print("복용버튼 DailyData $dailyData");
-  //     curCompleteCount++;
-  //     notifyListeners();
-  //
-  //
-  //
-  //     print(response.body);
-  //   } else {
-  //     print(response.body);
-  //     print("영양제 복용 완료 요청 수신 실패");
-  //   }
-  //   // MainScreen().today.createState();
-  //   notifyListeners();
-  // }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/screen/Login/login_screen.dart';
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/screen/Main/main_screen.dart';
 import 'package:yourpilling/screen/SignUp/greeting_screen.dart';
 import 'package:yourpilling/store/user_store.dart';
@@ -60,6 +62,14 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
     super.dispose();
   }
 
+  // 자동 로그인 설정
+  void _setAutoLogin(String token) async {
+    // 공유저장소에 유저 DB의 인덱스 저장
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width * 0.9;
@@ -102,6 +112,17 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                   ),
                   Text(
                     "나이를 기준으로 맞춤 정보를 제공해드려요",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    "예시) 1998 년 01 월 01 일",
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w400,
@@ -240,16 +261,21 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
 
                     // 시작하기 버튼
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         context.read<UserStore>().setYear(year);
                         context.read<UserStore>().setMonth(month);
                         context.read<UserStore>().setDay(day);
                         context.read<UserStore>().signUpEssential(context); // 생년월일 및 성별 포함 회원가입
 
-                        Navigator.push(
+
+                        var userDetail = await context.read<UserStore>().UserDetail;
+                        _setAutoLogin(userDetail);
+
+                        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                        Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (c, a1, a2) => MainScreen(),
+                            pageBuilder: (c, a1, a2) => MainPageChild(),
                             transitionsBuilder: (c, a1, a2, child) =>
                                 SlideTransition(
                                   position: Tween(
@@ -262,7 +288,10 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                                 ),
                             transitionDuration: Duration(milliseconds: 750),
                           ),
+
                         );
+
+
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(30, 20, 30, 20),

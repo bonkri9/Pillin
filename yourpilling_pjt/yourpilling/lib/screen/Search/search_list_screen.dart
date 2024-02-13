@@ -11,10 +11,11 @@ import 'dart:convert';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 
-
 class SearchListScreen extends StatefulWidget {
   final String myControllerValue;
+
   const SearchListScreen({super.key, required this.myControllerValue});
+
   @override
   State<SearchListScreen> createState() => _SearchListScreenState();
 }
@@ -32,39 +33,34 @@ class _SearchListScreenState extends State<SearchListScreen> {
   @override
   void initState() {
     super.initState();
-    searchInsert = widget.myControllerValue; // widget 키워드를 통해 myControllerValue에 접근합니다.
+    searchInsert =
+        widget.myControllerValue; // widget 키워드를 통해 myControllerValue에 접근합니다.
     myController.text = searchInsert;
     myController.addListener(() {
       print("TextField content: ${myController.text}");
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus(); // 터치하면 키보드꺼짐
-      },
-      child: Scaffold(
-        appBar: MainAppBar(
-          barColor: Color(0xFFF5F6F9),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          onPressed: () {
+            // 뒤로 가기 기능 추가
+            Navigator.pop(context);
+          },
         ),
-        backgroundColor: BACKGROUND_COLOR,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _SearchBar(
-              myController: myController, searchInsert: searchInsert,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            // 검색 리스트들
-            _SearchResult(),
-          ],
+        toolbarHeight: 70,
+        title: _SearchBar(
+          myController: myController,
+          searchInsert: searchInsert,
         ),
       ),
+      backgroundColor: BACKGROUND_COLOR,
+      body: _SearchResult(),
     );
   }
 }
@@ -74,44 +70,71 @@ class _SearchBar extends StatelessWidget {
   final String searchInsert;
   final TextEditingController myController;
 
-  const _SearchBar({Key? key, required this.myController, required this.searchInsert}) : super(key: key);
+  const _SearchBar(
+      {Key? key, required this.myController, required this.searchInsert})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 30,
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(15.0),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: myController,
-              decoration: InputDecoration(
-                labelText: '검색어를 입력해주세요',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: TextField(
+                textAlign: TextAlign.start, // 텍스트 왼쪽 정렬
+                controller: myController,
+                decoration: InputDecoration(
+                  filled: false,
+                  hintText: '성분 이름을 입력해주세요',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 17,
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                  ),
+                  contentPadding: EdgeInsets.zero,
+                ),
               ),
             ),
-          ),
-          IconButton(
+            IconButton(
               icon: Icon(
                 Icons.search,
-                color: Color(0xFFFF6666),
+                color: Color(0xFFFF6F61),
                 size: 34,
               ),
               onPressed: () async {
-                try{
-                  await context.read<SearchStore>().getSearchNameData(context, myController.text);
-                  print('검색 통신성공');
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SearchListScreen(myControllerValue: myController.text,)));
-                }catch(error){
+                try {
+                  await context.read<SearchStore>().getSearchNameData(
+                        context,
+                        myController.text,
+                      );
+                  print('검색 통신 성공');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchListScreen(
+                        myControllerValue: myController.text,
+                      ),
+                    ),
+                  );
+                } catch (error) {
+                  print('이름 검색 실패');
                   falseDialog(context);
+                  print(error);
                 }
-
-              }),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -122,69 +145,72 @@ class _SearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String accessToken = context.watch<UserStore>().accessToken;
-    var pillList = context.read<SearchStore>().SearchData['data'];
+    String accessToken = context.read<UserStore>().accessToken;
+    var pillList = context.read<SearchStore>().searchData['data'];
 
-
-    return Container(
-      height: 650,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: pillList.length,
-            itemBuilder: (context, i) {
-
-              return BaseContainer(
-                color: Colors.white,
-
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: pillList.length,
+        itemBuilder: (context, i) {
+          if (i == 0) {
+            return GestureDetector(
+              onTap: () {
+                var pillId = pillList[i]['pillId'] ?? 0;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PillDetailScreen(
+                          pillId: pillId,
+                        )));
+              },
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                    border: Border.all(
+                      width: 0.1,
+                      color: Colors.grey.withOpacity(0.5),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color(0x00b5b5b5).withOpacity(0.1),
+                          offset: Offset(0.1, 0.1),
+                          blurRadius: 3 // 그림자 위치 조정
+                      ),
+                    ]),
                 width: 500,
-                height: 190,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 0, 10),
+                  padding: const EdgeInsets.fromLTRB(25, 10, 10, 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, top: 30, bottom: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                Text(
-                                  '${pillList[i]['manufacturer']}',
-                                  style: TextStyle(
-                                      color: BASIC_GREY,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w800),
-                                ),
-                                Text(
-                                  '${pillList[i]['pillName']}',
-                                  style: TextStyle(
-                                      color: BASIC_BLACK, fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: Size.zero,
-                                padding: EdgeInsets.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                textStyle: const TextStyle(fontSize: 10),
+                            Text(
+                              '${pillList[i]['manufacturer']}',
+                              style: TextStyle(
+                                color: BASIC_BLACK.withOpacity(0.3),
+                                fontSize: 14,
+                                fontFamily: "Pretendard",
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.w500,
                               ),
-                              onPressed: () {
-                                var pillId = pillList[i]['pillId'] ?? 0;
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PillDetailScreen(pillId: pillId,)));
-                              },
-                              child: const Text(
-                                '상세 보기',
-                                style: TextStyle(color: Colors.grey),
+                            ),
+                            Text(
+                              '${pillList[i]['pillName']}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: BASIC_BLACK.withOpacity(0.8),
+                                fontSize: 17,
+                                fontFamily: "Pretendard",
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -194,31 +220,117 @@ class _SearchResult extends StatelessWidget {
                         children: [
                           Image.network(
                             "${pillList[i]['imageUrl']}",
-                            width: 100,
+                            width: 120,
                             height: 130,
                           ),
-                          SizedBox(width: 10,),
-                          Text(
-                            "상세정보",
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: BASIC_BLACK,
-                            ),
+                          SizedBox(
+                            width: 35,
                           ),
+                          // Text(
+                          //   "상세정보",
+                          //   style: TextStyle(
+                          //     fontSize: 10,
+                          //     color: BASIC_BLACK,
+                          //   ),
+                          // ),
                         ],
                       ),
-
                     ],
                   ),
                 ),
-              );
-            }),
-      ),
-    );
+              ),
+            );
+          } else {
+            return GestureDetector(
+              onTap: () {
+                var pillId = pillList[i]['pillId'] ?? 0;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PillDetailScreen(
+                              pillId: pillId,
+                            )));
+              },
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                    border: Border.all(
+                      width: 0.1,
+                      color: Colors.grey.withOpacity(0.5),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color(0x00b5b5b5).withOpacity(0.1),
+                          offset: Offset(0.1, 0.1),
+                          blurRadius: 3 // 그림자 위치 조정
+                          ),
+                    ]),
+                width: 500,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 10, 10, 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, top: 30, bottom: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${pillList[i]['manufacturer']}',
+                              style: TextStyle(
+                                color: BASIC_BLACK.withOpacity(0.3),
+                                fontSize: 14,
+                                fontFamily: "Pretendard",
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              '${pillList[i]['pillName']}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: BASIC_BLACK.withOpacity(0.8),
+                                fontSize: 17,
+                                fontFamily: "Pretendard",
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Image.network(
+                            "${pillList[i]['imageUrl']}",
+                            width: 120,
+                            height: 130,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          // Text(
+                          //   "상세정보",
+                          //   style: TextStyle(
+                          //     fontSize: 10,
+                          //     color: BASIC_BLACK,
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+        });
   }
 }
-
-
 
 // 통신 오류
 void falseDialog(context) {
