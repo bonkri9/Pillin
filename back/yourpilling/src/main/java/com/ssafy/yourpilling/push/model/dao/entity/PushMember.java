@@ -17,10 +17,10 @@ public class PushMember {
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long memberId;
 
-        @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
         private List<DeviceToken> deviceTokens;
 
-        @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
         private List<PushOwnPill> ownPills;
 
 

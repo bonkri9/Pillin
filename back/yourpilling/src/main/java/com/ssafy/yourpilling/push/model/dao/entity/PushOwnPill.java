@@ -32,14 +32,14 @@ public class PushOwnPill {
         private int totalCount;
 
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "member_id")
         private PushMember member;
 
-        @OneToMany(mappedBy = "pushOwnPill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "pushOwnPill", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
         private List<PushNotification> pushNotifications;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "pill_pill_id")
         private PushPill pushPill;
 

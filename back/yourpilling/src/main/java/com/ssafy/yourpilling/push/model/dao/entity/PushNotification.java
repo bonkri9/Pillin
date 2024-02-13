@@ -29,11 +29,11 @@ public class PushNotification {
     @Column(name = "push_minute")
     private int pushMinute;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "own_pill_id")
     private PushOwnPill pushOwnPill;
 
-    @OneToMany(mappedBy = "pushNotification", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pushNotification", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PushMessageInfo> messageInfos;
 
     public void addMessageInfo(PushMessageInfo pushMessageInfo) {

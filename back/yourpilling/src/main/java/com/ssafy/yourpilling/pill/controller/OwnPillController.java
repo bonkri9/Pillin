@@ -1,13 +1,12 @@
 package com.ssafy.yourpilling.pill.controller;
 
 import com.ssafy.yourpilling.pill.controller.dto.request.*;
-import com.ssafy.yourpilling.pill.model.service.vo.out.*;
 import com.ssafy.yourpilling.pill.controller.mapper.OwnPillControllerMapper;
 import com.ssafy.yourpilling.pill.model.service.OwnPillService;
+import com.ssafy.yourpilling.pill.model.service.vo.out.*;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +87,14 @@ public class OwnPillController {
         log.info("[요청 : 복용, 미복용 전환] own_id : {}", dto.getOwnPillId());
         ownPillService.updateTakeYn(mapper.mapToOwnPillTakeYnVo(dto));
         // OutOwnPillTakeYnVo vo = ownPillService.updateTakeYn(mapper.mapToOwnPillTakeYnVo(dto));
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/buy")
+    ResponseEntity<Void> buy(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                             @RequestBody RequestPillBuyRecordDto dto){
+        log.info("[요청 : {} 사용자가 {} 구매 링크 클릭]", principalDetails.getMember().getMemberId(), dto.getPillId());
+        ownPillService.buyRecord(mapper.mapToBuyRecordVo(principalDetails.getMember().getMemberId(), dto));
         return ResponseEntity.ok().build();
     }
 }
