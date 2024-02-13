@@ -119,7 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
     login(String email, String password) async {
-      try {
         print('$email $password');
         var response = await http.post(Uri.parse(url),
             headers: {
@@ -160,11 +159,11 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
           }
           return accessToken;
+        }else{
+          print("회원정보가 없는경우");
+          throw Error();
         }
-      } catch (error) {
-        print(error);
-        return '-1'; // 에러 시 -1 반환
-      }
+
     }
 
     setEmail(emailInput) {
@@ -268,43 +267,61 @@ class _LoginScreenState extends State<LoginScreen> {
           child: ElevatedButton(
             onPressed: () async {
               if(isValidate()) {
-                final loginCheck = await login(
-                    emailController.text, passwordController.text);
-                print('로그인 버튼 눌림');
-                print(loginCheck);
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => MainPageChild()));
+                try{
+                  final loginCheck = await login(
+                      emailController.text, passwordController.text);
+                  print('로그인 버튼 눌림');
+                  print(loginCheck);
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (context) => MainPageChild()));
 
-                // 로그인 확인
-                if (loginCheck == '-1') {
-                  print('로그인 실패');
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('알림'),
-                        content: Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
-                        actions: [
-                          TextButton(
-                            child: Text('닫기'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                } else {
-                  print('로그인 성공');
-                  print(switchValue);
-                  // 자동 로그인 확인
-                  if (switchValue == true) {
-                    _setAutoLogin(loginCheck!);
+                  // 로그인 확인
+                  if (loginCheck == '-1') {
+                    print('로그인 실패');
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('알림'),
+                          content: Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
+                          actions: [
+                            TextButton(
+                              child: Text('닫기'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   } else {
-                    _delAutoLogin();
+                    print('로그인 성공');
+                    print(switchValue);
+                    // 자동 로그인 확인
+                    if (switchValue == true) {
+                      _setAutoLogin(loginCheck!);
+                    } else {
+                      _delAutoLogin();
+                    }
                   }
+                }catch(e){
+                  Vibration.vibrate(duration: 300); // 진동
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    shape: RoundedRectangleBorder(
+                      // ShapeDecoration을 사용하여 borderRadius 적용
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                    ),
+                    content: Text(
+                      "회원정보가 없습니다",
+                      style: TextStyle(color: BASIC_BLACK),
+                    ),
+                    backgroundColor: Colors.yellow,
+                    duration: Duration(milliseconds: 1100),
+                  ));
                 }
+
               }
             },
             style: ElevatedButton.styleFrom(
