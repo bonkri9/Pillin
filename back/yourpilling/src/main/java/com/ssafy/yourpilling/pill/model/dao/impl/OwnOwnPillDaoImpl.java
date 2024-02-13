@@ -3,10 +3,7 @@ package com.ssafy.yourpilling.pill.model.dao.impl;
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
 import com.ssafy.yourpilling.pill.model.dao.entity.*;
-import com.ssafy.yourpilling.pill.model.dao.jpa.OwnPillJpaRepository;
-import com.ssafy.yourpilling.pill.model.dao.jpa.PillJpaRepository;
-import com.ssafy.yourpilling.pill.model.dao.jpa.PillMemberJpaRepository;
-import com.ssafy.yourpilling.pill.model.dao.jpa.TakerHistoryRepository;
+import com.ssafy.yourpilling.pill.model.dao.jpa.*;
 import com.ssafy.yourpilling.pill.model.service.vo.in.MonthlyTakerHistoryVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.OwnPillUpdateVo;
 import com.ssafy.yourpilling.pill.model.service.vo.in.WeeklyTakerHistoryVo;
@@ -24,12 +21,13 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     private final PillJpaRepository pillJpaRepository;
     private final PillMemberJpaRepository pillMemberJpaRepository;
     private final TakerHistoryRepository takerHistoryRepository;
+    private final BuyRecordRepository buyRecordRepository;
 
     @Override
     public void isAlreadyRegister(Long memberId, Long pillId) {
         List<OwnPill> ownPills = findByMemberId(memberId).getOwnPills();
 
-        if (ownPills.stream().anyMatch(ownPill -> ownPill.getPill().equals(pillId))) {
+        if (ownPills.stream().anyMatch(ownPill -> ownPill.getPill().getPillId().equals(pillId))) {
             throw new IllegalArgumentException("이미 등록된 영양제를 재등록할 수 없습니다.");
         }
     }
@@ -91,6 +89,11 @@ public class OwnOwnPillDaoImpl implements OwnPillDao {
     public void removeByOwnPillId(Long ownPillId) {
         ownPillJpaRepository.deleteByOwnPillId(ownPillId)
                 .orElseThrow(() -> new IllegalArgumentException("보유중인 영양제 삭제에 실패했습니다."));
+    }
+
+    @Override
+    public void buyRecord(BuyRecord buyRecord) {
+        buyRecordRepository.save(buyRecord);
     }
 
     private void updateValues(OwnPillUpdateVo vo, OwnPill ownPill) {

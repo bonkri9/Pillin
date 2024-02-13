@@ -12,6 +12,7 @@ import com.ssafy.yourpilling.push.model.service.PushService;
 import com.ssafy.yourpilling.push.model.service.vo.out.*;
 import com.ssafy.yourpilling.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/push")
 public class PushController {
@@ -36,20 +38,21 @@ public class PushController {
     @PostMapping("/device-token")
     ResponseEntity<Void> register(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                   @RequestBody RequestDeviceTokenDto dto) {
+        log.info("[요청 : 디바이스 토큰 등록] member_id : {}, deviceToken : {}", principalDetails.getMember().getMemberId(), dto.getDeviceToken());
         pushService.register(mapper.mapToDeviceTokenVo(principalDetails.getMember().getMemberId(), dto));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/notification")
     ResponseEntity<OutPushMessageInfoMapVo> selectPushNotifications(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-
+        log.info("[요청 : PUSH알림 정보 목록 조회] member_id : {},", principalDetails.getMember().getMemberId());
         OutPushMessageInfoMapVo vo = pushService.selectPushNotification(principalDetails.getMember().getMemberId());
         return ResponseEntity.ok(vo);
     }
 
     @PostMapping("/notification")
     ResponseEntity<Void> registPushNotification(@RequestBody RequestPushNotificationsDto dto) {
-
+        log.info("[요청 : PUSH알림 정보 등록] ownPillId : {}, ownPillName : {}, day : {}, hour : {}, minute : {}, ", dto.getOwnPillId(), dto.getOwnPillName(), dto.getDay(), dto.getHour(), dto.getMinute());
         pushService.registPushNotification(mapper.mapToRegistPushNotificationVo(dto));
         return ResponseEntity.ok().build();
     }
@@ -57,7 +60,7 @@ public class PushController {
     @PutMapping("/notification")
     ResponseEntity<Void> updatePushNotification(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                 @RequestBody RequestUpdatePushNotificationDto dto) {
-
+        log.info("[요청 : PUSH알림 정보 수정] pushId : {}, day : {}, hour : {}, minute : {}, ", dto.getPushId(), dto.getDay(), dto.getHour(), dto.getMinute());
         pushService.updatePushNotification(mapper.mapToUpdatePushNotificationVo(principalDetails.getMember().getMemberId(), dto));
         return ResponseEntity.ok().build();
     }
@@ -65,14 +68,14 @@ public class PushController {
     @DeleteMapping("/notification")
     ResponseEntity<Void> deletePushNotification(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                 @RequestBody RequestDeletePushNotificationsDto dto) {
-
+        log.info("[요청 : PUSH알림 정보 삭제] pushId : {} ", dto.getPushId());
         pushService.DeletePushNotification(mapper.mapToDeletePushNotificationVo(principalDetails.getMember().getMemberId(), dto));
         return ResponseEntity.ok().build();
     }
 
     @Scheduled(cron = "0 */1 * * * *")
     ResponseEntity<Void> sendPushMessage() {
-
+        log.info("[요청 : PUSH 복용 메세지 FCM 스케쥴러 동작]");
         LocalDateTime now = LocalDateTime.now();
 
         RequestPushFcmDto dto = RequestPushFcmDto
@@ -111,7 +114,7 @@ public class PushController {
     @Scheduled(cron = "0 0 20 * * *")
     ResponseEntity<Void> sendPushRepurchaseMessage() {
 
-
+        log.info("[요청 : PUSH 재구매 메세지 FCM 스케쥴러 동작]");
         OutPushRepurchaseVo outPushRepurchaseVo = pushService.findByOutRemains();
 
         List<OutDeviceTokenVo> sendDeviceList = new ArrayList<>();
@@ -160,27 +163,27 @@ public class PushController {
                 .build();
     }
 
-//    @GetMapping("/send-pushMessageTest")
-//    ResponseEntity<Void> sendPushMessageTest() {
-//
-//        Message fcmMessage = Message
-//                .builder()
-//                .setNotification(
-//                        Notification
-//                                .builder()
-//                                .setTitle(PUSH_TITLE)
-//                                .setBody("안녕하세요? 여러분의 건강을 책임지는 Pillin 입니다! Pillin은 영양제 재고 관리 및 푸시 알림을 활용하여 여러분의 무병장수를 기원하며 시작되었습니다.")
-//                                .setImage(PUSH_IMAGE)
-//                                .build()
-//                )
-//                .setToken("c5yarpmyQlS8-jnxhpUWQR:APA91bEznsOEGs0D28iSdJqA_CRytIizfp1YfAnmr-c-tiWK_ET7Geuecww7B57XF3JHfa6raXcZUjBIXWD_LM2c-RpIzCzHK8_-KGgKIu0n_Ua1koK8cQAIS1ih7FlJE8mx11lPiIhm")
-//                .build();
-//        try {
-//            firebaseMessaging.send(fcmMessage);
-//        } catch (FirebaseMessagingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @GetMapping("/send-pushMessageTest")
+    ResponseEntity<Void> sendPushMessageTest(@RequestParam(name = "deviceToken") String deviceToken) {
+        log.info("[요청 : PUSH 메세지 FCM 테스트] deviceToken : {}", deviceToken);
+        Message fcmMessage = Message
+                .builder()
+                .setNotification(
+                        Notification
+                                .builder()
+                                .setTitle(PUSH_TITLE)
+                                .setBody("안녕하세요? 여러분의 건강을 책임지는 Pillin 입니다! Pillin은 영양제 재고 관리 및 푸시 알림을 활용하여 여러분의 무병장수를 기원하며 시작되었습니다.")
+                                .setImage(PUSH_IMAGE)
+                                .build()
+                )
+                .setToken(deviceToken)
+                .build();
+        try {
+            firebaseMessaging.send(fcmMessage);
+        } catch (FirebaseMessagingException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
