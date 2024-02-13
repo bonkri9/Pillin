@@ -225,6 +225,10 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 30,
+                ),
+                Text("잔여 알약 수는 총 알약 수를 넘을 수 없습니다."),
                 Container(
                     height: 50,
                     child: Row(

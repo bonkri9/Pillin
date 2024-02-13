@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/screen/Login/login_screen.dart';
 import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/screen/Main/main_screen.dart';
@@ -60,6 +61,14 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
     dayFocusNode.dispose();
     super.dispose();
   }
+
+  // 자동 로그인 설정
+  void _setAutoLogin(String token) async {
+    // 공유저장소에 유저 DB의 인덱스 저장
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -247,6 +256,11 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         context.read<UserStore>().setDay(day);
                         context.read<UserStore>().signUpEssential(context); // 생년월일 및 성별 포함 회원가입
 
+
+                        var userDetail = context.read<UserStore>().UserDetail;
+                        _setAutoLogin(userDetail);
+
+
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
@@ -263,7 +277,10 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                                 ),
                             transitionDuration: Duration(milliseconds: 750),
                           ),
+
                         );
+
+
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(30, 20, 30, 20),

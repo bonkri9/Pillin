@@ -7,6 +7,7 @@ import 'main_screen.dart';
 
 class MainPageChild extends StatefulWidget {
   const MainPageChild({super.key});
+
   @override
   State<MainPageChild> createState() => _MyAppState();
 }

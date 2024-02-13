@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/component/common/app_bar.dart';
 import 'package:yourpilling/component/common/base_container_noheight.dart';
 import 'package:yourpilling/const/colors.dart';
@@ -29,6 +30,15 @@ class _MainScreenState extends State<MainScreen> {
     context.read<MainStore>().getWeeklyData(context);
     context.read<MainStore>().getUserInventory(context);
     context.read<MainStore>().getDailyData(context);
+
+    var userDetail = context.read<UserStore>().UserDetail;
+
+    void setTokenInDevice(var token) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+    }
+
+    setTokenInDevice(userDetail);
 
     DateTime? currentBackPressTime;
     Future<bool> onWillPop() {
@@ -778,7 +788,8 @@ class _TodayState extends State<_Today> {
                                               color: BASIC_BLACK,
                                             )),
                                         Text(
-                                          dailyData[i]['remains'] < dailyData[i]['takeCount']
+                                          dailyData[i]['remains'] <
+                                                  dailyData[i]['takeCount']
                                               ? "재고 ${dailyData[i]['remains']}정 남음"
                                               : "${dailyData[i]['actualTakeCount']}/${dailyData[i]['needToTakeTotalCount']}정",
                                           overflow: TextOverflow.ellipsis,
