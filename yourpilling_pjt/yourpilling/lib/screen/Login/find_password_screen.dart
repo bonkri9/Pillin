@@ -25,6 +25,8 @@ class _FindPasswordScreenState extends State<FindPasswordScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0.0,
+          elevation: 0,
           title: Text("비밀번호찾기"),
         ),
         backgroundColor: BACKGROUND_COLOR,

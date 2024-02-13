@@ -23,7 +23,7 @@ class MyPageScreen extends StatelessWidget {
 // todo : 상단바 위젯 스크롤 내리면 사라지고 올리면 뜨게 하기
   @override
   Widget build(BuildContext context) {
-    var userDetailInfo = context.read<UserStore>().UserDetail;
+    var userDetailInfo = context.watch<UserStore>().UserDetail;
     return Scaffold(
         body: ListView(
           children: [
@@ -36,21 +36,21 @@ class MyPageScreen extends StatelessWidget {
                     SizedBox(
                       height: 8,
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8,
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back_ios,
-                              size: 18,
-                            )),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     SizedBox(
+                    //       width: 8,
+                    //     ),
+                    //     IconButton(
+                    //         onPressed: () {
+                    //           Navigator.pop(context);
+                    //         },
+                    //         icon: Icon(
+                    //           Icons.arrow_back_ios,
+                    //           size: 18,
+                    //         )),
+                    //   ],
+                    // ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                       child: Column(
@@ -63,7 +63,7 @@ class MyPageScreen extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                  '${userDetailInfo?['name'] ?? 0}',
+                                  '${userDetailInfo?['name'] ?? ''}',
                                   style: TextStyle(
                                     color: HOT_PINK,
                                     fontSize: 20,

@@ -38,6 +38,8 @@ class _SearchNutrientScreenState extends State<SearchNutrientScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0.0,
+          elevation: 0,
           backgroundColor: Colors.white,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios_new),
