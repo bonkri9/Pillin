@@ -218,7 +218,7 @@ class _WelcomeState extends State<Welcome> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: '개 남았어요!"',
+                                  text: '정 남았어요!"',
                                   style: TextStyle(
                                     fontSize: 19,
                                     color: BASIC_BLACK,
@@ -778,15 +778,18 @@ class _TodayState extends State<_Today> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("${dailyData[i]['name']}",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontFamily: "Pretendard",
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.5,
-                                              color: BASIC_BLACK,
-                                            )),
+                                        Container(
+                                          width: 270,
+                                          child: Text("${dailyData[i]['name']}",
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                fontFamily: "Pretendard",
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16.5,
+                                                color: BASIC_BLACK,
+                                              )),
+                                        ),
                                         Text(
                                           dailyData[i]['remains'] <
                                                   dailyData[i]['takeCount']

@@ -69,23 +69,10 @@ class _TakenListState extends State<TakenList> {
                           ,children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (c, a1, a2) => SearchScreen(showAppBar: true,),
-                                    transitionsBuilder: (c, a1, a2, child) =>
-                                        SlideTransition(
-                                          position: Tween(
-                                            begin: Offset(1.0, 0.0),
-                                            end: Offset(0.0, 0.0),
-                                          )
-                                              .chain(CurveTween(curve: Curves.easeInOut))
-                                              .animate(a1),
-                                          child: child,
-                                        ),
-                                    transitionDuration: Duration(milliseconds: 750),
-                                  ),
-                                );
+                                var ownPillId = '${takeTrueList[i]?['ownPillId'] ?? 0}';
+                                var index = i;
+                                print(index);
+                                showUpdateTakenDialog(context, ownPillId, index);
                               },
                               child: Icon(
                                 Icons.mode_edit,
@@ -190,21 +177,6 @@ class _TakenListState extends State<TakenList> {
                                 ),
                               ),
                             ),
-                            IconButton(
-                              iconSize: 16,
-                              onPressed: () {
-                                // var ownPillId =
-                                //     '${takeTrueListData['takeTrue']['data'][i]['ownPillId']}';
-                                var ownPillId = '${takeTrueList[i]?['ownPillId'] ?? 0}';
-                                var index = i;
-                                print(index);
-                                print('위는 인덱스');
-                                showUpdateTakenDialog(context, ownPillId, index);
-                              },
-                              icon: Icon(Icons.edit),
-                            ),
-
-
                           ],
                         ),
                       ],

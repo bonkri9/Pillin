@@ -50,6 +50,7 @@ class _TokenCheckState extends State<TokenCheck> {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: isToken ? MainPageChild() : EnterLoginScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
