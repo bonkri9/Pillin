@@ -22,6 +22,8 @@ public class PushControllerMapper {
         return PushNotificationVo
                 .builder()
                 .pushDay(dto.getPushDay())
+                .hour(dto.getHour())
+                .minute(dto.getMinute())
                 .build();
     }
 
