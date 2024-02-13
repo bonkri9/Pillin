@@ -6,8 +6,8 @@ import 'package:yourpilling/store/user_store.dart';
 import 'dart:convert';
 import '../const/url.dart';
 class RankingStore extends ChangeNotifier {
-  var CategoriData;
-  var RankingData;
+  var CategoriData = [];
+  var RankingData = [];
   var RankingIndex;
   var ShowData;
 
@@ -70,7 +70,7 @@ class RankingStore extends ChangeNotifier {
       print("체크3");
       RankingData = Rankingdata['data'];
       print("랭킹 데이터 입니다: ${RankingData[0]['outRankData']}");
-
+      getShowData(CategoriData[0]['midCategories'][0]['midCategoryId']);
     } else {
       print(response.body);
       throw Exception('랭킹 결과가 없습니다');

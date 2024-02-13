@@ -21,60 +21,49 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _MainAppBarState extends State<MainAppBar> {
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    const weekDays = ['월', '화', '수', '목', '금', '토', '일'];
     return AppBar(
+      centerTitle: true,
       automaticallyImplyLeading: false,
       backgroundColor: widget.barColor,
       toolbarHeight: 120,
+      elevation: 0,
       title: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/logo/only_pillin_logo.png',
-                  width: 70, height: 70),
+              // Image.asset('assets/logo/only_pillin_logo.png',
+              //     width: 70, height: 70),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text(
+                    "${now.month}.${now.day} ${weekDays[now.weekday - 1]}",
+                    style: TextStyle(
+                      color: BASIC_BLACK,
+                      fontSize: 18,
+                      fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   // IconButton(
-                  //   padding: EdgeInsets.only(right: 15),
+                  //   padding: EdgeInsets.zero,
                   //   visualDensity: const VisualDensity(horizontal: -4),
-                  //   onPressed: () {},
-                  //   icon: Icon(
-                  //     Icons.search,
-                  //     size: 28,
-                  //   ),
-                  // ),
-                  // IconButton(
-                  //   padding: EdgeInsets.only(right: 15),
-                  //   visualDensity: const VisualDensity(horizontal: -4),
-                  //   onPressed: () {},
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => MyPageScreen())); // 마이페이지로 이동
+                  //   },
                   //   icon: Row(
                   //     children: [
-                  //       SvgPicture.asset('assets/icon/bell.svg',
-                  //           width: 26, height: 26, color: BASIC_BLACK,),
-                  //       // 알람 아이콘 크기
+                  //       SvgPicture.asset('assets/icon/user.svg',
+                  //           width: 28, height: 28),
                   //     ],
                   //   ),
                   // ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    visualDensity: const VisualDensity(horizontal: -4),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyPage())); // 마이페이지로 이동
-                    },
-                    icon: Row(
-                      children: [
-                        SvgPicture.asset('assets/icon/user.svg',
-                            width: 28, height: 28),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  )
                 ],
               ),
             ],

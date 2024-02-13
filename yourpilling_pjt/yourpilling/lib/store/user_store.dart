@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/screen/Main/main_screen.dart';
 import 'package:yourpilling/screen/SignUp/more_info_screen.dart';
 
@@ -24,7 +25,7 @@ class UserStore extends ChangeNotifier {
   String month = '';
   String day = '';
 
-  // 성별 : enum Type / 남자 : 1, 여자 : 0
+  // 성별 : enum Type / 남자 : 'MAN', 여자 : 'WOMAN'
   String gender = '';
 
   setGender(String str) {
@@ -59,7 +60,7 @@ class UserStore extends ChangeNotifier {
     print("회원가입 요청");
     String url = "${CONVERT_URL}/api/v1/register"; // 회원가입 요청 url
     print('${userEmail} $password $userName');
-    try {
+
       var response = await http.post(Uri.parse(url),
           headers: {
             'Content-Type': 'application/json',
@@ -75,17 +76,15 @@ class UserStore extends ChangeNotifier {
       } else {
         print("회원가입 요청 실패");
         print(response.body);
+        throw Error();
       }
-    } catch (error) {
-      print(error);
-    }
+
   }
 
   signUpEssential(BuildContext context) async {
     print("생년월일 및 성별 포함 회원가입 요청");
     String url = "${CONVERT_URL}/api/v1/register/essential";
     print('$userEmail $password $userName $year $month $day ${gender}'); // 잘 들어옴
-
     try {
       print(" accessToken 이야 이게 $accessToken");
       var response = await http.put(Uri.parse(url), headers: {
@@ -105,7 +104,7 @@ class UserStore extends ChangeNotifier {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (c, a1, a2) => MainScreen(),
+            pageBuilder: (c, a1, a2) => MainPageChild(),
             transitionsBuilder: (c, a1, a2, child) =>
                 SlideTransition(
                   position: Tween(
@@ -123,6 +122,7 @@ class UserStore extends ChangeNotifier {
       } else {
         print("추가 회원가입 요청 실패");
         print(response.body);
+
       }
 
     } catch (error) {

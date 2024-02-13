@@ -27,9 +27,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   TextEditingController totalCountController = TextEditingController();
 
   var pillId;
-
   var takeYn = false;
-  // var takeYn;
   var remains;
   var totalCount;
   var takeCount;
@@ -38,11 +36,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   @override
   Widget build(BuildContext context) {
     var pillId = widget.pillId;
-    void loadData(BuildContext context) {
-      context.read<SearchStore>().getSearchDetailData(context, pillId);
-    }
-
-    loadData(context);
+    context.read<SearchStore>().getSearchDetailData(context, pillId);
 
     // 영양제 등록 때 보낼 데이터 변수명
     getCurPillCount(count) {
@@ -66,151 +60,97 @@ class _InsertInventoryState extends State<InsertInventory> {
       print(totalCount);
     }
 
-    loadData(context);
-    var pillDetailData = context.read<SearchStore>().PillDetailData;
-    print(pillDetailData);
+    var pillDetailData = context.read<SearchStore>().pillDetailData;
+    print('pillDetailData $pillDetailData');
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: BACKGROUND_COLOR,
+        scrolledUnderElevation: 0.0,
+        elevation: 0,
+        backgroundColor: Colors.white,
         leading: IconButton(
           padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
           onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios),
-          iconSize: 24,
           disabledColor: Colors.black,
+        ),
+        toolbarHeight: 70,
+        centerTitle: true,
+        title: Text(
+          '내 영양제 등록',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontFamily: "Pretendard",
+            fontSize: 20,
+            color: BASIC_BLACK.withOpacity(0.9),
+          ),
         ),
       ),
       body: SingleChildScrollView(
-        // color: BACKGROUND_COLOR,
-        padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            _InsertInvenUpper(),
-            SizedBox(
-              height: 30,
-            ),
             _InsertInvenContent(
-              getTakeYn: getTakeYn,
-              getCurPillCount: getCurPillCount,
-              getTotalPillCount: getTotalPillCount,
-            ),
+                getTakeYn: getTakeYn,
+                getCurPillCount: getCurPillCount,
+                getTotalPillCount: getTotalPillCount,
+                detailData: pillDetailData),
           ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: BACKGROUND_COLOR,
+        color: Colors.white,
         child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
           child: Text(
             '등록',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Pretendard",
+              fontSize: 17,
+            ),
           ),
           onPressed: () {
-            // bool checkTrue = false;
-            // var trueList = context.read<InventoryStore>().takeTrueListData;
-            // var trueLength = trueList.length;
-            // for (int i = 0; i < trueLength; i++) {
-            //   if (trueList[i]['pillId'] == pillId) {
-            //     checkTrue = true; // 복용하는 약 중에 이미 존재한다
-            //   }
-            // }
-            //
-            // bool checkFalse = false;
-            // var falseList = context.read<InventoryStore>().takeFalseListData;
-            // var falseLength = falseList.length;
-            // for (int i = 0; i < falseLength; i++) {
-            //   if (falseList[i]['pillId'] == pillId) {
-            //     checkFalse = true; // 미복용하는 약 중에 이미 존재한다
-            //   }
-            // }
-            // print("아래가 checkFalse");
-            // print(checkFalse);
-            // print(checkTrue);
-            // //재고 리스트에 이미 있다면, 이미 등록된 재고라고 모달창 띄우기
-            // if (checkTrue == false && checkFalse == false) {
-              print(takeYn);
-              print(remains);
-              print(totalCount);
-              context
-                  .read<InventoryStore>()
-                  .registInven(context, pillId, takeYn, remains, totalCount);
-              showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: 450,
-                      height: 200,
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.redAccent)),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Inventory()));
-                              },
-                              child: const Text(
-                                '등록완료!',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    );
-                  });
-            // } else {
-            //   showDialog(
-            //       context: context,
-            //       builder: (BuildContext context) {
-            //         return AlertDialog(
-            //           title: Text('알림'),
-            //           content: Text("이미 등록된 영양제입니다."),
-            //           actions: [
-            //             TextButton(
-            //               child: Text("닫기"),
-            //               onPressed: () {
-            //                 Navigator.of(context).pop();
-            //               },
-            //             ),
-            //           ],
-            //         );
-            //       });
-            // }
+            context
+                .read<InventoryStore>()
+                .registInven(context, pillId, takeYn, remains, totalCount);
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    width: 450,
+                    height: 200,
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white)),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              '내 영양제로 등록했어요 :)',
+                              style: TextStyle(
+                                color: BASIC_BLACK,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Pretendard",
+                                fontSize: 17,
+                              ),
+                            )),
+                      ],
+                    ),
+                  );
+                });
           },
         ),
       ),
-    );
-  }
-}
-
-class _InsertInvenUpper extends StatefulWidget {
-  _InsertInvenUpper({super.key});
-
-  @override
-  State<_InsertInvenUpper> createState() => _InsertInvenUpperState();
-}
-
-class _InsertInvenUpperState extends State<_InsertInvenUpper> {
-  // var takeYn;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          '영양제 재고 등록',
-          style: TextStyle(fontSize: 30),
-        ),
-      ],
     );
   }
 }
@@ -220,13 +160,14 @@ class _InsertInvenContent extends StatefulWidget {
       {super.key,
       this.getCurPillCount,
       this.getTotalPillCount,
-      this.pillId,
-      this.getTakeYn});
+      this.getTakeYn,
+      this.detailData});
 
-  var getCurPillCount;
-  var getTotalPillCount;
-  var pillId;
-  var getTakeYn;
+  final getCurPillCount;
+  final getTotalPillCount;
+  // var pillId;
+  final getTakeYn;
+  final detailData;
 
   @override
   State<_InsertInvenContent> createState() => _InsertInvenContentState();
@@ -239,13 +180,8 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
 
   @override
   Widget build(BuildContext context) {
-    var pillId = widget.pillId;
-    void loadData(BuildContext context) {
-      context.read<SearchStore>().getSearchDetailData(context, pillId);
-    }
-
-    loadData(context);
-    var pillDetailData = context.read<SearchStore>().PillDetailData;
+    // var pillId = widget.pillId;
+    var pillDetailData = widget.detailData;
 
     return Container(
       decoration: BoxDecoration(
@@ -282,7 +218,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                             text: TextSpan(
                                 text: '${pillDetailData['pillName']}',
                                 style: const TextStyle(
-                                  color: Colors.black,
+                                  color: BASIC_BLACK,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ))),
@@ -290,28 +226,10 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                     ],
                   ),
                 ),
-                // LiteRollingSwitch(
-                //     width: 100,
-                //     onTap: () {},
-                //     onDoubleTap: () {},
-                //     onSwipe: () {},
-                //     value: takeYn ?? false,
-                //     textOn: '복용중',
-                //     textOff: '미복용',
-                //     colorOn: Colors.greenAccent,
-                //     colorOff: Colors.redAccent,
-                //     iconOn: Icons.done,
-                //     iconOff: Icons.do_not_disturb_on_outlined,
-                //     textSize: 13,
-                //     onChanged: (bool? value) {
-                //       setState(() {
-                //         print(takeYn);
-                //         print('아래가 value onChanged');
-                //         print(value);
-                //         takeYn = value;
-                //         widget.getTakeYn(takeYn);
-                //       });
-                //     }),
+                SizedBox(
+                  height: 30,
+                ),
+                Text("잔여 알약 수는 총 알약 수를 넘을 수 없습니다."),
                 Container(
                     height: 50,
                     child: Row(
