@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/Inventory/update_taken.dart';
-
+import 'package:yourpilling/screen/Search/search_screen.dart';
 import '../../store/inventory_store.dart';
 
 class TakenList extends StatefulWidget {
@@ -64,6 +64,37 @@ class _TakenListState extends State<TakenList> {
                     padding: const EdgeInsets.fromLTRB(20, 20, 25, 20),
                     child: Column(
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end
+                          ,children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (c, a1, a2) => SearchScreen(),
+                                    transitionsBuilder: (c, a1, a2, child) =>
+                                        SlideTransition(
+                                          position: Tween(
+                                            begin: Offset(1.0, 0.0),
+                                            end: Offset(0.0, 0.0),
+                                          )
+                                              .chain(CurveTween(curve: Curves.easeInOut))
+                                              .animate(a1),
+                                          child: child,
+                                        ),
+                                    transitionDuration: Duration(milliseconds: 750),
+                                  ),
+                                );
+                              },
+                              child: Icon(
+                                Icons.mode_edit,
+                                size: 20,
+                                color: BASIC_GREY, // 아이콘 색상
+                              ),
+                            ),
+                          ],
+                        ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(5, 15, 0, 15),
                           child: Image.network(
@@ -146,7 +177,7 @@ class _TakenListState extends State<TakenList> {
                                 padding: EdgeInsets.fromLTRB(13, 7, 13, 7),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(35),
-                                  color: Colors.greenAccent.withOpacity(0.9), // 원의 배경색
+                                  color: Color(0xFFFF6F61).withOpacity(0.9), // 원의 배경색
                                 ),
                                 child: Text(
                                   '보관하기',

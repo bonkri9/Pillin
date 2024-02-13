@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:provider/provider.dart';
+import 'package:yourpilling/screen/Search/search_screen.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 
 import '../../component/common/base_container_noheight.dart';
@@ -13,7 +14,6 @@ import '../../store/analysis_report_store.dart';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 import '../Search/search_pill_detail.dart';
-import '../Search/search_screen.dart';
 
 class AnalysisReport extends StatefulWidget {
   const AnalysisReport({super.key});
@@ -36,7 +36,7 @@ class _AnalysisReportState extends State<AnalysisReport> {
     var takeTrueListDataLength = takeTrueListData.length;
 
     return Scaffold(
-      backgroundColor: BACKGROUND_COLOR.withOpacity(0.95),
+      backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
