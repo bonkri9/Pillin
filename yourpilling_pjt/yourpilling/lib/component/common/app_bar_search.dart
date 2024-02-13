@@ -32,7 +32,7 @@ class _MainAppBarSearchState extends State<MainAppBarSearch> {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen(showAppBar: false,)));
                 },
                 icon: Icon(Icons.search, size: 22,),
               ),

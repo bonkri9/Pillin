@@ -8,8 +8,8 @@ import 'dart:convert';
 import '../const/url.dart';
 
 class SearchStore extends ChangeNotifier {
-  var SearchData;
-  var PillDetailData;
+  var searchData;
+  var pillDetailData;
 
 
   // 이름 검색 리스트 받아오기
@@ -30,9 +30,9 @@ class SearchStore extends ChangeNotifier {
     if (response.statusCode == 200) {
       print("이름 검색 수신 성공");
       // MainStore에 응답 저장
-      SearchData = jsonDecode(utf8.decode(response.bodyBytes));
+      searchData = jsonDecode(utf8.decode(response.bodyBytes));
       print("체크3");
-      print("SearchData: ${SearchData["data"]}");
+      print("searchData: ${searchData["data"]}");
     } else {
       print(response.body);
       throw Exception('검색 결과가 없습니다');
@@ -65,9 +65,9 @@ class SearchStore extends ChangeNotifier {
         print("이름 검색 수신 성공");
 
         // MainStore에 응답 저장
-        SearchData = jsonDecode(utf8.decode(response.bodyBytes));
+        searchData = jsonDecode(utf8.decode(response.bodyBytes));
         print("체크3");
-        print("SearchData: ${SearchData["data"]}");
+        print("searchData: ${searchData["data"]}");
       } else {
         print(response.body);
         print("성분 검색기록 불러오기 실패");
@@ -97,9 +97,9 @@ class SearchStore extends ChangeNotifier {
         print('영양소 건강고민 통신성공');
 
         // MainStore에 응답 저장
-        SearchData = jsonDecode(utf8.decode(response.bodyBytes));
+        searchData = jsonDecode(utf8.decode(response.bodyBytes));
         print("체크3");
-        print("SearchData: ${SearchData["data"]}");
+        print("SearchData: ${searchData["data"]}");
       } else {
         print(response.body);
         print("건강 검색기록 불러오기 실패");
@@ -127,7 +127,7 @@ class SearchStore extends ChangeNotifier {
         // print(response.body);
 
         // InventoryStore에 응답 저장
-        PillDetailData = jsonDecode(utf8.decode(response.bodyBytes));
+        pillDetailData = jsonDecode(utf8.decode(response.bodyBytes));
 
         // print(PillDetailData);
       } else {

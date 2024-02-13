@@ -6,8 +6,8 @@ import 'package:yourpilling/store/user_store.dart';
 import 'dart:convert';
 import '../const/url.dart';
 class RankingStore extends ChangeNotifier {
-  var CategoriData;
-  var RankingData;
+  var CategoriData = [];
+  var RankingData = [];
   var RankingIndex;
   var ShowData;
 

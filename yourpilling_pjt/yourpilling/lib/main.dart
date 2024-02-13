@@ -10,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:yourpilling/firebase_options.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:yourpilling/store/analysis_report_store.dart';
+import 'package:yourpilling/store/alarm_store.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 import 'package:yourpilling/store/main_store.dart';
 import 'package:yourpilling/store/ranking_store.dart';
@@ -34,8 +35,8 @@ void main() async {
   // 시간 초기화를 위해 NTP(Network Time Protocol)를 사용
 
   // Firebase가 앱을 초기화할때까지 기다릴 수있음
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseApi().initNotifications(); // 알람을 초기화함
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await FirebaseApi().initNotifications(); // 알람을 초기화함
 
   initializeDateFormatting().then((_) => runApp(
       MultiProvider(
@@ -48,7 +49,7 @@ void main() async {
           ChangeNotifierProvider(create: (c) => SearchRepository()),
           ChangeNotifierProvider(create: (c) => RankingStore()),
           ChangeNotifierProvider(create: (c) => AnalysisReportStore()),
-
+          ChangeNotifierProvider(create: (c) => AlarmStore()),
           // 필요한 만큼 ChangeNotifierProvider를 추가하시면 됩니다.
         ],
         child: SafeArea(
