@@ -145,13 +145,13 @@ class _UnTakenListState extends State<UnTakenList> {
                                 padding: EdgeInsets.fromLTRB(13, 7, 13, 7),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(35),
-                                  color: Colors.redAccent.withOpacity(0.9), // 원의 배경색
+                                  color: Colors.yellow, // 원의 배경색
                                 ),
                                 child: Text(
                                   '복용 시작하기',
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: Colors.white,
+                                    color: BASIC_BLACK.withOpacity(0.7),
                                     fontWeight: FontWeight.w500,
                                     fontFamily: 'Pretendard',
                                   ),

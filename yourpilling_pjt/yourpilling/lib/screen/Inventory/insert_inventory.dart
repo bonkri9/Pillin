@@ -27,10 +27,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   TextEditingController totalCountController = TextEditingController();
 
   var pillId;
-
   var takeYn = false;
-
-  // var takeYn;
   var remains;
   var totalCount;
   var takeCount;
@@ -39,11 +36,7 @@ class _InsertInventoryState extends State<InsertInventory> {
   @override
   Widget build(BuildContext context) {
     var pillId = widget.pillId;
-    void loadData(BuildContext context) {
-      context.read<SearchStore>().getSearchDetailData(context, pillId);
-    }
-
-    loadData(context);
+    context.read<SearchStore>().getSearchDetailData(context, pillId);
 
     // 영양제 등록 때 보낼 데이터 변수명
     getCurPillCount(count) {
@@ -67,32 +60,35 @@ class _InsertInventoryState extends State<InsertInventory> {
       print(totalCount);
     }
 
-    loadData(context);
     var pillDetailData = context.read<SearchStore>().pillDetailData;
-    print(pillDetailData);
+    print('pillDetailData $pillDetailData');
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: BACKGROUND_COLOR,
+        backgroundColor: Colors.white,
         leading: IconButton(
           padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
           onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios),
-          iconSize: 24,
           disabledColor: Colors.black,
+        ),
+        toolbarHeight: 70,
+        centerTitle: true,
+        title: Text(
+          '내 영양제 등록',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontFamily: "Pretendard",
+            fontSize: 20,
+            color: BASIC_BLACK.withOpacity(0.9),
+          ),
         ),
       ),
       body: SingleChildScrollView(
-        // color: BACKGROUND_COLOR,
-        padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            _InsertInvenUpper(),
-            SizedBox(
-              height: 30,
-            ),
             _InsertInvenContent(
                 getTakeYn: getTakeYn,
                 getCurPillCount: getCurPillCount,
@@ -102,101 +98,57 @@ class _InsertInventoryState extends State<InsertInventory> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: BACKGROUND_COLOR,
+        color: Colors.white,
         child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
           child: Text(
             '등록',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Pretendard",
+              fontSize: 17,
+            ),
           ),
-          onPressed: () async {
-            try {
-              await context
-                  .read<InventoryStore>()
-                  .registInven(context, pillId, takeYn, remains, totalCount);
-              showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: 450,
-                      height: 200,
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.redAccent)),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            InventoryScreen()));
-                              },
-                              child: const Text(
-                                '재고 확인하러 가기!',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    );
-                  });
-            } catch (e) {
-              showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: 450,
-                      height: 200,
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.redAccent)),
-                              onPressed: () {
-                              },
-                              child: const Text(
-                                '이미 등록된 영양제입니다!',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    );
-                  });
-            }
+          onPressed: () {
+            context
+                .read<InventoryStore>()
+                .registInven(context, pillId, takeYn, remains, totalCount);
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    width: 450,
+                    height: 200,
+                    color: Colors.transparent,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white)),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              '내 영양제로 등록했어요 :)',
+                              style: TextStyle(
+                                color: BASIC_BLACK,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Pretendard",
+                                fontSize: 17,
+                              ),
+                            )),
+                      ],
+                    ),
+                  );
+                });
           },
         ),
       ),
-    );
-  }
-}
-
-class _InsertInvenUpper extends StatefulWidget {
-  _InsertInvenUpper({super.key});
-
-  @override
-  State<_InsertInvenUpper> createState() => _InsertInvenUpperState();
-}
-
-class _InsertInvenUpperState extends State<_InsertInvenUpper> {
-  // var takeYn;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          '영양제 재고 등록',
-          style: TextStyle(fontSize: 30),
-        ),
-      ],
     );
   }
 }
@@ -228,11 +180,6 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
   @override
   Widget build(BuildContext context) {
     var pillId = widget.pillId;
-    // void loadData(BuildContext context) {
-    //   context.read<SearchStore>().getSearchDetailData(context, pillId);
-    // }
-    //
-    // loadData(context);
     var pillDetailData = widget.detailData;
 
     return Container(
@@ -270,7 +217,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                             text: TextSpan(
                                 text: '${pillDetailData['pillName']}',
                                 style: const TextStyle(
-                                  color: Colors.black,
+                                  color: BASIC_BLACK,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ))),

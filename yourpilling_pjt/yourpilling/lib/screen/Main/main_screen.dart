@@ -198,8 +198,7 @@ class _WelcomeState extends State<Welcome> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text:
-                                      '${denominator - numerator}',
+                                  text: '${denominator - numerator}',
                                   style: TextStyle(
                                     color: Colors
                                         .redAccent, // 영양이 부분의 색상을 빨간색으로 지정
@@ -302,8 +301,7 @@ class _WelcomeState extends State<Welcome> {
                                   : AnimatedProgressBar(
                                       width: 340,
                                       height: 15,
-                                      value:
-                                      numerator / denominator,
+                                      value: numerator / denominator,
                                       duration: const Duration(seconds: 1),
                                       gradient: const LinearGradient(
                                         colors: [
@@ -363,8 +361,7 @@ class _WelcomeState extends State<Welcome> {
                                   : AnimatedProgressBar(
                                       width: 340,
                                       height: 15,
-                                      value:
-                                      numerator / denominator,
+                                      value: numerator / denominator,
                                       duration: Duration(seconds: 1),
                                       gradient: LinearGradient(
                                         colors: [
@@ -404,167 +401,181 @@ class _WeekState extends State<_Week> {
     double screenWidth = MediaQuery.of(context).size.width;
     var weekData = context.watch<MainStore>().weekData;
     DateTime now = DateTime.now();
-    return Container(
-        width: screenWidth,
-        // height: 160,
-        constraints: BoxConstraints(
-          minHeight: 210,
-        ),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(36),
-            border: Border.all(
-              width: 0.1,
-              color: Colors.grey.withOpacity(0.5),
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => RecordScreen())); // 캘린더 페이지 이동
+        },
+        child: Container(
+            width: screenWidth,
+            // height: 160,
+            constraints: BoxConstraints(
+              minHeight: 210,
             ),
-            boxShadow: [
-              BoxShadow(
-                  color: Color(0x00b5b5b5).withOpacity(0.1),
-                  offset: Offset(0.1, 0.1),
-                  blurRadius: 3 // 그림자 위치 조정
-                  ),
-            ]),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(30, 30, 0, 10),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    Text(
-                      "이번 주 복용 현황이에요",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Pretendard",
-                        fontSize: 20,
-                        color: BASIC_BLACK,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 30,
-                      height: 40,
-                      child: Lottie.asset('assets/lottie/calendar_better.json',
-                          fit: BoxFit.fitHeight),
-                    ),
-                  ],
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(36),
+                border: Border.all(
+                  width: 0.1,
+                  color: Colors.grey.withOpacity(0.5),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: IgnorePointer(
-                  ignoring: true,
-                  child: TableCalendar(
-                    calendarFormat: CalendarFormat.week,
-                    startingDayOfWeek: StartingDayOfWeek.monday,
-                    availableCalendarFormats: {
-                      CalendarFormat.week: 'Week',
-                    },
-                    focusedDay: DateTime.now(),
-                    firstDay: DateTime(2024, 1, 1),
-                    lastDay: DateTime(2024, 12, 31),
-                    headerVisible: false,
-                    locale: 'ko-KR',
-                    daysOfWeekStyle: DaysOfWeekStyle(
-                        weekendStyle: TextStyle(
-                          color: Color(0xFFD0D0D0),
-                          fontSize: 13,
-                          height: 1,
+                boxShadow: [
+                  BoxShadow(
+                      color: Color(0x00b5b5b5).withOpacity(0.1),
+                      offset: Offset(0.1, 0.1),
+                      blurRadius: 3 // 그림자 위치 조정
+                      ),
+                ]),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30, 30, 0, 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Text(
+                          "이번 주 복용 현황이에요",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Pretendard",
+                            fontSize: 20,
+                            color: BASIC_BLACK,
+                          ),
                         ),
-                        weekdayStyle: TextStyle(
-                          height: 1,
-                          color: Color(0xFFD0D0D0),
-                          fontSize: 13,
-                        )),
-                    calendarStyle: CalendarStyle(
-                      outsideDaysVisible: false,
-                      todayTextStyle:
-                          TextStyle(color: Colors.red.withOpacity(0.8)),
-                      weekendTextStyle: TextStyle(color: Colors.grey),
-                      defaultTextStyle: TextStyle(color: Colors.grey),
-                      todayDecoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                        // color: Colors.red.withOpacity(0.1),
-                      ),
-                      defaultDecoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                      ),
-                      weekendDecoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: BASIC_GREY.withOpacity(0.2)),
-                      ),
-                      markersMaxCount: 1,
+                        SizedBox(
+                          width: 30,
+                          height: 40,
+                          child: Lottie.asset(
+                              'assets/lottie/calendar_better.json',
+                              fit: BoxFit.fitHeight),
+                        ),
+                      ],
                     ),
-                    calendarBuilders: CalendarBuilders(
-                        markerBuilder: (context, date, events) {
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: IgnorePointer(
+                      ignoring: true,
+                      child: TableCalendar(
+                        calendarFormat: CalendarFormat.week,
+                        startingDayOfWeek: StartingDayOfWeek.monday,
+                        availableCalendarFormats: {
+                          CalendarFormat.week: 'Week',
+                        },
+                        focusedDay: DateTime.now(),
+                        firstDay: DateTime(2024, 1, 1),
+                        lastDay: DateTime(2024, 12, 31),
+                        headerVisible: false,
+                        locale: 'ko-KR',
+                        daysOfWeekStyle: DaysOfWeekStyle(
+                            weekendStyle: TextStyle(
+                              color: Color(0xFFD0D0D0),
+                              fontSize: 13,
+                              height: 1,
+                            ),
+                            weekdayStyle: TextStyle(
+                              height: 1,
+                              color: Color(0xFFD0D0D0),
+                              fontSize: 13,
+                            )),
+                        calendarStyle: CalendarStyle(
+                          outsideDaysVisible: false,
+                          todayTextStyle:
+                              TextStyle(color: Colors.red.withOpacity(0.8)),
+                          weekendTextStyle: TextStyle(color: Colors.grey),
+                          defaultTextStyle: TextStyle(color: Colors.grey),
+                          todayDecoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                            // color: Colors.red.withOpacity(0.1),
+                          ),
+                          defaultDecoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                          ),
+                          weekendDecoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: BASIC_GREY.withOpacity(0.2)),
+                          ),
+                          markersMaxCount: 1,
+                        ),
+                        calendarBuilders: CalendarBuilders(
+                            markerBuilder: (context, date, events) {
                           String month = date.month.toString().padLeft(2, '0');
                           String day = date.day.toString().padLeft(2, '0');
                           String paramDate = '${date.year}-$month-$day';
-                      print("파람 데이터 $paramDate");
-                      // 현재 날짜에 해당하는 데이터 찾기
-                      var dayData = weekData.firstWhere(
-                        (data) => data['date'] == paramDate,
-                        orElse: () => null,
-                      );
-                      print(dayData);
+                          print("파람 데이터 $paramDate");
+                          // 현재 날짜에 해당하는 데이터 찾기
+                          var dayData = weekData.firstWhere(
+                            (data) => data['date'] == paramDate,
+                            orElse: () => null,
+                          );
+                          print(dayData);
 
-                      if (dayData != null) {
-                        int needToTakenCountToday =
-                            dayData['needToTakenCountToday'];
-                        int actualTakenToday = dayData['actualTakenToday'];
+                          if (dayData != null) {
+                            int needToTakenCountToday =
+                                dayData['needToTakenCountToday'];
+                            int actualTakenToday = dayData['actualTakenToday'];
 
-                        double dayGauge =
-                            actualTakenToday / needToTakenCountToday;
+                            double dayGauge =
+                                actualTakenToday / needToTakenCountToday;
 
-                        return Positioned(
-                          bottom: 5,
-                          child: SizedBox(
-                            width: 40,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 1),
-                              child: CircleProgressBar(
-                                strokeWidth: 2.6,
-                                foregroundColor: dayGauge == 1
-                                    ? fullColor
-                                    : dayGauge > 0.5
-                                        ? overFiftyColor
-                                        : dayGauge == 0.5
-                                            ? fiftyColor
-                                            : underFiftyColor,
-                                backgroundColor: BASIC_GREY.withOpacity(0.2),
-                                value: dayGauge, // dayGauge
+                            return Positioned(
+                              bottom: 5,
+                              child: SizedBox(
+                                width: 40,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 1),
+                                  child: CircleProgressBar(
+                                    strokeWidth: 2.6,
+                                    foregroundColor: dayGauge == 1
+                                        ? fullColor
+                                        : dayGauge > 0.5
+                                            ? overFiftyColor
+                                            : dayGauge == 0.5
+                                                ? fiftyColor
+                                                : underFiftyColor,
+                                    backgroundColor:
+                                        BASIC_GREY.withOpacity(0.2),
+                                    value: dayGauge, // dayGauge
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Positioned(
-                          bottom: 5,
-                          child: SizedBox(
-                            width: 40,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 1),
-                              child: CircleProgressBar(
-                                strokeWidth: 2.6,
-                                foregroundColor: BASIC_GREY.withOpacity(0.2),
-                                backgroundColor: BASIC_GREY.withOpacity(0.2),
-                                value: 0, // dayGauge
+                            );
+                          } else {
+                            return Positioned(
+                              bottom: 5,
+                              child: SizedBox(
+                                width: 40,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 1),
+                                  child: CircleProgressBar(
+                                    strokeWidth: 2.6,
+                                    foregroundColor:
+                                        BASIC_GREY.withOpacity(0.2),
+                                    backgroundColor:
+                                        BASIC_GREY.withOpacity(0.2),
+                                    value: 0, // dayGauge
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      }
-                    }),
-                  ),
-                )),
-          ],
-        ));
+                            );
+                          }
+                        }),
+                      ),
+                    )),
+              ],
+            )));
   }
 }
 
@@ -613,9 +624,9 @@ class _TodayState extends State<_Today> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
+                padding: EdgeInsets.fromLTRB(30, 20, 20, 0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "오늘 꼭 챙겨드세요",
@@ -626,8 +637,65 @@ class _TodayState extends State<_Today> {
                         color: BASIC_BLACK,
                       ),
                     ),
-                    Lottie.asset('assets/lottie/todo.json',
-                        width: 60, height: 50),
+                    // Lottie.asset('assets/lottie/todo.json',
+                    //     width: 40, height: 50),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 11),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => SearchScreen(),
+                              transitionsBuilder: (c, a1, a2, child) =>
+                                  SlideTransition(
+                                position: Tween(
+                                  begin: Offset(1.0, 0.0),
+                                  end: Offset(0.0, 0.0),
+                                )
+                                    .chain(CurveTween(curve: Curves.easeInOut))
+                                    .animate(a1),
+                                child: child,
+                              ),
+                              transitionDuration: Duration(milliseconds: 750),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 13.0,
+                          backgroundColor: Colors.yellow, // 원의 배경색
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white, // 화살표 아이콘의 색상
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Expanded를 사용하여 나머지 공간을 차지하도록 함
+                    Expanded(child: Container()),
+                    // 영양제 추가 하기
+                    GestureDetector(
+                      onTap: () {
+                        // 로직 짜줘 희태야~!~!
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10),
+                        padding: EdgeInsets.fromLTRB(9, 5, 9, 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: BASIC_GREY.withOpacity(0.2), // 원의 배경색
+                        ),
+                        child: Text(
+                          '모두 복용',
+                          style: TextStyle(
+                            fontFamily: "Pretendard",
+                            color: BASIC_BLACK.withOpacity(0.4),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -672,8 +740,13 @@ class _TodayState extends State<_Today> {
                             width: 300,
                             height: 85,
                             decoration: BoxDecoration(
-                              color: (dailyData[i]['actualTakeCount'] == dailyData[i]['needToTakeTotalCount']  || dailyData[i]['remains'] == 0)
-                                  ? afterTakeColor : beforeTakeColor, // 다 먹으면 노랑, 다 못먹으면 파랑                              // beforeTakeColor
+                              color: (dailyData[i]['actualTakeCount'] ==
+                                          dailyData[i]
+                                              ['needToTakeTotalCount'] ||
+                                      dailyData[i]['remains'] == 0)
+                                  ? afterTakeColor
+                                  : beforeTakeColor,
+                              // 다 먹으면 노랑, 다 못먹으면 파랑                              // beforeTakeColor
                               //     : afterTakeColor,
                               borderRadius: BorderRadius.circular(23),
                               border: Border.all(
@@ -705,7 +778,8 @@ class _TodayState extends State<_Today> {
                                               color: BASIC_BLACK,
                                             )),
                                         Text(
-                                          dailyData[i]['remains'] < dailyData[i]['takeCount']
+                                          dailyData[i]['remains'] <
+                                                  dailyData[i]['takeCount']
                                               ? "${dailyData[i]['remains']}정 남음"
                                               : "${dailyData[i]['actualTakeCount']}/${dailyData[i]['needToTakeTotalCount']}정",
                                           overflow: TextOverflow.ellipsis,
@@ -719,19 +793,22 @@ class _TodayState extends State<_Today> {
                                         )
                                       ],
                                     ),
-                                    (dailyData[i]['actualTakeCount'] == dailyData[i]['needToTakeTotalCount']  || dailyData[i]['remains'] == 0)
-                                        ?
-                                        Icon(
+                                    (dailyData[i]['actualTakeCount'] ==
+                                                dailyData[i]
+                                                    ['needToTakeTotalCount'] ||
+                                            dailyData[i]['remains'] == 0)
+                                        ? Icon(
                                             Icons.check_circle,
                                             color: Colors.greenAccent
                                                 .withOpacity(0.9),
                                             size: 30, // 아이콘 크기 조절
-                                          ):Icon(
-                                      Icons.check_circle_outline,
-                                      color: Color(0xFFFF6F61)
-                                          .withOpacity(0.2),
-                                      size: 30, // 아이콘 크기 조절
-                                    )
+                                          )
+                                        : Icon(
+                                            Icons.check_circle_outline,
+                                            color: Color(0xFFFF6F61)
+                                                .withOpacity(0.2),
+                                            size: 30, // 아이콘 크기 조절
+                                          )
                                   ],
                                 ),
                               ),
