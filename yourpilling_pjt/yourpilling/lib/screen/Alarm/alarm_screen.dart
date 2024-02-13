@@ -413,6 +413,28 @@ class _List extends StatefulWidget {
 }
 
 class _ListState extends State<_List> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    var alarmWidth = MediaQuery.of(context).size.width * 0.9;
+    // 스크롤 감지하여 일정 픽셀 이동했을 때 자동으로 넘어가도록 처리
+    if (_scrollController.offset >= alarmWidth) {
+      _scrollController.jumpTo(alarmWidth); // 처음으로 이동
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     context.watch<AlarmStore>().AlarmList;
@@ -421,131 +443,135 @@ class _ListState extends State<_List> {
 
     return Container(
       height: 600,
-      child: ListView.builder(
+      child: PageView.builder(
         // physics: NeverScrollableScrollPhysics(), // ListView 스크롤 방지
-        shrinkWrap: true,
+        // shrinkWrap: true,
         scrollDirection: Axis.horizontal,
+        controller: PageController(viewportFraction: 0.85,),
         itemCount: context.read<AlarmStore>().AlarmList.length,
         itemBuilder: (context, idx) {
           // itemBuilder는 위젯을 반환해야함
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: Container(
-              width: alarmWidth,
-              height: 400,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  border: Border.all(
-                    width: 0.1,
-                    color: Colors.grey.withOpacity(0.5),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color(0x00b5b5b5).withOpacity(0.1),
-                        offset: Offset(0.1, 0.1),
-                        blurRadius: 3 // 그림자 위치 조정
-                        ),
-                  ]),
-              child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20, top: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // 추가 버튼
-                            GestureDetector(
-                              onTap: () {
-                                try {
-                                  Firebase.initializeApp(
-                                      options: DefaultFirebaseOptions
-                                          .currentPlatform);
-                                  FirebaseApi()
-                                      .initNotifications(context); // 알람을 초기화함
-                                  _selectTime(
-                                      context,
-                                      context.read<AlarmStore>().AlarmList[idx]
-                                          ['ownPillId'],
-                                      context.read<AlarmStore>().AlarmList[idx]
-                                          ['pillName']);
-                                } catch (e) {
-                                  // 에러 처리 부분
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text("경고"),
-                                        content: Text("권한을 허용하지 않으면 등록할 수 없어요"),
-                                        actions: [
-                                          TextButton(
-                                            child: Text("닫기"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
-                              },
-                              child: CircleAvatar(
-                                radius: 17.0,
-                                backgroundColor: Colors.indigoAccent
-                                    .withOpacity(0.7), // 원의 배경색
-                                child: Icon(
-                                  Icons.add_alarm,
-                                  color: Colors.white, // 화살표 아이콘의 색상
+          return Material(
+            // elevation: 5.0,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                width: alarmWidth,
+                height: 400,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    border: Border.all(
+                      width: 0.1,
+                      color: Colors.grey.withOpacity(0.6),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color(0x00b5b5b5).withOpacity(0.1),
+                          offset: Offset(0.1, 0.1),
+                          blurRadius: 3 // 그림자 위치 조정
+                          ),
+                    ]),
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20, top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // 추가 버튼
+                              GestureDetector(
+                                onTap: () {
+                                  try {
+                                    Firebase.initializeApp(
+                                        options: DefaultFirebaseOptions
+                                            .currentPlatform);
+                                    FirebaseApi()
+                                        .initNotifications(context); // 알람을 초기화함
+                                    _selectTime(
+                                        context,
+                                        context.read<AlarmStore>().AlarmList[idx]
+                                            ['ownPillId'],
+                                        context.read<AlarmStore>().AlarmList[idx]
+                                            ['pillName']);
+                                  } catch (e) {
+                                    // 에러 처리 부분
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text("경고"),
+                                          content: Text("권한을 허용하지 않으면 등록할 수 없어요"),
+                                          actions: [
+                                            TextButton(
+                                              child: Text("닫기"),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                child: CircleAvatar(
+                                  radius: 17.0,
+                                  backgroundColor: Colors.indigoAccent
+                                      .withOpacity(0.7), // 원의 배경색
+                                  child: Icon(
+                                    Icons.add_alarm,
+                                    color: Colors.white, // 화살표 아이콘의 색상
+                                  ),
                                 ),
                               ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Image.network(
+                              "${context.read<AlarmStore>().AlarmList[idx]['imageUrl']}",
+                              width: 120,
+                              height: 120,
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Container(
+                                width: 130,
+                                child: Text(
+                                  "${context.read<AlarmStore>().AlarmList[idx]['pillName']}",
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    color: BASIC_BLACK.withOpacity(0.8),
+                                    // 영양이 부분의 색상을 빨간색으로 지정
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ), // 컨테이너의 윗부분
                           ],
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Image.network(
-                            "${context.read<AlarmStore>().AlarmList[idx]['imageUrl']}",
-                            width: 120,
-                            height: 120,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Container(
-                              width: 200,
-                              child: Text(
-                                "${context.read<AlarmStore>().AlarmList[idx]['pillName']}",
-                                style: TextStyle(
-                                  fontFamily: "Pretendard",
-                                  color: BASIC_BLACK.withOpacity(0.8),
-                                  // 영양이 부분의 색상을 빨간색으로 지정
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                maxLines: 2,
-                              ),
-                            ),
-                          ), // 컨테이너의 윗부분
-                        ],
-                      ),
 
-                      SizedBox(
-                        height: 30,
-                      ),
-                      _Bottom(
-                        idx: idx,
-                        ownPillId: context.read<AlarmStore>().AlarmList[idx]
-                            ['ownPillId'],
-                      ),
-                      //절취선
+                        SizedBox(
+                          height: 30,
+                        ),
+                        _Bottom(
+                          idx: idx,
+                          ownPillId: context.read<AlarmStore>().AlarmList[idx]
+                              ['ownPillId'],
+                        ),
+                        //절취선
 
-                      // 절취선 종료
-                    ],
-                  )),
+                        // 절취선 종료
+                      ],
+                    )),
+              ),
             ),
           );
         },
