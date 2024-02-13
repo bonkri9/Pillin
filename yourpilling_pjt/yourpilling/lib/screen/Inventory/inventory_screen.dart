@@ -88,7 +88,7 @@ class InventoryScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                  pageBuilder: (c, a1, a2) => SearchScreen(),
+                                  pageBuilder: (c, a1, a2) => SearchScreen(showAppBar: true,),
                                   transitionsBuilder: (c, a1, a2, child) =>
                                       SlideTransition(
                                         position: Tween(
