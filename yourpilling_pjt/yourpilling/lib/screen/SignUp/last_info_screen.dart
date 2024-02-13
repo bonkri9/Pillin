@@ -119,6 +119,17 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                     ),
                   ),
                   SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    "예시) 1998 년 01 월 01 일",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                  SizedBox(
                     height: 70,
                   ),
                 ],
@@ -250,17 +261,17 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
 
                     // 시작하기 버튼
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         context.read<UserStore>().setYear(year);
                         context.read<UserStore>().setMonth(month);
                         context.read<UserStore>().setDay(day);
                         context.read<UserStore>().signUpEssential(context); // 생년월일 및 성별 포함 회원가입
 
 
-                        var userDetail = context.read<UserStore>().UserDetail;
+                        var userDetail = await context.read<UserStore>().UserDetail;
                         _setAutoLogin(userDetail);
 
-
+                        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
