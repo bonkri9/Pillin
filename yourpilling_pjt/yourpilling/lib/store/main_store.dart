@@ -32,8 +32,9 @@ class MainStore extends ChangeNotifier {
         print(response.body);
 
         // MainStore에 응답 저장
-        weekData = json.decode(response.body);
-        print("weekData: ${weekData["data"]}");
+        var tmp = json.decode(response.body);
+        weekData = tmp["data"];
+        print("weekData: $weekData");
       } else {
         print(response.body);
         print("주간 복용 기록 조회 실패");

@@ -503,16 +503,16 @@ class _WeekState extends State<_Week> {
                     ),
                     calendarBuilders: CalendarBuilders(
                         markerBuilder: (context, date, events) {
-                      String month = now.month.toString().padLeft(2, '0');
-                      String day = now.day.toString().padLeft(2, '0');
-
-                      String paramDate = '${date.year}-$month-$day';
-
+                          String month = date.month.toString().padLeft(2, '0');
+                          String day = date.day.toString().padLeft(2, '0');
+                          String paramDate = '${date.year}-$month-$day';
+                      print("파람 데이터 $paramDate");
                       // 현재 날짜에 해당하는 데이터 찾기
-                      var dayData = weekData['data'].firstWhere(
+                      var dayData = weekData.firstWhere(
                         (data) => data['date'] == paramDate,
                         orElse: () => null,
                       );
+                      print(dayData);
 
                       if (dayData != null) {
                         int needToTakenCountToday =
