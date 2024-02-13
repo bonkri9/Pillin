@@ -192,73 +192,68 @@ class _SearchBar extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(35.0),
             ),
-            child: Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: BASIC_GREY.withOpacity(0.15),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            controller: myController,
-                            decoration: InputDecoration(
-                              hintText: '어떤 영양제를 찾으세요?',
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 17,
-                                fontFamily: "Pretendard",
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.0),
+                color: BASIC_GREY.withOpacity(0.15),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      controller: myController,
+                      decoration: InputDecoration(
+                        hintText: '어떤 영양제를 찾으세요?',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 17,
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w400,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 5),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.search,
-                              color: Color(0xFFFF6F61),
-                              size: 34,
-                            ),
-                            onPressed: () async {
-                              try {
-                                await context
-                                    .read<SearchStore>()
-                                    .getSearchNameData(
-                                      context,
-                                      myController.text,
-                                    );
-                                print('검색 통신 성공');
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SearchListScreen(
-                                      myControllerValue: myController.text,
-                                    ),
-                                  ),
-                                );
-                              } catch (error) {
-                                print('이름 검색 실패');
-                                falseDialog(context);
-                                print(error);
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Color(0xFFFF6F61),
+                        size: 34,
+                      ),
+                      onPressed: () async {
+                        try {
+                          await context
+                              .read<SearchStore>()
+                              .getSearchNameData(
+                            context,
+                            myController.text,
+                          );
+                          print('검색 통신 성공');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SearchListScreen(
+                                    myControllerValue: myController.text,
+                                  ),
+                            ),
+                          );
+                        } catch (error) {
+                          print('이름 검색 실패');
+                          falseDialog(context);
+                          print(error);
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ], // 여기에 누락된 괄호를 추가합니다.
+        ],
       ),
     );
   }
@@ -400,29 +395,16 @@ class _Ranking extends StatelessWidget {
     context.watch<RankingStore>().RankingData;
     var rankWidth = MediaQuery.of(context).size.width * 0.9;
 
-    var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
-
-    DateTime now = DateTime.now();
-    // int userBirthYear = int.parse(context.read<UserStore>().year);
-    // int userBirthMonth = int.parse(context.read<UserStore>().month);
-    // int userBirthDay = int.parse(context.read<UserStore>().day);
-
-    // int age = now.year - userBirthYear;
-    //
-    // if (now.month < userBirthMonth || (now.month == userBirthMonth && now.day < userBirthDay)) {
-    //   age--;
-    // }
-
-    // String ageGroup = getAgeGroup(age);
-
-    print('gender $gender');
+    // var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
+    // DateTime now = DateTime.now();
+    // print('gender $gender');
 
     return Container(
       width: rankWidth,
       height: 485,
       color: Colors.white,
       child: DefaultTabController(
-        length: 3, // 탭의 수
+        length: 2, // 탭의 수
         child: Column(
           children: [
             SizedBox(
@@ -508,69 +490,69 @@ class _StyledTab extends StatelessWidget {
 }
 
 // 나이 탭
-class _AgeTab extends StatefulWidget {
-  const _AgeTab({super.key});
-
-  @override
-  State<_AgeTab> createState() => _AgeTabState();
-}
-
-class _AgeTabState extends State<_AgeTab> {
-  int _index = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    var agelist = context.read<RankingStore>().CategoriData[2]
-        ['midCategories']; // 복용 요청하기
-// midCategoryId
-
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            height: 0, // 높이 설정
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 0,
-              itemBuilder: (context, i) {
-                return Container(
-                  padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
-                  child: TextButton(
-                    onPressed: () {
-                      context
-                          .read<RankingStore>()
-                          .getShowData(agelist[i]['midCategoryId']);
-                      setState(() {
-                        _index = i;
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
-                    ),
-                    child: Text(
-                      '${agelist[i]['midCategoryName']}',
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        color: BASIC_BLACK.withOpacity(0.65),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Expanded(
-              child: _SearchRanking(
-            title: '${_index}',
-          )),
-        ],
-      ),
-    );
-  }
-}
+// class _AgeTab extends StatefulWidget {
+//   const _AgeTab({super.key});
+//
+//   @override
+//   State<_AgeTab> createState() => _AgeTabState();
+// }
+//
+// class _AgeTabState extends State<_AgeTab> {
+//   int _index = 0;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var agelist = context.read<RankingStore>().CategoriData[2]
+//         ['midCategories']; // 복용 요청하기
+// // midCategoryId
+//
+//     return Container(
+//       child: Column(
+//         children: [
+//           Container(
+//             height: 0, // 높이 설정
+//             child: ListView.builder(
+//               scrollDirection: Axis.horizontal,
+//               itemCount: 0,
+//               itemBuilder: (context, i) {
+//                 return Container(
+//                   padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
+//                   child: TextButton(
+//                     onPressed: () {
+//                       context
+//                           .read<RankingStore>()
+//                           .getShowData(agelist[i]['midCategoryId']);
+//                       setState(() {
+//                         _index = i;
+//                       });
+//                     },
+//                     style: TextButton.styleFrom(
+//                       backgroundColor:
+//                           BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
+//                     ),
+//                     child: Text(
+//                       '${agelist[i]['midCategoryName']}',
+//                       style: TextStyle(
+//                         fontFamily: "Pretendard",
+//                         color: BASIC_BLACK.withOpacity(0.65),
+//                         fontSize: 14,
+//                         fontWeight: FontWeight.w400,
+//                       ),
+//                     ),
+//                   ),
+//                 );
+//               },
+//             ),
+//           ),
+//           Expanded(
+//               child: _SearchRanking(
+//             title: '${_index}',
+//           )),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 // 성분 탭
 class _NutrientTab extends StatefulWidget {
