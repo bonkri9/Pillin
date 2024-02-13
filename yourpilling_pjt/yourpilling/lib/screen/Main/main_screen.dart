@@ -71,9 +71,7 @@ class _MainScreenState extends State<MainScreen> {
         appBar: MainAppBar(
           barColor: Colors.white,
         ),
-        body: WillPopScope(
-          onWillPop: onWillPop,
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
             child: Column(
               children: [
                 Welcome(),
@@ -92,7 +90,8 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-        ));
+        // )
+    );
   }
 }
 
