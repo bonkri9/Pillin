@@ -514,8 +514,8 @@ class _ListState extends State<_List> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 20),
-                            child: Container(
-                              width: 200,
+                            child: SizedBox(
+                              width: 150,
                               child: Text(
                                 "${context.read<AlarmStore>().AlarmList[idx]['pillName']}",
                                 style: TextStyle(
