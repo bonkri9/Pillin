@@ -19,7 +19,6 @@ class RankingStore extends ChangeNotifier {
   }
 
 
-
 // 카테고리 데이터
   Future<void> getCategoriData(BuildContext context) async {
     String accessToken = context.read<UserStore>().accessToken;
