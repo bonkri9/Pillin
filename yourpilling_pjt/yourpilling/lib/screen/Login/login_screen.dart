@@ -160,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
           }
+
           return accessToken;
         }else{
           print("회원정보가 없는경우");
