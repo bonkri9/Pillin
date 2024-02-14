@@ -292,6 +292,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           context.read<UserStore>().password = password;
                           await context.read<UserStore>().signUp(context);
                           if (isValidate()) {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            // 회원가입 성공 시 이름이랑 닉네임 페이지 사라지게
                             Navigator.push(
                               context,
                               PageRouteBuilder(

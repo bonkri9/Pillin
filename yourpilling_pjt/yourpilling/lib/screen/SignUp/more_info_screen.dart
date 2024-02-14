@@ -81,7 +81,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                     GestureDetector(
                       onTap: () {
                         context.read<UserStore>().setGender('MAN'); // 성별 저장
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (c, a1, a2) => LastInfoScreen(),
@@ -128,7 +128,8 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                     GestureDetector(
                       onTap: () {
                         context.read<UserStore>().setGender('WOMAN'); // 성별 저장
-                        Navigator.push(
+                        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                        Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (c, a1, a2) => LastInfoScreen(),
