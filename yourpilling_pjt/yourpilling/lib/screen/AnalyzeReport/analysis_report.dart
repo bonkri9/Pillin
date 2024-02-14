@@ -27,7 +27,6 @@ class _AnalysisReportState extends State<AnalysisReport> {
   @override
   Widget build(BuildContext context) {
     context.read<InventoryStore>().getTakeYnListData(context);
-    context.read<InventoryStore>().takeTrueListData;
     context.read<AnalysisReportStore>().getEssentialNutrientsDataList(context);
     context.read<AnalysisReportStore>().getVitaminBGroupDataList(context);
     context.read<AnalysisReportStore>().getRecommendList(context);
@@ -260,7 +259,7 @@ class _TakingNowListState extends State<_TakingNowList> {
   @override
   Widget build(BuildContext context) {
     var takeTrueList = context.watch<InventoryStore>().takeTrueListData;
-    var userDetailInfo = context.read<UserStore>().UserDetail;
+    var userDetailInfo = context.watch<UserStore>().UserDetail;
     var imageWidth = MediaQuery.of(context).size.width * 0.3;
     var screenWidth = MediaQuery.of(context).size.width;
 
@@ -688,7 +687,7 @@ class _VitaminBGroupState extends State<_VitaminBGroup> {
     var vitaminBGroupDataList =
         context.watch<AnalysisReportStore>().vitaminBGroupDataList;
     var listLength =
-        context.read<AnalysisReportStore>().vitaminBGroupDataListLength;
+        context.watch<AnalysisReportStore>().vitaminBGroupDataListLength;
 
     return SingleChildScrollView(
       child: BaseContainerOnlyWidth(
@@ -704,21 +703,21 @@ class _VitaminBGroupState extends State<_VitaminBGroup> {
                   itemCount: listLength ?? 0,
                   itemBuilder: (context, i) {
                     var nutrientsName =
-                        vitaminBGroupDataList?[i]?["nutrientsName"] ?? "미표기";
+                        vitaminBGroupDataList?[i]?["nutrientsName"] ?? "";
                     var recommendedIntake = vitaminBGroupDataList?[i]?["data"]
                             ?["recommendedIntake"] ??
-                        "미표기";
+                        "";
                     var excessiveIntake = vitaminBGroupDataList?[i]?["data"]
                             ?["excessiveIntake"] ??
-                        "미표기";
+                        "";
                     var userIntake = vitaminBGroupDataList?[i]?["data"]
                             ?["userIntake"] ??
-                        "미표기";
+                        "";
                     var unit =
                         vitaminBGroupDataList?[i]?["data"]?["unit"] ?? "미표기";
                     var intakeDiagnosis = vitaminBGroupDataList?[i]?["data"]
                             ?["intakeDiagnosis"] ??
-                        "미표기";
+                        "";
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -867,11 +866,10 @@ class _RecommendListState extends State<_RecommendList> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     var recommendList = context.watch<AnalysisReportStore>().recommendList;
-    var listLength = context.read<AnalysisReportStore>().recommendListLength;
-    var userDetailInfo = context.watch<UserStore>().UserDetail;
-
-    print("이게 추천길이 $listLength");
-    print(recommendList);
+    var listLength = context.watch<AnalysisReportStore>().recommendListLength;
+    // var userDetailInfo = context.watch<UserStore>().UserDetail;
+    // print("이게 추천길이 $listLength");
+    // print(recommendList);
 
     return Container(
       width: screenWidth,
@@ -1115,7 +1113,7 @@ class _RecommendListState extends State<_RecommendList> {
                                                 ),
                                                 onPressed: () {
                                                   context
-                                                      .read<SearchStore>()
+                                                      .watch<SearchStore>()
                                                       .pillDetailData;
                                                   Navigator.push(
                                                       context,
@@ -1125,7 +1123,7 @@ class _RecommendListState extends State<_RecommendList> {
                                                                 pillId: pillId,
                                                               )));
                                                   context
-                                                      .read<SearchStore>()
+                                                      .watch<SearchStore>()
                                                       .pillDetailData;
                                                 },
                                               ),
