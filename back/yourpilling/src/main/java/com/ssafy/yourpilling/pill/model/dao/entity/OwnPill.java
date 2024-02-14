@@ -138,4 +138,15 @@ public class OwnPill {
             this.takeYN = false;
         }
     }
+
+    public void decreaseAllTake(int takeAmount) {
+
+        if(this.remains - takeAmount > 0) {
+            this.remains -= takeAmount;
+        }
+        else {
+            this.remains = 0;
+            this.takeYN = false;
+        }
+    }
 }
