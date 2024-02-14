@@ -24,7 +24,7 @@ class InsertInventory extends StatefulWidget {
 
 class _InsertInventoryState extends State<InsertInventory> {
   var pillId;
-  var takeYn = false;
+  var takeYn = true;
   var remains;
   var totalCount;
   var takeCount;
@@ -412,7 +412,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30, 15, 30, 30),
+                  padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
                   child: Row(
                     children: [
                       Text(

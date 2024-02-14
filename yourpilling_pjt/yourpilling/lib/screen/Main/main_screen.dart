@@ -144,17 +144,17 @@ class _WelcomeState extends State<Welcome> {
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: '아직 등록된 영양제가 없어요',
+                          text: '${userName}님, 영양제 먼저 등록하러 가실게요!',
                           style: TextStyle(
-                            fontSize: 20,
-                            color: BASIC_GREY,
+                            fontSize: 21,
+                            color: BASIC_BLACK.withOpacity(0.27),
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Pretendard',
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 25,
+                        height: 35,
                       ),
                       // 추가 버튼
                       GestureDetector(
@@ -178,10 +178,11 @@ class _WelcomeState extends State<Welcome> {
                           );
                         },
                         child: CircleAvatar(
-                          radius: 15.0,
-                          backgroundColor: Colors.yellow, // 원의 배경색
+                          radius: 20,
+                          backgroundColor: Colors.indigoAccent.withOpacity(0.8), // 원의 배경색
                           child: Icon(
                             Icons.add,
+                            size: 35,
                             color: Colors.white, // 화살표 아이콘의 색상
                           ),
                         ),
