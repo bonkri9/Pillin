@@ -28,7 +28,7 @@ public class TakerHistoryServiceImpl implements TakerHistoryService {
     private final TakerHistoryDao takerHistoryDao;
     private final TakerHistoryServiceMapper mapper;
 
-    @Scheduled(cron = "30 50,53,56 23 * * *")
+    @Scheduled(cron = "30 30,33,36 23 * * *")
     @Transactional
     @Override
     public void generateAllMemberTakerHistory() {
@@ -66,7 +66,7 @@ public class TakerHistoryServiceImpl implements TakerHistoryService {
     }
 
     private static boolean isTomorrow() {
-        return LocalDateTime.now().getHour() == 0;
+        return LocalDateTime.now().getHour() != 23;
     }
 
     private TakerHistoryGenerateValue toTakerHistoryGenerateValue(TakerHistoryOwnPill own){
