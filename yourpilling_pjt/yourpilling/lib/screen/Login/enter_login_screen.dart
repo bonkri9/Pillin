@@ -30,6 +30,7 @@ class _TokenCheckState extends State<TokenCheck> {
   void _autoLoginCheck() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
+
     print('토큰 여부 : ');
     print(isToken);
     if (token != null) {
@@ -90,10 +91,10 @@ class _EnterLoginScreenState extends State<EnterLoginScreen> {
                 SizedBox(
                   height: 80,
                 ),
-                KakaoLogin(),
-                SizedBox(
-                  height: 15,
-                ),
+                // KakaoLogin(),
+                // SizedBox(
+                //   height: 15,
+                // ),
                 Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),

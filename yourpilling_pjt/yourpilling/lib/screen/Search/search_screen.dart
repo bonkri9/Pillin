@@ -523,10 +523,9 @@ class _AgeTabState extends State<_AgeTab> {
               },
             ),
           ),
-          Expanded(
-              child: _SearchRanking(
-            title: '${_index}',
-          )),
+          _SearchRanking(
+                      title: '${_index}',
+                    ),
         ],
       ),
     );

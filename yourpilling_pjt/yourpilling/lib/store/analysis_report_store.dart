@@ -7,10 +7,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AnalysisReportStore extends ChangeNotifier {
-  // var curCompleteCount = 0;
-  // var takenPillIdxList = [];
-  // var takenOrUnTaken = false;
-
   late List essentialNutrientDataList = [];
   late List vitaminBGroupDataList = [];
   late List recommendList = [];
@@ -69,7 +65,7 @@ class AnalysisReportStore extends ChangeNotifier {
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
         vitaminBGroupDataList = listAll?["vitaminBGroupDataList"] ?? [];
-        vitaminBGroupDataListLength = vitaminBGroupDataList.length ?? 0;
+        vitaminBGroupDataListLength = vitaminBGroupDataList.length;
         print("vitaminBGroupDataList: ${vitaminBGroupDataList}");
         print("이게 B 길이: $vitaminBGroupDataListLength");
       } else {
@@ -100,7 +96,7 @@ class AnalysisReportStore extends ChangeNotifier {
         // MainStore에 응답 저장
         listAll = jsonDecode(utf8.decode(response.bodyBytes));
         recommendList = listAll?["recommendList"]?["data"] ?? [];
-        recommendListLength = recommendList.length ?? 0;
+        recommendListLength = recommendList.length;
         print("recommendList: ${recommendList}");
         print("이게 추천 길이: $recommendListLength");
       } else {

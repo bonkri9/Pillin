@@ -309,16 +309,22 @@ class _infoState extends State<info> {
                               pillId: pillId,
                             )));
               },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-
-                child: Text(
-                  '내 영양제 등록하기',
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    color: BASIC_BLACK.withOpacity(0.8),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+              child: Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFF6F61).withOpacity(0.9), // 배경색 설정
+                    borderRadius: BorderRadius.circular(15), // 원하는 모양의 테두리 설정
+                  ),
+                  child: Text(
+                    '내 영양제 등록',
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
@@ -334,6 +340,10 @@ class _infoState extends State<info> {
                 print(buyLink);
               },
               child: Container(
+                decoration: BoxDecoration(
+                  color: BASIC_GREY.withOpacity(0.3), // 배경색 설정
+                  borderRadius: BorderRadius.circular(15), // 원하는 모양의 테두리 설정
+                ),
                 padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
                 child: Text(
                   '구매하러 가기',
