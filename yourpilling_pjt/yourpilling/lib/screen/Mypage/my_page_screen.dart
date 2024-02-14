@@ -44,23 +44,23 @@ class MyPageScreen extends StatelessWidget {
                           SizedBox(
                             height: 10,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                  '${userDetailInfo?['name'] ?? ''}',
-                                  style: TextStyle(
-                                    color: HOT_PINK,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w800,
-                                  )),
-                              Text("님",
-                                  style: TextStyle(
-                                    color: BASIC_BLACK,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w800,
-                                  )),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //         '${userDetailInfo?['name'] ?? ''}',
+                          //         style: TextStyle(
+                          //           color: HOT_PINK,
+                          //           fontSize: 20,
+                          //           fontWeight: FontWeight.w800,
+                          //         )),
+                          //     Text("님",
+                          //         style: TextStyle(
+                          //           color: BASIC_BLACK,
+                          //           fontSize: 20,
+                          //           fontWeight: FontWeight.w800,
+                          //         )),
+                          //   ],
+                          // ),
                           Text(
                             "오늘도 건강하세요!",
                             style: TextStyle(
