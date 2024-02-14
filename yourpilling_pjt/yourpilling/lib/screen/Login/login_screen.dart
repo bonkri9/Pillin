@@ -153,9 +153,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
           if (isFirstLogin) {
             print("첫번째 로그인임");
+            Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MoreInfoScreen()));
           } else {
             print("첫번째 로그인 아님");
+            Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
           }
           return accessToken;
@@ -271,10 +273,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   final loginCheck = await login(
                       emailController.text, passwordController.text);
                   print('로그인 버튼 눌림');
-                  print(loginCheck);
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => MainPageChild()));
-
                   // 로그인 확인
                   if (loginCheck == '-1') {
                     print('로그인 실패');

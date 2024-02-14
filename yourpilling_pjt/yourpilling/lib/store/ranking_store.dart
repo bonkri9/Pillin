@@ -12,12 +12,14 @@ class RankingStore extends ChangeNotifier {
   var ShowData;
 
   Future<void> getShowData(index) async {
-    ShowData = RankingData[index]['outRankData'];
-    // print("카테고리 전체 데이터입니다 ${CategoriData}");
-    // print("카테고리 데이터 입니다 ${CategoriData[0]['midCategories']}");
+    for (var data in RankingData) {
+      if (data['midCategoryId'] == index) {
+        ShowData = data['outRankData'];
+        break;
+      }
+    }
     notifyListeners();
   }
-
 
 
 // 카테고리 데이터
@@ -39,7 +41,7 @@ class RankingStore extends ChangeNotifier {
       // dailyData[i]['actualTakeCount']
       var categoriesData = jsonDecode(utf8.decode(response.bodyBytes));
       CategoriData = categoriesData['categoires'];
-      // print("카테고리 전체 데이터입니다 ${CategoriData}");
+      print("카테고리 전체 데이터입니다 ${CategoriData}");
       // print("카테고리 데이터 입니다 ${CategoriData[0]['midCategories']}");
     } else {
       print(response.body);
@@ -76,7 +78,4 @@ class RankingStore extends ChangeNotifier {
       throw Exception('랭킹 결과가 없습니다');
     }
   }
-
-
-
 }
