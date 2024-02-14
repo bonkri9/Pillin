@@ -273,10 +273,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   final loginCheck = await login(
                       emailController.text, passwordController.text);
                   print('로그인 버튼 눌림');
-                  print(loginCheck);
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => MainPageChild()));
-
                   // 로그인 확인
                   if (loginCheck == '-1') {
                     print('로그인 실패');
