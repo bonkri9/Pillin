@@ -496,6 +496,7 @@ class _AgeTabState extends State<_AgeTab> {
                   padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
                   child: TextButton(
                     onPressed: () {
+                      print("쇼데이터 입력 아이디 ${agelist[i]['midCategoryId']}");
                       context
                           .read<RankingStore>()
                           .getShowData(agelist[i]['midCategoryId']);

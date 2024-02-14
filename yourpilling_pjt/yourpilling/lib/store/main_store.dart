@@ -153,6 +153,54 @@ class MainStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 모두복용 버튼
+  takeAll(BuildContext context) async {
+    const String takeAllUrl = "${CONVERT_URL}/api/v1/pill/take-all";
+    print("영양제 복용 완료 요청");
+    String accessToken = context.read<UserStore>().accessToken;
+    var response = await http.put(Uri.parse(takeAllUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },);
+    if (response.statusCode == 200) {
+      print("영양제 모두 복용 완료 요청 수신 성공");
+      print("복용버튼 DailyData $dailyData");
+      await getDailyData(context);
+      // 주간 데이터 업데이트 시작
+      const String weeklyUrl = "${CONVERT_URL}/api/v1/pill/history/weekly";
+      response = await http.get(Uri.parse(weeklyUrl), headers: {
+        'Content-Type': 'application/json',
+        'accessToken': accessToken,
+      });
+      var tmp = json.decode(response.body);
+      weekData = tmp["data"];
+      // 주간 데이터 업데이트 완료
+      // 재고 업데이트 시작
+      String inventoryListUrl = "${CONVERT_URL}/api/v1/pill/inventory/list";
+      response = await http.get(
+        Uri.parse(inventoryListUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },);
+      userInventoryData =
+      json.decode(utf8.decode(response.bodyBytes))['takeTrue']['data'];
+      print('userInventoryData: $userInventoryData');
+      // 재고 업데이트 완료
+      notifyListeners();
+      print(response.body);
+    } else {
+      print(response.body);
+      print("영양제 복용 완료 요청 수신 실패");
+    }
+    notifyListeners();
+  }
+
+
+
+
+
   // 내 영양제 재고
   getUserInventory(BuildContext context) async {
     String accessToken = context.read<UserStore>().accessToken;
