@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yourpilling/screen/Inventory/update_taken.dart';
 import 'package:yourpilling/screen/Inventory/update_untaken.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 
@@ -62,6 +63,24 @@ class _UnTakenListState extends State<UnTakenList> {
                     padding: const EdgeInsets.fromLTRB(20, 20, 25, 20),
                     child: Column(
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end
+                          ,children: [
+                          GestureDetector(
+                            onTap: () {
+                              var ownPillId = '${takeFalseList[i]?['ownPillId'] ?? 0}';
+                              var index = i;
+                              print(index);
+                              showUpdateUntakenDialog(context, ownPillId, index);
+                            },
+                            child: Icon(
+                              Icons.mode_edit,
+                              size: 20,
+                              color: BASIC_GREY, // 아이콘 색상
+                            ),
+                          ),
+                        ],
+                        ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(5, 15, 0, 15),
                           child: Image.network(
@@ -69,7 +88,7 @@ class _UnTakenListState extends State<UnTakenList> {
                             width: imageWidth,
                             height: 100,
                           ),
-                        ),
+                ),
                         Text(
                           takeFalseList[i]['pillName'],
                           style: TextStyle(
@@ -157,19 +176,6 @@ class _UnTakenListState extends State<UnTakenList> {
                                   ),
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              iconSize: 16,
-                              onPressed: () {
-                                // var ownPillId =
-                                //     '${takeTrueListData['takeTrue']['data'][i]['ownPillId']}';
-                                var ownPillId = '${takeFalseList[i]?['ownPillId'] ?? 0}';
-                                var index = i;
-                                print(index);
-                                print('위는 인덱스');
-                                showUpdateUntakenDialog(context, ownPillId, index);
-                              },
-                              icon: Icon(Icons.edit),
                             ),
                           ],
                         ),

@@ -15,6 +15,7 @@ import '../../const/url.dart';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 import 'package:http/http.dart' as http;
+import 'package:animated_shimmer/animated_shimmer.dart';
 
 getTabData(BuildContext context) async {
   await context.read<RankingStore>().getCategoriData(context); // 카테고리 데이터 할당
@@ -23,8 +24,8 @@ getTabData(BuildContext context) async {
 
 class SearchScreen extends StatefulWidget {
   final bool showAppBar;
-
-  const SearchScreen({Key? key, required this.showAppBar}) : super(key: key);
+  bool isLoaded = false;
+  SearchScreen({Key? key, required this.showAppBar}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState(showAppBar);
