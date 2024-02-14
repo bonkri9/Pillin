@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:yourpilling/component/common/base_container.dart';
 import 'package:yourpilling/const/colors.dart';
-import 'package:yourpilling/screen/SignUp/user_info_screen.dart';
+import 'package:yourpilling/screen/Search/user_info_screen.dart';
 
 import '../../store/user_store.dart';
 

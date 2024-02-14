@@ -1003,7 +1003,7 @@ class _RecommendListState extends State<_RecommendList> {
                                     var pillId =
                                         recommendOneData[index]["pillId"] ?? "";
                                     var rank =
-                                        recommendOneData[index]["rank"] + 1 ??
+                                        recommendOneData[index]["rank"] ??
                                             "";
                                     var pillName = recommendOneData[index]
                                             ["pillName"] ??
