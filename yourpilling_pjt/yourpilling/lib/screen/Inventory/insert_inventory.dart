@@ -59,7 +59,6 @@ class _InsertInventoryState extends State<InsertInventory> {
 
     var pillDetailData = context.read<SearchStore>().pillDetailData;
     print('pillDetailData $pillDetailData');
-
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
@@ -127,23 +126,28 @@ class _InsertInventoryState extends State<InsertInventory> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.white)),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              '내 영양제로 등록했어요 :)',
-                              style: TextStyle(
-                                color: BASIC_BLACK,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Pretendard",
-                                fontSize: 17,
-                              ),
-                            )),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.indigoAccent.withOpacity(0.7),
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
+                            child: Text('내 영양제로 등록했어요!', style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "Pretendard",
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        ),
                       ],
                     ),
                   );

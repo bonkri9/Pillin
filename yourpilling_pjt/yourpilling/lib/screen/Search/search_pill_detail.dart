@@ -81,8 +81,6 @@ class _infoState extends State<info> {
     });
   }
 
-
-
   //나타나는 과정
   @override
   void initState() {
@@ -102,7 +100,7 @@ class _infoState extends State<info> {
   @override
   Widget build(BuildContext context) {
     var pillDetailInfo = context.watch<SearchStore>().pillDetailData;
-
+    bool isInMyInventory = context.watch<SearchStore>().isInMyInventory;
     var containerWidth = MediaQuery.of(context).size.width * 0.9;
 
     return Scaffold(
@@ -297,7 +295,7 @@ class _infoState extends State<info> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
-          BottomNavigationBarItem(
+          isInMyInventory == false ? BottomNavigationBarItem(
             label: '등록하기',
             icon: GestureDetector(
               onTap: () {
@@ -329,19 +327,47 @@ class _infoState extends State<info> {
                 ),
               ),
             ),
+          ) : BottomNavigationBarItem(
+            label: '이미 있음',
+            icon: GestureDetector(
+              onTap: () {
+                // 이때는 ?
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                  decoration: BoxDecoration(
+                    color: BASIC_GREY.withOpacity(0.3), // 배경색 설정
+                    borderRadius: BorderRadius.circular(15), // 원하는 모양의 테두리 설정
+                  ),
+                  child: Text(
+                    '이미 갖고 있어요',
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      color: BASIC_BLACK.withOpacity(0.8),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           BottomNavigationBarItem(
             label: '영양제 구매하기',
             icon: GestureDetector(
               onTap: () {
+                var pillId = pillDetailInfo['pillId'];
                 var pillName = pillDetailInfo['pillName'];
+                context.read<SearchStore>().postBuyClick(context, pillId);
                 context.read<SearchRepository>().getNaverBlogSearch(pillName);
                 var buyLink = context.read<SearchRepository>().BuyLink; // 네이버 구매 링크
                 print(buyLink);
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: BASIC_GREY.withOpacity(0.3), // 배경색 설정
+                  color: Colors.yellow, // 배경색 설정
                   borderRadius: BorderRadius.circular(15), // 원하는 모양의 테두리 설정
                 ),
                 padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
@@ -349,7 +375,7 @@ class _infoState extends State<info> {
                   '구매하러 가기',
                   style: TextStyle(
                     fontFamily: "Pretendard",
-                    color: BASIC_BLACK.withOpacity(0.8),
+                    color: BASIC_BLACK,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
