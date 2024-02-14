@@ -125,6 +125,26 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 .build();
     }
 
+    @Transactional
+    @Override
+    public void takeAll(Long memberId) {
+
+        List<OwnPill> ownPills = ownPillDao.findByMemberId(memberId).getOwnPills();
+        for(OwnPill ownPill : ownPills) {
+            for(TakerHistory th : ownPill.getTakerHistories()) {
+                if(th.getTakeAt().equals(LocalDate.now())) {
+
+                    int amountToTakeAll = th.getNeedToTakeCount() - th.getCurrentTakeCount();
+                    ownPill.decreaseAllTake(amountToTakeAll);
+                    th.increaseCurrentTakeCount(amountToTakeAll);
+
+                    break;
+                }
+            }
+        }
+
+    }
+
     @Override
     public OutWeeklyTakerHistoryVo weeklyTakerHistory(WeeklyTakerHistoryVo weeklyTakerHistoryVo) {
         return ownPillDao.findWeeklyTakerHistoriesByMemberId(weeklyTakerHistoryVo);
