@@ -91,10 +91,10 @@ class _EnterLoginScreenState extends State<EnterLoginScreen> {
                 SizedBox(
                   height: 80,
                 ),
-                KakaoLogin(),
-                SizedBox(
-                  height: 15,
-                ),
+                // KakaoLogin(),
+                // SizedBox(
+                //   height: 15,
+                // ),
                 Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
