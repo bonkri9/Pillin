@@ -363,48 +363,23 @@ class _MiddleTap extends StatelessWidget {
   }
 }
 
-String getAgeGroup(int age) {
-  if (age < 10) {
-    return "10대 미만";
-  } else if (age >= 10 && age < 20) {
-    return "10대";
-  } else if (age >= 20 && age < 30) {
-    return "20대";
-  } else if (age >= 30 && age < 40) {
-    return "30대";
-  } else if (age >= 40 && age < 50) {
-    return "40대";
-  } else if (age >= 50 && age < 60) {
-    return "50대";
-  } else if (age >= 60 && age < 70) {
-    return "60대";
-  } else if (age >= 70 && age < 80) {
-    return "70대";
-  } else {
-    return "80대 이상";
-  }
-}
-
 // 랭킹페이지
 class _Ranking extends StatelessWidget {
   const _Ranking({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.watch<RankingStore>().CategoriData;
-    context.watch<RankingStore>().RankingData;
     var rankWidth = MediaQuery.of(context).size.width * 0.9;
-
-    // var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
-    // DateTime now = DateTime.now();
-    // print('gender $gender');
+    var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
+    print('gender $gender');
+    var CategoriData = context.watch<RankingStore>().CategoriData;
 
     return Container(
       width: rankWidth,
       height: 485,
       color: Colors.white,
       child: DefaultTabController(
-        length: 2, // 탭의 수
+        length: 3, // 탭의 수
         child: Column(
           children: [
             SizedBox(
@@ -412,7 +387,7 @@ class _Ranking extends StatelessWidget {
             ),
             // header end
             TabBar(
-              indicatorWeight: 2,
+              indicatorWeight: 3,
               indicatorColor: Color(0xFFFF6F61),
               // 선택된 탭의 아래에 표시되는 줄의 색상
               labelColor: Color(0xFFFF6F61),
@@ -425,21 +400,23 @@ class _Ranking extends StatelessWidget {
                 switch (index) {
                   case 0:
                     print('건강고민 탭 선택');
-                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[0]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(CategoriData[0]['midCategories'][0]['midCategoryId']);
                     break;
                   case 1:
                     print('성분 탭 선택');
-                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
                     break;
-                  // case 2:
-                  //   print('20대 ${gender} 탭 선택');
-                  //   break;
+                  case 2:
+                    print('20대 ${gender} 탭 선택');
+                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    // context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[2]['midCategories'][0]['midCategoryId']);
+                    break;
                 }
               },
               tabs: [
-                _StyledTab('건강고민'),
-                _StyledTab('성분'),
-                // _StyledTab('20대 ${gender}'),
+                _StyledTab('${CategoriData[0]['bigCategoryName']}'),
+                _StyledTab('${CategoriData[1]['bigCategoryName']}'),
+                _StyledTab('${CategoriData[2]['bigCategoryName']}'),
               ],
             ),
             SizedBox(
@@ -450,7 +427,7 @@ class _Ranking extends StatelessWidget {
                 children: [
                   _HealthTab(),
                   _NutrientTab(),
-                  // _AgeTab(),
+                  _AgeTab(),
                 ],
               ),
             ),
@@ -489,70 +466,71 @@ class _StyledTab extends StatelessWidget {
   }
 }
 
-// 나이 탭
-// class _AgeTab extends StatefulWidget {
-//   const _AgeTab({super.key});
-//
-//   @override
-//   State<_AgeTab> createState() => _AgeTabState();
-// }
-//
-// class _AgeTabState extends State<_AgeTab> {
-//   int _index = 0;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     var agelist = context.read<RankingStore>().CategoriData[2]
-//         ['midCategories']; // 복용 요청하기
-// // midCategoryId
-//
-//     return Container(
-//       child: Column(
-//         children: [
-//           Container(
-//             height: 0, // 높이 설정
-//             child: ListView.builder(
-//               scrollDirection: Axis.horizontal,
-//               itemCount: 0,
-//               itemBuilder: (context, i) {
-//                 return Container(
-//                   padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
-//                   child: TextButton(
-//                     onPressed: () {
-//                       context
-//                           .read<RankingStore>()
-//                           .getShowData(agelist[i]['midCategoryId']);
-//                       setState(() {
-//                         _index = i;
-//                       });
-//                     },
-//                     style: TextButton.styleFrom(
-//                       backgroundColor:
-//                           BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
-//                     ),
-//                     child: Text(
-//                       '${agelist[i]['midCategoryName']}',
-//                       style: TextStyle(
-//                         fontFamily: "Pretendard",
-//                         color: BASIC_BLACK.withOpacity(0.65),
-//                         fontSize: 14,
-//                         fontWeight: FontWeight.w400,
-//                       ),
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//           Expanded(
-//               child: _SearchRanking(
-//             title: '${_index}',
-//           )),
-//         ],
-//       ),
-//     );
-//   }
-// }
+//나이 탭
+class _AgeTab extends StatefulWidget {
+  const _AgeTab({super.key});
+
+  @override
+  State<_AgeTab> createState() => _AgeTabState();
+}
+
+class _AgeTabState extends State<_AgeTab> {
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    var agelist = context.read<RankingStore>().CategoriData[2]
+        ['midCategories']; // 복용 요청하기
+// midCategoryId
+
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            height: 50, // 높이 설정
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: agelist.length,
+              itemBuilder: (context, i) {
+                return Container(
+                  padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
+                  child: TextButton(
+                    onPressed: () {
+                      print("쇼데이터 입력 아이디 ${agelist[i]['midCategoryId']}");
+                      context
+                          .read<RankingStore>()
+                          .getShowData(agelist[i]['midCategoryId']);
+                      setState(() {
+                        _index = i;
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor:
+                          BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
+                    ),
+                    child: Text(
+                      '${agelist[i]['midCategoryName']}',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        color: BASIC_BLACK.withOpacity(0.65),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+              child: _SearchRanking(
+            title: '${_index}',
+          )),
+        ],
+      ),
+    );
+  }
+}
 
 // 성분 탭
 class _NutrientTab extends StatefulWidget {
@@ -692,7 +670,7 @@ class _SearchRanking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 종합비타민 눌렀을때
-    var RankingList = context.read<RankingStore>().ShowData;
+    var RankingList = context.watch<RankingStore>().ShowData;
 
     return Padding(
       padding: const EdgeInsets.all(15.0),

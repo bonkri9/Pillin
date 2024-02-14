@@ -684,8 +684,9 @@ class _TodayState extends State<_Today> {
                     Expanded(child: Container()),
                     // 영양제 추가 하기
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         // 로직 짜줘 희태야~!~!
+                        await context.read<MainStore>().takeAll(context);
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 10),
