@@ -42,14 +42,13 @@ Future<void> initializedNotification() async {
 }
 
 
-
-
 final navigatorKey = GlobalKey<NavigatorState>(); // 키받을때 사용
 
 void main() async {
   // 비동기선언
   // 위젯이 플러터 바인딩 보장이 초기화되었다고 말해야 이 함수를 비동기로 사용이 가능
   WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   // runApp() 충돌전 Flutter SDK 초기화
   KakaoSdk.init(
     nativeAppKey: '7c21f22cbe067e3f41623266b8dab1e5',
@@ -58,8 +57,7 @@ void main() async {
   Intl.defaultLocale = 'ko_KR';
   // 시간 초기화를 위해 NTP(Network Time Protocol)를 사용
   // Firebase가 앱을 초기화할때까지 기다릴 수있음
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initializedNotification();
   // await FirebaseApi().initNotifications(); // 알람을 초기화함
   initializeDateFormatting().then((_) => runApp(
