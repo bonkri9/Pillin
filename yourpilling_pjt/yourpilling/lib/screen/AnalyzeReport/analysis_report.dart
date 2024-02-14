@@ -317,7 +317,7 @@ class _TakingNowListState extends State<_TakingNowList> {
                           ),
                         ),
                         Container(
-                          width: 200,
+                          width: 160,
                           child: RichText(
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
