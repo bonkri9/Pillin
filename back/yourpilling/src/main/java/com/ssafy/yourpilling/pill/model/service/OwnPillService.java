@@ -18,6 +18,8 @@ public interface OwnPillService {
 
     OutOwnPillTakeVo take(OwnPillTakeVo ownPillTakeVo);
 
+    void takeAll(Long memberId);
+
     OutWeeklyTakerHistoryVo weeklyTakerHistory(WeeklyTakerHistoryVo weeklyTakerHistoryVo);
 
     OutMonthlyTakerHistoryVo monthlyTakerHistory(MonthlyTakerHistoryVo monthlyTakerHistoryVo);
