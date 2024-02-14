@@ -16,7 +16,8 @@ import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 import 'package:http/http.dart' as http;
 import 'package:animated_shimmer/animated_shimmer.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 getTabData(BuildContext context) async {
   await context.read<RankingStore>().getCategoriData(context); // 카테고리 데이터 할당
   await context.read<RankingStore>().getRankingData(context); // 랭킹 데이터 받기
@@ -40,6 +41,36 @@ class _SearchScreenState extends State<SearchScreen> {
     myController.addListener(() {
       print("TextField content: ${myController.text}");
     });
+  }
+  // import 'package:firebase_messaging/firebase_messaging.dart';
+  // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+  var messageString = "";
+  void getMyDeviceToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print("내 디바이스 토큰 $token");
+  }
+  @override
+  void initState(){
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      RemoteNotification? notification = message.notification;
+
+      if (notification != null){
+        FlutterLocalNotificationsPlugin().show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            const NotificationDetails(
+              android: AndroidNotificationDetails
+                ('channelId', 'channelName',importance: Importance.max),
+            )
+        );
+        setState(() {
+          messageString = message.notification!.body!;
+          print("Forground 메시지 수신 : $messageString}");
+        });
+      }
+    });
+    super.initState();
   }
 
   @override
