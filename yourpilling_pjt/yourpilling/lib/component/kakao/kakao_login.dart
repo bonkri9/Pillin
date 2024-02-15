@@ -5,8 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/const/url.dart';
+import 'package:yourpilling/screen/SignUp/last_info_screen.dart';
 import 'dart:convert';
 
+import '../../screen/Main/main_page_child_screen.dart';
+import '../../screen/SignUp/more_info_screen.dart';
 import '../../store/user_store.dart';
 
 class KakaoLogin extends StatefulWidget {
@@ -24,8 +27,8 @@ class _KakaoLoginState extends State<KakaoLogin> {
     _context = context;
     var inputWidth = MediaQuery.of(context).size.width * 0.82;
     return InkWell(
-      onTap: () {
-        signInWithKakao(context);
+      onTap: () async {
+        await signInWithKakao(context);
       },
 //thing to do
 
@@ -67,7 +70,8 @@ class _KakaoLoginState extends State<KakaoLogin> {
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
         if (error is PlatformException && error.code == 'CANCELED') {
-          return;
+          print("hii");
+          // return;
         }
         try {
           print(await KakaoSdk.origin);
@@ -114,14 +118,41 @@ class _KakaoLoginState extends State<KakaoLogin> {
     print(response.body);
     print('체크1');
     if (response.statusCode == 200) {
+
+      print('response headers : ${response.headers}');
+      String? isFirstLoginStr = response.headers['isfirstlogin'];
+      bool isFirstLogin = true;
+      print("라스트체크 $isFirstLogin");
+      if(isFirstLoginStr != null) {
+        isFirstLogin = isFirstLoginStr.toLowerCase() == 'true';
+      }
+      print("최초로그인 bool값 ${response.headers['isfirstlogin']}");
+      print("isFirstLogin값은 $isFirstLogin");
+      // print("최초로그인 bool값 ${response.headers['isfirstlogin'].toLowerCase()}");
       print('카카오토큰을 성공적으로 우리 토큰으로 변한걸 보내고 받음');
       print('변환해서 받은 값 ${response.headers['accesstoken']}');
-      _context.read<UserStore>().getToken(response.headers['accesstoken']!);
-      print('체크10');
+      // context.read<UserStore>().getToken(response.headers['accesstoken']!);
+      String tmp = response.headers['accesstoken']!;
+      print('체크10 $tmp');
+      Provider.of<UserStore>(context, listen: false).getToken(tmp);
       print("우리 토큰에 할당함");
-      print('${_context.read<UserStore>().accessToken}');
+      print('${Provider.of<UserStore>(context, listen: false).accessToken}');
       print('토큰값과 비교해보자');
-    } else {
+      // 추가
+      print("최초로그인 bool값 ${response.headers['isFirstLogin']}");
+      print("라스트트 $isFirstLogin");
+      if (isFirstLogin) {
+        print("첫번째 로그인임");
+        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MoreInfoScreen()));
+      } else {
+        print("첫번째 로그인 아님");
+        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
+      }
+      // 추가 종료
+    }
+    else {
       print('카카오토큰을 성공적으로 변환하지 못함');
       print(response.body);
     }

@@ -116,56 +116,50 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     String url = "${CONVERT_URL}/api/v1/login";
-
-
     login(String email, String password) async {
-        print('$email $password');
-        var response = await http.post(Uri.parse(url),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: json.encode({
-              'email': email,
-              'password': password,
-            }));
+      print('$email $password');
+      var response = await http.post(Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            'email': email,
+            'password': password,
+          }));
 
-        print(response.body);
-        if (response.statusCode == 200) {
-          print("로그인 성공");
-          // print(context.watch<UserStore>().userName);
-          var accessToken =
-              response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
-          print('response header : ${response.headers}');
-          print(accessToken);
-          context
-              .read<UserStore>()
-              .getToken(accessToken!); // provider에 받은 토큰 저장
-          // Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => MainPageChild()));
+      print(response.body);
+      if (response.statusCode == 200) {
+        print("로그인 성공");
+        // print(context.watch<UserStore>().userName);
+        var accessToken =
+        response.headers['accesstoken']; // 이거 Provider 로 전역에 저장해보자
+        print('response header : ${response.headers}');
+        print(accessToken);
+        context.read<UserStore>().getToken(accessToken!); // provider에 받은 토큰 저장
+        setState(() {
+          isFirstLogin = response.headers['isfirstlogin'] == 'true'
+              ? true
+              : false; // 첫번째 로그인인지 여부 설정
+          print("로그인부분 bool 값 $isFirstLogin");
+        });
 
-          setState(() {
-            isFirstLogin = response.headers['isfirstlogin'] == 'true'
-                ? true
-                : false; // 첫번째 로그인인지 여부 설정
-          });
+        print(isFirstLogin);
 
-          print(isFirstLogin);
-
-          if (isFirstLogin) {
-            print("첫번째 로그인임");
-            Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MoreInfoScreen()));
-          } else {
-            print("첫번째 로그인 아님");
-            Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
-          }
-
-          return accessToken;
-        }else{
-          print("회원정보가 없는경우");
-          throw Error();
+        if (isFirstLogin) {
+          print("첫번째 로그인임");
+          Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MoreInfoScreen()));
+        } else {
+          print("첫번째 로그인 아님");
+          Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
         }
+
+        return accessToken;
+      }else{
+        print("회원정보가 없는경우");
+        throw Error();
+      }
 
     }
 
@@ -202,9 +196,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       children: [
         Lottie.asset('assets/lottie/heart.json',
-        fit: BoxFit.fill,
-        width: 300,
-        height: 300),
+            fit: BoxFit.fill,
+            width: 300,
+            height: 300),
       ],
     );
   }

@@ -16,7 +16,7 @@ class UserStore extends ChangeNotifier {
   var UserDetail; // 회원정보 페이지에 뿌려줄 데이터
 
   // 회원가입 정보
-  String userName = '';
+  String userName = '카카오';
   String userEmail = '';
   String password = '';
 
@@ -29,23 +29,28 @@ class UserStore extends ChangeNotifier {
   String gender = '';
 
   setGender(String str) {
+    print("성별 $str");
     gender = str;
   }
 
   setYear(String str) {
+    print("년도 $str");
     year = str;
   }
 
   setMonth(String str) {
+    print("월 $str");
     month = str;
   }
 
   setDay(String str) {
+    print("일 $str");
     day = str;
   }
 
   getToken(String token) {
     // 로그인할때 발급
+    print("겟토큰 $token");
     accessToken = token;
     notifyListeners();
   }
@@ -61,30 +66,29 @@ class UserStore extends ChangeNotifier {
     String url = "${CONVERT_URL}/api/v1/register"; // 회원가입 요청 url
     print('${userEmail} $password $userName');
 
-      var response = await http.post(Uri.parse(url),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: json.encode({
-            'email': userEmail,
-            'password': password,
-            'name': userName,
-          }));
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        print("회원가입 요청 성공");
-      } else {
-        print("회원가입 요청 실패");
-        print(response.body);
-        throw Error();
-      }
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'email': userEmail,
+          'password': password,
+          'name': userName,
+        }));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print("회원가입 요청 성공");
+    } else {
+      print("회원가입 요청 실패");
+      print(response.body);
+      throw Error();
+    }
 
   }
 
   signUpEssential(BuildContext context) async {
     print("생년월일 및 성별 포함 회원가입 요청");
     String url = "${CONVERT_URL}/api/v1/register/essential";
-    print('$userEmail $password $userName $year $month $day ${gender}'); // 잘 들어옴
 
     if (month.toString().length == 1) {
       month = '0$month';
@@ -100,9 +104,6 @@ class UserStore extends ChangeNotifier {
         'Content-Type' : 'application/json',
         'accessToken' : accessToken,
       }, body: json.encode({
-        'email': userEmail,
-        'password': password,
-        'name': userName,
         'birthday' : '$year-$month-$day',
         'gender' : gender,
       }));

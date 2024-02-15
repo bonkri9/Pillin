@@ -89,10 +89,10 @@ class _EnterLoginScreenState extends State<EnterLoginScreen> {
                 SizedBox(
                   height: 80,
                 ),
-                // KakaoLogin(),
-                // SizedBox(
-                //   height: 15,
-                // ),
+                KakaoLogin(),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -166,8 +166,8 @@ class _EnterLoginScreenState extends State<EnterLoginScreen> {
             Navigator.push(
               context,
               PageRouteBuilder(pageBuilder: (c, a1, a2) => GreetingScreen(),
-              transitionsBuilder: (c, a1, a2, child) => 
-                  FadeTransition(opacity: a1, child: child,),
+                transitionsBuilder: (c, a1, a2, child) =>
+                    FadeTransition(opacity: a1, child: child,),
                 transitionDuration: Duration(milliseconds: 700),
               ),
             );
