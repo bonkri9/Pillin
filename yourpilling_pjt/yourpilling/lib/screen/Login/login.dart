@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
+import '../Main/main_page_child_screen.dart';
+
 class kakaoLogin extends StatefulWidget {
   const kakaoLogin ({super.key});
 
@@ -15,7 +17,7 @@ class _kakaoLoginState extends State<kakaoLogin> {
     return Scaffold(
       body: Column(
         children: [
-          getKakaoLoginButton(),
+          getKakaoLoginButton(context), // 0215 새로생김
         ],
       ),
     );
@@ -32,6 +34,7 @@ Future<void> signInWithKakao() async {
     } catch (error) {
       print('카카오톡으로 로그인 실패 $error');
       if (error is PlatformException && error.code == 'CANCELED') {
+        print("체크1");
         return;
       }
       try {
@@ -41,6 +44,8 @@ Future<void> signInWithKakao() async {
         print('카카오계정으로 로그인 성공 ${token.accessToken}');
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');
+        print("체크2");
+        throw Error();
       }
     }
   } else {
@@ -51,14 +56,22 @@ Future<void> signInWithKakao() async {
       print('카카오계정으로 로그인 성공 ${token.accessToken}');
     } catch (error) {
       print('카카오계정으로 로그인 실패 $error');
+      print("체크3");
+      throw Error();
     }
   }
 }
 
-Widget getKakaoLoginButton() {
+Widget getKakaoLoginButton(BuildContext context) {
   return InkWell(
-    onTap: () {
-      signInWithKakao();
+    onTap: () async {
+      try{
+        await signInWithKakao(); // 기존에 있던것, 그 외는 0215새로 생김
+        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPageChild()));
+      }catch(e){
+        print("로그인 실패");
+      }
     },
 //thing to do
 

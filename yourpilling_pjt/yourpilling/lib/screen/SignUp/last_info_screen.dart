@@ -121,14 +121,6 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                   SizedBox(
                     height: 3,
                   ),
-                  Text(
-                    "예시) 1998 년 01 월 01 일",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
                   SizedBox(
                     height: 70,
                   ),

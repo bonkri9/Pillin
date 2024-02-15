@@ -34,6 +34,17 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                 children: [
                   Lottie.asset('assets/lottie/kickboard.json',
                       width: 300, height: 300),
+                  Text(
+                    "정확한 정보 제공을 위해 추가 정보가 필요해요",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
                   RichText(
                     text: TextSpan(
                       children: [
@@ -56,17 +67,6 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Text(
-                    "필요한 영양성분이 다를 수 있어요",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade400,
                     ),
                   ),
                   SizedBox(
