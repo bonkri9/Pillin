@@ -93,7 +93,7 @@ Future<void> findPassword(BuildContext context, email) async {
   print('체크1');
   // String url = '${CONVERT_URL}/api/v1/password-reissue';
 
-  String url = "${CONVERT_URL}/api/password-reissue";
+  String url = "${CONVERT_URL}/api/v1/password-reissue";
 
   print('email은 ${email}');
   try {

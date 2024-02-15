@@ -135,24 +135,19 @@ class _RecordScreenState extends State<RecordScreen> {
                   ),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 145),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 50,
-                    ),
-                    Text(
-                      "$curMonth월",
-                      style: TextStyle(color: Colors.white, fontSize: 19),
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_rounded,
-                      size: 25,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "$curMonth월",
+                    style: TextStyle(color: Colors.white, fontSize: 19),
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down_rounded,
+                    size: 25,
+                    color: Colors.white,
+                  ),
+                ],
               ),
             ),
           ],
@@ -239,12 +234,12 @@ class _RecordScreenState extends State<RecordScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        width: 280,
+                                        width: MediaQuery.of(context).size.width * 0.6,
                                         child: Text(
                                           pillListOfTheDay['${tmpYear}-${tmpMonth}-${tmpDay}']['taken'][i]['name'],
                                           style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
                                             color: isComplete
                                                 ? theDayCompleteContentColor
                                                 : theDayUnCompleteContentColor,

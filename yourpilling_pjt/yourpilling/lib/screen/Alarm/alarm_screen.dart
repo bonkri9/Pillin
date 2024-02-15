@@ -485,9 +485,6 @@ class _ListState extends State<_List> {
                               GestureDetector(
                                 onTap: () {
                                   try {
-                                    Firebase.initializeApp(
-                                        options: DefaultFirebaseOptions
-                                            .currentPlatform);
                                     FirebaseApi()
                                         .initNotifications(context); // 알람을 초기화함
                                     _selectTime(
