@@ -48,7 +48,7 @@ fun AnalysisRadarChart(
             netLinesStrokeCap = StrokeCap.Butt
         ),
         scalarSteps = 3,
-        scalarValue = 100.0,
+        scalarValue = 150.0,
         scalarValuesStyle = scalarValuesStyle,
         polygons = listOf(
             Polygon(
