@@ -513,8 +513,11 @@ class _AgeTabState extends State<_AgeTab> {
   Widget build(BuildContext context) {
     var agelist = context.read<RankingStore>().CategoriData[2]
         ['midCategories']; // 복용 요청하기
-// midCategoryId
-
+    List<Map<String, dynamic>> sortedList = List.from(agelist)..sort((a, b) {
+      return a['midCategoryName'].compareTo(b['midCategoryName']);
+    });
+    print(sortedList);
+    print("정렬 출력");
     return Container(
       child: Column(
         children: [
@@ -522,16 +525,16 @@ class _AgeTabState extends State<_AgeTab> {
             height: 50, // 높이 설정
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: agelist.length,
+              itemCount: sortedList.length,
               itemBuilder: (context, i) {
                 return Container(
                   padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
                   child: TextButton(
                     onPressed: () {
-                      print("쇼데이터 입력 아이디 ${agelist[i]['midCategoryId']}");
+                      print("쇼데이터 입력 아이디 ${sortedList[i]['midCategoryId']}");
                       context
                           .read<RankingStore>()
-                          .getShowData(agelist[i]['midCategoryId']);
+                          .getShowData(sortedList[i]['midCategoryId']);
                       setState(() {
                         _index = i;
                       });
@@ -541,7 +544,7 @@ class _AgeTabState extends State<_AgeTab> {
                           BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
                     ),
                     child: Text(
-                      '${agelist[i]['midCategoryName']}',
+                      '${sortedList[i]['midCategoryName']}',
                       style: TextStyle(
                         fontFamily: "Pretendard",
                         color: BASIC_BLACK.withOpacity(0.65),
