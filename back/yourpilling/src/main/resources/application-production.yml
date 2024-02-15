@@ -5,7 +5,7 @@ spring:
     username: S10P12B101
     password: WW6ZZxMUgt
     hikari:
-      maximum-pool-size: 6
+      maximum-pool-size: 10
   jpa:
     open-in-view: true
     hibernate:
@@ -18,7 +18,7 @@ spring:
 
   oauth:
     kakao:
-      client-id: bf01e1887c822be46c9d1d987654575e
+      client-id: 9c3a8e5f9209260e3e7f9cd8602c0d68
       redirect-uri: "https://i10b101.p.ssafy.io/login/oauth2/kakao"
       grant_type: authorization_code
 
