@@ -73,41 +73,10 @@ public class PushController {
         return ResponseEntity.ok().build();
     }
 
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "* */1 * * * *")
     ResponseEntity<Void> sendPushMessage() {
         log.info("[요청 : PUSH 복용 메세지 FCM 스케쥴러 동작]");
-        LocalDateTime now = LocalDateTime.now();
-
-        RequestPushFcmDto dto = RequestPushFcmDto
-                .builder()
-                .pushDay(now.getDayOfWeek().getValue())
-                .hour(now.getHour())
-                .minute(now.getMinute())
-                .build();
-
-        OutNotificationsVo vo = pushService.findAllByPushDayAndPushTime(mapper.mapToPushNotificationsVo(dto));
-
-        for (PushNotification noti : vo.getPushNotifications()) {
-            for (DeviceToken deviceToken : noti.getPushOwnPill().getMember().getDeviceTokens()) {
-                if (deviceToken.getDeviceToken() == null) {
-                    System.err.println("디바이스 토큰이 존재하지 않습니다!");
-                    continue;
-                }
-
-                Message fcmMessage = Message
-                        .builder()
-                        .setNotification(getNotification(noti.getMessage()))
-                        .setToken(deviceToken.getDeviceToken())
-                        .build();
-
-                try {
-                    firebaseMessaging.send(fcmMessage);
-                } catch (FirebaseMessagingException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
+        pushService.sendFCM();
         return ResponseEntity.ok().build();
     }
 
@@ -115,52 +84,8 @@ public class PushController {
     ResponseEntity<Void> sendPushRepurchaseMessage() {
 
         log.info("[요청 : PUSH 재구매 메세지 FCM 스케쥴러 동작]");
-        OutPushRepurchaseVo outPushRepurchaseVo = pushService.findByOutRemains();
-
-        List<OutDeviceTokenVo> sendDeviceList = new ArrayList<>();
-
-        // 부족한 재고 정보와 누구에게 보낼지(DeviceToken)을 조회
-        for (PushMemberVo pm : outPushRepurchaseVo.getPushMemberVoList()) {
-            for (PushOwnPillVo op : pm.getOwnPillVos()) {
-                if (op.getRemains() / (double) op.getTotalCount() < 0.1) {
-                    sendDeviceList.addAll(pm.getDeviceTokenVos());
-                    break;
-                }
-            }
-        }
-
-        // DeviceToken에 해당되는 유저에게 부족하다는 메세지를 보내야함
-
-        for (OutDeviceTokenVo dt : sendDeviceList) {
-            if (dt.getDeviceToken() == null) {
-                System.err.println("디바이스 토큰이 존재하지 않습니다!");
-                continue;
-            }
-
-            Message fcmMessage = Message
-                    .builder()
-                    .setNotification(getNotification(REPURCHASE_PUSH_MESSAGE))
-                    .setToken(dt.getDeviceToken())
-                    .build();
-
-            try {
-                firebaseMessaging.send(fcmMessage);
-            } catch (FirebaseMessagingException e) {
-                e.printStackTrace();
-            }
-        }
-
+        pushService.sendRepurchaseFCM();
         return ResponseEntity.ok().build();
-    }
-
-
-    private Notification getNotification(String message) {
-        return Notification
-                .builder()
-                .setTitle(PUSH_TITLE)
-                .setBody(message)
-                .setImage(PUSH_IMAGE)
-                .build();
     }
 
     @GetMapping("/send-pushMessageTest")
