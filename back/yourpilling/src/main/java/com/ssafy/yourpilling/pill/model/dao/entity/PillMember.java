@@ -25,6 +25,10 @@ public class PillMember {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OwnPill> ownPills;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<PillDeviceToken> deviceTokens;
+
+
     public void addOwnPill(OwnPill ownPill){
         this.ownPills.add(ownPill);
 
