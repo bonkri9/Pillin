@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/component/common/app_bar.dart';
@@ -16,7 +17,7 @@ import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:provider/provider.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 class MainScreen extends StatefulWidget {
   MainScreen({super.key});
 
@@ -25,6 +26,38 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  var messageString = "";
+
+  void getMyDeviceToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print("내 디바이스 토큰 $token");
+  }
+  @override
+  void initState(){
+    getMyDeviceToken();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      RemoteNotification? notification = message.notification;
+
+      if (notification != null){
+        FlutterLocalNotificationsPlugin().show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails
+            ('channelId', 'channelName',importance: Importance.max),
+          )
+        );
+        setState(() {
+          messageString = message.notification!.body!;
+          print("Forground 메시지 수신 : $messageString}");
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     context.read<MainStore>().getWeeklyData(context);

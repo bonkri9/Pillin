@@ -19,4 +19,9 @@ public interface PushService {
     OutPushMessageInfoMapVo selectPushNotification(Long memberId);
 
     OutPushRepurchaseVo findByOutRemains();
+
+    void sendFCM();
+
+    void sendRepurchaseFCM();
+
 }
