@@ -10,7 +10,15 @@ import '../const/url.dart';
 class SearchStore extends ChangeNotifier {
   var searchData;
   var pillDetailData;
+  var isInMyInventory = false;
 
+  setHaveTrue() {
+    isInMyInventory = true;
+  }
+
+  setHaveFalse() {
+    isInMyInventory = false;
+  }
 
   // 이름 검색 리스트 받아오기
   Future<void> getSearchNameData(BuildContext context, name) async {
@@ -128,8 +136,14 @@ class SearchStore extends ChangeNotifier {
 
         // InventoryStore에 응답 저장
         pillDetailData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        // print(PillDetailData);
+        print('이걸 보세요 ㄹㅇ ${pillDetailData['alreadyHave']}');
+        if (pillDetailData['alreadyHave']) {
+          print("보유중");
+          setHaveTrue();
+        } else {
+          print("보유중 아님");
+          setHaveFalse();
+        }
       } else {
         // print(response.body);
         print("검색 상세 get 수신 실패");
@@ -140,7 +154,35 @@ class SearchStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  //네이버 스토어 영양제별 클릭 횟수
+  Future<void> postBuyClick(BuildContext context, var pillId ) async {
+    print("클릭횟수 도착");
+    String accessToken = context.read<UserStore>().accessToken;
+    const String postBuyClickUrl = "${CONVERT_URL}/api/v1/pill/buy";
+    var response = await http.post(Uri.parse(postBuyClickUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': accessToken,
+        },
+        body: json.encode({
+          'pillId': pillId,
+        }));
+    print(response.body);
+    if (response.statusCode == 200) {
+      print("구매 클릭 post 수신 성공");
+      print(response.body);
+    } else {
+      print(response.body);
+      print("구매 클릭 post 수신 실패");
+      throw Error();
+    }
+
+    notifyListeners();
+  }
+
 }
+
+
 class SearchRepository extends ChangeNotifier {
   var BuyLink;
   var BuyList;
@@ -178,4 +220,6 @@ class SearchRepository extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+
 }

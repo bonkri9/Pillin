@@ -85,6 +85,15 @@ class UserStore extends ChangeNotifier {
     print("생년월일 및 성별 포함 회원가입 요청");
     String url = "${CONVERT_URL}/api/v1/register/essential";
     print('$userEmail $password $userName $year $month $day ${gender}'); // 잘 들어옴
+
+    if (month.toString().length == 1) {
+      month = '0$month';
+    }
+
+    if (day.toString().length == 1) {
+      day = '0$day';
+    }
+
     try {
       print(" accessToken 이야 이게 $accessToken");
       var response = await http.put(Uri.parse(url), headers: {
