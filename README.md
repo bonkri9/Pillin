@@ -21,7 +21,7 @@
 
 | 메인 페이지 |영양제 등록 페이지|복용 이력 페이지|영양제 알람 등록 페이지|분석 리포트 페이지|검색 페이지
 |:----:|:----:|:----:|:----:|:----:|:----:|
-|![main](../ImageFile/main.gif)|![regist](../ImageFile/main.gif)|![calendar](../ImageFile/calendar.gif)|![push](../ImageFile/push.gif)|![report_rank](../ImageFile/report_rank.gif)|![search](../ImageFile/search.gif)|
+|![main](../ImageFile/main.gif)|![regist](../ImageFile/regist.gif)|![calendar](../ImageFile/calendar.gif)|![push](../ImageFile/push.gif)|![report_rank](../ImageFile/report_rank.gif)|![search](../ImageFile/search.gif)|
 
 # 💊주요 기능💊
 
