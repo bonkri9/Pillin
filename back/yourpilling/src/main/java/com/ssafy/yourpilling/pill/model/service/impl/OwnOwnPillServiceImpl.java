@@ -118,11 +118,19 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 break;
             }
         }
+
+        // TODO: 영양제 일정 개수 이하로 떨어지면 재구매 알림
+        if(ownPill.getRemains() <= 10){
+            reBuyAlarm();
+        }
  
         return OutOwnPillTakeVo
                 .builder()
                 .needToUpdateWeeklyHistory(needToUpdate)
                 .build();
+    }
+
+    private void reBuyAlarm() {
     }
 
     @Transactional
