@@ -39,10 +39,12 @@ class MyPageScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Lottie.asset('assets/lottie/mypage.json',
-                              width: 200, height: 200),
+                          Center(
+                            child: Lottie.asset('assets/lottie/mypage.json',
+                                width: 200, height: 200),
+                          ),
                           SizedBox(
-                            height: 10,
+                            height: 30,
                           ),
                           // Row(
                           //   children: [
@@ -62,11 +64,12 @@ class MyPageScreen extends StatelessWidget {
                           //   ],
                           // ),
                           Text(
-                            "오늘도 건강하세요!",
+                            "오늘도 건강해져라 얍!",
                             style: TextStyle(
                               color: BASIC_BLACK,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "Pretendard",
                             ),
                           ),
                           SizedBox(
@@ -104,6 +107,7 @@ class MyPageScreen extends StatelessWidget {
                                       color: Colors.black,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500,
+                                      fontFamily: "Pretendard",
                                     ),
                                   ),
                                 ),
@@ -145,9 +149,10 @@ class MyPageScreen extends StatelessWidget {
                                   child: Text(
                                     "내 분석리포트",
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.redAccent.withOpacity(0.9),
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500,
+                                      fontFamily: "Pretendard",
                                     ),
                                   ),
                                 ),
@@ -185,6 +190,7 @@ class MyPageScreen extends StatelessWidget {
                                       color: Colors.black,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500,
+                                      fontFamily: "Pretendard",
                                     ),
                                   ),
                                 ),
@@ -234,6 +240,7 @@ class MyPageScreen extends StatelessWidget {
                                       color: Colors.black,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500,
+                                      fontFamily: "Pretendard",
                                     ),
                                   ),
                                 ),

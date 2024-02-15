@@ -18,6 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:animated_shimmer/animated_shimmer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 getTabData(BuildContext context) async {
   await context.read<RankingStore>().getCategoriData(context); // 카테고리 데이터 할당
   await context.read<RankingStore>().getRankingData(context); // 랭킹 데이터 받기
@@ -26,6 +27,7 @@ getTabData(BuildContext context) async {
 class SearchScreen extends StatefulWidget {
   final bool showAppBar;
   bool isLoaded = false;
+
   SearchScreen({Key? key, required this.showAppBar}) : super(key: key);
 
   @override
@@ -42,28 +44,30 @@ class _SearchScreenState extends State<SearchScreen> {
       print("TextField content: ${myController.text}");
     });
   }
+
   // import 'package:firebase_messaging/firebase_messaging.dart';
   // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
   var messageString = "";
+
   void getMyDeviceToken() async {
     final token = await FirebaseMessaging.instance.getToken();
     print("내 디바이스 토큰 $token");
   }
+
   @override
-  void initState(){
+  void initState() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
 
-      if (notification != null){
+      if (notification != null) {
         FlutterLocalNotificationsPlugin().show(
             notification.hashCode,
             notification.title,
             notification.body,
             const NotificationDetails(
-              android: AndroidNotificationDetails
-                ('channelId', 'channelName',importance: Importance.max),
-            )
-        );
+              android: AndroidNotificationDetails('channelId', 'channelName',
+                  importance: Importance.max),
+            ));
         setState(() {
           messageString = message.notification!.body!;
           print("Forground 메시지 수신 : $messageString}");
@@ -79,19 +83,21 @@ class _SearchScreenState extends State<SearchScreen> {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
-      appBar: showAppBar ? AppBar(
-        backgroundColor: Colors.white,
-        scrolledUnderElevation: 0.0,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            // 뒤로 가기 기능 추가
-            Navigator.pop(context);
-          },
-        ),
-        toolbarHeight: 70,
-      ) : null,
+      appBar: showAppBar
+          ? AppBar(
+              backgroundColor: Colors.white,
+              scrolledUnderElevation: 0.0,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_new),
+                onPressed: () {
+                  // 뒤로 가기 기능 추가
+                  Navigator.pop(context);
+                },
+              ),
+              toolbarHeight: 70,
+            )
+          : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -257,20 +263,17 @@ class _SearchBar extends StatelessWidget {
                       ),
                       onPressed: () async {
                         try {
-                          await context
-                              .read<SearchStore>()
-                              .getSearchNameData(
-                            context,
-                            myController.text,
-                          );
+                          await context.read<SearchStore>().getSearchNameData(
+                                context,
+                                myController.text,
+                              );
                           print('검색 통신 성공');
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  SearchListScreen(
-                                    myControllerValue: myController.text,
-                                  ),
+                              builder: (context) => SearchListScreen(
+                                myControllerValue: myController.text,
+                              ),
                             ),
                           );
                         } catch (error) {
@@ -426,21 +429,24 @@ class _Ranking extends StatelessWidget {
               // 선택된 탭의 텍스트 색상
               unselectedLabelColor: Colors.grey.withOpacity(0.7),
               // 선택되지 않은 탭의 텍스트 색상
-              onTap: (index){
+              onTap: (index) {
                 // 여기에 원하는 동작을 추가하세요.
                 // 예를 들면, 각 탭에 따라 다른 동작을 수행하게끔 설정할 수 있습니다.
                 switch (index) {
                   case 0:
                     print('건강고민 탭 선택');
-                    context.read<RankingStore>().getShowData(CategoriData[0]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(
+                        CategoriData[0]['midCategories'][0]['midCategoryId']);
                     break;
                   case 1:
                     print('성분 탭 선택');
-                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(
+                        CategoriData[1]['midCategories'][0]['midCategoryId']);
                     break;
                   case 2:
                     print('20대 ${gender} 탭 선택');
-                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(
+                        CategoriData[1]['midCategories'][0]['midCategoryId']);
                     // context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[2]['midCategories'][0]['midCategoryId']);
                     break;
                 }
@@ -514,12 +520,12 @@ class _AgeTabState extends State<_AgeTab> {
     var agelist = context.read<RankingStore>().CategoriData[2]
         ['midCategories']; // 복용 요청하기
 
-    List<Map<String, dynamic>> sortedList = List.from(agelist)..sort((a, b) {
-      return a['midCategoryName'].compareTo(b['midCategoryName']);
-    });
+    List<Map<String, dynamic>> sortedList = List.from(agelist)
+      ..sort((a, b) {
+        return a['midCategoryName'].compareTo(b['midCategoryName']);
+      });
     print('이게 분류된 리스트 $sortedList');
     print("정렬 출력");
-
 
     print(agelist);
 
@@ -536,7 +542,8 @@ class _AgeTabState extends State<_AgeTab> {
                 List<String> parts = ageCateOneDate.split(',');
                 String ageCate = parts.first;
 
-                String gender = parts.last.trim().toUpperCase() == 'MAN' ? '남성' : '여성';
+                String gender =
+                    parts.last.trim().toUpperCase() == 'MAN' ? '남성' : '여성';
                 // print("$ageCate 왼쪽은 나잇대, 오른쪽은 성별 $gender");
 
                 return Container(
@@ -571,8 +578,8 @@ class _AgeTabState extends State<_AgeTab> {
             ),
           ),
           _SearchRanking(
-                      title: '${_index}',
-                    ),
+            title: '${_index}',
+          ),
         ],
       ),
     );
@@ -592,8 +599,8 @@ class _NutrientTabState extends State<_NutrientTab> {
 
   @override
   Widget build(BuildContext context) {
-    var nutrientlist = context.read<RankingStore>().CategoriData[1]
-        ['midCategories'];
+    var nutrientlist =
+        context.read<RankingStore>().CategoriData[1]['midCategories'];
 
     return Container(
       child: Column(
@@ -659,50 +666,51 @@ class _HealthTabState extends State<_HealthTab> {
     var HealthTapList = context.read<RankingStore>().CategoriData[0]
         ['midCategories']; // 복용 요청하기
 
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            height: 50, // 높이 설정
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: HealthTapList.length,
-              itemBuilder: (context, i) {
-                return Container(
-                  padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
-                  child: TextButton(
-                    onPressed: () {
-                      context
-                          .read<RankingStore>()
-                          .getShowData(HealthTapList[i]['midCategoryId']);
-                      setState(() {
-                        _index = i;
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
-                    ),
-                    child: Text(
-                      '${HealthTapList[i]['midCategoryName']}',
-                      style: TextStyle(
-                        fontFamily: "Pretendard",
-                        color: BASIC_BLACK.withOpacity(0.65),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 50, // 높이 설정
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: HealthTapList.length,
+            itemBuilder: (context, i) {
+              return Container(
+                padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
+                child: TextButton(
+                  onPressed: () {
+                    context
+                        .read<RankingStore>()
+                        .getShowData(HealthTapList[i]['midCategoryId']);
+                    setState(() {
+                      _index = i;
+                    });
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor:
+                        BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
+                  ),
+                  child: Text(
+                    '${HealthTapList[i]['midCategoryName']}',
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      color: BASIC_BLACK.withOpacity(0.65),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-          Expanded(
-              child: _SearchRanking(
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.43,
+          child: _SearchRanking(
             title: '${_index}',
-          )),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -718,31 +726,23 @@ class _SearchRanking extends StatelessWidget {
   Widget build(BuildContext context) {
     // 종합비타민 눌렀을때
     var RankingList = context.watch<RankingStore>().ShowData;
-
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: ListView.separated(
-          separatorBuilder: (context, index) {
-            return Divider(
-              color: BASIC_GREY.withOpacity(0.4),
-              thickness: 1,
-              height: 0,
-            );
-          },
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: RankingList.length,
-          itemBuilder: (context, i) {
-            return GestureDetector(
-              onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PillDetailScreen(
-                          pillId: RankingList[i]['pillId'],
-                        )));
-              },
-              child: Padding(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.42,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: ListView.separated(
+            separatorBuilder: (context, index) {
+              return Divider(
+                color: BASIC_GREY.withOpacity(0.4),
+                thickness: 1,
+                height: 0,
+              );
+            },
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: RankingList.length,
+            itemBuilder: (context, i) {
+              return Padding(
                 padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
                 child: Row(
                   children: [
@@ -763,7 +763,7 @@ class _SearchRanking extends StatelessWidget {
                     Column(
                       children: [
                         Container(
-                          width: 150,
+                          width: MediaQuery.of(context).size.width * 0.36,
                           child: Text(
                             "${RankingList[i]['manufacturer']}",
                             textAlign: TextAlign.start,
@@ -786,7 +786,7 @@ class _SearchRanking extends StatelessWidget {
                                         )));
                           },
                           child: Container(
-                            width: 150,
+                            width: MediaQuery.of(context).size.width * 0.36,
                             child: Text(
                               "${RankingList[i]['pillName']}",
                               textAlign: TextAlign.start,
@@ -804,9 +804,9 @@ class _SearchRanking extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+      ),
     );
   }
 }
