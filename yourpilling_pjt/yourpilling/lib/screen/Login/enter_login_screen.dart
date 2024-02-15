@@ -75,8 +75,6 @@ class _EnterLoginScreenState extends State<EnterLoginScreen> {
   Widget build(BuildContext context) {
     // final TextEditingController emailController = TextEditingController();
     // final TextEditingController passwordController = TextEditingController();
-    // String url = "https://i10b101.p.ssafy.io/api/v1/login";
-    String url = "http://10.0.2.2:8080/api/v1/login";
     var inputWidth = MediaQuery.of(context).size.width * 0.82;
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF), // 0xFFF5F6F9
@@ -91,10 +89,10 @@ class _EnterLoginScreenState extends State<EnterLoginScreen> {
                 SizedBox(
                   height: 80,
                 ),
-                // KakaoLogin(),
-                // SizedBox(
-                //   height: 15,
-                // ),
+                KakaoLogin(),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),

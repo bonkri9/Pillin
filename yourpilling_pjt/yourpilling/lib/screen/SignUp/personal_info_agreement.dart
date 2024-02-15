@@ -163,6 +163,25 @@ class _PersonalAgreementDialogState extends State<PersonalAgreementDialog> {
           SizedBox(
             height: 15,
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  width: 190,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    maxLines: 4,
+                    strutStyle: StrutStyle(fontSize: 16),
+                    text: TextSpan(
+                      text: '수집 항목에 대한 보유 기간은 수집일로부터 1년입니다.',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                      ),
+                    ),
+                  )),
+            ],
+          ),
           Container(
               width: 300,
               child: RichText(

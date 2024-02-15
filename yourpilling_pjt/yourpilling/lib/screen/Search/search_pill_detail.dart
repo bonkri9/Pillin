@@ -358,7 +358,9 @@ class _infoState extends State<info> {
             label: '영양제 구매하기',
             icon: GestureDetector(
               onTap: () {
+                var pillId = pillDetailInfo['pillId'];
                 var pillName = pillDetailInfo['pillName'];
+                context.read<SearchStore>().postBuyClick(context, pillId);
                 context.read<SearchRepository>().getNaverBlogSearch(pillName);
                 var buyLink = context.read<SearchRepository>().BuyLink; // 네이버 구매 링크
                 print(buyLink);

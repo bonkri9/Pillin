@@ -5,17 +5,18 @@ initNotifications(): 사용자로부터 푸시 알림 권한을 요청하고, FC
 handleMessage(): 푸시 알림 메시지를 처리하는 함수입니다. 메시지가 null이 아닌 경우, 앱 내에서 특정 경로(/notification_screen)로 이동하게 됩니다.
 initPushNotifications(): 앱이 종료된 상태에서 푸시 알림을 통해 새로 열릴 때를 처리하는 이벤트 리스너를 설정합니다.
  */
-
 import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/main.dart';
-
 import '../const/url.dart';
 import '../store/user_store.dart';
 import 'package:http/http.dart' as http;
+
+
+
 class FirebaseApi{
   // create an instance of Firebase Messaging
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -27,12 +28,14 @@ class FirebaseApi{
     NotificationSettings settings = await _firebaseMessaging.requestPermission();
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      // 알림 허용이 된 경우
+      // User granted permission
       print("User granted permission");
+
       // fetch the FCM token
       final fCMToken = await _firebaseMessaging.getToken();
-      print('Token: $fCMToken'); // 토큰값 알아내기
-      // 푸시알람을 초기화하고 맨처음에 이 메서드를 시작시켜보자
+      print('Token: $fCMToken');
+
+      // Initialize push notifications
       String accessToken = context.read<UserStore>().accessToken;
       const String takeYnListUrl = "${CONVERT_URL}/api/v1/push/device-token";
       try {
@@ -43,6 +46,7 @@ class FirebaseApi{
           "deviceToken" : fCMToken,
         }));
         print('response 이거임 $response');
+
         if (response.statusCode == 200) {
           print("디바이스 토큰 등록 완료");
         } else {
@@ -53,7 +57,26 @@ class FirebaseApi{
         print("토큰 등록 에러");
         print(error);
       }
-
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print("들어온걸 확인했다옹");
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
+        if (notification != null && android != null) {
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                  android: AndroidNotificationDetails(
+                    'your_channel_id', // 여기를 변경
+                    'your_channel_name', // 여기를 변경
+                    icon: android.smallIcon,
+                    // other properties...
+                  )),
+              payload: message.data['item_id']);
+        }
+      });
 
       initPushNotifications();
     } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
