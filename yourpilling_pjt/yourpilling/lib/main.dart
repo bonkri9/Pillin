@@ -31,7 +31,7 @@ Future<void> initializedNotification() async {
     (const AndroidNotificationChannel('id', '네임',importance: Importance.max));
 
   await flutterLocalNotificationPlugin.initialize(const InitializationSettings(
-    android: AndroidInitializationSettings("@mipmap/ic_launcher")
+    android: AndroidInitializationSettings("@mipmap/only_pillin_logo")
   ));
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
