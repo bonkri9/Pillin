@@ -513,11 +513,16 @@ class _AgeTabState extends State<_AgeTab> {
   Widget build(BuildContext context) {
     var agelist = context.read<RankingStore>().CategoriData[2]
         ['midCategories']; // 복용 요청하기
+
     List<Map<String, dynamic>> sortedList = List.from(agelist)..sort((a, b) {
       return a['midCategoryName'].compareTo(b['midCategoryName']);
     });
-    print(sortedList);
+    print('이게 분류된 리스트 $sortedList');
     print("정렬 출력");
+
+
+    print(agelist);
+
     return Container(
       child: Column(
         children: [
@@ -527,6 +532,13 @@ class _AgeTabState extends State<_AgeTab> {
               scrollDirection: Axis.horizontal,
               itemCount: sortedList.length,
               itemBuilder: (context, i) {
+                var ageCateOneDate = sortedList[i]['midCategoryName'];
+                List<String> parts = ageCateOneDate.split(',');
+                String ageCate = parts.first;
+
+                String gender = parts.last.trim().toUpperCase() == 'MAN' ? '남성' : '여성';
+                // print("$ageCate 왼쪽은 나잇대, 오른쪽은 성별 $gender");
+
                 return Container(
                   padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
                   child: TextButton(
@@ -544,7 +556,8 @@ class _AgeTabState extends State<_AgeTab> {
                           BASIC_GREY.withOpacity(0.2), // 연한 회색 동그라미 박스의 색상
                     ),
                     child: Text(
-                      '${sortedList[i]['midCategoryName']}',
+//                       '${sortedList[i]['midCategoryName']}',
+                      '$ageCate $gender',
                       style: TextStyle(
                         fontFamily: "Pretendard",
                         color: BASIC_BLACK.withOpacity(0.65),
@@ -720,67 +733,77 @@ class _SearchRanking extends StatelessWidget {
           shrinkWrap: true,
           itemCount: RankingList.length,
           itemBuilder: (context, i) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
-              child: Row(
-                children: [
-                  Text(
-                    "${i + 1}",
-                    style: TextStyle(
-                      color: Color(0xFFFF6F61).withOpacity(0.9),
-                      fontSize: 20,
-                      fontFamily: "Pretendard",
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Image.network(
-                    "${RankingList[i]['imageUrl']}",
-                    width: 130,
-                    height: 80,
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        width: 150,
-                        child: Text(
-                          "${RankingList[i]['manufacturer']}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: BASIC_BLACK.withOpacity(0.3),
-                            fontSize: 13,
-                            fontFamily: "Pretendard",
-                            overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+            return GestureDetector(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PillDetailScreen(
+                          pillId: RankingList[i]['pillId'],
+                        )));
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
+                child: Row(
+                  children: [
+                    Text(
+                      "${i + 1}",
+                      style: TextStyle(
+                        color: Color(0xFFFF6F61).withOpacity(0.9),
+                        fontSize: 20,
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w600,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PillDetailScreen(
-                                        pillId: RankingList[i]['pillId'],
-                                      )));
-                        },
-                        child: Container(
+                    ),
+                    Image.network(
+                      "${RankingList[i]['imageUrl']}",
+                      width: 130,
+                      height: 80,
+                    ),
+                    Column(
+                      children: [
+                        Container(
                           width: 150,
                           child: Text(
-                            "${RankingList[i]['pillName']}",
+                            "${RankingList[i]['manufacturer']}",
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: BASIC_BLACK.withOpacity(0.9),
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 15,
+                              color: BASIC_BLACK.withOpacity(0.3),
+                              fontSize: 13,
                               fontFamily: "Pretendard",
+                              overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PillDetailScreen(
+                                          pillId: RankingList[i]['pillId'],
+                                        )));
+                          },
+                          child: Container(
+                            width: 150,
+                            child: Text(
+                              "${RankingList[i]['pillName']}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: BASIC_BLACK.withOpacity(0.9),
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 15,
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           }),
