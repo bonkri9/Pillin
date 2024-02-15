@@ -71,9 +71,7 @@ class _MainScreenState extends State<MainScreen> {
         appBar: MainAppBar(
           barColor: Colors.white,
         ),
-        body: WillPopScope(
-          onWillPop: onWillPop,
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
             child: Column(
               children: [
                 Welcome(),
@@ -92,7 +90,8 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-        ));
+        // )
+    );
   }
 }
 
@@ -145,17 +144,17 @@ class _WelcomeState extends State<Welcome> {
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: '아직 등록된 영양제가 없어요',
+                          text: '${userName}님, 영양제 먼저 등록하러 가실게요!',
                           style: TextStyle(
-                            fontSize: 20,
-                            color: BASIC_GREY,
+                            fontSize: 21,
+                            color: BASIC_BLACK.withOpacity(0.27),
                             fontWeight: FontWeight.w500,
                             fontFamily: 'Pretendard',
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 25,
+                        height: 35,
                       ),
                       // 추가 버튼
                       GestureDetector(
@@ -179,10 +178,11 @@ class _WelcomeState extends State<Welcome> {
                           );
                         },
                         child: CircleAvatar(
-                          radius: 15.0,
-                          backgroundColor: Colors.yellow, // 원의 배경색
+                          radius: 20,
+                          backgroundColor: Colors.indigoAccent.withOpacity(0.8), // 원의 배경색
                           child: Icon(
                             Icons.add,
+                            size: 35,
                             color: Colors.white, // 화살표 아이콘의 색상
                           ),
                         ),
@@ -218,7 +218,7 @@ class _WelcomeState extends State<Welcome> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: '개 남았어요!"',
+                                  text: '정 남았어요!"',
                                   style: TextStyle(
                                     fontSize: 19,
                                     color: BASIC_BLACK,
@@ -685,8 +685,9 @@ class _TodayState extends State<_Today> {
                     Expanded(child: Container()),
                     // 영양제 추가 하기
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         // 로직 짜줘 희태야~!~!
+                        await context.read<MainStore>().takeAll(context);
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 10),
@@ -778,15 +779,18 @@ class _TodayState extends State<_Today> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("${dailyData[i]['name']}",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontFamily: "Pretendard",
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.5,
-                                              color: BASIC_BLACK,
-                                            )),
+                                        Container(
+                                          width: 270,
+                                          child: Text("${dailyData[i]['name']}",
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                fontFamily: "Pretendard",
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16.5,
+                                                color: BASIC_BLACK,
+                                              )),
+                                        ),
                                         Text(
                                           dailyData[i]['remains'] <
                                                   dailyData[i]['takeCount']

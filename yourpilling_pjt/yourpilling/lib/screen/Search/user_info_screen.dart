@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:yourpilling/screen/Login/login_screen.dart';
 import 'package:yourpilling/screen/SignUp/greeting_screen.dart';
+import 'package:yourpilling/screen/SignUp/personal_info_agreement.dart';
 import 'package:yourpilling/store/user_store.dart';
 
 import '../../const/colors.dart';
@@ -24,16 +25,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   late FocusNode emailFocusNode;
   late FocusNode passwordFocusNode;
 
-
   @override
   void initState() {
     super.initState();
     emailFocusNode = FocusNode();
     passwordFocusNode = FocusNode();
   }
-
-
-
 
   bool isValidEmail(String email) {
     // 정규 표현식을 사용하여 이메일 형식 검사
@@ -180,7 +177,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             controller: emailController,
                             focusNode: emailFocusNode,
                             onEditingComplete: () {
-                              FocusScope.of(context).requestFocus(passwordFocusNode);
+                              FocusScope.of(context)
+                                  .requestFocus(passwordFocusNode);
                             },
                             onChanged: (value) {
                               setState(() {
@@ -244,79 +242,124 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // 닉네임 다시 설정
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (c, a1, a2) => GreetingScreen(),
-                            transitionsBuilder: (c, a1, a2, child) =>
-                                SlideTransition(
-                              position: Tween(
-                                begin: Offset(-1.0, 0.0),
-                                end: Offset(0.0, 0.0),
-                              )
-                                  .chain(CurveTween(curve: Curves.easeInOut))
-                                  .animate(a1),
-                              child: child,
-                            ),
-                            transitionDuration: Duration(milliseconds: 750),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            width: 0.7,
-                            color: Colors.redAccent,
-                          ),
-                          color: Colors.white,
-                        ),
-                        child: Text(
-                          '이름 바꿀래요',
-                          style: TextStyle(
-                            color: Colors.redAccent, // 텍스트의 색상
-                          ),
-                        ),
-                      ),
-                    ),
+                    //회원가입 시 개인정보 수집 동의
+                    // GestureDetector(
+                    //   onTap: () async {
+                    //     showPersonalAgreementDialog(context );
+                    //   },
+                    //   child: Container(
+                    //     padding: EdgeInsets.all(10.0),
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(20),
+                    //       border: Border.all(
+                    //         width: 0.7,
+                    //         color: Colors.redAccent,
+                    //       ),
+                    //       color: Colors.white,
+                    //     ),
+                    //     child: Text(
+                    //       '[필수] 개인정보 수집 동의',
+                    //       style: TextStyle(
+                    //         color: Colors.redAccent, // 텍스트의 색상
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+
+                    // // 닉네임 다시 설정
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       PageRouteBuilder(
+                    //         pageBuilder: (c, a1, a2) => GreetingScreen(),
+                    //         transitionsBuilder: (c, a1, a2, child) =>
+                    //             SlideTransition(
+                    //           position: Tween(
+                    //             begin: Offset(-1.0, 0.0),
+                    //             end: Offset(0.0, 0.0),
+                    //           )
+                    //               .chain(CurveTween(curve: Curves.easeInOut))
+                    //               .animate(a1),
+                    //           child: child,
+                    //         ),
+                    //         transitionDuration: Duration(milliseconds: 750),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Container(
+                    //     padding: EdgeInsets.all(10.0),
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(20),
+                    //       border: Border.all(
+                    //         width: 0.7,
+                    //         color: Colors.redAccent,
+                    //       ),
+                    //       color: Colors.white,
+                    //     ),
+                    //     child: Text(
+                    //       '이름 바꿀래요',
+                    //       style: TextStyle(
+                    //         color: Colors.redAccent, // 텍스트의 색상
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(width: 10),
                     // 회원가입 요청
                     GestureDetector(
                       onTap: () async {
-                        try{
+                        bool? agreement =
+                            await showPersonalAgreementDialog(context);
+                        if (!agreement) {
+                          // agreement가 false인 경우 메시지를 띄움
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('개인정보 수집 동의가 필요합니다.'),
+                          ));
+                          return; // 등록 작업을 중단
+                        }
+
+                        // agreement가 true인 경우 사용자 정보 입력 값의 유효성 검사를 수행
+                        if (!isValidate()) {
+                          return; // 등록 작업을 중단
+                        }
+
+                        //회원가입 요청
+                        try {
                           context.read<UserStore>().userEmail = email;
                           context.read<UserStore>().password = password;
                           await context.read<UserStore>().signUp(context);
                           if (isValidate()) {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            // 회원가입 성공 시 이름이랑 닉네임 페이지 사라지게
                             Navigator.push(
                               context,
                               PageRouteBuilder(
                                 pageBuilder: (c, a1, a2) => LoginScreen(),
                                 transitionsBuilder: (c, a1, a2, child) =>
                                     SlideTransition(
-                                      position: Tween(
-                                        begin: Offset(-1.0, 0.0),
-                                        end: Offset(0.0, 0.0),
-                                      )
-                                          .chain(CurveTween(curve: Curves.easeInOut))
-                                          .animate(a1),
-                                      child: child,
-                                    ),
+                                  position: Tween(
+                                    begin: Offset(-1.0, 0.0),
+                                    end: Offset(0.0, 0.0),
+                                  )
+                                      .chain(
+                                          CurveTween(curve: Curves.easeInOut))
+                                      .animate(a1),
+                                  child: child,
+                                ),
                                 transitionDuration: Duration(milliseconds: 750),
                               ),
                             );
                           }
-                        }catch(e){
+                        } catch (e) {
                           Vibration.vibrate(duration: 300); // 진동
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             shape: RoundedRectangleBorder(
                               // ShapeDecoration을 사용하여 borderRadius 적용
                               borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15)),
                             ),
                             content: Text(
                               "이미 가입된 이메일입니다!",
@@ -326,7 +369,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             duration: Duration(milliseconds: 1100),
                           ));
                         }
-
                       },
                       child: Container(
                         padding: EdgeInsets.all(10.0),

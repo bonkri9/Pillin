@@ -15,6 +15,7 @@ import '../../const/url.dart';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 import 'package:http/http.dart' as http;
+import 'package:animated_shimmer/animated_shimmer.dart';
 
 getTabData(BuildContext context) async {
   await context.read<RankingStore>().getCategoriData(context); // 카테고리 데이터 할당
@@ -23,8 +24,8 @@ getTabData(BuildContext context) async {
 
 class SearchScreen extends StatefulWidget {
   final bool showAppBar;
-
-  const SearchScreen({Key? key, required this.showAppBar}) : super(key: key);
+  bool isLoaded = false;
+  SearchScreen({Key? key, required this.showAppBar}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState(showAppBar);
@@ -192,73 +193,68 @@ class _SearchBar extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(35.0),
             ),
-            child: Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: BASIC_GREY.withOpacity(0.15),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            controller: myController,
-                            decoration: InputDecoration(
-                              hintText: '어떤 영양제를 찾으세요?',
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 17,
-                                fontFamily: "Pretendard",
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.0),
+                color: BASIC_GREY.withOpacity(0.15),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      controller: myController,
+                      decoration: InputDecoration(
+                        hintText: '어떤 영양제를 찾으세요?',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 17,
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w400,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 5),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.search,
-                              color: Color(0xFFFF6F61),
-                              size: 34,
-                            ),
-                            onPressed: () async {
-                              try {
-                                await context
-                                    .read<SearchStore>()
-                                    .getSearchNameData(
-                                      context,
-                                      myController.text,
-                                    );
-                                print('검색 통신 성공');
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SearchListScreen(
-                                      myControllerValue: myController.text,
-                                    ),
-                                  ),
-                                );
-                              } catch (error) {
-                                print('이름 검색 실패');
-                                falseDialog(context);
-                                print(error);
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Color(0xFFFF6F61),
+                        size: 34,
+                      ),
+                      onPressed: () async {
+                        try {
+                          await context
+                              .read<SearchStore>()
+                              .getSearchNameData(
+                            context,
+                            myController.text,
+                          );
+                          print('검색 통신 성공');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SearchListScreen(
+                                    myControllerValue: myController.text,
+                                  ),
+                            ),
+                          );
+                        } catch (error) {
+                          print('이름 검색 실패');
+                          falseDialog(context);
+                          print(error);
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ], // 여기에 누락된 괄호를 추가합니다.
+        ],
       ),
     );
   }
@@ -368,54 +364,16 @@ class _MiddleTap extends StatelessWidget {
   }
 }
 
-String getAgeGroup(int age) {
-  if (age < 10) {
-    return "10대 미만";
-  } else if (age >= 10 && age < 20) {
-    return "10대";
-  } else if (age >= 20 && age < 30) {
-    return "20대";
-  } else if (age >= 30 && age < 40) {
-    return "30대";
-  } else if (age >= 40 && age < 50) {
-    return "40대";
-  } else if (age >= 50 && age < 60) {
-    return "50대";
-  } else if (age >= 60 && age < 70) {
-    return "60대";
-  } else if (age >= 70 && age < 80) {
-    return "70대";
-  } else {
-    return "80대 이상";
-  }
-}
-
 // 랭킹페이지
 class _Ranking extends StatelessWidget {
   const _Ranking({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.watch<RankingStore>().CategoriData;
-    context.watch<RankingStore>().RankingData;
     var rankWidth = MediaQuery.of(context).size.width * 0.9;
-
     var gender = context.read<UserStore>().gender == 'MAN' ? '남성' : '여성';
-
-    DateTime now = DateTime.now();
-    // int userBirthYear = int.parse(context.read<UserStore>().year);
-    // int userBirthMonth = int.parse(context.read<UserStore>().month);
-    // int userBirthDay = int.parse(context.read<UserStore>().day);
-
-    // int age = now.year - userBirthYear;
-    //
-    // if (now.month < userBirthMonth || (now.month == userBirthMonth && now.day < userBirthDay)) {
-    //   age--;
-    // }
-
-    // String ageGroup = getAgeGroup(age);
-
     print('gender $gender');
+    var CategoriData = context.watch<RankingStore>().CategoriData;
 
     return Container(
       width: rankWidth,
@@ -430,7 +388,7 @@ class _Ranking extends StatelessWidget {
             ),
             // header end
             TabBar(
-              indicatorWeight: 2,
+              indicatorWeight: 3,
               indicatorColor: Color(0xFFFF6F61),
               // 선택된 탭의 아래에 표시되는 줄의 색상
               labelColor: Color(0xFFFF6F61),
@@ -443,21 +401,23 @@ class _Ranking extends StatelessWidget {
                 switch (index) {
                   case 0:
                     print('건강고민 탭 선택');
-                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[0]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(CategoriData[0]['midCategories'][0]['midCategoryId']);
                     break;
                   case 1:
                     print('성분 탭 선택');
-                    context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
                     break;
-                  // case 2:
-                  //   print('20대 ${gender} 탭 선택');
-                  //   break;
+                  case 2:
+                    print('20대 ${gender} 탭 선택');
+                    context.read<RankingStore>().getShowData(CategoriData[1]['midCategories'][0]['midCategoryId']);
+                    // context.read<RankingStore>().getShowData(context.read<RankingStore>().CategoriData[2]['midCategories'][0]['midCategoryId']);
+                    break;
                 }
               },
               tabs: [
-                _StyledTab('건강고민'),
-                _StyledTab('성분'),
-                // _StyledTab('20대 ${gender}'),
+                _StyledTab('${CategoriData[0]['bigCategoryName']}'),
+                _StyledTab('${CategoriData[1]['bigCategoryName']}'),
+                _StyledTab('${CategoriData[2]['bigCategoryName']}'),
               ],
             ),
             SizedBox(
@@ -468,7 +428,7 @@ class _Ranking extends StatelessWidget {
                 children: [
                   _HealthTab(),
                   _NutrientTab(),
-                  // _AgeTab(),
+                  _AgeTab(),
                 ],
               ),
             ),
@@ -507,7 +467,7 @@ class _StyledTab extends StatelessWidget {
   }
 }
 
-// 나이 탭
+//나이 탭
 class _AgeTab extends StatefulWidget {
   const _AgeTab({super.key});
 
@@ -528,15 +488,16 @@ class _AgeTabState extends State<_AgeTab> {
       child: Column(
         children: [
           Container(
-            height: 0, // 높이 설정
+            height: 50, // 높이 설정
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 0,
+              itemCount: agelist.length,
               itemBuilder: (context, i) {
                 return Container(
                   padding: EdgeInsets.fromLTRB(0, 6, 10, 6),
                   child: TextButton(
                     onPressed: () {
+                      print("쇼데이터 입력 아이디 ${agelist[i]['midCategoryId']}");
                       context
                           .read<RankingStore>()
                           .getShowData(agelist[i]['midCategoryId']);
@@ -562,10 +523,9 @@ class _AgeTabState extends State<_AgeTab> {
               },
             ),
           ),
-          Expanded(
-              child: _SearchRanking(
-            title: '${_index}',
-          )),
+          _SearchRanking(
+                      title: '${_index}',
+                    ),
         ],
       ),
     );
@@ -710,7 +670,7 @@ class _SearchRanking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 종합비타민 눌렀을때
-    var RankingList = context.read<RankingStore>().ShowData;
+    var RankingList = context.watch<RankingStore>().ShowData;
 
     return Padding(
       padding: const EdgeInsets.all(15.0),

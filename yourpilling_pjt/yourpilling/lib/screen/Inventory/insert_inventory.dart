@@ -23,11 +23,8 @@ class InsertInventory extends StatefulWidget {
 }
 
 class _InsertInventoryState extends State<InsertInventory> {
-  TextEditingController remainsController = TextEditingController();
-  TextEditingController totalCountController = TextEditingController();
-
   var pillId;
-  var takeYn = false;
+  var takeYn = true;
   var remains;
   var totalCount;
   var takeCount;
@@ -88,6 +85,7 @@ class _InsertInventoryState extends State<InsertInventory> {
           ),
         ),
       ),
+      // body 시작
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -99,16 +97,18 @@ class _InsertInventoryState extends State<InsertInventory> {
           ],
         ),
       ),
+      // 하단 바
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         child: ElevatedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.redAccent)),
+            backgroundColor: MaterialStatePropertyAll(Colors.redAccent),
+          ),
           child: Text(
             '등록',
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
               fontFamily: "Pretendard",
               fontSize: 17,
             ),
@@ -123,7 +123,7 @@ class _InsertInventoryState extends State<InsertInventory> {
                   return Container(
                     width: 450,
                     height: 200,
-                    color: Colors.transparent,
+                    color: Colors.white,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -156,15 +156,17 @@ class _InsertInventoryState extends State<InsertInventory> {
 }
 
 class _InsertInvenContent extends StatefulWidget {
-  _InsertInvenContent(
-      {super.key,
-      this.getCurPillCount,
-      this.getTotalPillCount,
-      this.getTakeYn,
-      this.detailData});
+  _InsertInvenContent({
+    super.key,
+    this.getCurPillCount,
+    this.getTotalPillCount,
+    this.getTakeYn,
+    this.detailData,
+  });
 
   final getCurPillCount;
   final getTotalPillCount;
+
   // var pillId;
   final getTakeYn;
   final detailData;
@@ -177,169 +179,295 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
   var curPillCount;
   var totalPillCount;
   var takeYn;
+  TextEditingController remainsController = TextEditingController();
+  TextEditingController totalCountController = TextEditingController();
+
+  @override
+  void dispose() {
+    totalCountController.dispose();
+    remainsController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     // var pillId = widget.pillId;
     var pillDetailData = widget.detailData;
+    var inputWidth = MediaQuery.of(context).size.width * 0.9;
 
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: Colors.white,
-      ),
-      width: MediaQuery.of(context).size.width * 0.9,
+      color: BACKGROUND_COLOR.withOpacity(0.8),
       child: Column(
         children: [
           Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(15),
-            width: MediaQuery.of(context).size.width,
-            child: Image.network(
-              fit: BoxFit.cover,
-              '${pillDetailData['imageUrl']}',
-              width: 250,
+            constraints: BoxConstraints(
+              minHeight: 380,
             ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 30, right: 30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(35),
+                bottomRight: Radius.circular(35),
+              ),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: BASIC_GREY.withOpacity(0.2),
+                  blurRadius: 3,
+                  offset: Offset(0, 1),
+                ),
+              ],
+            ),
+            width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
+                SizedBox(height: 20),
                 Container(
-                  padding: EdgeInsets.only(left: 30, right: 30),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(15),
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      '${pillDetailData['imageUrl']}',
+                      fit: BoxFit.contain,
+                      width: 230,
+                      height: 150,
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        '${pillDetailData['pillName']}',
+                        style: TextStyle(
+                          fontFamily: "Pretendard",
+                          color: BASIC_BLACK,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(9, 5, 9, 5),
+                          decoration: BoxDecoration(
+                            color: BASIC_GREY.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              width: 0.1,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                '하루에 ',
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 14,
+                                  color: BASIC_BLACK.withOpacity(0.8),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                '${pillDetailData['takeCount']}번',
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 14,
+                                  color: BASIC_BLACK.withOpacity(0.8),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 13),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(9, 5, 9, 5),
+                          decoration: BoxDecoration(
+                            color: Colors.yellow.withOpacity(0.7),
+                            borderRadius: BorderRadius.circular(40),
+                            border: Border.all(
+                              width: 0.1,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                '한번에 ',
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 14,
+                                  color: BASIC_BLACK.withOpacity(0.8),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                '${pillDetailData['takeOnceAmount']}정',
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 14,
+                                  color: BASIC_BLACK.withOpacity(0.8),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          // 아래 컨테이너
+          Container(
+            constraints: BoxConstraints(
+              minHeight: 228,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(35),
+                topRight: Radius.circular(35),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: BASIC_GREY.withOpacity(0.2),
+                  blurRadius: 3,
+                  offset: Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(30),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        width: 150,
-                        child: RichText(
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            text: TextSpan(
-                                text: '${pillDetailData['pillName']}',
-                                style: const TextStyle(
-                                  color: BASIC_BLACK,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ))),
+                      Text(
+                        '총 몇 정 보유하고 계신가요? ',
+                        style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontSize: 17,
+                            color: BASIC_BLACK,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Focus(
+                          child: TextField(
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            controller: totalCountController,
+                            onChanged: (value) {
+                              setState(() {
+                                totalPillCount = int.tryParse(value) ?? 0;
+                                widget.getTotalPillCount(totalPillCount);
+                              });
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: BASIC_GREY.withOpacity(0.15),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 13),
+                        child: Text(
+                          '정',
+                          style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontSize: 17,
+                              color: BASIC_BLACK,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
+                  child: Row(
+                    children: [
+                      Text(
+                        '지금은 몇 정 남았나요? ',
+                        style: TextStyle(
+                            fontFamily: "Pretendard",
+                            fontSize: 17,
+                            color: BASIC_BLACK,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      SizedBox(
+                        width: 45,
+                      ),
+                      Expanded(
+                        child: Focus(
+                          child: TextField(
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            controller: remainsController,
+                            onChanged: (value) {
+                              setState(() {
+                                curPillCount = int.tryParse(value) ?? 0;
+                                widget.getCurPillCount(curPillCount);
+                              });
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: BASIC_GREY.withOpacity(0.15),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 13),
+                        child: Text(
+                          '정',
+                          style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontSize: 17,
+                              color: BASIC_BLACK,
+                              fontWeight: FontWeight.w400),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Text("잔여 알약 수는 총 알약 수를 넘을 수 없습니다."),
-                Container(
-                    height: 50,
-                    child: Row(
-                      children: [
-                        Text('총 알약 수 : '),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InputQty(
-                              maxVal: 500,
-                              initVal: 0,
-                              steps: 1,
-                              // minVal: 0,
-                              minVal: curPillCount ?? 0,
-                              onQtyChanged: (value) {
-                                setState(() {
-                                  totalPillCount = value.round();
-                                  widget.getTotalPillCount(value.round());
-                                });
-                              },
-                              validator: (value) {
-                                if (value == null || value == 0)
-                                  return "입력이 필요합니다.";
-                                if (value < 0) {
-                                  return "";
-                                } else if (value > 500) {
-                                  return "입력값 초과";
-                                }
-                                return null;
-                              },
-                              // qtyFormProps: QtyFormProps(enableTyping: false),
-                              decoration: QtyDecorationProps(
-                                isBordered: false,
-                                // borderShape: BorderShapeBtn.circle,
-                                minusBtn:
-                                    Icon(Icons.remove_circle_outline_rounded),
-                                plusBtn: Icon(Icons.add_circle_outline_rounded),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )),
-                Container(
-                    height: 50,
-                    child: Row(
-                      children: [
-                        Text('잔여 알약 수 : '),
-                        // Text('${insertInvenInfo[0]['remains']}'),
-                        // Text('정'),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InputQty(
-                              // maxVal: 500,
-                              maxVal: totalPillCount ?? 0,
-                              initVal: 0,
-                              steps: 1,
-                              minVal: 0,
-                              validator: (value) {
-                                if (value == null || value == 0)
-                                  return "입력이 필요합니다.";
-                                if (value < 0) {
-                                  return "";
-                                } else if (value > 500) {
-                                  return "입력값 초과";
-                                }
-                                return null;
-                              },
-                              onQtyChanged: (value) {
-                                setState(() {
-                                  curPillCount = value.round();
-                                  widget.getCurPillCount(value.round());
-                                });
-                              },
-                              // qtyFormProps: QtyFormProps(enableTyping: false),
-                              decoration: QtyDecorationProps(
-                                isBordered: false,
-                                // borderShape: BorderShapeBtn.circle,
-                                minusBtn:
-                                    Icon(Icons.remove_circle_outline_rounded),
-                                plusBtn: Icon(Icons.add_circle_outline_rounded),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )),
-                Container(
-                    child: Row(
-                  children: [
-                    Text('일일 복용 횟수 : '),
-                    Text('${pillDetailData['takeCount']}'),
-                    Text('회(변경 불가능)'),
-                  ],
-                )),
-                Container(
-                    child: Row(
-                  children: [
-                    Text('1회 복용량 : '),
-                    Text('${pillDetailData['takeOnceAmount']}'),
-                    Text('정(변경 불가능)'),
-                  ],
-                )),
               ],
             ),
           ),

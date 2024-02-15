@@ -175,9 +175,7 @@ class InventoryStore extends ChangeNotifier {
           'totalCount': totalCount,
           'takeWeekdays': ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
         }));
-    print("체크2");
     print(response.body);
-    print("리스폰스 체크");
     if (response.statusCode == 200) {
       print("재고 등록 post 수신 성공");
       print(response.body);

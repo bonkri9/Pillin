@@ -26,7 +26,7 @@ public class HPillServiceImpl implements PillService {
     public ResponsePillVo pillDetail(HPillVo vo) {
         boolean alreadyHave = pillDao.alreadyHavePill(vo.getMemberId(), vo.getPillId());
 
-        return mapper.mapToPill(pillDao.pillDetail(mapper.mapToPillId(vo)), alreadyHave);
+        return mapper.mapToPill(pillDao.pillDetail(mapper.mapToPillId(vo)), !alreadyHave);
     }
 
     @Override

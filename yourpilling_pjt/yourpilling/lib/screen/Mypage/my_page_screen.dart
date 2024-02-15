@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yourpilling/component/common/angle_container.dart';
@@ -29,34 +30,17 @@ class MyPageScreen extends StatelessWidget {
           children: [
             AngleContainer(
                 width: 300,
-                height: 500,
+                height: MediaQuery.of(context).size.height,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 8,
-                    ),
-                    // Row(
-                    //   children: [
-                    //     SizedBox(
-                    //       width: 8,
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () {
-                    //           Navigator.pop(context);
-                    //         },
-                    //         icon: Icon(
-                    //           Icons.arrow_back_ios,
-                    //           size: 18,
-                    //         )),
-                    //   ],
-                    // ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
+                          Lottie.asset('assets/lottie/mypage.json',
+                              width: 200, height: 200),
                           SizedBox(
                             height: 10,
                           ),

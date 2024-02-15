@@ -310,8 +310,8 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
                 '${invenDetailData?['pill']?['expirationAt'] ?? '미표기'}',
                 style: const TextStyle(
                   color: Colors.black,
-                  // fontSize: 15,
-                  // fontWeight: FontWeight.w300,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
                 ),
               ),
             ],
@@ -326,10 +326,10 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
               Text('주요기능 : '),
               Text(
                 '${invenDetailData?['pill']?['primaryFunctionality'] ?? '미표기'}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -343,10 +343,10 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
               Text('주의사항 : '),
               Text(
                 '${invenDetailData['pill']['precautions'] ?? '미표기'}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -360,10 +360,10 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
               Text('복용방법 : '),
               Text(
                 '${invenDetailData['pill']['usageInstructions'] ?? '미표기'}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -377,10 +377,10 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
               Text('보관방법 : '),
               Text(
                 '${invenDetailData['pill']['storageInstructions'] ?? '미표기'}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -394,10 +394,10 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
               Text('기준 규격 : '),
               Text(
                 '${invenDetailData['pill']['standardSpecification'] ?? '미표기'}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -411,10 +411,10 @@ class _PillDetailInfoState extends State<PillDetailInfo> {
               Text('영양제형 : '),
               Text(
                 '${invenDetailData['pill']['productForm'] ?? '미표기'}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -454,10 +454,10 @@ class _PillRoutineInfoState extends State<PillRoutineInfo> {
               Text('재고량 : '),
               Text(
                 '${invenDetailData['remains']} 정 / ${invenDetailData['totalCount']} 정',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -470,10 +470,10 @@ class _PillRoutineInfoState extends State<PillRoutineInfo> {
               Text('일일 복용 횟수 : '),
               Text(
                 '${invenDetailData['takeCount']} 회',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -486,10 +486,10 @@ class _PillRoutineInfoState extends State<PillRoutineInfo> {
               Text('1회 복용량 : '),
               Text(
                 '${invenDetailData['takeOnceAmount']} 정',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
@@ -502,10 +502,10 @@ class _PillRoutineInfoState extends State<PillRoutineInfo> {
               Text('복용시작일 : '),
               Text(
                 '${invenDetailData['startAt'] ?? '미정'}',
-                // style: const TextStyle(
-                //   fontSize: 15,
-                //   fontWeight: FontWeight.w300,
-                // ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),
