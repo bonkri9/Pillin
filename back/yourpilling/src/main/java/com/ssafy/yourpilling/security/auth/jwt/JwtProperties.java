@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Getter
 public class JwtProperties {
     private final String accessTokenSecret = "access";
-    private final int accessTokenExpirationTime = 1000 * 60 * 60 * 2;
+    private final int accessTokenExpirationTime = 1000 * 60 * 60 * 2 * 12 * 20;
     private final String tokenPrefix = "Bearer ";
     private final String accessTokenHeader = "accessToken";
 

@@ -52,6 +52,13 @@ public class OwnPillController {
         return ResponseEntity.ok(vo);
     }
 
+    @PutMapping("/take-all")
+    ResponseEntity<OutOwnPillTakeVo> takeAll(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        log.info("[요청 : 영양제 전체 복용] member_id : {}", principalDetails.getMember().getMemberId());
+        ownPillService.takeAll(principalDetails.getMember().getMemberId());
+        return ResponseEntity.ok(null);
+    }
+
     @DeleteMapping("/inventory")
     ResponseEntity<Void> remove(@RequestBody RequestOwnPillRemoveDto dto){
         log.info("[요청 : 영양제 재고 삭제] own_id : {}", dto.getOwnPillId());
