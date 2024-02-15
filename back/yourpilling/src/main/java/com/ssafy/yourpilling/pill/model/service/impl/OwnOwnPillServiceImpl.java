@@ -1,5 +1,9 @@
 package com.ssafy.yourpilling.pill.model.service.impl;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import com.ssafy.yourpilling.common.TakeWeekday;
 import com.ssafy.yourpilling.pill.model.dao.OwnPillDao;
 import com.ssafy.yourpilling.pill.model.dao.entity.*;
@@ -29,6 +33,11 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
     private final OwnPillDao ownPillDao;
     private final OwnPillServiceMapper mapper;
+
+    private final FirebaseMessaging firebaseMessaging;
+    private final String PUSH_TITLE = "Pillin";
+    private final String PUSH_IMAGE = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fko%2Fimages%2Fsearch%2F%25EC%2598%2581%25EC%2596%2591%25EC%25A0%259C%2F&psig=AOvVaw2J4FYwok9I3UwNP5WIPR-_&ust=1706684262130000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCNiij7vEhIQDFQAAAAAdAAAAABAE";
+    private final String REPURCHASE_PUSH_MESSAGE = "재구매 시기가 다가온 영양제가 있습니다!";
 
     @Override
     public OutOwnPillDetailVo detail(OwnPillDetailVo vo) {
@@ -109,7 +118,6 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
                 }
 
-                ownPill.decreaseRemains();
                 th.increaseCurrentTakeCount(ownPill.getTakeOnceAmount());
 
                 if(th.getCurrentTakeCount() >= th.getNeedToTakeCount()) {
@@ -121,7 +129,12 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
         // TODO: 영양제 일정 개수 이하로 떨어지면 재구매 알림
         if(ownPill.getRemains() <= 10){
-            reBuyAlarm();
+            try{
+                reBuyAlarm(ownPill.getMember().getDeviceTokens());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
  
         return OutOwnPillTakeVo
@@ -130,7 +143,25 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                 .build();
     }
 
-    private void reBuyAlarm() {
+    private void reBuyAlarm(List<PillDeviceToken> deviceTokens) {
+
+            for (PillDeviceToken deviceToken : deviceTokens) {
+                System.out.println(deviceToken);
+                Message fcmMessage = Message
+                        .builder()
+                        .setNotification(getNotification(REPURCHASE_PUSH_MESSAGE))
+                        .setToken(deviceToken.getDeviceToken())
+                        .build();
+
+                try {
+                    firebaseMessaging.send(fcmMessage);
+                } catch (FirebaseMessagingException e) {
+                    e.printStackTrace();
+                }
+
+        }
+
+
     }
 
     @Transactional
@@ -286,6 +317,15 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
 
     private List<String> takeWeekDays(Integer value) {
         return TakeWeekday.toTakeWeekdays(value);
+    }
+
+    private Notification getNotification(String message) {
+        return Notification
+                .builder()
+                .setTitle(PUSH_TITLE)
+                .setBody(message)
+                .setImage(PUSH_IMAGE)
+                .build();
     }
 
 
