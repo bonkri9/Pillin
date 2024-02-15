@@ -97,7 +97,7 @@ public class PushController {
                         Notification
                                 .builder()
                                 .setTitle(PUSH_TITLE)
-                                .setBody("안녕하세요? 여러분의 건강을 책임지는 Pillin 입니다! Pillin은 영양제 재고 관리 및 푸시 알림을 활용하여 여러분의 무병장수를 기원하며 시작되었습니다.")
+                                .setBody("다 떨어져가는 영양제가 있어요!")
                                 .setImage(PUSH_IMAGE)
                                 .build()
                 )
