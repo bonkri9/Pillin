@@ -82,13 +82,13 @@
 [기능 명세서 바로가기](https://www.notion.so/fc19297e4dc44ad584ce8067969edea1?pvs=21)
 
 ### ERD
-![erd](../ImageFile/erd.png)
+![ERD](../ImageFile/ERD.png)
 
 ### 아키텍처
 ![architecture](../ImageFile/architecture.png)
 
 ### UCC
-[UCC](https://bonkri.notion.site/Pillin-e594f1a0efff47e6ad42acfcb31e98ec?pvs=4)
+[UCC 바로가기](https://bonkri.notion.site/Pillin-e594f1a0efff47e6ad42acfcb31e98ec?pvs=4)
 
 # 💊팀원 소개💊
 ![team](../ImageFile/team.png)
