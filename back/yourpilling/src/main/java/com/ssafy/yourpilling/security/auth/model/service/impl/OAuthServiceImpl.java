@@ -47,6 +47,7 @@ public class OAuthServiceImpl implements OAuthService {
     private final OAuthServiceMapper mapper;
     private final JwtManager jwtManager;
 
+    @Transactional
     @Override
     public OutServerAccessTokenVo serverAccessToken(OAuthKakaoAccessTokenVo vo) {
         JsonObject kakaoMemberInfo = requestKaKaoMemberInfo(vo.getKakaoAccessToken());
