@@ -8,13 +8,14 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yourpilling/screen/Search/search_screen.dart';
 import 'package:yourpilling/store/inventory_store.dart';
-
 import '../../component/common/base_container_noheight.dart';
 import '../../const/colors.dart';
 import '../../store/analysis_report_store.dart';
 import '../../store/search_store.dart';
 import '../../store/user_store.dart';
 import '../Search/search_pill_detail.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class AnalysisReport extends StatefulWidget {
   const AnalysisReport({super.key});
@@ -24,6 +25,37 @@ class AnalysisReport extends StatefulWidget {
 }
 
 class _AnalysisReportState extends State<AnalysisReport> {
+
+  var messageString = "";
+  void getMyDeviceToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print("내 디바이스 토큰 $token");
+  }
+  @override
+  void initState(){
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      RemoteNotification? notification = message.notification;
+
+      if (notification != null){
+        FlutterLocalNotificationsPlugin().show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            const NotificationDetails(
+              android: AndroidNotificationDetails
+                ('channelId', 'channelName',importance: Importance.max),
+            )
+        );
+        setState(() {
+          messageString = message.notification!.body!;
+          print("Forground 메시지 수신 : $messageString}");
+        });
+      }
+    });
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     context.read<InventoryStore>().getTakeYnListData(context);
@@ -31,9 +63,7 @@ class _AnalysisReportState extends State<AnalysisReport> {
     context.read<AnalysisReportStore>().getVitaminBGroupDataList(context);
     context.read<AnalysisReportStore>().getRecommendList(context);
 
-    var userDetailInfo = context.watch<UserStore>().UserDetail;
-    var takeTrueListData = context.read<InventoryStore>().takeTrueListData;
-    var takeTrueListDataLength = takeTrueListData.length;
+
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR.withOpacity(0.8),
@@ -53,126 +83,135 @@ class _AnalysisReportState extends State<AnalysisReport> {
         child: Container(
           color: BACKGROUND_COLOR.withOpacity(0.8),
           child: Center(
-            child: Column(
-              children: [
-                takeTrueListData == null || takeTrueListDataLength == 0
-                    ? Column(
-                        //복용중인 영양제가 없다면 표시할 것들
-                        children: [
-                          Container(
-                            width: 350,
-                            height: 150,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(30),
-                                    topRight: Radius.circular(30),
-                                    bottomLeft: Radius.circular(30),
-                                    bottomRight: Radius.circular(30)),
-                                border: Border.all(
-                                  width: 0.1,
-                                  color: Colors.grey.withOpacity(0.5),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x00b5b5b5).withOpacity(0.1),
-                                      offset: Offset(0.1, 0.1),
-                                      blurRadius: 3 // 그림자 위치 조정
-                                      ),
-                                ]),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                RichText(
-                                  text: TextSpan(
-                                    text: '아직 분석할 복용 영양제가 없어요',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: BASIC_BLACK,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Pretendard',
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 25,
-                                ),
-                                // 추가 버튼
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        pageBuilder: (c, a1, a2) =>
-                                            SearchScreen(
-                                          showAppBar: true,
-                                        ),
-                                        transitionsBuilder:
-                                            (c, a1, a2, child) =>
-                                                SlideTransition(
-                                          position: Tween(
-                                            begin: Offset(1.0, 0.0),
-                                            end: Offset(0.0, 0.0),
-                                          )
-                                              .chain(CurveTween(
-                                                  curve: Curves.easeInOut))
-                                              .animate(a1),
-                                          child: child,
-                                        ),
-                                        transitionDuration:
-                                            Duration(milliseconds: 750),
-                                      ),
-                                    );
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 15.0,
-                                    backgroundColor: Colors.yellow, // 원의 배경색
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Colors.white, // 화살표 아이콘의 색상
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        //복용 중인 영양제가 있다면 표시할 것들
-                        children: [
-                          _ReportIntro(), //리포트 개요
-                          SizedBox(
-                            height: 15,
-                          ),
-
-                          _TakingNowList(),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          _EssentialNutrients(), //필수영양소 레이더
-                          SizedBox(
-                            height: 15,
-                          ),
-                          _VitaminBGroupRadar(), //비타민 B군 레이더
-                          SizedBox(
-                            height: 15,
-                          ),
-                          // _VitaminBGroup(),
-                          // SizedBox(
-                          //   height: 15,
-                          // ),
-                          _RecommendList(), //추천리스트
-                        ],
-                      ),
-              ],
-            ),
+            child: TakingNowList(),
           ),
         ),
       ),
     );
   }
 }
+
+class TakingNowList extends StatelessWidget {
+  const TakingNowList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var takeTrueListData = context.watch<InventoryStore>().takeTrueListData;
+    var takeTrueListDataLength = takeTrueListData.length;
+
+    return takeTrueListData == null || takeTrueListDataLength == 0
+        ? Column(
+      //복용중인 영양제가 없다면 표시할 것들
+      children: [
+        Container(
+          width: 350,
+          height: 150,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)),
+              border: Border.all(
+                width: 0.1,
+                color: Colors.grey.withOpacity(0.5),
+              ),
+              boxShadow: [
+                BoxShadow(
+                    color: Color(0x00b5b5b5).withOpacity(0.1),
+                    offset: Offset(0.1, 0.1),
+                    blurRadius: 3 // 그림자 위치 조정
+                ),
+              ]),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RichText(
+                text: TextSpan(
+                  text: '아직 분석할 복용 영양제가 없어요',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: BASIC_BLACK,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Pretendard',
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              // 추가 버튼
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (c, a1, a2) =>
+                          SearchScreen(
+                            showAppBar: true,
+                          ),
+                      transitionsBuilder:
+                          (c, a1, a2, child) =>
+                          SlideTransition(
+                            position: Tween(
+                              begin: Offset(1.0, 0.0),
+                              end: Offset(0.0, 0.0),
+                            )
+                                .chain(CurveTween(
+                                curve: Curves.easeInOut))
+                                .animate(a1),
+                            child: child,
+                          ),
+                      transitionDuration:
+                      Duration(milliseconds: 750),
+                    ),
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 15.0,
+                  backgroundColor: Colors.yellow, // 원의 배경색
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white, // 화살표 아이콘의 색상
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    )
+        : Column(
+      //복용 중인 영양제가 있다면 표시할 것들
+      children: [
+        _ReportIntro(), //리포트 개요
+        SizedBox(
+          height: 15,
+        ),
+
+        _TakingNowList(),
+        SizedBox(
+          height: 15,
+        ),
+        _EssentialNutrients(), //필수영양소 레이더
+        SizedBox(
+          height: 15,
+        ),
+        _VitaminBGroupRadar(), //비타민 B군 레이더
+        SizedBox(
+          height: 15,
+        ),
+        // _VitaminBGroup(),
+        // SizedBox(
+        //   height: 15,
+        // ),
+        _RecommendList(), //추천리스트
+      ],
+    );
+  }
+}
+
 
 //분석리포트 개요
 class _ReportIntro extends StatefulWidget {
