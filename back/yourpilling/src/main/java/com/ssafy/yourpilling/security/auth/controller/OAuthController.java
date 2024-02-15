@@ -43,7 +43,7 @@ public class OAuthController {
         return ResponseEntity
                 .ok()
                 .header(jwtProperties.getAccessTokenHeader(), vo.getAccessToken())
-                .header("isFisrtLogin", String.valueOf(vo.isFirstLogin()))
+                .header("isFirstLogin", String.valueOf(vo.isFirstLogin()))
                 .build();
     }
 }
