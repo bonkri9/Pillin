@@ -6,6 +6,7 @@ import 'package:yourpilling/const/colors.dart';
 import 'package:yourpilling/screen/Inventory/inventory_screen.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:http/http.dart' as http;
+import 'package:yourpilling/screen/Main/main_page_child_screen.dart';
 import 'package:yourpilling/store/inventory_store.dart';
 
 import 'dart:convert';
@@ -144,8 +145,9 @@ class _InsertInventoryState extends State<InsertInventory> {
                             ),),
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => MainPageChild()));
+
                           },
                         ),
                       ],
