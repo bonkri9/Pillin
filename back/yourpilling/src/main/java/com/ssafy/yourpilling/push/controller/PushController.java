@@ -73,7 +73,7 @@ public class PushController {
         return ResponseEntity.ok().build();
     }
 
-    @Scheduled(cron = "* */1 * * * *")
+    @Scheduled(cron = "0 */1 * * * *")
     ResponseEntity<Void> sendPushMessage() {
         log.info("[요청 : PUSH 복용 메세지 FCM 스케쥴러 동작]");
         pushService.sendFCM();
