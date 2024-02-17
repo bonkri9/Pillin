@@ -101,7 +101,7 @@ class _InsertInventoryState extends State<InsertInventory> {
             backgroundColor: MaterialStatePropertyAll(Colors.redAccent),
           ),
           child: Text(
-            '등록',
+            '다음',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w400,
@@ -360,7 +360,7 @@ class _InsertInvenContentState extends State<_InsertInvenContent> {
                   child: Row(
                     children: [
                       Text(
-                        '총 몇 정 보유하고 계신가요? ',
+                        '원래 몇 정 들어있었나요? ',
                         style: TextStyle(
                             fontFamily: "Pretendard",
                             fontSize: 17,
