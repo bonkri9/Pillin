@@ -166,8 +166,8 @@ class _EnterLoginScreenState extends State<EnterLoginScreen> {
             Navigator.push(
               context,
               PageRouteBuilder(pageBuilder: (c, a1, a2) => GreetingScreen(),
-              transitionsBuilder: (c, a1, a2, child) => 
-                  FadeTransition(opacity: a1, child: child,),
+                transitionsBuilder: (c, a1, a2, child) =>
+                    FadeTransition(opacity: a1, child: child,),
                 transitionDuration: Duration(milliseconds: 700),
               ),
             );
