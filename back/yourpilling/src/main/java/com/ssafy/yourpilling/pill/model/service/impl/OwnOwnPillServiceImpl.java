@@ -118,6 +118,7 @@ public class OwnOwnPillServiceImpl implements OwnPillService {
                     throw new IllegalArgumentException("더 이상 복용할 수 없습니다.");
                 }
 
+                ownPill.decreaseRemains();
                 th.increaseCurrentTakeCount(ownPill.getTakeOnceAmount());
 
                 if(th.getCurrentTakeCount() >= th.getNeedToTakeCount()) {
