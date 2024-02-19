@@ -26,6 +26,12 @@ public class RankController {
         return ResponseEntity.ok(rankService.categories());
     }
 
+    @GetMapping("/rankTest")
+    ResponseEntity<Void> rankTest(){
+         rankService.generateWeeklyRank();
+         return ResponseEntity.ok(null);
+    }
+
     @GetMapping
     ResponseEntity<OutRankVos> rank(@AuthenticationPrincipal PrincipalDetails principalDetails){
         OutRankVos vos = rankService.rank(mapper.mapToRankVo(principalDetails.getMember().getMemberId()));
