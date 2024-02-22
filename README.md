@@ -90,5 +90,12 @@
 ### UCC
 [UCC 바로가기](https://bonkri.notion.site/Pillin-e594f1a0efff47e6ad42acfcb31e98ec?pvs=4)
 
+# 💊포팅 메뉴얼💊
+### Backend 빌드
+- gradle -> Bootjar
+
+### Wearable 
+- Android Studio 실행
+
 # 💊팀원 소개💊
 ![team](../ImageFile/team.png)
