@@ -80,7 +80,7 @@ public class PushController {
         return ResponseEntity.ok().build();
     }
 
-    @Scheduled(cron = "0 0 20 * * *")
+    @Scheduled(cron = "0 0 */2 * * *")
     ResponseEntity<Void> sendPushRepurchaseMessage() {
 
         log.info("[요청 : PUSH 재구매 메세지 FCM 스케쥴러 동작]");
