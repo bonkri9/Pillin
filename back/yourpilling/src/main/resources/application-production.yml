@@ -2,8 +2,8 @@ spring:
   datasource:
     url: jdbc:mariadb://pillin.cl84wsky80vr.ap-northeast-2.rds.amazonaws.com:3306/s10p12b101?serverTimezone=Asia/Seoul
     driver-class-name: org.mariadb.jdbc.Driver
-    username: pillin
-    password: wngurqhsalstjdgusgmlwngmlxotjdqja
+    username: ${db.username}
+    password: ${db.password}
     hikari:
       maximum-pool-size: 5
   jpa:
@@ -18,15 +18,15 @@ spring:
 
   oauth:
     kakao:
-      client-id: 9c3a8e5f9209260e3e7f9cd8602c0d68
-      redirect-uri: "https://www.pillin.store/login/oauth2/kakao"
+      client-id: ${kakao.key}
+      redirect-uri: "https://i10b101.p.ssafy.io/login/oauth2/kakao"
       grant_type: authorization_code
 
   mail:
     host: smtp.naver.com
     port: 465
-    username: zhfldk35@naver.com
-    password: ksb980520.
+    username: ${email.username}
+    password: ${email.password}
     properties:
       mail.smtp.auth: true
       mail.smtp.ssl.enable: true
