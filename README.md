@@ -75,11 +75,11 @@
 
 ### 기획서
 
-[기획서 바로가기](https://www.notion.so/e8be82238cd24274bd5aecdc23b75efd?pvs=21)
+[기획서 바로가기](https://bonkri.notion.site/484e49cf2ea143caacb40da5ba4ed004)
 
 ### 기능 명세서
 
-[기능 명세서 바로가기](https://www.notion.so/fc19297e4dc44ad584ce8067969edea1?pvs=21)
+[기능 명세서 바로가기](https://bonkri.notion.site/9d195c3928794c568cdd1f5841666a24)
 
 ### ERD
 ![ERD](../ImageFile/ERD.png)
@@ -88,7 +88,7 @@
 ![architecture](../ImageFile/architecture.png)
 
 ### UCC
-[UCC 바로가기](https://bonkri.notion.site/Pillin-e594f1a0efff47e6ad42acfcb31e98ec?pvs=4)
+[UCC 바로가기](https://bonkri.notion.site/Pillin-14ca2a8ea28447b1998caf2f3558d47b)
 
 # 💊팀원 소개💊
 ![team](../ImageFile/team.png)
