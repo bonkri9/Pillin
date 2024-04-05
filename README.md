@@ -1,72 +1,94 @@
-# Pillin
-## 서비스 설명/주요기능
-### 영양제 관리 및 추천 서비스 
-1. 영양제 복용 기록
-2. 필요한 영양소의 영양제 추천
-3. 영양제 알람
-4. 영양제별 재고관리 
-5. 영양제 상세정보 
-6. 영양제 검색 
-7. 영양제 분석 리포트 
+# 💊프로젝트 이름💊
+### Pillin(필린)
 
-## 프로젝트 특장점(기능 관점)
-1. 복용하는 영양제 자동 재고 관리
-2. 웨어러블 기기와의 연계를 통해 알람 및 관리
-3. 깔끔하고 예쁜 디자인으로 SNS에 공유 유도
-4. 영양제 레벨 시스템
-- 하루 꼬박꼬박 복용하면 할수록 경험치 증가
-- 뱃지, 메달을 활용해 성취감 유발
+###### 영양제 <mark>재고 관리 및 알림</mark> 앱 서비스
 
-## 프로젝트의 차별점/독창성(기술 관점)
-1. Item 기반 영양제 복용 분석 추천
+![pillin](../ImageFile/noback_login_pillin_logo.png)
 
-2. 웨어러블 사용
+![pages](../ImageFile/pages.png)
 
-3. 자동 영양재 재고 관리
+# 💊개발 환경💊
 
-## 역할별 담당자
-FE : 구본민, 김성현, 양희태
-BE : 강성범, 김희주, 이주혁
+<img src="https://img.shields.io/badge/Gitlab-FC6D26?style=flat-square&logo=GitLab&logoColor=white"/>
+<img src="https://img.shields.io/badge/SpringBoot-6DB23F?style=flat-square&logo=SpringBoot&logoColor=white"/>
+<img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/>
+<img src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=Flutter&logoColor=white"/>
+<img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=Kotlin&logoColor=white"/>
+<img src="https://img.shields.io/badge/WearOS-4285F4?style=flat-square&logo=WearOS&logoColor=white"/>
+<img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=flat-square&logo=AndroidStudio&logoColor=white"/>
 
-## FE 프레임워크
-Flutter
-Android Studio
+# 💊서비스 화면💊
 
-## BE 프레임워크
-Spring Boot
+| 메인 페이지 |영양제 등록 페이지|복용 이력 페이지|영양제 알람 등록 페이지|분석 리포트 페이지|검색 페이지
+|:----:|:----:|:----:|:----:|:----:|:----:|
+|![main](../ImageFile/main.gif)|![regist](../ImageFile/regist.gif)|![calendar](../ImageFile/calendar.gif)|![push](../ImageFile/push.gif)|![report_rank](../ImageFile/report_rank.gif)|![search](../ImageFile/search.gif)|
 
-## DB
-Mysql
+# 💊주요 기능💊
 
-## 주요 기술 스택
-BE : Android Studio, Spring Boot, Flask
-FE : Flutter, Android Studio
-DB : Mysql
-Infra : Docker
-AI : Item 기반 추천 알고리즘
+### 로그인
 
-## 프로젝트 배경
-- 매일 건강을 챙기기 귀찮은 사람들이 **꾸준히 영양제를 찾아 먹는데 느끼는 어려움**에 대해 생각해 보았습니다.
-- 뿐만 아니라, 무엇이든 공유하고 기록하고 싶은 젊은 세대들의 감성까지 감안한 영양제 공유/관리 서비스를 기획하게 되었습니다.
+- 소셜 계정으로도 회원 가입 및 로그인이 가능해요!
+    - 카카오
 
-## 프로젝트 목표
-## 내 영양제 쉽게 관리!
+### 내 프로필 생성
 
-> 많은 사람들이 영양제가 떨어져간다는 것을 인지하고 있지만, 계속 재구매 고민만 하다가 결국 영양제가 동 나서야 재구매를 하게 됩니다.
-> 
+- 기본 정보(아이디, 이름, 생년월일, 성별 등)
 
-<aside>
-💡 저희는 초기 영양제 개수와 섭취 날짜를 기반으로 영양제 재고 상태를 확인하여 알람이 일정 개수 이하로 떨어지면 **추천 영양제와 함께 알람**을 보내 사용자의 재구매 고민을 줄어들게 합니다.
+### <mark>재고 등록</mark>
 
-</aside>
+- 사용자가 보유중인 영양제 등록
+- 재고 관리를 통해 재구매 알람
 
-## 나 영양제 이거 먹어!
+### <mark>알림 설정</mark>
 
-> 많은 사람들이 SNS에 내가 먹는 영양제 사진을 찍어서 올립니다. 이런 사진은 예쁘지 않고, 내가 얼마나 잘 챙겨 먹는지 공유할 수 없습니다.
-> 
+- 주기적인 복용을 도와주기 위해 현재 보유 중인 영양제 알람 등록/수정 가능
 
-<aside>
-💡 저희는 사용자가 어떤 영양제를 먹는지, 얼마나 자주 챙겨 먹는지를 저장하고 있습니다. 이 정보를 카드 형태로 만들어 SNS에 쉽고 예쁘고 공유할 수 있게 하며, QR 코드를 통해 핸드폰과 스마트 워치에도 원하는 상대에게 나의 영양제 섭취 활동을 공유할 수 있습니다.
+### 건강 관리
 
-</aside>
+- 영양제 복용 기록 ( 월간/주간/일일 형식 )
+- 필요한 영양소의 영양제 추천(랭킹 서비스)
+- 영양제 분석 리포트
 
+### 검색
+
+- 영양제 이름 검색
+    - 텍스트 검색 - 영양제 성분별/ 제품명/브랜드명/건강고민별 검색
+- 영양제 상세정보 및 구매링크 제공
+
+### <mark>웨어러블</mark>
+
+- 영양제 복용 기록
+- 영양제 복용 알림
+
+# 💊기술 소개💊
+
+- Android/iOS 에서 동작 가능한 <mark>하이브리드</mark> 어플리케이션
+    - Flutter를 활용하여 하이브리드 어플리케이션 제작
+- 사용자 알림
+    - Firebase Cloud Message 를 이용하여 사용자에게 <mark>Push 알림</mark> 제공
+- 카카오 로그인
+    - 일반 회원가입 및 OAuth를 이용한 인증을 통해 간편한 회원가입 제공
+- 웨어러블
+    - Wear OS를 활용하여 간편한 복용 기록 관리 기능 제공
+
+# 💊설계 문서💊
+
+### 기획서
+
+[기획서 바로가기](https://bonkri.notion.site/484e49cf2ea143caacb40da5ba4ed004)
+
+### 기능 명세서
+
+[기능 명세서 바로가기](https://bonkri.notion.site/9d195c3928794c568cdd1f5841666a24)
+
+### ERD
+![ERD](../ImageFile/ERD.png)
+
+### 아키텍처
+![architecture](../ImageFile/architecture.png)
+
+### UCC
+[UCC 바로가기](https://bonkri.notion.site/Pillin-14ca2a8ea28447b1998caf2f3558d47b)
+
+# 💊팀원 소개💊
+![team](../ImageFile/team.png)
