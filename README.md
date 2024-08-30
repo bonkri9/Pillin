@@ -37,7 +37,8 @@
 
 # 💊개발 환경💊
 
-|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Part | Tech Skills | 
+|:---------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | **FrontEnd** | <img src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=Flutter&logoColor=white"/> <img src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=Dart&logoColor=white"/> <img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=flat-square&logo=AndroidStudio&logoColor=white"/> |
 | **BackEnd**  | <img src="https://img.shields.io/badge/SpringBoot-6DB23F?style=flat-square&logo=SpringBoot&logoColor=white"/> <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/> |
 | **Android**  | <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=Kotlin&logoColor=white"/> <img src="https://img.shields.io/badge/WearOS-4285F4?style=flat-square&logo=WearOS&logoColor=white"/> |
