@@ -7,21 +7,38 @@
 
 ![pages](/ImageFile/pages.png)
 
-# 💊개발 환경💊
+# 💊설계 문서💊
 
-<img src="https://img.shields.io/badge/Gitlab-FC6D26?style=flat-square&logo=GitLab&logoColor=white"/>
-<img src="https://img.shields.io/badge/SpringBoot-6DB23F?style=flat-square&logo=SpringBoot&logoColor=white"/>
-<img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/>
-<img src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=Flutter&logoColor=white"/>
-<img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=Kotlin&logoColor=white"/>
-<img src="https://img.shields.io/badge/WearOS-4285F4?style=flat-square&logo=WearOS&logoColor=white"/>
-<img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=flat-square&logo=AndroidStudio&logoColor=white"/>
+### 기획서
+
+[기획서 바로가기](https://bonkri.notion.site/484e49cf2ea143caacb40da5ba4ed004)
+
+### 기능 명세서
+
+[기능 명세서 바로가기](https://bonkri.notion.site/9d195c3928794c568cdd1f5841666a24)
+
+### ERD
+![ERD](/ImageFile/ERD.png)
+
+### 아키텍처
+![architecture](/ImageFile/architecture.png)
+
+### UCC
+[UCC 바로가기](https://bonkri.notion.site/Pillin-14ca2a8ea28447b1998caf2f3558d47b)
 
 # 💊서비스 화면💊
 
 | 메인 페이지 |영양제 등록 페이지|복용 이력 페이지|영양제 알람 등록 페이지|분석 리포트 페이지|검색 페이지
 |:----:|:----:|:----:|:----:|:----:|:----:|
 |![main](/ImageFile/main.gif)|![regist](/ImageFile/regist.gif)|![calendar](/ImageFile/calendar.gif)|![push](/ImageFile/push.gif)|![report_rank](/ImageFile/report_rank.gif)|![search](/ImageFile/search.gif)|
+
+# 💊개발 환경💊
+
+| --- | --- |
+| FrontEnd | <img src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=Flutter&logoColor=white"/> <img src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=Dart&logoColor=white"/> <img src="https://img.shields.io/badge/AndroidStudio-3DDC84?style=flat-square&logo=AndroidStudio&logoColor=white"/>
+| BackEnd | <img src="https://img.shields.io/badge/SpringBoot-6DB23F?style=flat-square&logo=SpringBoot&logoColor=white"/> <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/>
+| Android | <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=Kotlin&logoColor=white"/> <img src="https://img.shields.io/badge/WearOS-4285F4?style=flat-square&logo=WearOS&logoColor=white"/>
+| Tools | <img src="https://img.shields.io/badge/Gitlab-FC6D26?style=flat-square&logo=GitLab&logoColor=white"/> <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=Figma&logoColor=white"/> <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=Notion&logoColor=white"/> <img src="https://img.shields.io/badge/Jira-0052CC?style=flat-square&logo=Jira&logoColor=white"/> <img src="https://img.shields.io/badge/Gerrit-EEEEEE?style=flat-square&logo=Gerrit&logoColor=white"/>
 
 # 💊주요 기능💊
 
@@ -71,24 +88,6 @@
 - 웨어러블
     - Wear OS를 활용하여 간편한 복용 기록 관리 기능 제공
 
-# 💊설계 문서💊
-
-### 기획서
-
-[기획서 바로가기](https://bonkri.notion.site/484e49cf2ea143caacb40da5ba4ed004)
-
-### 기능 명세서
-
-[기능 명세서 바로가기](https://bonkri.notion.site/9d195c3928794c568cdd1f5841666a24)
-
-### ERD
-![ERD](/ImageFile/ERD.png)
-
-### 아키텍처
-![architecture](/ImageFile/architecture.png)
-
-### UCC
-[UCC 바로가기](https://bonkri.notion.site/Pillin-14ca2a8ea28447b1998caf2f3558d47b)
 
 # 💊팀원 소개💊
 ![team](/ImageFile/team.png)
